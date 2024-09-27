@@ -1,0 +1,26 @@
+{
+  "name": "scouting",
+  "version": "0.0.0",
+  "description": "Monorepo for Indiana Scouting Alliance 2025",
+  "bugs": {
+    "url": "https://github.com/liujip0/scouting/issues"
+  },
+  "author": {
+    "name": "Jiping Liu",
+    "url": "https://github.com/liujip0"
+  },
+  "contributors": [
+    {
+      "name": "Kennan Hunter",
+      "url": "https://kennan.tech"
+    },
+    {
+      "name": "Iraa Pardeshi"
+    }
+  ],
+  "repository": "github:liujip0/scouting",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5"
+  }
+}
