@@ -1,0 +1,19 @@
+{
+  "name": "isa2025-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy",
+    "migrate": "wrangler d1 migrations apply scouting-db",
+    "migrate:local": "pnpm migrate --local"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "wrangler": "^3.84.1"
+  },
+  "dependencies": {
+    "@trpc/server": "^10.45.2"
+  }
+}

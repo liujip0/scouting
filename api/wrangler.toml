@@ -1,0 +1,8 @@
+name = "scouting-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-02"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "scouting-db"
+database_id = "b784526e-54ee-4594-baf5-17dda271c266"
