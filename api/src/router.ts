@@ -7,6 +7,9 @@ export const appRouter = router({
     .query(({ input }) => {
       return `hello ${input ?? "world"}`;
     }),
+  getUserById: loggedPublicProcedure.input(z.string()).query(() => {
+    return "arkghlerkghlerk";
+  }),
 });
 
 export type AppRouter = typeof appRouter;
