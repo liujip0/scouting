@@ -40,3 +40,8 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   FOREIGN KEY(matchKey) REFERENCES Matches(matchKey),
   FOREIGN KEY(teamNumber) REFERENCES Teams(teamNumber)
 );
+
+DROP TABLE IF EXISTS Users;
+CREATE TABLE IF NOT EXISTS Users(
+  username text UNIQUE PRIMARY KEY
+)
