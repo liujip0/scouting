@@ -1,6 +1,6 @@
 name = "isa2025"
 compatibility_date = "2024-04-03"
-main = "src/index.ts"
+main = "api/src/index.ts"
 
 [[d1_databases]]
 binding = "DB"
