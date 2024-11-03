@@ -16,6 +16,7 @@ export default defineConfig({
       input: {
         main: resolve(root, "index.html"),
         scout: resolve(root, "scout", "index.html"),
+        viewdata: resolve(root, "viewdata", "index.html"),
       },
     },
   },
