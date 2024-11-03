@@ -1,5 +1,5 @@
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
-import { Env } from "./index.ts";
+import { Env } from "./[[index]].ts";
 
 export const createContext = async ({
   req,
