@@ -1,8 +1,8 @@
-name = "scouting-2025-api"
+name = "isa2025"
 compatibility_date = "2024-04-03"
 main = "src/index.ts"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "scouting-db"
-database_id = "69ef60bc-028e-4758-8e5c-5bdd84d99a99"
+database_name = "isa2025-db"
+database_id = "beb7b5e5-4196-4a8f-807d-5a5cb56be206"
