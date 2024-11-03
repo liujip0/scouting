@@ -1,11 +1,12 @@
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import { Env } from "./index.ts";
 
 export const createContext = async ({
   req,
   resHeaders,
-  info,
-}: FetchCreateContextFnOptions) => {
-  return { req, resHeaders, info };
+  env,
+}: FetchCreateContextFnOptions & { env: Env }) => {
+  return { req, resHeaders, env };
 };
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

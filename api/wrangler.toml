@@ -6,3 +6,6 @@ main = "src/index.ts"
 binding = "DB"
 database_name = "isa2025-db"
 database_id = "beb7b5e5-4196-4a8f-807d-5a5cb56be206"
+
+[vars]
+SALT_TOKEN = "e27oln41kl6a4t204r7xjwzq1syysd56"
