@@ -1,12 +1,14 @@
-import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import { inferAsyncReturnType } from "@trpc/server";
+import { FetchCreateContextWithCloudflareEnvFnOptions } from "cloudflare-pages-plugin-trpc";
 import { Env } from "./[[index]].ts";
 
 export const createContext = async ({
   req,
-  resHeaders,
   env,
-}: FetchCreateContextFnOptions & { env: Env }) => {
-  return { req, resHeaders, env };
+}: FetchCreateContextWithCloudflareEnvFnOptions<Env>) => {
+  return {
+    req,
+    env,
+  };
 };
-
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export type Context = inferAsyncReturnType<typeof createContext>;
