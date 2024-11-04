@@ -10,6 +10,9 @@ export const appRouter = router({
   getUserById: loggedPublicProcedure.input(z.string()).query(() => {
     return "arkghlerkghlerk";
   }),
+  test: loggedPublicProcedure.query(() => {
+    return "ksdjf;lkalsd";
+  }),
 });
 
 export type AppRouter = typeof appRouter;
