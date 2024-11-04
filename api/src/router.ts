@@ -11,7 +11,7 @@ export const appRouter = router({
     return 'arkghlerkghlerk';
   }),
   test: loggedPublicProcedure.query(() => {
-    return 'ksdjf;lkalsd';
+    return 'ksdjaskdjflkjahsdfd';
   })
 });
 
