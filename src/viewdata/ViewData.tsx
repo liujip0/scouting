@@ -1,7 +1,5 @@
-import { useState } from "react";
-
 export default function ViewData() {
-  const sessionToken = useState<string | null>(null);
+  // const sessionToken = useState<string | null>(null);
 
   return (
     <div
