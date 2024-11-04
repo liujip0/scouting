@@ -1,0 +1,14 @@
+{
+  "name": "isa2025-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@trpc/server": "^10.45.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "wrangler": "^3.84.1"
+  }
+}
