@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE IF NOT EXISTS Users(
   username text UNIQUE PRIMARY KEY,
   hashedPassword text,
-  permLevel text CHECK(permLevel IN ("team", "admin"))
+  permLevel text CHECK(permLevel IN ("team", "admin")) DEFAULT "team"
 );
 
 DROP TABLE IF EXISTS UserSessions;

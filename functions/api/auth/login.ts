@@ -62,6 +62,18 @@ export const login = loggedPublicProcedure
           opts.ctx.env.SALT_TOKEN
         );
         const expiresAt = Date.now() + 6.048e8;
+        await opts.ctx.env.DB.prepare(
+          "INSERT INTO Users (username, hashedPassword, permLevel) VALUES (?, ?, ?)"
+        )
+          .bind(
+            opts.input.username,
+            await hashPassword(
+              opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
+              opts.ctx.env.SALT_TOKEN
+            ),
+            "admin"
+          )
+          .run();
         const tokenCreationResult = await opts.ctx.env.DB.prepare(
           "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
         )
