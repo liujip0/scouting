@@ -10,13 +10,16 @@ export const loggedPublicProcedure = publicProcedure.use(async (opts) => {
   const start = Date.now();
   const result = await opts.next();
   const durationMs = Date.now() - start;
-  console.log({
+  const log = {
     time: start,
     duration: durationMs,
     apiPath: opts.path,
     trpcType: opts.type,
     input: opts.input,
-    result: result,
-  });
+    success: result.ok,
+  };
+  console.log(
+    result.ok ? { ...log, data: result.data } : { ...log, error: result.error }
+  );
   return result;
 });

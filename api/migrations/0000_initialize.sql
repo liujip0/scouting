@@ -41,17 +41,6 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   FOREIGN KEY(teamNumber) REFERENCES Teams(teamNumber)
 );
 
-DROP TABLE IF EXISTS ApiLogs;
-CREATE TABLE IF NOT EXISTS ApiLogs(
-  callId integer PRIMARY KEY AUTOINCREMENT,
-  callTime integer,
-  callDuration integer,
-  callPath text,
-  callType text CHECK(callType IN ("query", "mutation", "subscription")),
-  callInput text,
-  callSuccess boolean
-);
-
 DROP TABLE IF EXISTS Users;
 CREATE TABLE IF NOT EXISTS Users(
   username text UNIQUE PRIMARY KEY,
