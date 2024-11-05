@@ -16,13 +16,14 @@
     "@trpc/react-query": "11.0.0-rc.608",
     "@trpc/server": "11.0.0-rc.608",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
-    "@isa2025/api": "workspace:*",
     "@eslint/js": "^9.14.0",
+    "@isa2025/api": "workspace:*",
     "@types/node": "^22.8.7",
-    "@types/react": "^18.3.12",
+    "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^9.14.0",
@@ -30,6 +31,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.12.2",
-    "vite": "^5.4.10"
+    "vite": "^5.4.10",
+    "wrangler": "^3.84.1"
   }
 }

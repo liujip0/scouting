@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 export default function Scout() {
   return (
     <div>
-      <a href="/">Back to Landing Page</a>
+      <Link to="/">Back to Landing Page</Link>
     </div>
   );
 }

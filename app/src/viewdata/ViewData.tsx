@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { urls } from "../utils/constants.ts";
 import { trpc } from "../utils/trpc.ts";
 import Login from "./Login.tsx";
@@ -32,7 +33,7 @@ export default function ViewData() {
             height: "100%",
             width: "100%",
           }}>
-          <a href="/">Back to Landing Page</a>
+          <Link to="/">Back to Landing Page</Link>
           {sessionToken ?
             sessionToken
           : <Login setSessionToken={setSessionToken} />}

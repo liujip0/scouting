@@ -9,6 +9,11 @@ export default function Login({ setSessionToken }: LoginProps) {
   const [password, setPassword] = useState("");
   const [hello, setHello] = useState("");
 
+  const helloQuery = trpc.hello.useQuery(username, {
+    enabled: false,
+  });
+  const utils = trpc.useUtils();
+
   return (
     <div
       style={{
@@ -40,16 +45,16 @@ export default function Login({ setSessionToken }: LoginProps) {
       </button>
       <br />
       <button
-        onClick={() => {
-          const response = trpc.hello.useQuery(username);
-          if (response.data) {
-            setHello(response.data);
+        onClick={async () => {
+          const response = await utils.hello.fetch(username);
+          if (response) {
+            setHello(response);
           }
         }}>
         Test Hello API
       </button>
       <br />
-      <div>{hello}</div>
+      <div>{hello ?? "No data yet"}</div>
     </div>
   );
 }

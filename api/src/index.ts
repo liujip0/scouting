@@ -26,7 +26,7 @@ export default {
     }
 
     return fetchRequestHandler({
-      endpoint: "/",
+      endpoint: "/api",
       req: request,
       router: appRouter,
       createContext: (options: FetchCreateContextFnOptions) =>

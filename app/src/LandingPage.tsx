@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom";
+
 export default function LandingPage() {
   return (
     <div>
       <h1>Landing Page</h1>
-      <a href="/scout/">Scout</a>
+      <Link to="/scout">Scout</Link>
       <br />
-      <a href="/viewdata/">View or Manage Data</a>
+      <Link to="/viewdata">View or Manage Data</Link>
     </div>
   );
 }
