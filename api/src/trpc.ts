@@ -4,7 +4,7 @@ import { Context } from './context.ts';
 const t = initTRPC.context<Context>().create();
 
 export const router = t.router;
-const publicProcedure = t.procedure;
+export const publicProcedure = t.procedure;
 
 export const loggedPublicProcedure = publicProcedure.use(async (opts) => {
   const start = Date.now();
