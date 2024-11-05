@@ -1,11 +1,11 @@
 {
-  "name": "isa2025-api",
+  "name": "@isa2025/api",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "packageManager": "pnpm@9.12.3",
   "dependencies": {
-    "@trpc/server": "^10.45.2",
+    "@trpc/server": "11.0.0-rc.608",
     "zod": "^3.23.8"
   },
   "devDependencies": {
