@@ -5,7 +5,7 @@ export const appRouter = router({
   hello: loggedPublicProcedure
     .input(z.string().nullish())
     .query(({ input }) => {
-      return `hello ${input ?? "world"}`;
+      return `hello ${input}`;
     }),
   getUserById: loggedPublicProcedure.input(z.string()).query(() => {
     return "arkghlerkghlerk";
