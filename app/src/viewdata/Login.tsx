@@ -9,9 +9,6 @@ export default function Login({ setSessionToken }: LoginProps) {
   const [password, setPassword] = useState("");
   const [hello, setHello] = useState("");
 
-  const helloQuery = trpc.hello.useQuery(username, {
-    enabled: false,
-  });
   const utils = trpc.useUtils();
 
   return (
