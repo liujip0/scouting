@@ -1,18 +1,18 @@
-import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-import { hashPassword } from '../../../app/util/auth.ts';
-import { loggedPublicProcedure } from '../trpc.ts';
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { loggedPublicProcedure } from "../trpc.ts";
+import { hashPassword } from "../util/auth.ts";
 
 export const login = loggedPublicProcedure
   .input(
     z.object({
       username: z.string(),
-      password: z.string()
+      password: z.string(),
     })
   )
   .mutation(async (opts) => {
     const result = await opts.ctx.env.DB.prepare(
-      'SELECT username, hashedPassword FROM Users WHERE username = ? LIMIT 1;'
+      "SELECT username, hashedPassword FROM Users WHERE username = ? LIMIT 1;"
     )
       .bind(opts.input.username)
       .first();
@@ -27,30 +27,30 @@ export const login = loggedPublicProcedure
         );
         const expiresAt = Date.now() + 6.048e8;
         const tokenCreationResult = await opts.ctx.env.DB.prepare(
-          'INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);'
+          "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
         )
           .bind(opts.input.username, token, expiresAt)
           .run();
         if (tokenCreationResult.success) {
           return {
             token: token,
-            expiresAt: expiresAt
+            expiresAt: expiresAt,
           };
         } else {
           throw new TRPCError({
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Token creation failed.'
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Token creation failed.",
           });
         }
       } else {
         throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Invalid login credentials.'
+          code: "BAD_REQUEST",
+          message: "Invalid login credentials.",
         });
       }
     } else {
       if (
-        opts.input.username === 'admin' &&
+        opts.input.username === "admin" &&
         (await hashPassword(opts.input.password, opts.ctx.env.SALT_TOKEN)) ===
           (await hashPassword(
             opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
@@ -63,7 +63,7 @@ export const login = loggedPublicProcedure
         );
         const expiresAt = Date.now() + 6.048e8;
         await opts.ctx.env.DB.prepare(
-          'INSERT INTO Users (username, hashedPassword, permLevel) VALUES (?, ?, ?)'
+          "INSERT INTO Users (username, hashedPassword, permLevel) VALUES (?, ?, ?)"
         )
           .bind(
             opts.input.username,
@@ -71,29 +71,29 @@ export const login = loggedPublicProcedure
               opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
               opts.ctx.env.SALT_TOKEN
             ),
-            'admin'
+            "admin"
           )
           .run();
         const tokenCreationResult = await opts.ctx.env.DB.prepare(
-          'INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);'
+          "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
         )
           .bind(opts.input.username, token, expiresAt)
           .run();
         if (tokenCreationResult.success) {
           return {
             token: token,
-            expiresAt: expiresAt
+            expiresAt: expiresAt,
           };
         } else {
           throw new TRPCError({
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Token creation failed.'
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Token creation failed.",
           });
         }
       }
       throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Invalid login credentials.'
+        code: "BAD_REQUEST",
+        message: "Invalid login credentials.",
       });
     }
   });
