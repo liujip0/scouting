@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { authRouter } from "./auth/router.ts";
 import { loggedPublicProcedure, publicProcedure, router } from "./trpc.ts";
 
 export const appRouter = router({
@@ -16,6 +17,7 @@ export const appRouter = router({
   logTest: loggedPublicProcedure.query(() => {
     return "kjhsrlgkjhlaekgjh";
   }),
+  auth: authRouter,
 });
 
 export type AppRouter = typeof appRouter;
