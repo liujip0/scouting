@@ -1,10 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { urls } from "../utils/constants.ts";
 import { trpc } from "../utils/trpc.ts";
+import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
+import SelectEvent from "./SelectEvent.tsx";
 
 export default function ViewData() {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,6 +22,7 @@ export default function ViewData() {
   );
 
   const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [eventKey, setEventKey] = useState<string | null>(null);
 
   return (
     <trpc.Provider
@@ -33,10 +35,15 @@ export default function ViewData() {
             height: "100%",
             width: "100%",
           }}>
-          <Link to="/">Back to Landing Page</Link>
-          {sessionToken ?
-            sessionToken
-          : <Login setSessionToken={setSessionToken} />}
+          {(() => {
+            if (!sessionToken) {
+              return <Login setSessionToken={setSessionToken} />;
+            } else if (!eventKey) {
+              return <SelectEvent setEventKey={setEventKey} />;
+            } else {
+              return <DataViewerLayout />;
+            }
+          })()}
         </div>
       </QueryClientProvider>
     </trpc.Provider>

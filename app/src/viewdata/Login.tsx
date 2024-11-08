@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { trpc } from "../utils/trpc.ts";
 
 type LoginProps = {
   setSessionToken: (value: string) => void;
 };
 export default function Login({ setSessionToken }: LoginProps) {
+  const login = trpc.auth.login.useMutation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [hello, setHello] = useState("");
 
-  const utils = trpc.useUtils();
+  useEffect(() => {
+    if (login.isSuccess) {
+      setSessionToken(login.data!.token);
+    }
+  }, [login]);
 
   return (
     <div
@@ -18,6 +23,8 @@ export default function Login({ setSessionToken }: LoginProps) {
         height: "100%",
         width: "100%",
       }}>
+      <Link to="/">Back to Landing Page</Link>
+      <br />
       <input
         type="text"
         value={username}
@@ -36,22 +43,14 @@ export default function Login({ setSessionToken }: LoginProps) {
       <br />
       <button
         onClick={() => {
-          setSessionToken("kar;ghliuwh");
+          login.mutate({ username, password });
         }}>
         Submit
       </button>
-      <br />
-      <button
-        onClick={async () => {
-          const response = await utils.hello.fetch(username);
-          if (response) {
-            setHello(response);
-          }
-        }}>
-        Test Hello API
-      </button>
-      <br />
-      <div>{hello ?? "No data yet"}</div>
+      <div>
+        {login.isSuccess && "Login Successful"}
+        {login.isError && login.error.message}
+      </div>
     </div>
   );
 }

@@ -8,7 +8,6 @@ import { appRouter } from "./router.ts";
 
 export interface Env {
   DB: D1Database;
-  SALT_TOKEN: string;
   ADMIN_ACCOUNT_PASSWORD: string;
 }
 

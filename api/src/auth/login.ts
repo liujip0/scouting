@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
-import { hashPassword } from "../util/auth.ts";
+import { hashPassword, randomString } from "../utils/auth.ts";
 
 export const login = loggedPublicProcedure
   .input(
@@ -12,18 +12,18 @@ export const login = loggedPublicProcedure
   )
   .mutation(async (opts) => {
     const result = await opts.ctx.env.DB.prepare(
-      "SELECT username, hashedPassword FROM Users WHERE username = ? LIMIT 1;"
+      "SELECT username, hashedPassword, saltToken FROM Users WHERE username = ? LIMIT 1;"
     )
       .bind(opts.input.username)
-      .first();
+      .first<{ username: string; hashedPassword: string; saltToken: string }>();
     if (result) {
       if (
-        (await hashPassword(opts.input.password, opts.ctx.env.SALT_TOKEN)) ===
+        (await hashPassword(opts.input.password, result.saltToken)) ===
         result.hashedPassword
       ) {
         const token = await hashPassword(
           (Math.random() + 1).toString(3),
-          opts.ctx.env.SALT_TOKEN
+          result.saltToken
         );
         const expiresAt = Date.now() + 6.048e8;
         const tokenCreationResult = await opts.ctx.env.DB.prepare(
@@ -49,51 +49,50 @@ export const login = loggedPublicProcedure
         });
       }
     } else {
-      if (
-        opts.input.username === "admin" &&
-        (await hashPassword(opts.input.password, opts.ctx.env.SALT_TOKEN)) ===
-          (await hashPassword(
-            opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
-            opts.ctx.env.SALT_TOKEN
-          ))
-      ) {
-        const token = await hashPassword(
-          (Math.random() + 1).toString(3),
-          opts.ctx.env.SALT_TOKEN
-        );
-        const expiresAt = Date.now() + 6.048e8;
-        await opts.ctx.env.DB.prepare(
-          "INSERT INTO Users (username, hashedPassword, permLevel) VALUES (?, ?, ?)"
-        )
-          .bind(
-            opts.input.username,
-            await hashPassword(
-              opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
-              opts.ctx.env.SALT_TOKEN
-            ),
-            "admin"
+      if (opts.input.username === "admin") {
+        const salt = randomString(32);
+        if (
+          (await hashPassword(opts.input.password, salt)) ===
+          (await hashPassword(opts.ctx.env.ADMIN_ACCOUNT_PASSWORD, salt))
+        ) {
+          const token = await hashPassword(
+            (Math.random() + 1).toString(3),
+            salt
+          );
+          const expiresAt = Date.now() + 6.048e8;
+          const adminCreationResult = await opts.ctx.env.DB.prepare(
+            "INSERT INTO Users (username, hashedPassword, permLevel, saltToken) VALUES (?, ?, ?, ?)"
           )
-          .run();
-        const tokenCreationResult = await opts.ctx.env.DB.prepare(
-          "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
-        )
-          .bind(opts.input.username, token, expiresAt)
-          .run();
-        if (tokenCreationResult.success) {
-          return {
-            token: token,
-            expiresAt: expiresAt,
-          };
-        } else {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: "Token creation failed.",
-          });
+            .bind(
+              opts.input.username,
+              await hashPassword(opts.ctx.env.ADMIN_ACCOUNT_PASSWORD, salt),
+              "admin",
+              salt
+            )
+            .run();
+          console.log(adminCreationResult);
+          const tokenCreationResult = await opts.ctx.env.DB.prepare(
+            "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
+          )
+            .bind(opts.input.username, token, expiresAt)
+            .run();
+          console.log(tokenCreationResult);
+          if (tokenCreationResult.success && adminCreationResult.success) {
+            return {
+              token: token,
+              expiresAt: expiresAt,
+            };
+          } else {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Admin token creation failed.",
+            });
+          }
         }
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid login credentials.",
+        });
       }
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "Invalid login credentials.",
-      });
     }
   });

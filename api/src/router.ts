@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { authRouter } from "./auth/router.ts";
+import { dataRouter } from "./data/router.ts";
 import { loggedPublicProcedure, publicProcedure, router } from "./trpc.ts";
 
 export const appRouter = router({
@@ -18,6 +19,7 @@ export const appRouter = router({
     return "kjhsrlgkjhlaekgjh";
   }),
   auth: authRouter,
+  data: dataRouter,
 });
 
 export type AppRouter = typeof appRouter;
