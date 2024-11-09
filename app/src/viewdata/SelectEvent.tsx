@@ -44,7 +44,7 @@ export default function SelectEvent({ setEventKey }: SelectEventProps) {
             </tr>
           </thead>
           <tbody>
-            {events.data?.forEach((event) => (
+            {events.data?.map((event) => (
               <tr
                 key={event.eventKey}
                 onClick={() => {

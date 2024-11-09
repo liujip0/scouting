@@ -26,7 +26,8 @@ export const loggedPublicProcedure = publicProcedure.use(async (opts) => {
 });
 
 export const authedLoggedProcedure = loggedPublicProcedure.use(async (opts) => {
-  const token = opts.ctx.req.headers.get("authorization");
+  const token = opts.ctx.req.headers.get("Authorization")?.split(" ")[1];
+  console.log(opts.ctx.req.headers.get("Authorization"));
   const session = await opts.ctx.env.DB.prepare(
     "SELECT sessionId, expiresAt FROM UserSessions WHERE token = ? LIMIT 1;"
   )

@@ -70,13 +70,11 @@ export const login = loggedPublicProcedure
               salt
             )
             .run();
-          console.log(adminCreationResult);
           const tokenCreationResult = await opts.ctx.env.DB.prepare(
             "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
           )
             .bind(opts.input.username, token, expiresAt)
             .run();
-          console.log(tokenCreationResult);
           if (tokenCreationResult.success && adminCreationResult.success) {
             return {
               token: token,

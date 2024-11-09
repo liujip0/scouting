@@ -1,20 +1,24 @@
-import { useEffect, useState } from "react";
+import { hashPassword, randomString } from "@isa2025/api/src/utils/auth.ts";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { trpc } from "../utils/trpc.ts";
+import { setToken } from "./ViewData.tsx";
 
 type LoginProps = {
-  setSessionToken: (value: string) => void;
+  setLoggedIn: (value: boolean) => void;
 };
-export default function Login({ setSessionToken }: LoginProps) {
-  const login = trpc.auth.login.useMutation();
+export default function Login({ setLoggedIn }: LoginProps) {
+  const login = trpc.auth.login.useMutation({
+    onSuccess(data) {
+      if (data?.token) {
+        setToken(data.token);
+        setLoggedIn(true);
+      }
+    },
+  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    if (login.isSuccess) {
-      setSessionToken(login.data!.token);
-    }
-  }, [login]);
+  const [hashedPassword, setHashedPassword] = useState("");
 
   return (
     <div
@@ -23,8 +27,9 @@ export default function Login({ setSessionToken }: LoginProps) {
         height: "100%",
         width: "100%",
       }}>
-      <Link to="/">Back to Landing Page</Link>
-      <br />
+      <div>
+        <Link to="/">Back to Landing Page</Link>
+      </div>
       <input
         type="text"
         value={username}
@@ -51,6 +56,16 @@ export default function Login({ setSessionToken }: LoginProps) {
         {login.isSuccess && "Login Successful"}
         {login.isError && login.error.message}
       </div>
+      <br />
+      <button
+        onClick={async () => {
+          const salt = randomString(32);
+          const hashed = await hashPassword(password, salt);
+          setHashedPassword(salt + " " + hashed);
+        }}>
+        Generate Hash
+      </button>
+      <div>{hashedPassword}</div>
     </div>
   );
 }
