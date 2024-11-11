@@ -6,6 +6,10 @@ import LandingPage from "./LandingPage.tsx";
 import Scout from "./scout/Scout.tsx";
 import ViewData from "./viewdata/ViewData.tsx";
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./serviceworker.js");
+}
+
 const router = createBrowserRouter([
   {
     path: "/",

@@ -1,0 +1,8 @@
+{
+  "short_name": "ISA 2025",
+  "name": "Indiana Scouting Alliance 2025",
+  "start_url": "./",
+  "display": "standalone",
+  "lang": "en-US",
+  "background_color": "#000f5d"
+}
