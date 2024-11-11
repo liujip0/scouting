@@ -1,21 +1,21 @@
 const cacheName = "isa2025-cache";
 const urlsToCache = [
-  "./",
-  "./index.html",
-  "./main.tsx",
-  "./index.css",
+  "/",
+  "/index.html",
+  "/main.tsx",
+  "/index.css",
 
-  "./LandingPage.tsx",
+  "/LandingPage.tsx",
 
-  "./utils/constants.ts",
-  "./utils/trpc.ts",
+  "/utils/constants.ts",
+  "/utils/trpc.ts",
 
-  "./scout/Scout.tsx",
+  "/scout/Scout.tsx",
 
-  "./viewdata/ViewData.tsx",
-  "./viewdata/Login.tsx",
-  "./viewdata/SelectEvent.tsx",
-  "./viewdata/DataViewerLayout.tsx",
+  "/viewdata/ViewData.tsx",
+  "/viewdata/Login.tsx",
+  "/viewdata/SelectEvent.tsx",
+  "/viewdata/DataViewerLayout.tsx",
 ];
 
 self.addEventListener("install", (event) => {
