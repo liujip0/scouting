@@ -8,12 +8,22 @@ import Login from "./Login.tsx";
 import SelectEvent from "./SelectEvent.tsx";
 
 let token: string;
-export function setToken(newToken: string) {
+if (localStorage.getItem("token")) {
+  token = localStorage.getItem("token")!;
+}
+// eslint-disable-next-line react-refresh/only-export-components
+export function setToken(newToken: string, expiresAt: number) {
+  localStorage.setItem("token", newToken);
+  localStorage.setItem("tokenExpiresAt", expiresAt.toString());
   token = newToken;
 }
 
 export default function ViewData() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(
+    localStorage.getItem("token") !== null &&
+      localStorage.getItem("tokenExpiresAt") !== null &&
+      Date.now() < parseInt(localStorage.getItem("tokenExpiresAt")!)
+  );
   const [eventKey, setEventKey] = useState<string | null>(null);
 
   const [queryClient] = useState(() => new QueryClient());
@@ -49,7 +59,12 @@ export default function ViewData() {
             if (!loggedIn) {
               return <Login setLoggedIn={setLoggedIn} />;
             } else if (!eventKey) {
-              return <SelectEvent setEventKey={setEventKey} />;
+              return (
+                <SelectEvent
+                  eventKey={eventKey}
+                  setEventKey={setEventKey}
+                />
+              );
             } else {
               return <DataViewerLayout />;
             }

@@ -11,7 +11,7 @@ export default function Login({ setLoggedIn }: LoginProps) {
   const login = trpc.auth.login.useMutation({
     onSuccess(data) {
       if (data?.token) {
-        setToken(data.token);
+        setToken(data.token, data.expiresAt);
         setLoggedIn(true);
       }
     },

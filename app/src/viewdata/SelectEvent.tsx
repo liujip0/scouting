@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import { trpc } from "../utils/trpc.ts";
 
 type SelectEventProps = {
+  eventKey: string | null;
   setEventKey: (value: string) => void;
 };
-export default function SelectEvent({ setEventKey }: SelectEventProps) {
+export default function SelectEvent({
+  eventKey,
+  setEventKey,
+}: SelectEventProps) {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
 
   const events = trpc.data.getEvents.useQuery();
@@ -48,7 +52,7 @@ export default function SelectEvent({ setEventKey }: SelectEventProps) {
               <tr
                 key={event.eventKey}
                 onClick={() => {
-                  setSelectedEvent(event.eventKey);
+                  setSelectedEvent(eventKey ? null : event.eventKey);
                 }}>
                 <td>{event.eventKey}</td>
                 <td>{event.eventName}</td>
