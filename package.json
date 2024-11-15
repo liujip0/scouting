@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@9.13.1+sha256.dd98691b127b5d2c4d0605b594e98ec0bcbe5fba86358184de706c3312a4e2ee",
   "devDependencies": {
     "concurrently": "^9.0.1",
     "prettier": "^3.3.3"

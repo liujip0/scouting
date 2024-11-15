@@ -1,3 +1,8 @@
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { createTheme, ThemeProvider } from "@mui/material";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -21,8 +26,28 @@ const router = createBrowserRouter([
   },
 ]);
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#d59f0f", // Indiana Flag Gold
+      contrastText: "#000",
+    },
+    secondary: {
+      main: "#000f5d", // Indiana Flag Blue
+      contrastText: "#fff",
+    },
+  },
+  typography: {
+    h1: {
+      fontSize: "2.5rem",
+    },
+  },
+});
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>
 );
