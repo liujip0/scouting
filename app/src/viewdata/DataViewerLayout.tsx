@@ -1,17 +1,55 @@
-import { Link } from "react-router-dom";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { useState } from "react";
 
 export default function DataViewerLayout() {
+  const [tab, setTab] = useState<"data" | "accounts">("data");
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        border: "1px solid red",
-        display: "flex",
-        flexDirection: "column",
+    <Box
+      sx={{
+        width: 1,
+        height: 1,
       }}>
-      <Link to="/">Back to Landing Page</Link>
-      <div>DataViewerLayout</div>
-    </div>
+      <AppBar
+        position="static"
+        sx={{
+          display: "flex",
+        }}>
+        <Toolbar>
+          <TrendingUpIcon fontSize="large" />
+          <Typography
+            variant="h2"
+            fontSize="large">
+            Indiana Scouting Alliance
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <TabContext value={tab}>
+        <Box>
+          <TabList
+            onChange={(_event, value) => {
+              setTab(value);
+            }}>
+            <Tab
+              label="Data"
+              value="data"
+            />
+            <Tab
+              label="Manage Accounts"
+              value="accounts"
+            />
+          </TabList>
+        </Box>
+        <TabPanel value="data">Data</TabPanel>
+        <TabPanel value="accounts">Accounts</TabPanel>
+      </TabContext>
+    </Box>
   );
 }

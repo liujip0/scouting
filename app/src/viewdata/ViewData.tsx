@@ -5,7 +5,6 @@ import { urls } from "../utils/constants.ts";
 import { trpc } from "../utils/trpc.ts";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
-import SelectEvent from "./SelectEvent.tsx";
 
 let token: string;
 if (localStorage.getItem("token")) {
@@ -24,7 +23,6 @@ export default function ViewData() {
       localStorage.getItem("tokenExpiresAt") !== null &&
       Date.now() < parseInt(localStorage.getItem("tokenExpiresAt")!)
   );
-  const [eventKey, setEventKey] = useState<string | null>(null);
 
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -49,27 +47,9 @@ export default function ViewData() {
       client={trpcClient}
       queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <div
-          style={{
-            border: "1px solid blue",
-            height: "100%",
-            width: "100%",
-          }}>
-          {(() => {
-            if (!loggedIn) {
-              return <Login setLoggedIn={setLoggedIn} />;
-            } else if (!eventKey) {
-              return (
-                <SelectEvent
-                  eventKey={eventKey}
-                  setEventKey={setEventKey}
-                />
-              );
-            } else {
-              return <DataViewerLayout />;
-            }
-          })()}
-        </div>
+        {!loggedIn ?
+          <Login setLoggedIn={setLoggedIn} />
+        : <DataViewerLayout />}
       </QueryClientProvider>
     </trpc.Provider>
   );
