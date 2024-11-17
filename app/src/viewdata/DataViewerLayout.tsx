@@ -4,6 +4,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Tab from "@mui/material/Tab";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -17,18 +18,28 @@ export default function DataViewerLayout() {
         width: 1,
         height: 1,
       }}>
-      <AppBar
-        position="static"
-        sx={{
-          display: "flex",
-        }}>
+      <AppBar position="static">
         <Toolbar>
-          <TrendingUpIcon fontSize="large" />
+          <TrendingUpIcon
+            fontSize="large"
+            sx={{
+              mr: 2,
+            }}
+          />
           <Typography
-            variant="h2"
-            fontSize="large">
+            variant="h1"
+            fontSize="large"
+            sx={{
+              flex: 1,
+            }}>
             Indiana Scouting Alliance
           </Typography>
+          <Button
+            sx={{
+              color: "primary.contrastText",
+            }}>
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <TabContext value={tab}>
