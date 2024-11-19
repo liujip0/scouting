@@ -1,7 +1,7 @@
 import { hashPassword, randomString } from "@isa2025/api/src/utils/auth.ts";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { trpc } from "../utils/trpc.ts";
+import { trpc } from "../utils/Trpc.ts";
 import { setToken } from "./ViewData.tsx";
 
 type LoginProps = {

@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
-import { urls } from "../utils/constants.ts";
-import { trpc } from "../utils/trpc.ts";
+import { urls } from "../utils/Constants.ts";
+import { trpc } from "../utils/Trpc.ts";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
 
