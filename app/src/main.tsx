@@ -29,12 +29,12 @@ const router = createBrowserRouter([
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#d59f0f", // Indiana Flag Gold
-      contrastText: "#000",
-    },
-    secondary: {
       main: "#000f5d", // Indiana Flag Blue
       contrastText: "#fff",
+    },
+    secondary: {
+      main: "#d59f0f", // Indiana Flag Gold
+      contrastText: "#000",
     },
   },
   typography: {

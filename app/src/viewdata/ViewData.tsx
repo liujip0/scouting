@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
-import { urls } from "../utils/Constants.ts";
-import { trpc } from "../utils/Trpc.ts";
+import { urls } from "../utils/Constants.tsx";
+import { trpc } from "../utils/Trpc.tsx";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
 
@@ -49,7 +49,7 @@ export default function ViewData() {
       <QueryClientProvider client={queryClient}>
         {!loggedIn ?
           <Login setLoggedIn={setLoggedIn} />
-        : <DataViewerLayout />}
+        : <DataViewerLayout setLoggedIn={setLoggedIn} />}
       </QueryClientProvider>
     </trpc.Provider>
   );

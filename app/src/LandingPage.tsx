@@ -7,7 +7,7 @@ export default function LandingPage() {
   return (
     <Box
       sx={{
-        bgcolor: "secondary.main",
+        bgcolor: "primary.main",
         width: 1,
         height: 1,
         display: "flex",
@@ -19,7 +19,7 @@ export default function LandingPage() {
         variant="h1"
         sx={{
           textAlign: "center",
-          color: "secondary.contrastText",
+          color: "primary.contrastText",
           mb: 4,
           fontSize: "2.5rem",
         }}>
@@ -49,6 +49,8 @@ function LinkButton({ to, children }: LinkButtonProps) {
         variant="contained"
         sx={{
           width: 1,
+          backgroundColor: "secondary.main",
+          color: "secondary.contrastText",
         }}>
         {children}
       </Button>

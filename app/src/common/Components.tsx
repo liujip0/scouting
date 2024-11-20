@@ -1,19 +1,80 @@
 import Box from "@mui/material/Box";
 
-export function GridBorder() {
-  const borderWidth = 20;
+type GridBorderProps = {
+  children: React.ReactNode;
+};
+export function GridBorder({ children }: GridBorderProps) {
+  const borderMarginPx = 20;
+  const borderWidthPx = 5;
   return (
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: `${borderWidth}px 1fr ${borderWidth}px`,
-        gridTemplateRows: `${borderWidth}px 1fr ${borderWidth}px`,
+        gridTemplateColumns: `${borderMarginPx}px 1fr ${borderMarginPx}px`,
+        gridTemplateRows: `${borderMarginPx}px 1fr ${borderMarginPx}px`,
+        columnGap: `${borderWidthPx}px`,
+        rowGap: `${borderWidthPx}px`,
+        width: 1,
+        height: 1,
+        boxSizing: "content-box",
+        backgroundColor: "primary.main",
       }}>
       <Box
         sx={{
-          gridColumn: "2 / 3",
-          gridRow: "1",
+          gridColumn: 1,
+          gridRow: 1,
+          backgroundColor: "secondary.main",
         }}></Box>
+      <Box
+        sx={{
+          gridColumn: 2,
+          gridRow: 1,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 3,
+          gridRow: 1,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 1,
+          gridRow: 2,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 3,
+          gridRow: 2,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 1,
+          gridRow: 3,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 2,
+          gridRow: 3,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 3,
+          gridRow: 3,
+          backgroundColor: "secondary.main",
+        }}></Box>
+      <Box
+        sx={{
+          gridColumn: 2,
+          gridRow: 2,
+          backgroundColor: "secondary.main",
+        }}>
+        {children}
+      </Box>
     </Box>
   );
 }

@@ -9,8 +9,14 @@ import Tab from "@mui/material/Tab";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { setToken } from "./ViewData.tsx";
 
-export default function DataViewerLayout() {
+type DataViewerLayoutProps = {
+  setLoggedIn: (value: boolean) => void;
+};
+export default function DataViewerLayout({
+  setLoggedIn,
+}: DataViewerLayoutProps) {
   const [tab, setTab] = useState<"data" | "accounts">("data");
   return (
     <Box
@@ -37,6 +43,10 @@ export default function DataViewerLayout() {
           <Button
             sx={{
               color: "primary.contrastText",
+            }}
+            onClick={() => {
+              setToken("", 0);
+              setLoggedIn(false);
             }}>
             Log Out
           </Button>
