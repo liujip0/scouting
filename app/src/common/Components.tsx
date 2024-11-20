@@ -16,7 +16,6 @@ export function GridBorder({ children }: GridBorderProps) {
         rowGap: `${borderWidthPx}px`,
         width: 1,
         height: 1,
-        boxSizing: "content-box",
         backgroundColor: "primary.main",
       }}>
       <Box

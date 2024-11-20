@@ -1,4 +1,10 @@
-import { hashPassword, randomString } from "@isa2025/api/src/utils/auth.ts";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { GridBorder } from "../common/Components.tsx";
@@ -19,56 +25,67 @@ export default function Login({ setLoggedIn }: LoginProps) {
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [hashedPassword, setHashedPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <GridBorder>
-      <div
-        style={{
-          border: "1px solid red",
-          height: "100%",
-          width: "100%",
+      <Box
+        sx={{
+          width: 1,
+          height: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}>
-        <div>
-          <Link to="/">Back to Landing Page</Link>
-        </div>
-        <input
+        <Link to="/">Back to Landing Page</Link>
+        <Avatar
+          alt="ISA Logo"
+          src="/logo.svg"
+          sx={{
+            width: "min(30vw, 30vh)",
+            height: "min(30vw, 30vh)",
+            m: 2,
+          }}
+        />
+        <TextField
           type="text"
           value={username}
-          onInput={(event) => {
+          onChange={(event) => {
             setUsername(event.currentTarget.value);
           }}
         />
-        <br />
-        <input
-          type="password"
+        <TextField
+          variant="outlined"
+          type={showPassword ? "text" : "password"}
           value={password}
-          onInput={(event) => {
+          onChange={(event) => {
             setPassword(event.currentTarget.value);
           }}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}>
+                    {showPassword ?
+                      <VisibilityOff />
+                    : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
         />
-        <br />
         <button
           onClick={() => {
             login.mutate({ username, password });
           }}>
           Submit
         </button>
-        <div>
-          {login.isSuccess && "Login Successful"}
-          {login.isError && login.error.message}
-        </div>
-        <br />
-        <button
-          onClick={async () => {
-            const salt = randomString(32);
-            const hashed = await hashPassword(password, salt);
-            setHashedPassword(salt + " " + hashed);
-          }}>
-          Generate Hash
-        </button>
-        <div>{hashedPassword}</div>
-      </div>
+      </Box>
     </GridBorder>
   );
 }

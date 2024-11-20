@@ -49,9 +49,8 @@ function LinkButton({ to, children }: LinkButtonProps) {
         variant="contained"
         sx={{
           width: 1,
-          backgroundColor: "secondary.main",
-          color: "secondary.contrastText",
-        }}>
+        }}
+        color="secondary">
         {children}
       </Button>
     </Link>
