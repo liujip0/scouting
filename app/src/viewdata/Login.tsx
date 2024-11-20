@@ -138,8 +138,8 @@ export default function Login({ setLoggedIn }: LoginProps) {
         variant="contained"
         sx={{
           position: "absolute",
-          right: `${borderMarginPx + borderWidthPx + 10}px`,
-          bottom: `${borderMarginPx + borderWidthPx + 10}px`,
+          right: `${borderMarginPx + borderWidthPx + 20}px`,
+          bottom: `${borderMarginPx + borderWidthPx + 20}px`,
         }}>
         Return to Home
       </Button>
