@@ -1,11 +1,12 @@
 import Box from "@mui/material/Box";
 
+export const borderMarginPx = 20;
+export const borderWidthPx = 5;
+
 type GridBorderProps = {
   children: React.ReactNode;
 };
 export function GridBorder({ children }: GridBorderProps) {
-  const borderMarginPx = 20;
-  const borderWidthPx = 5;
   return (
     <Box
       sx={{
