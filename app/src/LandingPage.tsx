@@ -21,7 +21,6 @@ export default function LandingPage() {
           textAlign: "center",
           color: "primary.contrastText",
           mb: 4,
-          fontSize: "2.5rem",
         }}>
         Indiana Scouting Alliance 2025
       </Typography>

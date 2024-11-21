@@ -9,6 +9,7 @@ import Tab from "@mui/material/Tab";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   borderMarginPx,
   borderWidthPx,
@@ -23,6 +24,7 @@ export default function DataViewerLayout({
   setLoggedIn,
 }: DataViewerLayoutProps) {
   const topBarHeightRem = 4;
+  const navigate = useNavigate();
   const [tab, setTab] = useState<"data" | "accounts">("data");
   return (
     <Box
@@ -51,13 +53,24 @@ export default function DataViewerLayout({
             }}
           />
           <Typography
-            variant="h1"
+            variant="h2"
             fontSize="large"
             sx={{
               flex: 1,
             }}>
             Indiana Scouting Alliance
           </Typography>
+          <Button
+            onClick={() => {
+              navigate("/");
+            }}
+            variant="outlined"
+            color="secondary"
+            sx={{
+              mr: 2,
+            }}>
+            Return to Home
+          </Button>
           <Button
             onClick={() => {
               setToken("", 0);

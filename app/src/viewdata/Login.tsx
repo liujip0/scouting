@@ -50,8 +50,8 @@ export default function Login({ setLoggedIn }: LoginProps) {
           alt="ISA Logo"
           src="/logo.svg"
           sx={{
-            width: "min(30vw, 30vh)",
-            height: "min(30vw, 30vh)",
+            width: "min(25vw, 25vh)",
+            height: "min(25vw, 25vh)",
             m: 1,
             borderColor: "primary.main",
             borderStyle: "solid",
@@ -160,7 +160,7 @@ function TextFieldLabel({ label, children }: TextFieldLabelProps) {
         mb: 1,
       }}>
       <Box>
-        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
+        <Typography variant="body1">{label}</Typography>
       </Box>
       <Box
         sx={{
@@ -175,7 +175,7 @@ function TextFieldLabel({ label, children }: TextFieldLabelProps) {
         sx={{
           visibility: "hidden",
         }}>
-        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
+        <Typography variant="body1">{label}</Typography>
       </Box>
     </Box>
   );
