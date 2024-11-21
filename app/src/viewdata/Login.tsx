@@ -160,7 +160,7 @@ function TextFieldLabel({ label, children }: TextFieldLabelProps) {
         mb: 1,
       }}>
       <Box>
-        <Typography variant="body1">{label}</Typography>
+        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
       </Box>
       <Box
         sx={{
@@ -175,7 +175,7 @@ function TextFieldLabel({ label, children }: TextFieldLabelProps) {
         sx={{
           visibility: "hidden",
         }}>
-        <Typography variant="body1">{label}</Typography>
+        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
       </Box>
     </Box>
   );
@@ -185,13 +185,5 @@ type TextFieldLabelTypographyProps = {
   children: React.ReactNode;
 };
 function TextFieldLabelTypography({ children }: TextFieldLabelTypographyProps) {
-  return (
-    <Typography
-      variant="h3"
-      sx={{
-        fontSize: "medium",
-      }}>
-      {children}
-    </Typography>
-  );
+  return <Typography variant="body1">{children}</Typography>;
 }
