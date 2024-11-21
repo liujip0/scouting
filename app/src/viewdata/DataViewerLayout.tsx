@@ -1,14 +1,19 @@
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Tab from "@mui/material/Tab";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import {
+  borderMarginPx,
+  borderWidthPx,
+  GridBorder,
+} from "../common/Components.tsx";
 import { setToken } from "./ViewData.tsx";
 
 type DataViewerLayoutProps = {
@@ -17,6 +22,7 @@ type DataViewerLayoutProps = {
 export default function DataViewerLayout({
   setLoggedIn,
 }: DataViewerLayoutProps) {
+  const topBarHeightRem = 4;
   const [tab, setTab] = useState<"data" | "accounts">("data");
   return (
     <Box
@@ -24,11 +30,23 @@ export default function DataViewerLayout({
         width: 1,
         height: 1,
       }}>
-      <AppBar position="static">
-        <Toolbar>
-          <TrendingUpIcon
-            fontSize="large"
+      <AppBar
+        color="primary"
+        sx={{
+          height: `${topBarHeightRem}rem`,
+        }}>
+        <Toolbar
+          sx={{
+            alignItems: "center",
+            flex: 1,
+          }}>
+          <Avatar
+            alt="ISA Logo"
+            src="/logo.svg"
             sx={{
+              borderColor: "primary.main",
+              borderStyle: "solid",
+              borderWidth: "2px",
               mr: 2,
             }}
           />
@@ -41,36 +59,45 @@ export default function DataViewerLayout({
             Indiana Scouting Alliance
           </Typography>
           <Button
-            sx={{
-              color: "primary.contrastText",
-            }}
             onClick={() => {
               setToken("", 0);
               setLoggedIn(false);
-            }}>
+            }}
+            variant="outlined"
+            color="secondary">
             Log Out
           </Button>
         </Toolbar>
       </AppBar>
-      <TabContext value={tab}>
-        <Box>
-          <TabList
-            onChange={(_event, value) => {
-              setTab(value);
-            }}>
-            <Tab
-              label="Data"
-              value="data"
-            />
-            <Tab
-              label="Manage Accounts"
-              value="accounts"
-            />
-          </TabList>
-        </Box>
-        <TabPanel value="data">Data</TabPanel>
-        <TabPanel value="accounts">Accounts</TabPanel>
-      </TabContext>
+      <Box
+        sx={{
+          width: 1,
+          height: `calc(calc(100% - ${topBarHeightRem}rem) + ${borderMarginPx + borderWidthPx}px)`,
+          position: "relative",
+          top: `calc(${topBarHeightRem}rem - ${borderMarginPx + borderWidthPx}px)`,
+        }}>
+        <GridBorder>
+          <TabContext value={tab}>
+            <Box>
+              <TabList
+                onChange={(_event, value) => {
+                  setTab(value);
+                }}>
+                <Tab
+                  label="Data"
+                  value="data"
+                />
+                <Tab
+                  label="Manage Accounts"
+                  value="accounts"
+                />
+              </TabList>
+            </Box>
+            <TabPanel value="data">Data</TabPanel>
+            <TabPanel value="accounts">Accounts</TabPanel>
+          </TabContext>
+        </GridBorder>
+      </Box>
     </Box>
   );
 }
