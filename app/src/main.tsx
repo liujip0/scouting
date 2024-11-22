@@ -37,6 +37,9 @@ const theme = responsiveFontSizes(
         main: "#d59f0f", // Indiana Flag Gold
         contrastText: "#000",
       },
+      background: {
+        default: "#f1dc8e", // Light Indiana Flag Gold
+      },
     },
     typography: {
       h1: {

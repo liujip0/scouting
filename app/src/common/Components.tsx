@@ -23,55 +23,55 @@ export function GridBorder({ children }: GridBorderProps) {
         sx={{
           gridColumn: 1,
           gridRow: 1,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 2,
           gridRow: 1,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 3,
           gridRow: 1,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 1,
           gridRow: 2,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 3,
           gridRow: 2,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 1,
           gridRow: 3,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 2,
           gridRow: 3,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 3,
           gridRow: 3,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}></Box>
       <Box
         sx={{
           gridColumn: 2,
           gridRow: 2,
-          backgroundColor: "secondary.main",
+          backgroundColor: "background.default",
         }}>
         {children}
       </Box>
