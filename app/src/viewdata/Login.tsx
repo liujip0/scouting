@@ -9,11 +9,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  borderMarginPx,
-  borderWidthPx,
-  GridBorder,
-} from "../common/Components.tsx";
+import { GridBorder, borderMarginPx, borderWidthPx } from "../GridBorder.tsx";
+import { TextFieldDoubleLabel } from "../TextFieldLabel.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 import { setToken } from "./ViewData.tsx";
 
@@ -66,7 +63,7 @@ export default function Login({ setLoggedIn }: LoginProps) {
           }}>
           Login
         </Typography>
-        <TextFieldLabel label="Username:">
+        <TextFieldDoubleLabel label="Username:">
           <TextField
             type="text"
             value={username}
@@ -81,8 +78,8 @@ export default function Login({ setLoggedIn }: LoginProps) {
               borderColor: "primary.main",
             }}
           />
-        </TextFieldLabel>
-        <TextFieldLabel label="Password:">
+        </TextFieldDoubleLabel>
+        <TextFieldDoubleLabel label="Password:">
           <TextField
             variant="outlined"
             type={showPassword ? "text" : "password"}
@@ -118,7 +115,7 @@ export default function Login({ setLoggedIn }: LoginProps) {
               borderColor: "primary.main",
             }}
           />
-        </TextFieldLabel>
+        </TextFieldDoubleLabel>
         <Button
           ref={submitRef}
           onClick={() => {
@@ -145,45 +142,4 @@ export default function Login({ setLoggedIn }: LoginProps) {
       </Button>
     </GridBorder>
   );
-}
-
-type TextFieldLabelProps = {
-  label: string;
-  children: React.ReactNode;
-};
-function TextFieldLabel({ label, children }: TextFieldLabelProps) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        mb: 1,
-      }}>
-      <Box>
-        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
-      </Box>
-      <Box
-        sx={{
-          ml: 1,
-          mr: 1,
-          width: "35vw",
-          maxWidth: "25rem",
-        }}>
-        {children}
-      </Box>
-      <Box
-        sx={{
-          visibility: "hidden",
-        }}>
-        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
-      </Box>
-    </Box>
-  );
-}
-
-type TextFieldLabelTypographyProps = {
-  children: React.ReactNode;
-};
-function TextFieldLabelTypography({ children }: TextFieldLabelTypographyProps) {
-  return <Typography variant="body1">{children}</Typography>;
 }

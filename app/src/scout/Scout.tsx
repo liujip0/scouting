@@ -2,14 +2,12 @@ import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import { useState } from "react";
-import {
-  borderMarginPx,
-  borderWidthPx,
-  GridBorder,
-} from "../common/Components.tsx";
-import { ScoutPage } from "../common/Types.tsx";
+import { GridBorder } from "../GridBorder.tsx";
+import Auto from "./Auto.tsx";
 import DeviceSetup from "./DeviceSetup.tsx";
 import ScoutInfo from "./ScoutInfo.tsx";
+
+export type ScoutPage = "devicesetup" | "scoutinfo" | "auto" | "teleop";
 
 export default function Scout() {
   const [page, setPage] = useState<ScoutPage>("scoutinfo");
@@ -21,22 +19,27 @@ export default function Scout() {
     case "scoutinfo": {
       return <ScoutInfo setPage={setPage} />;
     }
+    case "auto": {
+      return <Auto setPage={setPage} />;
+    }
   }
 }
 
 type ScoutLayoutProps = {
   title: string;
-  children?: React.ReactNode;
   nowScouting?: {
     teamNumber: number;
     alliance: "red" | "blue";
     robotPosition: number;
   };
+  navButtons?: React.ReactNode;
+  children?: React.ReactNode;
 };
 export function ScoutLayout({
   title,
-  children,
   nowScouting,
+  navButtons,
+  children,
 }: ScoutLayoutProps) {
   return (
     <GridBorder>
@@ -85,28 +88,16 @@ export function ScoutLayout({
           }}>
           {children}
         </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            padding: 4,
+            justifyContent: "right",
+          }}>
+          {navButtons}
+        </Box>
       </Box>
     </GridBorder>
-  );
-}
-
-type ScoutNavButtonContainerProps = {
-  children: React.ReactNode;
-};
-export function ScoutNavButtonContainer({
-  children,
-}: ScoutNavButtonContainerProps) {
-  return (
-    <Box
-      sx={{
-        position: "absolute",
-        right: `${borderMarginPx + borderWidthPx + 20}px`,
-        maxWidth: `calc(100vw - ${2 * (borderMarginPx + borderWidthPx + 20)}px)`,
-        bottom: `${borderMarginPx + borderWidthPx + 20}px`,
-        display: "flex",
-        gap: 2,
-      }}>
-      {children}
-    </Box>
   );
 }

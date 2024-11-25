@@ -1,21 +1,28 @@
 import Button from "@mui/material/Button";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
-type DeviceSetup = {
-  setPage: (newValue: ScoutPage) => void;
+type AutoProps = {
+  setPage: (value: ScoutPage) => void;
 };
-export default function DeviceSetup({ setPage }: DeviceSetup) {
+export default function Auto({ setPage }: AutoProps) {
   return (
     <ScoutLayout
-      title="Device Setup"
+      title="Auto"
       navButtons={
         <>
           <Button
             onClick={() => {
               setPage("scoutinfo");
             }}
+            variant="outlined">
+            Back
+          </Button>
+          <Button
+            onClick={() => {
+              setPage("teleop");
+            }}
             variant="contained">
-            Done
+            Continue
           </Button>
         </>
       }></ScoutLayout>

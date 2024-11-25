@@ -55,6 +55,15 @@ const theme = responsiveFontSizes(
         fontSize: "1.3em",
       },
     },
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          notchedOutline: {
+            borderColor: "#000f5d",
+          },
+        },
+      },
+    },
   })
 );
 
