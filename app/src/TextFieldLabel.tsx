@@ -1,34 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-type TextFieldLabelProps = {
-  label: string;
-  children: React.ReactNode;
-};
-export function TextFieldLabel({ label, children }: TextFieldLabelProps) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        mb: 1,
-      }}>
-      <Box>
-        <TextFieldLabelTypography>{label}</TextFieldLabelTypography>
-      </Box>
-      <Box
-        sx={{
-          ml: 1,
-          mr: 1,
-          width: "35vw",
-          maxWidth: "25rem",
-        }}>
-        {children}
-      </Box>
-    </Box>
-  );
-}
-
 type TextFieldDoubleLabelProps = {
   label: string;
   children: React.ReactNode;

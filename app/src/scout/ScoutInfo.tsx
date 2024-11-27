@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
-import { TextFieldLabel } from "../TextFieldLabel.tsx";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type ScoutInfoProps = {
@@ -50,29 +50,53 @@ export default function ScoutInfo({ setPage }: ScoutInfoProps) {
           width: 1,
           height: 1,
           display: "flex",
-          padding: 4,
+          pt: 4,
+          pb: 4,
         }}>
-        <Box
+        <Stack
           sx={{
             flex: 1,
-          }}>
+            pl: 4,
+            pr: 4,
+          }}
+          gap={2}>
           <TextField
+            type="text"
             variant="outlined"
             label="Scout Name & Last Initial"
           />
-          <TextFieldLabel label="Scout Name & Last Initial:">
-            <TextField variant="outlined" />
-          </TextFieldLabel>
-        </Box>
+          <TextField
+            type="number"
+            variant="outlined"
+            label="Scout Team Number"
+          />
+        </Stack>
         <Divider
           orientation="vertical"
           variant="middle"
           flexItem
         />
-        <Box
+        <Stack
           sx={{
             flex: 1,
-          }}></Box>
+            pl: 4,
+            pr: 4,
+          }}
+          gap={2}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+            }}>
+            <TextField
+              type="text"
+              variant="outlined"
+              label="Event Code"
+              disabled
+            />
+            <Button>Select</Button>
+          </Box>
+        </Stack>
       </Box>
     </ScoutLayout>
   );
