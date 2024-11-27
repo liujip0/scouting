@@ -4,6 +4,7 @@ import {
   fetchRequestHandler,
 } from "@trpc/server/adapters/fetch";
 import { createContext } from "./context.ts";
+import { publicRouter } from "./public/index.ts";
 import { appRouter } from "./router.ts";
 
 export interface Env {
@@ -22,6 +23,15 @@ export default {
         },
       });
       return response;
+    }
+
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/public")) {
+      return publicRouter(
+        request,
+        url.pathname.split("/").filter((x) => x !== "" && x !== "public"),
+        url.searchParams
+      );
     }
 
     return fetchRequestHandler({

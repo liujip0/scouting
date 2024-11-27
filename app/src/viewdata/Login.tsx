@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { GridBorder, borderMarginPx, borderWidthPx } from "../GridBorder.tsx";
 import { TextFieldDoubleLabel } from "../TextFieldLabel.tsx";
 import { trpc } from "../utils/Trpc.tsx";
-import { setToken } from "./ViewData.tsx";
+import { setToken } from "./Data.tsx";
 
 type LoginProps = {
   setLoggedIn: (value: boolean) => void;

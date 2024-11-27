@@ -31,7 +31,7 @@ export default function LandingPage() {
           gap: 2,
         }}>
         <LinkButton to="/scout">Scout</LinkButton>
-        <LinkButton to="/viewdata">View or Manage Data</LinkButton>
+        <LinkButton to="/data">View or Manage Data</LinkButton>
       </Box>
     </Box>
   );

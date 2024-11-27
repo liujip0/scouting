@@ -11,7 +11,8 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { borderMarginPx, borderWidthPx, GridBorder } from "../GridBorder.tsx";
-import { setToken } from "./ViewData.tsx";
+import { setToken } from "./Data.tsx";
+import ViewData from "./ViewData.tsx";
 
 type DataViewerLayoutProps = {
   setLoggedIn: (value: boolean) => void;
@@ -21,7 +22,9 @@ export default function DataViewerLayout({
 }: DataViewerLayoutProps) {
   const topBarHeightRem = 4;
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"data" | "accounts">("data");
+  const [tab, setTab] = useState<"viewdata" | "exportdata" | "accounts">(
+    "viewdata"
+  );
   return (
     <Box
       sx={{
@@ -93,8 +96,12 @@ export default function DataViewerLayout({
                   setTab(value);
                 }}>
                 <Tab
-                  label="Data"
-                  value="data"
+                  label="View Data"
+                  value="viewdata"
+                />
+                <Tab
+                  label="Export Data"
+                  value="exportdata"
                 />
                 <Tab
                   label="Manage Accounts"
@@ -102,7 +109,8 @@ export default function DataViewerLayout({
                 />
               </TabList>
             </Box>
-            <TabPanel value="data">Data</TabPanel>
+            <ViewData />
+            <TabPanel value="exportdata"></TabPanel>
             <TabPanel value="accounts">Accounts</TabPanel>
           </TabContext>
         </GridBorder>
