@@ -27,10 +27,11 @@ export default {
 
     const url = new URL(request.url);
     if (url.pathname.startsWith("/public")) {
-      return publicRouter(
+      return await publicRouter(
         request,
         url.pathname.split("/").filter((x) => x !== "" && x !== "public"),
-        url.searchParams
+        url.searchParams,
+        env
       );
     }
 
