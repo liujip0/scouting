@@ -7,7 +7,7 @@ import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
 
 let token: string;
-if (localStorage.getItem("token")) {
+if (localStorage.getItem("token") !== "") {
   token = localStorage.getItem("token")!;
 }
 // eslint-disable-next-line react-refresh/only-export-components

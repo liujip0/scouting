@@ -45,7 +45,7 @@ export const login = loggedPublicProcedure
         }
       } else {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: "UNAUTHORIZED",
           message: "Invalid login credentials.",
         });
       }
@@ -89,9 +89,13 @@ export const login = loggedPublicProcedure
           }
         }
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: "UNAUTHORIZED",
           message: "Invalid login credentials.",
         });
       }
     }
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Invalid login credentials.",
+    });
   });

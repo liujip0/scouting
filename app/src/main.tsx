@@ -6,11 +6,11 @@ import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Data from "./data/Data.tsx";
 import ErrorPage from "./ErrorPage.tsx";
 import "./index.css";
 import LandingPage from "./LandingPage.tsx";
 import Scout from "./scout/Scout.tsx";
-import Data from "./viewdata/Data.tsx";
 
 const router = createBrowserRouter([
   {

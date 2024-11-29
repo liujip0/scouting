@@ -22,7 +22,12 @@ type DataViewerLayoutProps = {
 export default function DataViewerLayout({
   setLoggedIn,
 }: DataViewerLayoutProps) {
-  const logout = trpc.auth.logout.useMutation();
+  const logout = trpc.auth.logout.useMutation({
+    onSuccess() {
+      setToken("", 0);
+      setLoggedIn(false);
+    },
+  });
 
   const topBarHeightRem = 4;
   const navigate = useNavigate();
@@ -78,8 +83,6 @@ export default function DataViewerLayout({
           <Button
             onClick={() => {
               logout.mutate();
-              setToken("", 0);
-              setLoggedIn(false);
             }}
             variant="outlined"
             color="secondary">

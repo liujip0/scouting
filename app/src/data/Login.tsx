@@ -18,6 +18,7 @@ type LoginProps = {
   setLoggedIn: (value: boolean) => void;
 };
 export default function Login({ setLoggedIn }: LoginProps) {
+  const [errorText, setErrorText] = useState("");
   const login = trpc.auth.login.useMutation({
     onSuccess(data) {
       if (data?.token) {
@@ -25,7 +26,11 @@ export default function Login({ setLoggedIn }: LoginProps) {
         setLoggedIn(true);
       }
     },
+    onError(error) {
+      setErrorText(error.message);
+    },
   });
+
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -71,6 +76,7 @@ export default function Login({ setLoggedIn }: LoginProps) {
               setUsername(event.currentTarget.value);
             }}
             placeholder="Enter Username"
+            error={errorText !== ""}
             color="primary"
             size="small"
             sx={{
@@ -81,7 +87,6 @@ export default function Login({ setLoggedIn }: LoginProps) {
         </TextFieldDoubleLabel>
         <TextFieldDoubleLabel label="Password:">
           <TextField
-            variant="outlined"
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(event) => {
@@ -109,6 +114,9 @@ export default function Login({ setLoggedIn }: LoginProps) {
               },
             }}
             placeholder="Enter Password"
+            error={errorText !== ""}
+            helperText={errorText}
+            variant="outlined"
             size="small"
             sx={{
               width: 1,
