@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { borderMarginPx, borderWidthPx, GridBorder } from "../GridBorder.tsx";
 import { setToken } from "./Data.tsx";
+import Util from "./Util.tsx";
 import ViewData from "./ViewData.tsx";
 
 type DataViewerLayoutProps = {
@@ -22,9 +23,9 @@ export default function DataViewerLayout({
 }: DataViewerLayoutProps) {
   const topBarHeightRem = 4;
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"viewdata" | "exportdata" | "accounts">(
-    "viewdata"
-  );
+  const [tab, setTab] = useState<
+    "viewdata" | "exportdata" | "accounts" | "util"
+  >("viewdata");
   return (
     <Box
       sx={{
@@ -107,11 +108,18 @@ export default function DataViewerLayout({
                   label="Manage Accounts"
                   value="accounts"
                 />
+                <Tab
+                  label="Util"
+                  value="util"
+                />
               </TabList>
             </Box>
             <ViewData />
             <TabPanel value="exportdata"></TabPanel>
             <TabPanel value="accounts">Accounts</TabPanel>
+            <TabPanel value="util">
+              <Util />
+            </TabPanel>
           </TabContext>
         </GridBorder>
       </Box>

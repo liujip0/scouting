@@ -29,13 +29,37 @@ export const authedLoggedProcedure = loggedPublicProcedure.use(async (opts) => {
   const token = opts.ctx.req.headers.get("Authorization")?.split(" ")[1];
   console.log(opts.ctx.req.headers.get("Authorization"));
   const session = await opts.ctx.env.DB.prepare(
-    "SELECT sessionId, expiresAt FROM UserSessions WHERE token = ? LIMIT 1;"
+    "SELECT sessionId, expiresAt, username FROM UserSessions WHERE token = ? LIMIT 1;"
   )
     .bind(token)
-    .run<{ sessionId: string; expiresAt: number }>();
+    .run<{
+      sessionId: string;
+      expiresAt: number;
+      username: string;
+    }>();
   if (!session.error && session.results[0]) {
     if (session.results[0].expiresAt! > Date.now()) {
-      const result = await opts.next();
+      const userInfo = await opts.ctx.env.DB.prepare(
+        "SELECT permLevel FROM Users WHERE username = ?"
+      )
+        .bind(session.results[0].username)
+        .first<{
+          permLevel: "demo" | "team" | "datamanage" | "admin";
+        }>();
+      if (!userInfo) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Unable to fetch user info after logging in.",
+        });
+      }
+      const result = await opts.next({
+        ctx: {
+          user: {
+            username: session.results[0].username,
+            permLevel: userInfo.permLevel,
+          },
+        },
+      });
       return result;
     } else {
       await opts.ctx.env.DB.prepare(

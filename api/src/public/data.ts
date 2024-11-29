@@ -1,4 +1,4 @@
-import { Env } from "../index.ts";
+import { publicOpts } from "./context.ts";
 
 interface TeamMatchEntry {
   eventKey: string;
@@ -34,14 +34,9 @@ interface TeamMatchEntry {
   postmatchUnderHeavyDefense: boolean;
 }
 
-export const data = async (
-  request: Request,
-  path: string[],
-  params: URLSearchParams,
-  env: Env
-): Promise<Response> => {
+export const data = async (opts: publicOpts): Promise<Response> => {
   const renameColumns: Record<string, string> = {};
-  params.getAll("rename").forEach((item) => {
+  opts.params.getAll("rename").forEach((item) => {
     const column = item.split(".");
     renameColumns[column[0]] = column[1];
   });
@@ -81,11 +76,11 @@ export const data = async (
   ];
 
   if (
-    params.has("include") &&
-    params.get("include")?.length === columns.length
+    opts.params.has("include") &&
+    opts.params.get("include")?.length === columns.length
   ) {
-    const newColumns = [];
-    const include = params.get("include")!;
+    const newColumns: string[] = [];
+    const include = opts.params.get("include")!;
     for (let i = 0; i < columns.length; i++) {
       if (include[i] === "1") {
         newColumns.push(
@@ -104,8 +99,8 @@ export const data = async (
               WHERE (`;
   const bindParams: string[] = [];
 
-  if (params.has("event")) {
-    query += params
+  if (opts.params.has("event")) {
+    query += opts.params
       .getAll("event")
       .map((value) => {
         bindParams.push(value);
@@ -117,8 +112,8 @@ export const data = async (
   }
   query += ") AND (";
 
-  if (params.has("team")) {
-    query += params
+  if (opts.params.has("team")) {
+    query += opts.params
       .getAll("team")
       .map((value) => {
         bindParams.push(value);
@@ -130,12 +125,12 @@ export const data = async (
   }
   query += ")";
 
-  const results = await env.DB.prepare(query)
+  const results = await opts.env.DB.prepare(query)
     .bind(...bindParams)
     .all<TeamMatchEntry>();
 
   if (results.success) {
-    switch (path[1]) {
+    switch (opts.path[1]) {
       case "json": {
         return new Response(JSON.stringify(results.results), {
           status: 200,
@@ -149,7 +144,7 @@ export const data = async (
         return new Response("CSV");
       }
       default: {
-        return new Response("", {
+        return new Response(null, {
           status: 404,
           statusText: "Not Found",
         });

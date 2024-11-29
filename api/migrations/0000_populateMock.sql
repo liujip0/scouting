@@ -21,9 +21,10 @@ INSERT INTO TeamMatchEntry (
   1, false, false
 );
 
-INSERT INTO Users (username, hashedPassword, saltToken)
+INSERT INTO Users (username, hashedPassword, saltToken, publicApiToken)
   VALUES (
     '9991',
     'b38ae1c3292b25b38b10119f3c83b07b369fae338589b3c56929c73e1f34d76a',
-    'sjt3pceewstwwl04edgom4am9mf33zb7'
+    'sjt3pceewstwwl04edgom4am9mf33zb7',
+    '00be3599d340a71196115824a01a38b20c168f946c080ccab9755ce1b5fe98ab'
   )

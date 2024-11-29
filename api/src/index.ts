@@ -4,6 +4,7 @@ import {
   fetchRequestHandler,
 } from "@trpc/server/adapters/fetch";
 import { createContext } from "./context.ts";
+import { createPublicContext } from "./public/context.ts";
 import { publicRouter } from "./public/index.ts";
 import { appRouter } from "./router.ts";
 
@@ -27,11 +28,12 @@ export default {
 
     const url = new URL(request.url);
     if (url.pathname.startsWith("/public")) {
-      return await publicRouter(
+      return await createPublicContext(
         request,
         url.pathname.split("/").filter((x) => x !== "" && x !== "public"),
         url.searchParams,
-        env
+        env,
+        publicRouter
       );
     }
 

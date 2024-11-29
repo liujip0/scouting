@@ -38,14 +38,14 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
 
 
 DROP TABLE IF EXISTS UserSessions;
-DROP TABLE IF EXISTS UserApiTokens;
 DROP TABLE IF EXISTS Users;
 
 CREATE TABLE IF NOT EXISTS Users(
   username text UNIQUE PRIMARY KEY,
   hashedPassword text,
   saltToken text,
-  permLevel text CHECK(permLevel IN ('team', 'datamanage', 'admin')) DEFAULT 'team'
+  publicApiToken text,
+  permLevel text CHECK(permLevel IN ('demo', 'team', 'datamanage', 'admin')) DEFAULT 'team'
 );
 
 CREATE TABLE IF NOT EXISTS UserSessions(
@@ -53,12 +53,5 @@ CREATE TABLE IF NOT EXISTS UserSessions(
   username text,
   token text,
   expiresAt integer,
-  FOREIGN KEY (username) REFERENCES Users(username)
-);
-
-CREATE TABLE IF NOT EXISTS UserApiTokens(
-  tokenId integer PRIMARY KEY AUTOINCREMENT,
-  username text,
-  token text,
   FOREIGN KEY (username) REFERENCES Users(username)
 );
