@@ -1,3 +1,4 @@
+import { User } from "../dbtypes.ts";
 import { publicOpts } from "./context.ts";
 import { data } from "./data.ts";
 
@@ -41,7 +42,7 @@ export const authedPublicEndpoint = async (
       .bind(token)
       .run<{
         username: string;
-        permLevel: "demo" | "team" | "datamanage" | "admin";
+        permLevel: User["permLevel"];
       }>();
     if (!authResults.success) {
       return new Response(

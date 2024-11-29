@@ -1,5 +1,6 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { Context } from "./context.ts";
+import { User } from "./dbtypes.ts";
 
 const t = initTRPC.context<Context>().create();
 
@@ -44,7 +45,7 @@ export const authedLoggedProcedure = loggedPublicProcedure.use(async (opts) => {
       )
         .bind(session.results[0].username)
         .first<{
-          permLevel: "demo" | "team" | "datamanage" | "admin";
+          permLevel: User["permLevel"];
         }>();
       if (!userInfo) {
         throw new TRPCError({

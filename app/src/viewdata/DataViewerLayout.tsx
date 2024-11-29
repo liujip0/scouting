@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { borderMarginPx, borderWidthPx, GridBorder } from "../GridBorder.tsx";
+import { trpc } from "../utils/Trpc.tsx";
 import { setToken } from "./Data.tsx";
 import Util from "./Util.tsx";
 import ViewData from "./ViewData.tsx";
@@ -21,11 +22,14 @@ type DataViewerLayoutProps = {
 export default function DataViewerLayout({
   setLoggedIn,
 }: DataViewerLayoutProps) {
+  const logout = trpc.auth.logout.useMutation();
+
   const topBarHeightRem = 4;
   const navigate = useNavigate();
   const [tab, setTab] = useState<
     "viewdata" | "exportdata" | "accounts" | "util"
   >("viewdata");
+
   return (
     <Box
       sx={{
@@ -73,6 +77,7 @@ export default function DataViewerLayout({
           </Button>
           <Button
             onClick={() => {
+              logout.mutate();
               setToken("", 0);
               setLoggedIn(false);
             }}

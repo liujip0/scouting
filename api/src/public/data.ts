@@ -1,3 +1,4 @@
+import { TeamMatchEntryColumns } from "../dbtypes.ts";
 import { publicOpts } from "./context.ts";
 
 interface TeamMatchEntry {
@@ -40,40 +41,7 @@ export const data = async (opts: publicOpts): Promise<Response> => {
     const column = item.split(".");
     renameColumns[column[0]] = column[1];
   });
-  let columns = [
-    "eventKey",
-    "matchKey",
-    "teamNumber",
-    "alliance",
-    "robotNumber",
-    "entryVersion",
-
-    "autoNote1",
-    "autoNote2",
-    "autoNote3",
-    "autoNote4",
-    "autoNote5",
-    "autoNote6",
-    "autoNote7",
-    "autoNote8",
-    "autoLeftStartingZone",
-    "autoSpeaker",
-    "autoAmp",
-
-    "teleopSpeaker",
-    "teleopAmp",
-    "teleopTrap",
-    "teleopPassed",
-    "teleopStolen",
-    "teleopChuteIntake",
-    "teleopGroundIntake",
-    "teleopEndgame",
-    "teleopSpotlight",
-
-    "postmatchDriverSkill",
-    "postmatchPlayedDefense",
-    "postmatchUnderHeavyDefense",
-  ];
+  let columns = TeamMatchEntryColumns;
 
   if (
     opts.params.has("include") &&

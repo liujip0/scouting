@@ -1,7 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
-import { hashPassword, randomString } from "../utils/auth.ts";
+import {
+  generateSaltToken,
+  generateToken,
+  hashPassword,
+} from "../utils/auth.ts";
 
 export const login = loggedPublicProcedure
   .input(
@@ -21,10 +25,7 @@ export const login = loggedPublicProcedure
         (await hashPassword(opts.input.password, result.saltToken)) ===
         result.hashedPassword
       ) {
-        const token = await hashPassword(
-          (Math.random() + 1).toString(3),
-          result.saltToken
-        );
+        const token = await generateToken(result.saltToken);
         const expiresAt = Date.now() + 6.048e8;
         const tokenCreationResult = await opts.ctx.env.DB.prepare(
           "INSERT INTO UserSessions (username, token, expiresAt) VALUES (?, ?, ?);"
@@ -50,24 +51,24 @@ export const login = loggedPublicProcedure
       }
     } else {
       if (opts.input.username === "admin") {
-        const salt = randomString(32);
+        const saltToken = generateSaltToken();
         if (
-          (await hashPassword(opts.input.password, salt)) ===
-          (await hashPassword(opts.ctx.env.ADMIN_ACCOUNT_PASSWORD, salt))
+          (await hashPassword(opts.input.password, saltToken)) ===
+          (await hashPassword(opts.ctx.env.ADMIN_ACCOUNT_PASSWORD, saltToken))
         ) {
-          const token = await hashPassword(
-            (Math.random() + 1).toString(3),
-            salt
-          );
+          const token = await generateToken(saltToken);
           const expiresAt = Date.now() + 6.048e8;
           const adminCreationResult = await opts.ctx.env.DB.prepare(
             "INSERT INTO Users (username, hashedPassword, permLevel, saltToken) VALUES (?, ?, ?, ?)"
           )
             .bind(
               opts.input.username,
-              await hashPassword(opts.ctx.env.ADMIN_ACCOUNT_PASSWORD, salt),
+              await hashPassword(
+                opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
+                saltToken
+              ),
               "admin",
-              salt
+              saltToken
             )
             .run();
           const tokenCreationResult = await opts.ctx.env.DB.prepare(

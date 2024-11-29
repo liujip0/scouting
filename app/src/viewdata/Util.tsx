@@ -1,4 +1,8 @@
-import { hashPassword, randomString } from "@isa2025/api/src/utils/auth.ts";
+import {
+  generateSaltToken,
+  generateToken,
+  hashPassword,
+} from "@isa2025/api/src/utils/auth.ts";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -16,7 +20,7 @@ export default function Util() {
       <Box>
         <Button
           onClick={() => {
-            setSaltToken(randomString(32));
+            setSaltToken(generateSaltToken());
           }}>
           Generate Salt Token
         </Button>
@@ -53,9 +57,7 @@ export default function Util() {
       <Box>
         <Button
           onClick={async () => {
-            setToken(
-              await hashPassword((Math.random() + 1).toString(3), saltToken)
-            );
+            setToken(await generateToken(saltToken));
           }}>
           Generate Token
         </Button>
