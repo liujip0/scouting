@@ -1,9 +1,10 @@
+import { User } from "../dbtypes.ts";
 import { Env } from "../index.ts";
 
 export interface publicCtx {
   user: {
     username: string;
-    permLevel: "demo" | "team" | "datamanage" | "admin";
+    permLevel: User["permLevel"];
   } | null;
 }
 export interface publicOpts {

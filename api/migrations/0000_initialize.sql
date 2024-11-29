@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Users(
   hashedPassword text,
   saltToken text,
   publicApiToken text,
-  permLevel text CHECK(permLevel IN ('demo', 'team', 'datamanage', 'admin')) DEFAULT 'team'
+  permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team'
 );
 
 CREATE TABLE IF NOT EXISTS UserSessions(

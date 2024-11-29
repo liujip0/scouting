@@ -37,5 +37,5 @@ export type User = {
   username: string;
   hashedPassword: string;
   saltToken: string;
-  permLevel: "demo" | "team" | "datamanage" | "admin";
+  permLevel: "none" | "demo" | "team" | "datamanage" | "admin";
 };

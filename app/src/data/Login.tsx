@@ -1,3 +1,4 @@
+import { User } from "@isa2025/api/src/dbtypes.ts";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Avatar from "@mui/material/Avatar";
@@ -16,13 +17,21 @@ import { setToken } from "./Data.tsx";
 
 type LoginProps = {
   setLoggedIn: (value: boolean) => void;
+  setPermLevel: (value: User["permLevel"]) => void;
 };
-export default function Login({ setLoggedIn }: LoginProps) {
+export default function Login({ setLoggedIn, setPermLevel }: LoginProps) {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const submitRef = useRef<HTMLButtonElement>(null);
   const [errorText, setErrorText] = useState("");
+
   const login = trpc.auth.login.useMutation({
     onSuccess(data) {
       if (data?.token) {
         setToken(data.token, data.expiresAt);
+        setPermLevel(data.permLevel as User["permLevel"]);
         setLoggedIn(true);
       }
     },
@@ -30,12 +39,6 @@ export default function Login({ setLoggedIn }: LoginProps) {
       setErrorText(error.message);
     },
   });
-
-  const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const submitRef = useRef<HTMLButtonElement>(null);
 
   return (
     <GridBorder>

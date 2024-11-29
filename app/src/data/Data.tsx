@@ -1,3 +1,4 @@
+import { User } from "@isa2025/api/src/dbtypes.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
@@ -6,7 +7,7 @@ import { trpc } from "../utils/Trpc.tsx";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
 
-let token: string;
+export let token: string;
 if (localStorage.getItem("token") !== "") {
   token = localStorage.getItem("token")!;
 }
@@ -23,6 +24,7 @@ export default function Data() {
       localStorage.getItem("tokenExpiresAt") !== null &&
       Date.now() < parseInt(localStorage.getItem("tokenExpiresAt")!)
   );
+  const [permLevel, setPermLevel] = useState<User["permLevel"]>("none");
 
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -48,8 +50,16 @@ export default function Data() {
       queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {!loggedIn ?
-          <Login setLoggedIn={setLoggedIn} />
-        : <DataViewerLayout setLoggedIn={setLoggedIn} />}
+          <Login
+            setLoggedIn={setLoggedIn}
+            setPermLevel={setPermLevel}
+          />
+        : <DataViewerLayout
+            setLoggedIn={setLoggedIn}
+            permLevel={permLevel}
+            setPermLevel={setPermLevel}
+          />
+        }
       </QueryClientProvider>
     </trpc.Provider>
   );

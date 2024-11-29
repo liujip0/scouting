@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { User } from "../dbtypes.ts";
 import { loggedPublicProcedure } from "../trpc.ts";
 import {
   generateSaltToken,
@@ -16,10 +17,15 @@ export const login = loggedPublicProcedure
   )
   .mutation(async (opts) => {
     const result = await opts.ctx.env.DB.prepare(
-      "SELECT username, hashedPassword, saltToken FROM Users WHERE username = ? LIMIT 1;"
+      "SELECT username, hashedPassword, saltToken, permLevel FROM Users WHERE username = ? LIMIT 1;"
     )
       .bind(opts.input.username)
-      .first<{ username: string; hashedPassword: string; saltToken: string }>();
+      .first<{
+        username: string;
+        hashedPassword: string;
+        saltToken: string;
+        permLevel: User["permLevel"];
+      }>();
     if (result) {
       if (
         (await hashPassword(opts.input.password, result.saltToken)) ===
@@ -36,6 +42,7 @@ export const login = loggedPublicProcedure
           return {
             token: token,
             expiresAt: expiresAt,
+            permLevel: result.permLevel,
           };
         } else {
           throw new TRPCError({
@@ -59,7 +66,7 @@ export const login = loggedPublicProcedure
           const token = await generateToken(saltToken);
           const expiresAt = Date.now() + 6.048e8;
           const adminCreationResult = await opts.ctx.env.DB.prepare(
-            "INSERT INTO Users (username, hashedPassword, permLevel, saltToken) VALUES (?, ?, ?, ?)"
+            "INSERT INTO Users (username, hashedPassword, permLevel, saltToken, publicApiToken) VALUES (?, ?, ?, ?, ?)"
           )
             .bind(
               opts.input.username,
@@ -68,7 +75,8 @@ export const login = loggedPublicProcedure
                 saltToken
               ),
               "admin",
-              saltToken
+              saltToken,
+              await generateToken(saltToken)
             )
             .run();
           const tokenCreationResult = await opts.ctx.env.DB.prepare(
@@ -80,6 +88,7 @@ export const login = loggedPublicProcedure
             return {
               token: token,
               expiresAt: expiresAt,
+              permLevel: "admin",
             };
           } else {
             throw new TRPCError({
