@@ -1,39 +1,5 @@
-import { TeamMatchEntryColumns } from "../dbtypes.ts";
+import { TeamMatchEntry, TeamMatchEntryColumns } from "../dbtypes.ts";
 import { publicOpts } from "./context.ts";
-
-interface TeamMatchEntry {
-  eventKey: string;
-  matchKey: string;
-  teamNumber: number;
-  alliance: "Red" | "Blue";
-  robotNumber: number;
-
-  autoNote1: boolean;
-  autoNote2: boolean;
-  autoNote3: boolean;
-  autoNote4: boolean;
-  autoNote5: boolean;
-  autoNote6: boolean;
-  autoNote7: boolean;
-  autoNote8: boolean;
-  autoLeftStartingZone: boolean;
-  autoSpeaker: number;
-  autoAmp: number;
-
-  teleopSpeaker: number;
-  teleopAmp: number;
-  teleopTrap: number;
-  teleopPassed: number;
-  teleopStolen: number;
-  teleopChuteIntake: boolean;
-  teleopGroundIntake: boolean;
-  teleopEndgame: "parked" | "climbed" | "none";
-  teleopSpotlight: number;
-
-  postmatchDriverSkill: number;
-  postmatchPlayedDefense: boolean;
-  postmatchUnderHeavyDefense: boolean;
-}
 
 export const data = async (opts: publicOpts): Promise<Response> => {
   const renameColumns: Record<string, string> = {};
@@ -41,7 +7,7 @@ export const data = async (opts: publicOpts): Promise<Response> => {
     const column = item.split(".");
     renameColumns[column[0]] = column[1];
   });
-  let columns = TeamMatchEntryColumns;
+  let columns: string[] = [...TeamMatchEntryColumns];
 
   if (
     opts.params.has("include") &&

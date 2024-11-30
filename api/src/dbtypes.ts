@@ -1,3 +1,37 @@
+export interface TeamMatchEntry {
+  eventKey: string;
+  matchKey: string;
+  teamNumber: number;
+  alliance: "Red" | "Blue";
+  robotNumber: number;
+  entryVersion: number;
+
+  autoNote1: boolean;
+  autoNote2: boolean;
+  autoNote3: boolean;
+  autoNote4: boolean;
+  autoNote5: boolean;
+  autoNote6: boolean;
+  autoNote7: boolean;
+  autoNote8: boolean;
+  autoLeftStartingZone: boolean;
+  autoSpeaker: number;
+  autoAmp: number;
+
+  teleopSpeaker: number;
+  teleopAmp: number;
+  teleopTrap: number;
+  teleopPassed: number;
+  teleopStolen: number;
+  teleopChuteIntake: boolean;
+  teleopGroundIntake: boolean;
+  teleopEndgame: "parked" | "climbed" | "none";
+  teleopSpotlight: number;
+
+  postmatchDriverSkill: number;
+  postmatchPlayedDefense: boolean;
+  postmatchUnderHeavyDefense: boolean;
+}
 export const TeamMatchEntryColumns = [
   "eventKey",
   "matchKey",
@@ -31,7 +65,8 @@ export const TeamMatchEntryColumns = [
   "postmatchDriverSkill",
   "postmatchPlayedDefense",
   "postmatchUnderHeavyDefense",
-];
+] as const;
+export type TeamMatchEntryColumn = (typeof TeamMatchEntryColumns)[number];
 
 export type User = {
   username: string;

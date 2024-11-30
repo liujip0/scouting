@@ -11,8 +11,8 @@ export function GridBorder({ children }: GridBorderProps) {
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: `${borderMarginPx}px 1fr ${borderMarginPx}px`,
-        gridTemplateRows: `${borderMarginPx}px 1fr ${borderMarginPx}px`,
+        gridTemplateColumns: `${borderMarginPx}px calc(calc(100% - ${2 * borderMarginPx}px) - ${2 * borderWidthPx}px) ${borderMarginPx}px`,
+        gridTemplateRows: `${borderMarginPx}px calc(calc(100% - ${2 * borderMarginPx}px) - ${2 * borderWidthPx}px) ${borderMarginPx}px`,
         columnGap: `${borderWidthPx}px`,
         rowGap: `${borderWidthPx}px`,
         width: 1,

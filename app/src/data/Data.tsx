@@ -24,7 +24,13 @@ export default function Data() {
       localStorage.getItem("tokenExpiresAt") !== null &&
       Date.now() < parseInt(localStorage.getItem("tokenExpiresAt")!)
   );
-  const [permLevel, setPermLevel] = useState<User["permLevel"]>("none");
+  const [permLevel, setPermLevelState] = useState<User["permLevel"]>(
+    (localStorage.getItem("permLevel") as User["permLevel"]) ?? "none"
+  );
+  const setPermLevel = (value: User["permLevel"]) => {
+    setPermLevelState(value);
+    localStorage.setItem("permLevel", value);
+  };
 
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
