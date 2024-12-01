@@ -1,14 +1,17 @@
+import { Theme } from "@emotion/react";
 import { User } from "@isa2025/api/src/dbtypes.ts";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import { Stack, SxProps, Theme } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Tab from "@mui/material/Tab";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import { TabContext, TabList } from "@mui/lab";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Stack,
+  SxProps,
+  Tab,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {

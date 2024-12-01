@@ -1,8 +1,4 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
+import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 

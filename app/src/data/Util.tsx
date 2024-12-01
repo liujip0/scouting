@@ -3,10 +3,7 @@ import {
   generateToken,
   hashPassword,
 } from "@isa2025/api/src/utils/auth.ts";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
+import { Box, Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { BoxTabPanel, DataViewerTab } from "./DataViewerLayout.tsx";
 

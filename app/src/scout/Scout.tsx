@@ -1,6 +1,4 @@
-import { Typography } from "@mui/material";
-import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
+import { Box, Chip, Typography } from "@mui/material";
 import { useState } from "react";
 import { GridBorder } from "../components/GridBorder.tsx";
 import Auto from "./Auto.tsx";

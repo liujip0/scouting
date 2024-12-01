@@ -1,4 +1,4 @@
-import Button from "@mui/material/Button";
+import { Button } from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
