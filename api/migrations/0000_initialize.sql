@@ -42,10 +42,10 @@ DROP TABLE IF EXISTS Users;
 
 CREATE TABLE IF NOT EXISTS Users(
   username text UNIQUE PRIMARY KEY,
+  permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team',
   hashedPassword text,
   saltToken text,
-  publicApiToken text,
-  permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team'
+  publicApiToken text
 );
 
 CREATE TABLE IF NOT EXISTS UserSessions(

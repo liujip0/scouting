@@ -68,18 +68,25 @@ export const TeamMatchEntryColumns = [
 ] as const;
 export type TeamMatchEntryColumn = (typeof TeamMatchEntryColumns)[number];
 
+export const UserPermLevel = [
+  "none",
+  "demo",
+  "team",
+  "datamanage",
+  "admin",
+] as const;
 export type User = {
   username: string;
+  permLevel: (typeof UserPermLevel)[number];
   hashedPassword: string;
   saltToken: string;
   publicApiToken: string;
-  permLevel: "none" | "demo" | "team" | "datamanage" | "admin";
 };
 export const UserColumns = [
   "username",
+  "permLevel",
   "hashedPassword",
   "saltToken",
   "publicApiToken",
-  "permLevel",
 ] as const;
 export type UserColumn = (typeof UserColumns)[number];

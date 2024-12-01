@@ -1,12 +1,20 @@
-import { UserColumn, UserColumns } from "@isa2025/api/src/dbtypes.ts";
+import {
+  User,
+  UserColumn,
+  UserColumns,
+  UserPermLevel,
+} from "@isa2025/api/src/dbtypes.ts";
 import { Delete, Edit } from "@mui/icons-material";
 import {
+  Button,
   Checkbox,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   FormControlLabel,
   IconButton,
+  MenuItem,
   Paper,
   Stack,
   TableBody,
@@ -26,18 +34,26 @@ type UsersProps = {
 export default function Users({ tab }: UsersProps) {
   const [showApiTokens, setShowApiTokens] = useState(false);
 
+  const users = trpc.users.useQuery();
+
   const [editUser, setEditUser] = useState("");
-  const [editUserUsername, setEditUserUsername] = useState("");
+  const [editUserUsername, setEditUserUsername] = useState<string | null>(null);
+  const [editUserPermLevel, setEditUserPermLevel] = useState<
+    User["permLevel"] | null
+  >(null);
   const openEditUser = (username: string) => {
-    setEditUser(username);
     setEditUserUsername(username);
+    setEditUserPermLevel(
+      users.data?.filter((user) => user.username === username)[0].permLevel ??
+        null
+    );
+    setEditUser(username);
   };
   const closeEditUser = () => {
     setEditUser("");
-    setEditUserUsername("");
+    setEditUserUsername(null);
+    setEditUserPermLevel(null);
   };
-
-  const users = trpc.users.useQuery();
 
   return (
     <BoxTabPanel
@@ -133,14 +149,49 @@ export default function Users({ tab }: UsersProps) {
         }}>
         <DialogTitle>Manage User</DialogTitle>
         <DialogContent>
-          <TextField
-            value={editUserUsername}
-            onChange={(event) => {
-              setEditUserUsername(event.currentTarget.value);
+          <Stack
+            sx={{
+              pt: 2,
             }}
-            label="Username"
-          />
+            gap={2}>
+            <TextField
+              value={editUserUsername}
+              onChange={(event) => {
+                setEditUserUsername(event.currentTarget.value);
+              }}
+              label="username"
+            />
+            <TextField
+              value={editUserPermLevel}
+              onChange={(event) => {
+                setEditUserPermLevel(event.target.value as User["permLevel"]);
+              }}
+              select
+              label="permLevel">
+              {UserPermLevel.map((perm) => (
+                <MenuItem
+                  key={perm}
+                  value={perm}>
+                  {perm}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
         </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              closeEditUser();
+            }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              closeEditUser();
+            }}>
+            Save
+          </Button>
+        </DialogActions>
       </Dialog>
     </BoxTabPanel>
   );

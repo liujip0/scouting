@@ -17,7 +17,7 @@ export const login = loggedPublicProcedure
   )
   .mutation(async (opts) => {
     const result = await opts.ctx.env.DB.prepare(
-      "SELECT username, hashedPassword, saltToken, permLevel FROM Users WHERE username = ? LIMIT 1;"
+      "SELECT username, permLevel, hashedPassword, saltToken FROM Users WHERE username = ? LIMIT 1;"
     )
       .bind(opts.input.username)
       .first<User>();
@@ -61,15 +61,15 @@ export const login = loggedPublicProcedure
           const token = await generateToken(saltToken);
           const expiresAt = Date.now() + 6.048e8;
           const adminCreationResult = await opts.ctx.env.DB.prepare(
-            "INSERT INTO Users (username, hashedPassword, permLevel, saltToken, publicApiToken) VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO Users (username, permLevel, hashedPassword, saltToken, publicApiToken) VALUES (?, ?, ?, ?, ?)"
           )
             .bind(
               opts.input.username,
+              "admin",
               await hashPassword(
                 opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
                 saltToken
               ),
-              opts.ctx.env.ADMIN_ACCOUNT_USERNAME,
               saltToken,
               await generateToken(saltToken)
             )

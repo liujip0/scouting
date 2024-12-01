@@ -49,7 +49,6 @@ export default function ViewData({ tab }: ViewDataProps) {
       }}>
       <Paper
         sx={{
-          padding: 1,
           display: "flex",
           gap: 2,
         }}
@@ -60,6 +59,7 @@ export default function ViewData({ tab }: ViewDataProps) {
           sx={{
             flex: 1,
             overflowX: "scroll",
+            padding: 1,
           }}>
           <TextField
             onChange={(event) => {
