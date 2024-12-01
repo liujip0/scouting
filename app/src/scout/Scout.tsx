@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import { useState } from "react";
-import { GridBorder } from "../GridBorder.tsx";
+import { GridBorder } from "../components/GridBorder.tsx";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./DeviceSetup.tsx";
 import ScoutInfo from "./ScoutInfo.tsx";

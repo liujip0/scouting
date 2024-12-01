@@ -72,5 +72,14 @@ export type User = {
   username: string;
   hashedPassword: string;
   saltToken: string;
+  publicApiToken: string;
   permLevel: "none" | "demo" | "team" | "datamanage" | "admin";
 };
+export const UserColumns = [
+  "username",
+  "hashedPassword",
+  "saltToken",
+  "publicApiToken",
+  "permLevel",
+] as const;
+export type UserColumn = (typeof UserColumns)[number];

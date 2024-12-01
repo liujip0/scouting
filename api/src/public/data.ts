@@ -2,6 +2,28 @@ import { TeamMatchEntry, TeamMatchEntryColumns } from "../dbtypes.ts";
 import { publicOpts } from "./context.ts";
 
 export const data = async (opts: publicOpts): Promise<Response> => {
+  if (
+    opts.ctx.user === null ||
+    (opts.ctx.user?.permLevel !== "demo" &&
+      opts.ctx.user?.permLevel !== "team" &&
+      opts.ctx.user?.permLevel !== "datamanage" &&
+      opts.ctx.user?.permLevel !== "admin")
+  ) {
+    return new Response(
+      JSON.stringify({
+        error: "403 Forbidden",
+        errorMessage: "Wrong permissions to fetch data.",
+      }),
+      {
+        status: 403,
+        statusText: "Forbidden",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
   const renameColumns: Record<string, string> = {};
   opts.params.getAll("rename").forEach((item) => {
     const column = item.split(".");
@@ -85,9 +107,18 @@ export const data = async (opts: publicOpts): Promise<Response> => {
       }
     }
   } else {
-    return new Response(null, {
-      status: 500,
-      statusText: "Internal Server Error",
-    });
+    return new Response(
+      JSON.stringify({
+        error: "500 Internal Server Error",
+        errorMessage: "Error while fetching data from server",
+      }),
+      {
+        status: 500,
+        statusText: "Internal Server Error",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 };

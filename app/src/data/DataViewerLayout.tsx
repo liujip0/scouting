@@ -1,7 +1,7 @@
 import { User } from "@isa2025/api/src/dbtypes.ts";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
+import { Stack, SxProps, Theme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -11,11 +11,23 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { borderMarginPx, borderWidthPx, GridBorder } from "../GridBorder.tsx";
+import {
+  borderMarginPx,
+  borderWidthPx,
+  GridBorder,
+} from "../components/GridBorder.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 import { setToken, token } from "./Data.tsx";
+import Users from "./Users.tsx";
 import Util from "./Util.tsx";
 import ViewData from "./ViewData.tsx";
+
+export type DataViewerTab =
+  | "viewdata"
+  | "exportdata"
+  | "reviewdata"
+  | "users"
+  | "util";
 
 type DataViewerLayoutProps = {
   setLoggedIn: (value: boolean) => void;
@@ -29,9 +41,7 @@ export default function DataViewerLayout({
 }: DataViewerLayoutProps) {
   const topBarHeightRem = 4;
   const navigate = useNavigate();
-  const [tab, setTab] = useState<
-    "viewdata" | "exportdata" | "reviewdata" | "accounts" | "util"
-  >("viewdata");
+  const [tab, setTab] = useState<DataViewerTab>("viewdata");
 
   const logout = trpc.auth.logout.useMutation({
     onSuccess() {
@@ -113,62 +123,46 @@ export default function DataViewerLayout({
         <GridBorder>
           {["demo", "team", "datamanage", "admin"].includes(permLevel) && (
             <TabContext value={tab}>
-              <Box
+              <Stack
                 sx={{
+                  height: 1,
                   width: 1,
                 }}>
-                {permLevel === "demo" ?
-                  <TabList
-                    onChange={(_event, value) => {
-                      setTab(value);
-                    }}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    allowScrollButtonsMobile>
-                    <Tab
-                      label="View Data"
-                      value="viewdata"
-                    />
-                  </TabList>
-                : permLevel === "team" ?
-                  <TabList
-                    onChange={(_event, value) => {
-                      setTab(value);
-                    }}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    allowScrollButtonsMobile>
-                    <Tab
-                      label="View Data"
-                      value="viewdata"
-                    />
-                    <Tab
-                      label="Export Data"
-                      value="exportdata"
-                    />
-                  </TabList>
-                : permLevel === "datamanage" ?
-                  <TabList
-                    onChange={(_event, value) => {
-                      setTab(value);
-                    }}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    allowScrollButtonsMobile>
-                    <Tab
-                      label="View Data"
-                      value="viewdata"
-                    />
-                    <Tab
-                      label="Export Data"
-                      value="exportdata"
-                    />
-                    <Tab
-                      label="Review Data"
-                      value="reviewdata"
-                    />
-                  </TabList>
-                : permLevel === "admin" && (
+                <Box
+                  sx={{
+                    width: 1,
+                  }}>
+                  {permLevel === "demo" ?
+                    <TabList
+                      onChange={(_event, value) => {
+                        setTab(value);
+                      }}
+                      variant="scrollable"
+                      scrollButtons="auto"
+                      allowScrollButtonsMobile>
+                      <Tab
+                        label="View Data"
+                        value="viewdata"
+                      />
+                    </TabList>
+                  : permLevel === "team" ?
+                    <TabList
+                      onChange={(_event, value) => {
+                        setTab(value);
+                      }}
+                      variant="scrollable"
+                      scrollButtons="auto"
+                      allowScrollButtonsMobile>
+                      <Tab
+                        label="View Data"
+                        value="viewdata"
+                      />
+                      <Tab
+                        label="Export Data"
+                        value="exportdata"
+                      />
+                    </TabList>
+                  : permLevel === "datamanage" ?
                     <TabList
                       onChange={(_event, value) => {
                         setTab(value);
@@ -188,35 +182,94 @@ export default function DataViewerLayout({
                         label="Review Data"
                         value="reviewdata"
                       />
-                      <Tab
-                        label="Manage Accounts"
-                        value="accounts"
-                      />
-                      <Tab
-                        label="Util"
-                        value="util"
-                      />
                     </TabList>
-                  )
-                }
-              </Box>
-              <ViewData />
-              <TabPanel value="exportdata"></TabPanel>
-              {["datamanage", "admin"].includes(permLevel) && (
-                <>
-                  <TabPanel value="reviewdata">Review Data</TabPanel>
-                  {["admin"].includes(permLevel) && (
-                    <>
-                      <TabPanel value="accounts">Accounts</TabPanel>
-                      <Util />
-                    </>
-                  )}
-                </>
-              )}
+                  : permLevel === "admin" && (
+                      <TabList
+                        onChange={(_event, value) => {
+                          setTab(value);
+                        }}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        allowScrollButtonsMobile>
+                        <Tab
+                          label="View Data"
+                          value="viewdata"
+                        />
+                        <Tab
+                          label="Export Data"
+                          value="exportdata"
+                        />
+                        <Tab
+                          label="Review Data"
+                          value="reviewdata"
+                        />
+                        <Tab
+                          label="Manage Users"
+                          value="users"
+                        />
+                        <Tab
+                          label="Util"
+                          value="util"
+                        />
+                      </TabList>
+                    )
+                  }
+                </Box>
+                <ViewData tab={tab} />
+                {["team", "datamanage", "admin"].includes(permLevel) && (
+                  <>
+                    <BoxTabPanel
+                      tab={tab}
+                      value="exportdata">
+                      Export
+                    </BoxTabPanel>
+                    {["datamanage", "admin"].includes(permLevel) && (
+                      <>
+                        <BoxTabPanel
+                          tab={tab}
+                          value="reviewdata">
+                          Review Data
+                        </BoxTabPanel>
+                        {["admin"].includes(permLevel) && (
+                          <>
+                            <Users tab={tab} />
+                            <Util tab={tab} />
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </Stack>
             </TabContext>
           )}
         </GridBorder>
       </Box>
+    </Box>
+  );
+}
+
+type BoxTabPanelProps = {
+  tab: DataViewerTab;
+  value: DataViewerTab;
+  sx?: SxProps<Theme>;
+  children?: React.ReactNode;
+};
+export function BoxTabPanel({
+  tab: value,
+  value: panelValue,
+  sx,
+  children,
+}: BoxTabPanelProps) {
+  return (
+    <Box
+      sx={{
+        ...sx,
+        // @ts-ignore: display does in fact exist on sx prop
+        display: value === panelValue ? (sx?.display ?? "block") : "none",
+        padding: 2,
+      }}>
+      {children}
     </Box>
   );
 }

@@ -11,6 +11,7 @@ import { appRouter } from "./router.ts";
 export interface Env {
   DB: D1Database;
   ADMIN_ACCOUNT_PASSWORD: string;
+  ADMIN_ACCOUNT_USERNAME: string;
 }
 
 export default {

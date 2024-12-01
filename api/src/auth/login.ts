@@ -20,12 +20,7 @@ export const login = loggedPublicProcedure
       "SELECT username, hashedPassword, saltToken, permLevel FROM Users WHERE username = ? LIMIT 1;"
     )
       .bind(opts.input.username)
-      .first<{
-        username: string;
-        hashedPassword: string;
-        saltToken: string;
-        permLevel: User["permLevel"];
-      }>();
+      .first<User>();
     if (result) {
       if (
         (await hashPassword(opts.input.password, result.saltToken)) ===
@@ -57,7 +52,7 @@ export const login = loggedPublicProcedure
         });
       }
     } else {
-      if (opts.input.username === "admin") {
+      if (opts.input.username === opts.ctx.env.ADMIN_ACCOUNT_USERNAME) {
         const saltToken = generateSaltToken();
         if (
           (await hashPassword(opts.input.password, saltToken)) ===
@@ -74,7 +69,7 @@ export const login = loggedPublicProcedure
                 opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
                 saltToken
               ),
-              "admin",
+              opts.ctx.env.ADMIN_ACCOUNT_USERNAME,
               saltToken,
               await generateToken(saltToken)
             )

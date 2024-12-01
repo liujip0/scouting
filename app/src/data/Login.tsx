@@ -10,7 +10,11 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GridBorder, borderMarginPx, borderWidthPx } from "../GridBorder.tsx";
+import {
+  GridBorder,
+  borderMarginPx,
+  borderWidthPx,
+} from "../components/GridBorder.tsx";
 import { TextFieldDoubleLabel } from "../TextFieldLabel.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 import { setToken } from "./Data.tsx";

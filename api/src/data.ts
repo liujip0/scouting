@@ -16,6 +16,18 @@ export const data = authedLoggedProcedure
     })
   )
   .query(async (opts) => {
+    if (
+      opts.ctx.user.permLevel !== "demo" &&
+      opts.ctx.user.permLevel !== "team" &&
+      opts.ctx.user.permLevel !== "datamanage" &&
+      opts.ctx.user.permLevel !== "admin"
+    ) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Wrong permissions to fetch data.",
+      });
+    }
+
     let columns: TeamMatchEntryColumn[] = [...TeamMatchEntryColumns];
 
     if (opts.input.include) {

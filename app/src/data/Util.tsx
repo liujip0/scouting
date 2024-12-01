@@ -3,21 +3,26 @@ import {
   generateToken,
   hashPassword,
 } from "@isa2025/api/src/utils/auth.ts";
-import TabPanel from "@mui/lab/TabPanel";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import { BoxTabPanel, DataViewerTab } from "./DataViewerLayout.tsx";
 
-export default function Util() {
+type UtilProps = {
+  tab: DataViewerTab;
+};
+export default function Util({ tab }: UtilProps) {
   const [password, setPassword] = useState("");
   const [saltToken, setSaltToken] = useState("");
   const [hashedPassword, setHashedPassword] = useState("");
   const [token, setToken] = useState("");
 
   return (
-    <TabPanel value="util">
+    <BoxTabPanel
+      tab={tab}
+      value="util">
       <Stack gap={2}>
         <Box>
           <Button
@@ -72,6 +77,6 @@ export default function Util() {
           />
         </Box>
       </Stack>
-    </TabPanel>
+    </BoxTabPanel>
   );
 }

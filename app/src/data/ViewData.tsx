@@ -2,29 +2,28 @@ import {
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
 } from "@isa2025/api/src/dbtypes.ts";
-import { FilterAltOff, KeyboardReturn } from "@mui/icons-material";
-import TabPanel from "@mui/lab/TabPanel";
+import { FilterAltOff } from "@mui/icons-material";
 import {
   IconButton,
-  InputAdornment,
   Paper,
   Stack,
-  Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { BorderedTable, Td, Th } from "../components/Table.tsx";
 import { trpc } from "../utils/Trpc.tsx";
+import { BoxTabPanel, DataViewerTab } from "./DataViewerLayout.tsx";
 
-export default function ViewData() {
+type ViewDataProps = {
+  tab: DataViewerTab;
+};
+export default function ViewData({ tab }: ViewDataProps) {
   const [events, setEvents] = useState("");
-  const [eventsFocused, setEventsFocused] = useState(false);
   const [teams, setTeams] = useState("");
-  const [teamsFocused, setTeamsFocused] = useState(false);
 
   const data = trpc.data.useQuery({
     events: events ? (events.split(",") as [string, ...string[]]) : undefined,
@@ -38,11 +37,12 @@ export default function ViewData() {
   });
 
   return (
-    <TabPanel
+    <BoxTabPanel
+      tab={tab}
       value="viewdata"
       sx={{
         width: 1,
-        height: 1,
+        flex: 1,
         display: "flex",
         flexDirection: "column",
         gap: 2,
@@ -62,65 +62,15 @@ export default function ViewData() {
             overflowX: "scroll",
           }}>
           <TextField
-            onFocus={() => {
-              setEventsFocused(true);
-            }}
-            onBlur={(event) => {
+            onChange={(event) => {
               setEvents(event.currentTarget.value);
-              setEventsFocused(false);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                (event.target as HTMLInputElement).blur();
-              }
-            }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <KeyboardReturn
-                      sx={(theme) => ({
-                        color:
-                          theme.palette.primary.main +
-                          (eventsFocused ? "88" : "00"),
-                      })}
-                    />
-                  </InputAdornment>
-                ),
-              },
             }}
             label="Events (comma-separated)"
             size="small"
           />
           <TextField
-            onFocus={() => {
-              setTeamsFocused(true);
-            }}
-            onBlur={(event) => {
+            onChange={(event) => {
               setTeams(event.currentTarget.value);
-              setTeamsFocused(false);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                (event.target as HTMLInputElement).blur();
-              }
-            }}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <KeyboardReturn
-                      sx={(theme) => ({
-                        color:
-                          theme.palette.primary.main +
-                          (teamsFocused ? "88" : "00"),
-                      })}
-                    />
-                  </InputAdornment>
-                ),
-              },
             }}
             label="Teams (comma-separated)"
             size="small"
@@ -136,68 +86,69 @@ export default function ViewData() {
       <TableContainer
         sx={{
           width: 1,
-          height: 1,
+          flex: 1,
         }}>
-        <Table
-          sx={{
-            borderColor: "primary.main",
-            borderWidth: 3,
-          }}>
+        <BorderedTable>
           <TableHead>
             <TableRow>
               {TeamMatchEntryColumns.map((column) => (
-                <TableCell
+                <Th
                   key={column}
-                  sx={{
-                    borderColor: "primary.main",
-                    //TODO: change when new columns
-                    borderRightWidth:
-                      (
-                        column === "entryVersion" ||
-                        column === "autoAmp" ||
-                        column === "teleopSpotlight"
-                      ) ?
-                        2.5
-                      : undefined,
-                  }}>
+                  thickRightBorder={
+                    column === "entryVersion" ||
+                    column === "autoAmp" ||
+                    column === "teleopSpotlight"
+                  }>
                   {column}
-                </TableCell>
+                </Th>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.data?.map((teamMatchEntry) => (
-              <TableRow
-                key={[
-                  teamMatchEntry.eventKey,
-                  teamMatchEntry.matchKey,
-                  teamMatchEntry.alliance,
-                  teamMatchEntry.robotNumber,
-                  teamMatchEntry.entryVersion,
-                ].join("_")}>
-                {TeamMatchEntryColumns.map((column) => (
-                  <TableCell
-                    key={column}
-                    sx={{
-                      borderColor: "primary.main",
-                      borderRightWidth:
-                        (
-                          column === "entryVersion" ||
-                          column === "autoAmp" ||
-                          column === "teleopSpotlight"
-                        ) ?
-                          2.5
-                        : undefined,
-                      borderTopWidth: 2,
-                    }}>
-                    {teamMatchEntry[column as TeamMatchEntryColumn]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {data.data?.map((teamMatchEntry, index) => {
+              if (events) {
+                let correctEvent = false;
+                for (let event of events.split(",")) {
+                  if (teamMatchEntry.eventKey === event) {
+                    correctEvent = true;
+                    break;
+                  }
+                }
+                if (correctEvent === false) {
+                  return;
+                }
+              }
+              if (teams) {
+                let correctTeam = false;
+                for (let team of teams.split(",").map((x) => parseInt(x))) {
+                  if (teamMatchEntry.teamNumber === team) {
+                    correctTeam = true;
+                    break;
+                  }
+                }
+                if (correctTeam === false) {
+                  return;
+                }
+              }
+              return (
+                <TableRow key={index}>
+                  {TeamMatchEntryColumns.map((column) => (
+                    <Td
+                      key={column}
+                      thickRightBorder={
+                        column === "entryVersion" ||
+                        column === "autoAmp" ||
+                        column === "teleopSpotlight"
+                      }>
+                      {teamMatchEntry[column as TeamMatchEntryColumn]}
+                    </Td>
+                  ))}
+                </TableRow>
+              );
+            })}
           </TableBody>
-        </Table>
+        </BorderedTable>
       </TableContainer>
-    </TabPanel>
+    </BoxTabPanel>
   );
 }
