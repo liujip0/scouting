@@ -4,7 +4,13 @@ import {
   UserColumns,
   UserPermLevel,
 } from "@isa2025/api/src/dbtypes.ts";
-import { Delete, Edit } from "@mui/icons-material";
+import {
+  ContentCopy,
+  Delete,
+  Edit,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Button,
   Checkbox,
@@ -14,6 +20,7 @@ import {
   DialogTitle,
   FormControlLabel,
   IconButton,
+  InputAdornment,
   MenuItem,
   Paper,
   Stack,
@@ -22,49 +29,45 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { BorderedTable, Td, Th } from "../components/Table.tsx";
 import { trpc } from "../utils/Trpc.tsx";
-import { BoxTabPanel, DataViewerTab } from "./DataViewerLayout.tsx";
 
-type UsersProps = {
-  tab: DataViewerTab;
-};
-export default function Users({ tab }: UsersProps) {
+export default function Users() {
   const [showApiTokens, setShowApiTokens] = useState(false);
 
   const users = trpc.users.useQuery();
 
-  const [editUser, setEditUser] = useState("");
   const [editUserUsername, setEditUserUsername] = useState<string | null>(null);
   const [editUserPermLevel, setEditUserPermLevel] = useState<
     User["permLevel"] | null
   >(null);
+  const [editUserShowApiToken, setEditUserShowApiToken] = useState(false);
   const openEditUser = (username: string) => {
-    setEditUserUsername(username);
     setEditUserPermLevel(
       users.data?.filter((user) => user.username === username)[0].permLevel ??
         null
     );
-    setEditUser(username);
+    setEditUserShowApiToken(false);
+    setEditUserUsername(username);
   };
   const closeEditUser = () => {
-    setEditUser("");
-    setEditUserUsername(null);
     setEditUserPermLevel(null);
+    setEditUserShowApiToken(false);
+    setEditUserUsername(null);
   };
 
   return (
-    <BoxTabPanel
-      tab={tab}
-      value="users"
+    <Stack
       sx={{
         width: 1,
         height: 1,
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        padding: 2,
       }}>
       <Paper
         sx={{
@@ -111,10 +114,36 @@ export default function Users({ tab }: UsersProps) {
                   column !== "hashedPassword" && column !== "saltToken" ?
                     <Td key={column}>
                       {column !== "publicApiToken" ?
-                        user[column as UserColumn]
-                      : showApiTokens ?
-                        user[column as UserColumn]
-                      : "-"}
+                        <Typography>{user[column as UserColumn]}</Typography>
+                      : <TextField
+                          value={user.publicApiToken}
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <IconButton
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      user.publicApiToken
+                                    );
+                                  }}>
+                                  <ContentCopy />
+                                </IconButton>
+                              ),
+                            },
+                          }}
+                          type={showApiTokens ? "text" : "password"}
+                          disabled
+                          variant="standard"
+                          sx={(theme) => {
+                            return {
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: theme.palette.text.primary,
+                                color: theme.palette.text.primary,
+                              },
+                            };
+                          }}
+                        />
+                      }
                     </Td>
                   : null
                 )}
@@ -143,7 +172,7 @@ export default function Users({ tab }: UsersProps) {
         </BorderedTable>
       </TableContainer>
       <Dialog
-        open={editUser !== ""}
+        open={editUserUsername !== null}
         onClose={() => {
           closeEditUser();
         }}>
@@ -176,6 +205,32 @@ export default function Users({ tab }: UsersProps) {
                 </MenuItem>
               ))}
             </TextField>
+            <TextField
+              value={
+                users.data?.filter(
+                  (user) => user.username === editUserUsername
+                )[0]?.publicApiToken ?? ""
+              }
+              disabled
+              type={editUserShowApiToken ? "text" : "password"}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => {
+                          setEditUserShowApiToken(!editUserShowApiToken);
+                        }}>
+                        {editUserShowApiToken ?
+                          <VisibilityOff color="primary" />
+                        : <Visibility color="primary" />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+              label="publicApiToken"
+            />
           </Stack>
         </DialogContent>
         <DialogActions>
@@ -193,6 +248,6 @@ export default function Users({ tab }: UsersProps) {
           </Button>
         </DialogActions>
       </Dialog>
-    </BoxTabPanel>
+    </Stack>
   );
 }

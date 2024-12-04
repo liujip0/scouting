@@ -1,4 +1,3 @@
-import { Theme } from "@emotion/react";
 import { User } from "@isa2025/api/src/dbtypes.ts";
 import { TabContext, TabList } from "@mui/lab";
 import {
@@ -7,7 +6,6 @@ import {
   Box,
   Button,
   Stack,
-  SxProps,
   Tab,
   Toolbar,
   Typography,
@@ -218,61 +216,49 @@ export default function DataViewerLayout({
                     )
                   }
                 </Box>
-                <ViewData tab={tab} />
-                {["team", "datamanage", "admin"].includes(permLevel) && (
-                  <>
-                    <BoxTabPanel
-                      tab={tab}
-                      value="exportdata">
-                      Export
-                    </BoxTabPanel>
-                    {["datamanage", "admin"].includes(permLevel) && (
-                      <>
-                        <BoxTabPanel
-                          tab={tab}
-                          value="reviewdata">
-                          Review Data
-                        </BoxTabPanel>
-                        {["admin"].includes(permLevel) && (
-                          <>
-                            <Users tab={tab} />
-                            <Util tab={tab} />
-                          </>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
+                {(() => {
+                  switch (tab) {
+                    case "viewdata": {
+                      if (
+                        ["demo", "team", "datamanage", "admin"].includes(
+                          permLevel
+                        )
+                      ) {
+                        return <ViewData />;
+                      }
+                      break;
+                    }
+                    case "exportdata": {
+                      if (["team", "datamanage", "admin"].includes(permLevel)) {
+                        return <Box>Export</Box>;
+                      }
+                      break;
+                    }
+                    case "reviewdata": {
+                      if (["datamanage", "admin"].includes(permLevel)) {
+                        return <Box>Review Data</Box>;
+                      }
+                      break;
+                    }
+                    case "users": {
+                      if (["admin"].includes(permLevel)) {
+                        return <Users />;
+                      }
+                      break;
+                    }
+                    case "util": {
+                      if (["admin"].includes(permLevel)) {
+                        return <Util />;
+                      }
+                      break;
+                    }
+                  }
+                })()}
               </Stack>
             </TabContext>
           )}
         </GridBorder>
       </Box>
-    </Box>
-  );
-}
-
-type BoxTabPanelProps = {
-  tab: DataViewerTab;
-  value: DataViewerTab;
-  sx?: SxProps<Theme>;
-  children?: React.ReactNode;
-};
-export function BoxTabPanel({
-  tab: value,
-  value: panelValue,
-  sx,
-  children,
-}: BoxTabPanelProps) {
-  return (
-    <Box
-      sx={{
-        ...sx,
-        // @ts-ignore: display does in fact exist on sx prop
-        display: value === panelValue ? (sx?.display ?? "block") : "none",
-        padding: 2,
-      }}>
-      {children}
     </Box>
   );
 }

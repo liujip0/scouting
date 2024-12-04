@@ -12,16 +12,13 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { BorderedTable, Td, Th } from "../components/Table.tsx";
 import { trpc } from "../utils/Trpc.tsx";
-import { BoxTabPanel, DataViewerTab } from "./DataViewerLayout.tsx";
 
-type ViewDataProps = {
-  tab: DataViewerTab;
-};
-export default function ViewData({ tab }: ViewDataProps) {
+export default function ViewData() {
   const [events, setEvents] = useState("");
   const [teams, setTeams] = useState("");
 
@@ -37,15 +34,14 @@ export default function ViewData({ tab }: ViewDataProps) {
   });
 
   return (
-    <BoxTabPanel
-      tab={tab}
-      value="viewdata"
+    <Stack
       sx={{
         width: 1,
         flex: 1,
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        padding: 2,
       }}>
       <Paper
         sx={{
@@ -140,7 +136,9 @@ export default function ViewData({ tab }: ViewDataProps) {
                         column === "autoAmp" ||
                         column === "teleopSpotlight"
                       }>
-                      {teamMatchEntry[column as TeamMatchEntryColumn]}
+                      <Typography>
+                        {teamMatchEntry[column as TeamMatchEntryColumn]}
+                      </Typography>
                     </Td>
                   ))}
                 </TableRow>
@@ -149,6 +147,6 @@ export default function ViewData({ tab }: ViewDataProps) {
           </TableBody>
         </BorderedTable>
       </TableContainer>
-    </BoxTabPanel>
+    </Stack>
   );
 }

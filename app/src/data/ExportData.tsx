@@ -6,6 +6,7 @@ export default function ExportData() {
       sx={{
         width: 1,
         height: 1,
+        padding: 2,
       }}
       direction="row"></Stack>
   );

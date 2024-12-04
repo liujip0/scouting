@@ -5,75 +5,67 @@ import {
 } from "@isa2025/api/src/utils/auth.ts";
 import { Box, Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
-import { BoxTabPanel, DataViewerTab } from "./DataViewerLayout.tsx";
 
-type UtilProps = {
-  tab: DataViewerTab;
-};
-export default function Util({ tab }: UtilProps) {
+export default function Util() {
   const [password, setPassword] = useState("");
   const [saltToken, setSaltToken] = useState("");
   const [hashedPassword, setHashedPassword] = useState("");
   const [token, setToken] = useState("");
 
   return (
-    <BoxTabPanel
-      tab={tab}
-      value="util">
-      <Stack gap={2}>
-        <Box>
-          <Button
-            onClick={() => {
-              setSaltToken(generateSaltToken());
-            }}>
-            Generate Salt Token
-          </Button>
-          <TextField
-            value={saltToken}
-            onChange={(event) => {
-              setSaltToken(event.currentTarget.value);
-            }}
-            label="Salt Token"
-          />
-        </Box>
+    <Stack gap={2}>
+      <Box>
+        <Button
+          onClick={() => {
+            setSaltToken(generateSaltToken());
+          }}>
+          Generate Salt Token
+        </Button>
         <TextField
-          value={password}
+          value={saltToken}
           onChange={(event) => {
-            setPassword(event.currentTarget.value);
+            setSaltToken(event.currentTarget.value);
           }}
-          label="Password"
+          label="Salt Token"
         />
-        <Box>
-          <Button
-            onClick={async () => {
-              setHashedPassword(await hashPassword(password, saltToken));
-            }}>
-            Hash
-          </Button>
-          <TextField
-            value={hashedPassword}
-            onChange={(event) => {
-              setHashedPassword(event.currentTarget.value);
-            }}
-            label="Hashed Password"
-          />
-        </Box>
-        <Box>
-          <Button
-            onClick={async () => {
-              setToken(await generateToken(saltToken));
-            }}>
-            Generate Token
-          </Button>
-          <TextField
-            value={token}
-            onChange={(event) => {
-              setToken(event.currentTarget.value);
-            }}
-            label="Token"
-          />
-        </Box>
-      </Stack>
-    </BoxTabPanel>
+      </Box>
+      <TextField
+        value={password}
+        onChange={(event) => {
+          setPassword(event.currentTarget.value);
+        }}
+        label="Password"
+      />
+      <Box>
+        <Button
+          onClick={async () => {
+            setHashedPassword(await hashPassword(password, saltToken));
+          }}>
+          Hash
+        </Button>
+        <TextField
+          value={hashedPassword}
+          onChange={(event) => {
+            setHashedPassword(event.currentTarget.value);
+          }}
+          label="Hashed Password"
+        />
+      </Box>
+      <Box>
+        <Button
+          onClick={async () => {
+            setToken(await generateToken(saltToken));
+          }}>
+          Generate Token
+        </Button>
+        <TextField
+          value={token}
+          onChange={(event) => {
+            setToken(event.currentTarget.value);
+          }}
+          label="Token"
+        />
+      </Box>
+    </Stack>
   );
 }

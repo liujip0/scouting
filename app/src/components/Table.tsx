@@ -1,4 +1,4 @@
-import { Table, TableCell } from "@mui/material";
+import { Table, TableCell, Typography } from "@mui/material";
 import React from "react";
 
 type BorderedTableProps = {
@@ -25,9 +25,14 @@ export function Th({ thickRightBorder = false, children }: ThProps) {
     <TableCell
       sx={{
         borderColor: "primary.main",
-        borderRightWidth: thickRightBorder ? 2.5 : 1,
+        borderRightWidth: thickRightBorder ? 5 : 1,
       }}>
-      {children}
+      <Typography
+        sx={{
+          fontWeight: "bold",
+        }}>
+        {children}
+      </Typography>
     </TableCell>
   );
 }
@@ -41,7 +46,7 @@ export function Td({ thickRightBorder = false, children }: TdProps) {
     <TableCell
       sx={{
         borderColor: "primary.main",
-        borderRightWidth: thickRightBorder ? 2.5 : 1,
+        borderRightWidth: thickRightBorder ? 5 : 1,
         borderTopWidth: 2,
       }}>
       {children}
