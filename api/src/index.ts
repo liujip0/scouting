@@ -20,7 +20,7 @@ export default {
       const response = new Response(null, {
         status: 200,
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "https://isa2025.pages.dev",
           "Access-Control-Allow-Headers": "*",
         },
       });
@@ -43,7 +43,10 @@ export default {
       req: request,
       router: appRouter,
       createContext: (options: FetchCreateContextFnOptions) =>
-        createContext({ ...options, env }),
+        createContext({
+          ...options,
+          env,
+        }),
     });
   },
 };
