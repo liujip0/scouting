@@ -38,7 +38,7 @@ import { trpc } from "../utils/Trpc.tsx";
 export default function Users() {
   const [showApiTokens, setShowApiTokens] = useState(false);
 
-  const users = trpc.users.useQuery();
+  const users = trpc.users.users.useQuery();
 
   const [editUserUsername, setEditUserUsername] = useState<string | null>(null);
   const [editUserPermLevel, setEditUserPermLevel] = useState<
@@ -230,8 +230,20 @@ export default function Users() {
                 },
               }}
               label="publicApiToken"
+              sx={(theme) => {
+                return {
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: theme.palette.text.primary,
+                    color: theme.palette.text.primary,
+                  },
+                };
+              }}
             />
           </Stack>
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Regenerate publicApiToken"
+          />
         </DialogContent>
         <DialogActions>
           <Button

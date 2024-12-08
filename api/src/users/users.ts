@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
-import { User } from "./dbtypes.ts";
-import { authedLoggedProcedure } from "./trpc.ts";
+import { User } from "../dbtypes.ts";
+import { authedLoggedProcedure } from "../trpc.ts";
 
 export const users = authedLoggedProcedure.query(async (opts) => {
   if (opts.ctx.user.permLevel !== "admin") {

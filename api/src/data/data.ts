@@ -4,8 +4,8 @@ import {
   TeamMatchEntry,
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
-} from "./dbtypes.ts";
-import { authedLoggedProcedure } from "./trpc.ts";
+} from "../dbtypes.ts";
+import { authedLoggedProcedure } from "../trpc.ts";
 
 export const data = authedLoggedProcedure
   .input(

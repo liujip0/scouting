@@ -22,7 +22,7 @@ export default function ViewData() {
   const [events, setEvents] = useState("");
   const [teams, setTeams] = useState("");
 
-  const data = trpc.data.useQuery({
+  const data = trpc.data.data.useQuery({
     events: events ? (events.split(",") as [string, ...string[]]) : undefined,
     teams:
       teams ?
