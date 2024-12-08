@@ -36,9 +36,7 @@ export default function Data() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: process.env.SERVER_URL as string,
-          // (import.meta.env.DEV ? urls.devServer : urls.productionServer) +
-          // "/api",
+          url: (process.env.SERVER_URL as string) + "/api",
           headers() {
             return {
               Authorization: "Bearer " + token,
