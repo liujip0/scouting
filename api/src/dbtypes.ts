@@ -4,7 +4,10 @@ export interface TeamMatchEntry {
   teamNumber: number;
   alliance: "Red" | "Blue";
   robotNumber: number;
-  entryVersion: number;
+  deviceTeamNumber: number;
+  deviceId: string;
+  scoutTeamNumber: number;
+  scoutName: string;
 
   autoNote1: boolean;
   autoNote2: boolean;
@@ -38,7 +41,10 @@ export const TeamMatchEntryColumns = [
   "teamNumber",
   "alliance",
   "robotNumber",
-  "entryVersion",
+  "deviceTeamNumber",
+  "deviceId",
+  "scoutTeamNumber",
+  "scoutName",
 
   "autoNote1",
   "autoNote2",

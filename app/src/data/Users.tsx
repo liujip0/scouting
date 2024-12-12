@@ -8,6 +8,8 @@ import {
   ContentCopy,
   Delete,
   Edit,
+  FilterAltOff,
+  Refresh,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
@@ -35,10 +37,28 @@ import { useState } from "react";
 import { BorderedTable, Td, Th } from "../components/Table.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 
-export default function Users() {
+type UsersProps = {
+  hidden: boolean;
+  logoutFunction: () => void;
+};
+export default function Users({ hidden, logoutFunction }: UsersProps) {
   const [showApiTokens, setShowApiTokens] = useState(false);
 
-  const users = trpc.users.users.useQuery();
+  const users = trpc.users.users.useQuery(undefined, {
+    retry: (_failureCount, error) => {
+      if (error.data?.httpStatus === 401) {
+        logoutFunction();
+        return false;
+      } else {
+        return true;
+      }
+    },
+  });
+
+  const [searchUsername, setSearchUsername] = useState("");
+  const [searchPermLevel, setSearchPermLevel] = useState<
+    User["permLevel"] | ""
+  >("");
 
   const [editUserUsername, setEditUserUsername] = useState<string | null>(null);
   const [editUserPermLevel, setEditUserPermLevel] = useState<
@@ -61,35 +81,93 @@ export default function Users() {
 
   return (
     <Stack
+      gap={2}
       sx={{
         width: 1,
         height: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
         padding: 2,
+        display: hidden ? "none" : "flex",
       }}>
       <Paper
         sx={{
-          padding: 1,
           display: "flex",
           gap: 2,
         }}
         square>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={showApiTokens}
-              onChange={(event) => {
-                setShowApiTokens(event.currentTarget.checked);
-              }}
-            />
-          }
-          label="Show Public API Tokens"
+        <Stack
+          direction="row"
+          gap={2}
           sx={{
-            pl: 2,
+            flex: 1,
+            overflowX: "scroll",
+            padding: 1,
+          }}>
+          <TextField
+            value={searchUsername}
+            onChange={(event) => {
+              setSearchUsername(event.currentTarget.value);
+            }}
+            label="Username"
+            size="small"
+            sx={{
+              width: 175,
+            }}
+          />
+          <TextField
+            value={searchPermLevel}
+            onChange={(event) => {
+              setSearchPermLevel(event.target.value as User["permLevel"] | "");
+            }}
+            select
+            label="permLevel"
+            size="small"
+            sx={{
+              width: 175,
+            }}>
+            <MenuItem value={""}>-</MenuItem>
+            {UserPermLevel.map((perm) => (
+              <MenuItem
+                key={perm}
+                value={perm}>
+                {perm}
+              </MenuItem>
+            ))}
+          </TextField>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showApiTokens}
+                onChange={(event) => {
+                  setShowApiTokens(event.currentTarget.checked);
+                }}
+              />
+            }
+            label="Show publicApiToken"
+            sx={{
+              pl: 2,
+            }}
+          />
+        </Stack>
+        <IconButton
+          onClick={() => {
+            users.refetch();
           }}
-        />
+          sx={{
+            width: "max-content",
+          }}>
+          <Refresh />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setSearchUsername("");
+            setSearchPermLevel("");
+          }}
+          sx={{
+            mr: 1,
+            width: "max-content",
+          }}>
+          <FilterAltOff />
+        </IconButton>
       </Paper>
       <TableContainer
         sx={{
@@ -108,66 +186,79 @@ export default function Users() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.data?.map((user) => (
-              <TableRow key={user.username}>
-                {UserColumns.map((column) =>
-                  column !== "hashedPassword" && column !== "saltToken" ?
-                    <Td key={column}>
-                      {column !== "publicApiToken" ?
-                        <Typography>{user[column as UserColumn]}</Typography>
-                      : <TextField
-                          value={user.publicApiToken}
-                          slotProps={{
-                            input: {
-                              endAdornment: (
-                                <IconButton
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(
-                                      user.publicApiToken
-                                    );
-                                  }}>
-                                  <ContentCopy />
-                                </IconButton>
-                              ),
-                            },
-                          }}
-                          type={showApiTokens ? "text" : "password"}
-                          disabled
-                          variant="standard"
-                          sx={(theme) => {
-                            return {
-                              "& .MuiInputBase-input.Mui-disabled": {
-                                WebkitTextFillColor: theme.palette.text.primary,
-                                color: theme.palette.text.primary,
+            {users.data?.map((user) => {
+              if (searchUsername) {
+                if (!user.username.includes(searchUsername)) {
+                  return;
+                }
+              }
+              if (searchPermLevel) {
+                if (user.permLevel !== searchPermLevel) {
+                  return;
+                }
+              }
+              return (
+                <TableRow key={user.username}>
+                  {UserColumns.map((column) =>
+                    column !== "hashedPassword" && column !== "saltToken" ?
+                      <Td key={column}>
+                        {column !== "publicApiToken" ?
+                          <Typography>{user[column as UserColumn]}</Typography>
+                        : <TextField
+                            value={user.publicApiToken}
+                            slotProps={{
+                              input: {
+                                endAdornment: (
+                                  <IconButton
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(
+                                        user.publicApiToken
+                                      );
+                                    }}>
+                                    <ContentCopy />
+                                  </IconButton>
+                                ),
                               },
-                            };
-                          }}
-                        />
-                      }
-                    </Td>
-                  : null
-                )}
-                <Td>
-                  <Stack
-                    direction="row"
-                    sx={{
-                      width: 1,
-                      height: 1,
-                      justifyContent: "space-around",
-                    }}>
-                    <IconButton
-                      onClick={() => {
-                        openEditUser(user.username);
+                            }}
+                            type={showApiTokens ? "text" : "password"}
+                            disabled
+                            variant="standard"
+                            sx={(theme) => {
+                              return {
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor:
+                                    theme.palette.text.primary,
+                                  color: theme.palette.text.primary,
+                                },
+                              };
+                            }}
+                          />
+                        }
+                      </Td>
+                    : null
+                  )}
+                  <Td>
+                    <Stack
+                      direction="row"
+                      sx={{
+                        width: 1,
+                        height: 1,
+                        justifyContent: "space-around",
                       }}>
-                      <Edit color="primary" />
-                    </IconButton>
-                    <IconButton>
-                      <Delete color="error" />
-                    </IconButton>
-                  </Stack>
-                </Td>
-              </TableRow>
-            ))}
+                      <IconButton
+                        onClick={() => {
+                          openEditUser(user.username);
+                        }}>
+                        <Edit color="primary" />
+                      </IconButton>
+                      <IconButton>
+                        <Delete color="error" />
+                      </IconButton>
+                    </Stack>
+                  </Td>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </BorderedTable>
       </TableContainer>

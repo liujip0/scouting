@@ -2,7 +2,7 @@ import {
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
 } from "@isa2025/api/src/dbtypes.ts";
-import { FilterAltOff } from "@mui/icons-material";
+import { FilterAltOff, Refresh } from "@mui/icons-material";
 import {
   IconButton,
   Paper,
@@ -18,30 +18,37 @@ import { useState } from "react";
 import { BorderedTable, Td, Th } from "../components/Table.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 
-export default function ViewData() {
+type ViewDataProps = {
+  hidden: boolean;
+  logoutFunction: () => void;
+};
+export default function ViewData({ hidden, logoutFunction }: ViewDataProps) {
   const [events, setEvents] = useState("");
   const [teams, setTeams] = useState("");
+  const [match, setMatch] = useState("");
 
-  const data = trpc.data.data.useQuery({
-    events: events ? (events.split(",") as [string, ...string[]]) : undefined,
-    teams:
-      teams ?
-        (teams.split(",").map((team) => parseInt(team)) as [
-          number,
-          ...number[],
-        ])
-      : undefined,
-  });
+  const data = trpc.data.data.useQuery(
+    {},
+    {
+      retry: (_failureCount, error) => {
+        if (error.data?.httpStatus === 401) {
+          logoutFunction();
+          return false;
+        } else {
+          return true;
+        }
+      },
+    }
+  );
 
   return (
     <Stack
+      gap={2}
       sx={{
         width: 1,
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
+        height: 1,
         padding: 2,
+        display: hidden ? "none" : "flex",
       }}>
       <Paper
         sx={{
@@ -58,22 +65,59 @@ export default function ViewData() {
             padding: 1,
           }}>
           <TextField
+            value={events}
             onChange={(event) => {
               setEvents(event.currentTarget.value);
             }}
-            label="Events (comma-separated)"
+            label="Events"
+            helperText="comma-separated"
             size="small"
+            sx={{
+              width: 175,
+            }}
           />
           <TextField
+            value={match}
+            onChange={(event) => {
+              setMatch(event.currentTarget.value);
+            }}
+            label="Match"
+            helperText="key or #"
+            size="small"
+            sx={{
+              width: 100,
+            }}
+          />
+          <TextField
+            value={teams}
             onChange={(event) => {
               setTeams(event.currentTarget.value);
             }}
-            label="Teams (comma-separated)"
+            label="Teams"
+            helperText="comma-separated"
             size="small"
+            sx={{
+              width: 175,
+            }}
           />
         </Stack>
         <IconButton
+          onClick={() => {
+            data.refetch();
+          }}
           sx={{
+            width: "max-content",
+          }}>
+          <Refresh />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setEvents("");
+            setMatch("");
+            setTeams("");
+          }}
+          sx={{
+            mr: 1,
             width: "max-content",
           }}>
           <FilterAltOff />
@@ -104,25 +148,47 @@ export default function ViewData() {
             {data.data?.map((teamMatchEntry, index) => {
               if (events) {
                 let correctEvent = false;
-                for (let event of events.split(",")) {
-                  if (teamMatchEntry.eventKey === event) {
+                for (let event of events.replace(/ /g, "").split(",")) {
+                  if (teamMatchEntry.eventKey.includes(event)) {
                     correctEvent = true;
                     break;
                   }
                 }
-                if (correctEvent === false) {
+                if (!correctEvent) {
                   return;
+                }
+              }
+              if (match) {
+                const trimmedMatch = match.replace(/ /g, "");
+                if (/^\d+$/.test(trimmedMatch)) {
+                  if (teamMatchEntry.matchKey !== "qm" + trimmedMatch) {
+                    return;
+                  }
+                } else if (
+                  trimmedMatch === "qm" ||
+                  /^(?:qf|sf|f)\d*(?:m\d*)?$/.test(trimmedMatch)
+                ) {
+                  if (!teamMatchEntry.matchKey.startsWith(trimmedMatch)) {
+                    return;
+                  }
+                } else {
+                  if (teamMatchEntry.matchKey !== trimmedMatch) {
+                    return;
+                  }
                 }
               }
               if (teams) {
                 let correctTeam = false;
-                for (let team of teams.split(",").map((x) => parseInt(x))) {
+                for (let team of teams
+                  .replace(/ /g, "")
+                  .split(",")
+                  .map((x) => parseInt(x))) {
                   if (teamMatchEntry.teamNumber === team) {
                     correctTeam = true;
                     break;
                   }
                 }
-                if (correctTeam === false) {
+                if (!correctTeam) {
                   return;
                 }
               }

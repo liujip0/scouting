@@ -1,21 +1,21 @@
 INSERT INTO TeamMatchEntry (
-  eventKey, matchKey, teamNumber, alliance, robotNumber, entryVersion,
+  eventKey, matchKey, teamNumber, alliance, robotNumber, deviceTeamNumber, deviceId, scoutTeamNumber, scoutName,
   autoNote1, autoNote2, autoNote3, autoNote4, autoNote5, autoNote6, autoNote7, autoNote8, autoLeftStartingZone, autoSpeaker, autoAmp,
   teleopSpeaker, teleopAmp, teleopTrap, teleopPassed, teleopStolen, teleopChuteIntake, teleopGroundIntake, teleopEndgame, teleopSpotlight,
   postmatchDriverSkill, postmatchPlayedDefense, postmatchUnderHeavyDefense
 ) VALUES (
-  '2025mock', 'qm1', 9991, 'Red', 1, 0,
+  '2025mock', 'qm1', 9991, 'Red', 1, 3494, 'tablet1', 3494, 'Jiping L',
   true, false, true, true, false, false, false, true, true, 3, 2,
   5, 4, 1, 6, 0, false, true, 'climbed', 1,
   3, false, true
 );
 INSERT INTO TeamMatchEntry (
-  eventKey, matchKey, teamNumber, alliance, robotNumber, entryVersion,
+  eventKey, matchKey, teamNumber, alliance, robotNumber, deviceTeamNumber, deviceId, scoutTeamNumber, scoutName,
   autoNote1, autoNote2, autoNote3, autoNote4, autoNote5, autoNote6, autoNote7, autoNote8, autoLeftStartingZone, autoSpeaker, autoAmp,
   teleopSpeaker, teleopAmp, teleopTrap, teleopPassed, teleopStolen, teleopChuteIntake, teleopGroundIntake, teleopEndgame, teleopSpotlight,
   postmatchDriverSkill, postmatchPlayedDefense, postmatchUnderHeavyDefense
 ) VALUES (
-  '2025mock', 'qm1', 9992, 'Red', 2, 0,
+  '2025mock', 'qm1', 9992, 'Red', 2, 3494, 'tablet2', 3494, 'Iraa P',
   true, true, true, true, false, false, false, false, true, 5, 1,
   0, 4, 0, 2, 5, true, false, 'parked', 2,
   1, false, false

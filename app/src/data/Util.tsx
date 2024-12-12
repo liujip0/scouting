@@ -6,14 +6,21 @@ import {
 import { Box, Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 
-export default function Util() {
+type UtilProps = {
+  hidden: boolean;
+};
+export default function Util({ hidden }: UtilProps) {
   const [password, setPassword] = useState("");
   const [saltToken, setSaltToken] = useState("");
   const [hashedPassword, setHashedPassword] = useState("");
   const [token, setToken] = useState("");
 
   return (
-    <Stack gap={2}>
+    <Stack
+      gap={2}
+      sx={{
+        display: hidden ? "none" : "flex",
+      }}>
       <Box>
         <Button
           onClick={() => {

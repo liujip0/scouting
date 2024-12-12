@@ -58,6 +58,9 @@ export default function DataViewerLayout({
       }
     },
   });
+  const logoutFunction = () => {
+    logout.mutate(token);
+  };
 
   return (
     <Box
@@ -106,7 +109,7 @@ export default function DataViewerLayout({
           </Button>
           <Button
             onClick={() => {
-              logout.mutate();
+              logout.mutate(token);
             }}
             variant="outlined"
             color="secondary">
@@ -216,44 +219,69 @@ export default function DataViewerLayout({
                     )
                   }
                 </Box>
-                {(() => {
-                  switch (tab) {
-                    case "viewdata": {
-                      if (
-                        ["demo", "team", "datamanage", "admin"].includes(
-                          permLevel
-                        )
-                      ) {
-                        return <ViewData />;
-                      }
-                      break;
+                <Box
+                  sx={{
+                    flex: 1,
+                    width: 1,
+                  }}>
+                  {(() => {
+                    console.log(tab);
+                    const tabPanels = [];
+                    if (
+                      ["demo", "team", "datamanage", "admin"].includes(
+                        permLevel
+                      )
+                    ) {
+                      tabPanels.push(
+                        <ViewData
+                          key={"viewdata"}
+                          hidden={tab !== "viewdata"}
+                          logoutFunction={logoutFunction}
+                        />
+                      );
                     }
-                    case "exportdata": {
-                      if (["team", "datamanage", "admin"].includes(permLevel)) {
-                        return <Box>Export</Box>;
-                      }
-                      break;
+                    if (["team", "datamanage", "admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Box
+                          key={"exportdata"}
+                          sx={{
+                            display: tab !== "exportdata" ? "none" : "block",
+                          }}>
+                          Export
+                        </Box>
+                      );
                     }
-                    case "reviewdata": {
-                      if (["datamanage", "admin"].includes(permLevel)) {
-                        return <Box>Review Data</Box>;
-                      }
-                      break;
+                    if (["datamanage", "admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Box
+                          key={"reviewdata"}
+                          sx={{
+                            display: tab !== "reviewdata" ? "none" : "block",
+                          }}>
+                          Review Data
+                        </Box>
+                      );
                     }
-                    case "users": {
-                      if (["admin"].includes(permLevel)) {
-                        return <Users />;
-                      }
-                      break;
+                    if (["admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Users
+                          key={"users"}
+                          hidden={tab !== "users"}
+                          logoutFunction={logoutFunction}
+                        />
+                      );
                     }
-                    case "util": {
-                      if (["admin"].includes(permLevel)) {
-                        return <Util />;
-                      }
-                      break;
+                    if (["admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Util
+                          key={"util"}
+                          hidden={tab !== "util"}
+                        />
+                      );
                     }
-                  }
-                })()}
+                    return tabPanels;
+                  })()}
+                </Box>
               </Stack>
             </TabContext>
           )}

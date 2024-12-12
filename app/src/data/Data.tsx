@@ -2,6 +2,7 @@ import { User } from "@isa2025/api/src/dbtypes.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
+import { urls } from "../utils/Constants.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
@@ -36,7 +37,9 @@ export default function Data() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: (process.env.SERVER_URL as string) + "/api",
+          url:
+            (import.meta.env.DEV ? urls.devServer : urls.productionServer) +
+            "/api",
           headers() {
             return {
               Authorization: "Bearer " + token,

@@ -6,7 +6,10 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   teamNumber integer,
   alliance text CHECK(alliance IN ('Red', 'Blue')),
   robotNumber integer,
-  entryVersion integer,
+  deviceTeamNumber integer,
+  deviceId text,
+  scoutTeamNumber integer,
+  scoutName text,
 
   autoNote1 boolean,
   autoNote2 boolean,
