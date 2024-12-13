@@ -90,9 +90,15 @@ export default function DataViewerLayout({
           />
           <Typography
             variant="h2"
-            fontSize="large"
             sx={{
               flex: 1,
+              fontSize: {
+                xs: "1rem",
+                sm: "1.2rem",
+                md: "1.4rem",
+                lg: "1.6rem",
+                xl: "1.6rem",
+              },
             }}>
             Indiana Scouting Alliance
           </Typography>
