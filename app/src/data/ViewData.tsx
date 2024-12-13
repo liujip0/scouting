@@ -128,14 +128,14 @@ export default function ViewData({ hidden, logoutFunction }: ViewDataProps) {
           width: 1,
           flex: 1,
         }}>
-        <BorderedTable>
+        <BorderedTable stickyHeader>
           <TableHead>
             <TableRow>
               {TeamMatchEntryColumns.map((column) => (
                 <Th
                   key={column}
                   thickRightBorder={
-                    column === "entryVersion" ||
+                    column === "scoutName" ||
                     column === "autoAmp" ||
                     column === "teleopSpotlight"
                   }>
@@ -166,7 +166,10 @@ export default function ViewData({ hidden, logoutFunction }: ViewDataProps) {
                   }
                 } else if (
                   trimmedMatch === "qm" ||
-                  /^(?:qf|sf|f)\d*(?:m\d*)?$/.test(trimmedMatch)
+                  trimmedMatch === "qf" ||
+                  trimmedMatch === "sf" ||
+                  trimmedMatch === "f" ||
+                  /^(?:qf|sf|f)\d*m?$/.test(trimmedMatch)
                 ) {
                   if (!teamMatchEntry.matchKey.startsWith(trimmedMatch)) {
                     return;
@@ -198,7 +201,7 @@ export default function ViewData({ hidden, logoutFunction }: ViewDataProps) {
                     <Td
                       key={column}
                       thickRightBorder={
-                        column === "entryVersion" ||
+                        column === "scoutName" ||
                         column === "autoAmp" ||
                         column === "teleopSpotlight"
                       }>

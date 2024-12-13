@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   postmatchDriverSkill integer,
   postmatchPlayedDefense boolean,
   postmatchUnderHeavyDefense boolean,
-  PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, entryVersion)
+  PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
 );
 
 

@@ -223,6 +223,7 @@ export default function DataViewerLayout({
                   sx={{
                     flex: 1,
                     width: 1,
+                    overflow: "scroll",
                   }}>
                   {(() => {
                     console.log(tab);

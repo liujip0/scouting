@@ -1,12 +1,14 @@
-import { Table, TableCell, Typography } from "@mui/material";
+import { SxProps, Table, TableCell, Typography } from "@mui/material";
 import React from "react";
 
 type BorderedTableProps = {
+  stickyHeader?: boolean;
   children?: React.ReactNode;
 };
-export function BorderedTable({ children }: BorderedTableProps) {
+export function BorderedTable({ stickyHeader, children }: BorderedTableProps) {
   return (
     <Table
+      stickyHeader={stickyHeader}
       sx={{
         borderColor: "primary.main",
         borderWidth: 3,
@@ -18,12 +20,14 @@ export function BorderedTable({ children }: BorderedTableProps) {
 
 type ThProps = {
   thickRightBorder?: boolean;
+  sx?: SxProps;
   children?: React.ReactNode;
 };
-export function Th({ thickRightBorder = false, children }: ThProps) {
+export function Th({ thickRightBorder = false, sx, children }: ThProps) {
   return (
     <TableCell
       sx={{
+        ...sx,
         borderColor: "primary.main",
         borderRightWidth: thickRightBorder ? 5 : 1,
       }}>
