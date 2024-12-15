@@ -19,6 +19,7 @@ import {
 } from "../components/GridBorder.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 import { setToken, token } from "./Data.tsx";
+import ExportData from "./ExportData.tsx";
 import Users from "./Users.tsx";
 import Util from "./Util.tsx";
 import ViewData from "./ViewData.tsx";
@@ -243,13 +244,10 @@ export default function DataViewerLayout({
                     }
                     if (["team", "datamanage", "admin"].includes(permLevel)) {
                       tabPanels.push(
-                        <Box
+                        <ExportData
                           key={"exportdata"}
-                          sx={{
-                            display: tab !== "exportdata" ? "none" : "block",
-                          }}>
-                          Export
-                        </Box>
+                          hidden={tab !== "exportdata"}
+                        />
                       );
                     }
                     if (["datamanage", "admin"].includes(permLevel)) {
