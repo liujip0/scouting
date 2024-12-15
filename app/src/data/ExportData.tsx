@@ -1,9 +1,12 @@
 import { TeamMatchEntryColumns } from "@isa2025/api/src/dbtypes.ts";
+import { ContentCopy } from "@mui/icons-material";
 import {
   Checkbox,
   Divider,
   FormControlLabel,
+  IconButton,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -60,7 +63,34 @@ export default function ExportData({ hidden }: ExportDataProps) {
       <Stack
         sx={{
           flex: 1,
-        }}></Stack>
+        }}>
+        <TextField
+          // value={user.publicApiToken}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <IconButton
+                  onClick={() => {
+                    // navigator.clipboard.writeText(user.publicApiToken);
+                  }}>
+                  <ContentCopy />
+                </IconButton>
+              ),
+            },
+          }}
+          // type={showApiTokens ? "text" : "password"}
+          disabled
+          variant="standard"
+          sx={(theme) => {
+            return {
+              "& .MuiInputBase-input.Mui-disabled": {
+                WebkitTextFillColor: theme.palette.text.primary,
+                color: theme.palette.text.primary,
+              },
+            };
+          }}
+        />
+      </Stack>
     </Stack>
   );
 }

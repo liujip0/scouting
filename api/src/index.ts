@@ -20,7 +20,7 @@ export default {
       const response = new Response(null, {
         status: 200,
         headers: {
-          "Access-Control-Allow-Origin": "https://isa2025.pages.dev",
+          "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Headers": "*",
         },
       });

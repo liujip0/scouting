@@ -7,10 +7,7 @@ export const createContext = async ({
   resHeaders,
 }: FetchCreateContextFnOptions & { env: Env }) => {
   const responseHeaders = resHeaders;
-  responseHeaders.set(
-    "Access-Control-Allow-Origin",
-    "https://isa2025.pages.dev"
-  );
+  responseHeaders.set("Access-Control-Allow-Origin", "*");
   return {
     req,
     env,
