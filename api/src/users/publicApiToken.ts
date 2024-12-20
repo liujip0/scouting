@@ -20,6 +20,7 @@ export const publicApiToken = authedLoggedProcedure.query(async (opts) => {
     .first<{ publicApiToken: string }>();
 
   if (result) {
+    return result.publicApiToken;
   } else {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
