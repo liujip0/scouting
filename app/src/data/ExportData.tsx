@@ -1,5 +1,5 @@
 import { TeamMatchEntryColumns } from "@isa2025/api/src/dbtypes.ts";
-import { ContentCopy } from "@mui/icons-material";
+import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Checkbox,
   Divider,
@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { trpc } from "../utils/Trpc.tsx";
 
 type ExportDataProps = {
   hidden: boolean;
@@ -18,6 +19,9 @@ export default function ExportData({ hidden }: ExportDataProps) {
   const [columns, setColumns] = useState<boolean[]>(
     new Array(TeamMatchEntryColumns.length).fill(true)
   );
+  const [showApiToken, setShowApiToken] = useState(false);
+
+  const publicApiToken = trpc.users.publicApiToken.useQuery();
 
   return (
     <Stack
@@ -63,22 +67,36 @@ export default function ExportData({ hidden }: ExportDataProps) {
       <Stack
         sx={{
           flex: 1,
+          padding: 1,
         }}>
         <TextField
-          // value={user.publicApiToken}
+          value={publicApiToken.data}
           slotProps={{
             input: {
               endAdornment: (
-                <IconButton
-                  onClick={() => {
-                    // navigator.clipboard.writeText(user.publicApiToken);
-                  }}>
-                  <ContentCopy />
-                </IconButton>
+                <Stack direction="row">
+                  <IconButton
+                    onClick={() => {
+                      setShowApiToken(!showApiToken);
+                    }}>
+                    {showApiToken ?
+                      <VisibilityOff />
+                    : <Visibility />}
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      if (publicApiToken.data) {
+                        navigator.clipboard.writeText(publicApiToken.data);
+                      }
+                    }}>
+                    <ContentCopy />
+                  </IconButton>
+                </Stack>
               ),
             },
           }}
-          // type={showApiTokens ? "text" : "password"}
+          label="publicApiToken"
+          type={showApiToken ? "text" : "password"}
           disabled
           variant="standard"
           sx={(theme) => {

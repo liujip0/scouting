@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { User } from "../dbtypes.ts";
 import { authedLoggedProcedure } from "../trpc.ts";
 
 export const publicApiToken = authedLoggedProcedure.query(async (opts) => {
@@ -17,9 +18,10 @@ export const publicApiToken = authedLoggedProcedure.query(async (opts) => {
     "SELECT publicApiToken FROM Users WHERE username = ? LIMIT 1"
   )
     .bind(opts.ctx.user.username)
-    .first<{ publicApiToken: string }>();
+    .first<User>();
 
-  if (result) {
+  if (result?.publicApiToken) {
+    return result.publicApiToken;
   } else {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
