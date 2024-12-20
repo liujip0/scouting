@@ -1,8 +1,9 @@
+export const Alliance = ["Red", "Blue"] as const;
 export interface TeamMatchEntry {
   eventKey: string;
   matchKey: string;
   teamNumber: number;
-  alliance: "Red" | "Blue";
+  alliance: (typeof Alliance)[number];
   robotNumber: number;
   deviceTeamNumber: number;
   deviceId: string;
