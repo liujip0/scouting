@@ -1,4 +1,3 @@
-import { D1PreparedStatement } from "@cloudflare/workers-types";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { UserPermLevel } from "../dbtypes.ts";
@@ -35,33 +34,25 @@ export const editUser = authedLoggedProcedure
 
     let query = "UPDATE Users SET ";
     const changes = [];
+    const params = [];
     if (opts.input.newUsername) {
       changes.push("username = ?");
+      params.push(opts.input.newUsername);
     }
     if (opts.input.permLevel) {
       changes.push("permLevel = ?");
+      params.push(opts.input.permLevel);
     }
     if (opts.input.regeneratePublicApiToken) {
       changes.push("publicApiToken = ?");
+      params.push(randomString(32));
     }
+    query += changes.join(", ");
     query += " WHERE username = ? LIMIT 1";
 
-    let boundQuery: D1PreparedStatement;
-    if (opts.input.regeneratePublicApiToken) {
-      boundQuery = opts.ctx.env.DB.prepare(query).bind(
-        opts.input.newUsername,
-        opts.input.permLevel,
-        randomString(32),
-        opts.input.oldUsername
-      );
-    } else {
-      boundQuery = opts.ctx.env.DB.prepare(query).bind(
-        opts.input.newUsername,
-        opts.input.permLevel,
-        opts.input.oldUsername
-      );
-    }
-    const result = await boundQuery.run();
+    const result = await opts.ctx.env.DB.prepare(query)
+      .bind(...params, opts.input.oldUsername)
+      .run();
     if (result.success) {
       return;
     } else {

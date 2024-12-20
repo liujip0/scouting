@@ -25,46 +25,43 @@ export default function DeviceSetup({
         <>
           <Button
             onClick={() => {
+              let error = false;
+
               if (!Number.isInteger(deviceSetup.deviceTeamNumber)) {
-                setDeviceTeamNumberError("Not an integer");
-              } else if (!(deviceSetup.deviceTeamNumber > 0)) {
-                setDeviceTeamNumberError("Not greater than 0");
+                setDeviceTeamNumberError("Must be an integer");
+                error = true;
+              } else if (deviceSetup.deviceTeamNumber <= 0) {
+                setDeviceTeamNumberError("Must be greater than 0");
+                error = true;
               } else {
                 setDeviceTeamNumberError("");
               }
 
               if (deviceSetup.deviceId === "") {
                 setDeviceIdError("Cannot be empty");
+                error = true;
               } else {
                 setDeviceIdError("");
               }
 
               if (!Alliance.includes(deviceSetup.alliance)) {
                 setAllianceError("Must be 'Red' or 'Blue'");
+                error = true;
               } else {
                 setAllianceError("");
               }
 
               if (!Number.isInteger(deviceSetup.robotNumber)) {
-                setRobotNumberError("Not an integer");
+                setRobotNumberError("Must be an integer");
+                error = true;
               } else if (!(deviceSetup.robotNumber > 0)) {
-                setRobotNumberError("Not greater than 0");
+                setRobotNumberError("Must be greater than 0");
+                error = true;
               } else {
                 setRobotNumberError("");
               }
 
-              console.log(
-                deviceTeamNumberError ||
-                  deviceIdError ||
-                  allianceError ||
-                  robotNumberError
-              );
-              if (
-                deviceTeamNumberError !==''&&
-                deviceIdError !==''&&
-                allianceError!=='' &&
-                robotNumberError!==''
-              ) {
+              if (!error) {
                 setPage("scoutinfo");
               }
             }}

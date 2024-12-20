@@ -54,17 +54,18 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
       }
     },
   });
-  const editUser = trpc.users.editUser.useMutation();
 
   const [searchUsername, setSearchUsername] = useState("");
   const [searchPermLevel, setSearchPermLevel] = useState<
     User["permLevel"] | ""
   >("");
 
+  const editUser = trpc.users.editUser.useMutation();
   const [editUserOldUsername, setEditUserOldUsername] = useState<string | null>(
     null
   );
   const [editUserUsername, setEditUserUsername] = useState<string | null>(null);
+  const [editUserUsernameError, setEditUserUsernameError] = useState("");
   const [editUserPermLevel, setEditUserPermLevel] = useState<
     User["permLevel"] | null
   >(null);
@@ -78,6 +79,7 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
     setEditUserShowApiToken(false);
     setEditUserRegenerateToken(false);
     setEditUserUsername(username);
+    setEditUserUsernameError("");
     setEditUserOldUsername(username);
   };
   const closeEditUser = () => {
@@ -85,7 +87,36 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
     setEditUserShowApiToken(false);
     setEditUserRegenerateToken(false);
     setEditUserUsername(null);
+    setEditUserUsernameError("");
     setEditUserOldUsername(null);
+  };
+
+  const [showCreateUser, setShowCreateUser] = useState(false);
+  const [createUserUsername, setCreateUserUsername] = useState("");
+  const [createUserUsernameError, setCreateUserUsernameError] = useState("");
+  const [createUserPassword, setCreateUserPassword] = useState("");
+  const [createUserShowPassowrd, setCreateUserShowPassword] = useState(false);
+  const [createUserPasswordError, setCreateUserPasswordError] = useState("");
+  const [createUserPermLevel, setCreateUserPermLevel] =
+    useState<User["permLevel"]>("team");
+  const createUser = trpc.users.createUser.useMutation();
+  const openCreateUser = () => {
+    setShowCreateUser(true);
+    setCreateUserUsername("");
+    setCreateUserUsernameError("");
+    setCreateUserPassword("");
+    setCreateUserShowPassword(false);
+    setCreateUserPasswordError("");
+    setCreateUserPermLevel("team");
+  };
+  const closeCreateUser = () => {
+    setShowCreateUser(false);
+    setCreateUserUsername("");
+    setCreateUserUsernameError("");
+    setCreateUserPassword("");
+    setCreateUserShowPassword(false);
+    setCreateUserPasswordError("");
+    setCreateUserPermLevel("team");
   };
 
   return (
@@ -151,11 +182,18 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
                 }}
               />
             }
-            label="Show publicApiToken"
+            label={"Show public\u200bApi\u200bToken"}
             sx={{
               pl: 2,
             }}
           />
+          <Button
+            onClick={() => {
+              openCreateUser();
+            }}
+            variant="outlined">
+            Create User
+          </Button>
         </Stack>
         <IconButton
           onClick={() => {
@@ -289,6 +327,8 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
                 setEditUserUsername(event.currentTarget.value);
               }}
               label="username"
+              helperText={editUserUsernameError}
+              error={editUserUsernameError !== ""}
             />
             <TextField
               value={editUserPermLevel}
@@ -308,7 +348,7 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
             <TextField
               value={
                 users.data?.filter(
-                  (user) => user.username === editUserUsername
+                  (user) => user.username === editUserOldUsername
                 )[0]?.publicApiToken ?? ""
               }
               disabled
@@ -361,13 +401,117 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
           </Button>
           <Button
             onClick={() => {
-              editUser.mutate({
-                oldUsername: editUserOldUsername!,
-                newUsername: editUserUsername!,
-                permLevel: editUserPermLevel!,
-                regeneratePublicApiToken: editUserRegenerateToken,
-              });
-              closeEditUser();
+              let error = false;
+
+              if (!editUserUsername) {
+                setEditUserUsernameError("Cannot be empty");
+                error = true;
+              } else {
+                setEditUserUsernameError("");
+              }
+
+              if (!error) {
+                editUser.mutate({
+                  oldUsername: editUserOldUsername!,
+                  newUsername: editUserUsername!,
+                  permLevel: editUserPermLevel!,
+                  regeneratePublicApiToken: editUserRegenerateToken,
+                });
+                closeEditUser();
+              }
+            }}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={showCreateUser}
+        onClose={() => {
+          closeCreateUser();
+        }}>
+        <DialogTitle>Create New User</DialogTitle>
+        <DialogContent>
+          <Stack
+            sx={{
+              pt: 2,
+            }}
+            gap={2}>
+            <TextField
+              value={createUserUsername}
+              onChange={(event) => {
+                setCreateUserUsername(event.currentTarget.value);
+              }}
+              label="Username"
+              helperText={createUserUsernameError}
+              error={createUserUsernameError !== ""}
+            />
+            <TextField
+              value={createUserPassword}
+              onChange={(event) => {
+                setCreateUserPassword(event.currentTarget.value);
+              }}
+              label="Password"
+              helperText={createUserPasswordError}
+              error={createUserPasswordError !== ""}
+              type={createUserShowPassowrd ? "text" : "password"}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => {
+                        setCreateUserShowPassword(!createUserShowPassowrd);
+                      }}>
+                      {createUserShowPassowrd ?
+                        <VisibilityOff />
+                      : <Visibility />}
+                    </IconButton>
+                  ),
+                },
+              }}
+            />
+            <TextField
+              value={createUserPermLevel}
+              onChange={(event) => {
+                setCreateUserPermLevel(event.target.value as User["permLevel"]);
+              }}
+              select
+              label="permLevel">
+              {UserPermLevel.map((perm) => (
+                <MenuItem
+                  key={perm}
+                  value={perm}>
+                  {perm}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              closeCreateUser();
+            }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              let error = false;
+
+              if (!createUserUsername) {
+                setCreateUserUsernameError("Cannot be empty");
+                error = true;
+              } else {
+                setCreateUserUsernameError("");
+              }
+
+              if (!error) {
+                createUser.mutate({
+                  username: createUserUsername,
+                  password: createUserPassword,
+                  permLevel: createUserPermLevel,
+                });
+                closeCreateUser();
+              }
             }}>
             Save
           </Button>
