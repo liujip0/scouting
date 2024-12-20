@@ -54,29 +54,38 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
       }
     },
   });
+  const editUser = trpc.users.editUser.useMutation();
 
   const [searchUsername, setSearchUsername] = useState("");
   const [searchPermLevel, setSearchPermLevel] = useState<
     User["permLevel"] | ""
   >("");
 
+  const [editUserOldUsername, setEditUserOldUsername] = useState<string | null>(
+    null
+  );
   const [editUserUsername, setEditUserUsername] = useState<string | null>(null);
   const [editUserPermLevel, setEditUserPermLevel] = useState<
     User["permLevel"] | null
   >(null);
   const [editUserShowApiToken, setEditUserShowApiToken] = useState(false);
+  const [editUserRegenerateToken, setEditUserRegenerateToken] = useState(false);
   const openEditUser = (username: string) => {
     setEditUserPermLevel(
       users.data?.filter((user) => user.username === username)[0].permLevel ??
         null
     );
     setEditUserShowApiToken(false);
+    setEditUserRegenerateToken(false);
     setEditUserUsername(username);
+    setEditUserOldUsername(username);
   };
   const closeEditUser = () => {
     setEditUserPermLevel(null);
     setEditUserShowApiToken(false);
+    setEditUserRegenerateToken(false);
     setEditUserUsername(null);
+    setEditUserOldUsername(null);
   };
 
   return (
@@ -332,7 +341,14 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
             />
           </Stack>
           <FormControlLabel
-            control={<Checkbox />}
+            control={
+              <Checkbox
+                checked={editUserRegenerateToken}
+                onChange={(event) => {
+                  setEditUserRegenerateToken(event.currentTarget.checked);
+                }}
+              />
+            }
             label="Regenerate publicApiToken"
           />
         </DialogContent>
@@ -345,6 +361,12 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
           </Button>
           <Button
             onClick={() => {
+              editUser.mutate({
+                oldUsername: editUserOldUsername!,
+                newUsername: editUserUsername!,
+                permLevel: editUserPermLevel!,
+                regeneratePublicApiToken: editUserRegenerateToken,
+              });
               closeEditUser();
             }}>
             Save

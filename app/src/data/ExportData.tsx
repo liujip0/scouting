@@ -1,6 +1,7 @@
 import { TeamMatchEntryColumns } from "@isa2025/api/src/dbtypes.ts";
 import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Button,
   Checkbox,
   Divider,
   FormControlLabel,
@@ -19,7 +20,9 @@ export default function ExportData({ hidden }: ExportDataProps) {
   const [columns, setColumns] = useState<boolean[]>(
     new Array(TeamMatchEntryColumns.length).fill(true)
   );
-  const [showApiToken, setShowApiToken] = useState(false);
+  const [showPublicApiToken, setShowPublicApiToken] = useState(false);
+  const [linkIncludesToken, setLinkIncludesToken] = useState(false);
+  const [showAuthorization, setShowAuthorization] = useState(false);
 
   const publicApiToken = trpc.users.publicApiToken.useQuery();
 
@@ -35,10 +38,14 @@ export default function ExportData({ hidden }: ExportDataProps) {
       <Stack
         sx={{
           flex: 1,
+          padding: 1,
         }}>
         <Typography
           variant="body1"
-          fontWeight="bold">
+          fontWeight="bold"
+          sx={{
+            textWrap: "wrap",
+          }}>
           Select columns to include in link
         </Typography>
         <Stack
@@ -58,7 +65,16 @@ export default function ExportData({ hidden }: ExportDataProps) {
                 );
               }}
               control={<Checkbox />}
-              label={column}
+              label={
+                column.startsWith("auto") ? column.replace("auto", "auto\u200b")
+                : column.startsWith("teleop") ?
+                  column.replace("teleop", "teleop\u200b")
+                : column.startsWith("endgame") ?
+                  column.replace("endgame", "endgame\u200b")
+                : column.startsWith("postmatch") ?
+                  column.replace("postmatch", "postmatch\u200b")
+                : column
+              }
             />
           ))}
         </Stack>
@@ -67,19 +83,20 @@ export default function ExportData({ hidden }: ExportDataProps) {
       <Stack
         sx={{
           flex: 1,
-          padding: 1,
-        }}>
+          padding: 2,
+        }}
+        gap={1}>
         <TextField
           value={publicApiToken.data}
           slotProps={{
             input: {
               endAdornment: (
-                <Stack direction="row">
+                <>
                   <IconButton
                     onClick={() => {
-                      setShowApiToken(!showApiToken);
+                      setShowPublicApiToken(!showPublicApiToken);
                     }}>
-                    {showApiToken ?
+                    {showPublicApiToken ?
                       <VisibilityOff />
                     : <Visibility />}
                   </IconButton>
@@ -91,14 +108,14 @@ export default function ExportData({ hidden }: ExportDataProps) {
                     }}>
                     <ContentCopy />
                   </IconButton>
-                </Stack>
+                </>
               ),
             },
           }}
-          label="publicApiToken"
-          type={showApiToken ? "text" : "password"}
+          type={showPublicApiToken ? "text" : "password"}
           disabled
-          variant="standard"
+          label="publicApiToken"
+          variant="outlined"
           sx={(theme) => {
             return {
               "& .MuiInputBase-input.Mui-disabled": {
@@ -108,6 +125,101 @@ export default function ExportData({ hidden }: ExportDataProps) {
             };
           }}
         />
+        <Divider
+          sx={{
+            mt: 2,
+            mb: 2,
+          }}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={linkIncludesToken}
+              onChange={(event) => {
+                setLinkIncludesToken(event.currentTarget.checked);
+              }}
+            />
+          }
+          label="Include token in link"
+        />
+        <TextField
+          value={
+            import.meta.env.VITE_SERVER_URL +
+            "/public/data?include=" +
+            columns.map((value) => (value ? 1 : 0)).join("") +
+            (linkIncludesToken ? "&token=" + publicApiToken.data : "")
+          }
+          slotProps={{
+            input: {
+              endAdornment: (
+                <IconButton
+                  onClick={() => {
+                    if (publicApiToken.data) {
+                      navigator.clipboard.writeText(
+                        import.meta.env.VITE_SERVER_URL +
+                          "/public/data?include=" +
+                          columns.map((value) => (value ? 1 : 0)).join("") +
+                          (linkIncludesToken ?
+                            "&token=" + publicApiToken.data
+                          : "")
+                      );
+                    }
+                  }}>
+                  <ContentCopy />
+                </IconButton>
+              ),
+            },
+          }}
+          label="API Link"
+          sx={{
+            mb: 1,
+          }}
+        />
+        {!linkIncludesToken && (
+          <TextField
+            value={"Bearer " + publicApiToken.data}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <>
+                    <IconButton
+                      onClick={() => {
+                        setShowAuthorization(!showAuthorization);
+                      }}>
+                      {showAuthorization ?
+                        <VisibilityOff />
+                      : <Visibility />}
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        if (publicApiToken.data) {
+                          navigator.clipboard.writeText(
+                            "Bearer " + publicApiToken.data
+                          );
+                        }
+                      }}>
+                      <ContentCopy />
+                    </IconButton>
+                  </>
+                ),
+              },
+            }}
+            type={showAuthorization ? "text" : "password"}
+            label='"Authorization" Header'
+          />
+        )}
+        <Divider
+          sx={{
+            mt: 2,
+            mb: 2,
+          }}
+        />
+        {
+          //TODO: export as file
+        }
+        <Button variant="outlined">Export as JSON</Button>
+        <Button variant="outlined">Export as CSV</Button>
+        <Button variant="outlined">Export as XLSX</Button>
       </Stack>
     </Stack>
   );

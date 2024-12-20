@@ -1,3 +1,4 @@
+import { TeamMatchEntry } from "@isa2025/api/src/dbtypes.ts";
 import { Box, Chip, Typography } from "@mui/material";
 import { useState } from "react";
 import { GridBorder } from "../components/GridBorder.tsx";
@@ -6,13 +7,51 @@ import DeviceSetup from "./DeviceSetup.tsx";
 import ScoutInfo from "./ScoutInfo.tsx";
 
 export type ScoutPage = "devicesetup" | "scoutinfo" | "auto" | "teleop";
-
+export type DeviceSetupObj = {
+  deviceTeamNumber: number;
+  deviceId: string;
+  alliance: TeamMatchEntry["alliance"];
+  robotNumber: number;
+};
 export default function Scout() {
-  const [page, setPage] = useState<ScoutPage>("scoutinfo");
+  const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
+    (): DeviceSetupObj => {
+      if (localStorage.getItem("deviceSetup") !== null) {
+        console.log(localStorage.getItem("deviceSetup"));
+        return JSON.parse(localStorage.getItem("deviceSetup")!);
+      }
+      localStorage.setItem(
+        "deviceSetup",
+        JSON.stringify({
+          deviceTeamNumber: 0,
+          deviceId: "",
+          alliance: "Red",
+          robotNumber: 1,
+        })
+      );
+      return {
+        deviceTeamNumber: 0,
+        deviceId: "",
+        alliance: "Red",
+        robotNumber: 1,
+      };
+    }
+  );
+  const setDeviceSetup = async (value: DeviceSetupObj) => {
+    setDeviceSetupState(value);
+    localStorage.setItem("deviceSetup", JSON.stringify(value));
+  };
+  const [page, setPage] = useState<ScoutPage>("devicesetup");
 
   switch (page) {
     case "devicesetup": {
-      return <DeviceSetup setPage={setPage} />;
+      return (
+        <DeviceSetup
+          deviceSetup={deviceSetup}
+          setDeviceSetup={setDeviceSetup}
+          setPage={setPage}
+        />
+      );
     }
     case "scoutinfo": {
       return <ScoutInfo setPage={setPage} />;

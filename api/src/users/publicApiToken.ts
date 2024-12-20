@@ -20,7 +20,11 @@ export const publicApiToken = authedLoggedProcedure.query(async (opts) => {
     .bind(opts.ctx.user.username)
     .first<User>();
 
+<<<<<<< HEAD
   if (result?.publicApiToken) {
+=======
+  if (result) {
+>>>>>>> e08b502647d50d57eaada66c2d3b8aba149d130f
     return result.publicApiToken;
   } else {
     throw new TRPCError({
