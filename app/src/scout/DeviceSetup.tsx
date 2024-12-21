@@ -1,4 +1,4 @@
-import { Alliance, TeamMatchEntry } from "@isa2025/api/src/dbtypes.ts";
+import { Alliance, TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Button, Divider, MenuItem, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { DeviceSetupObj, ScoutLayout, ScoutPage } from "./Scout.tsx";

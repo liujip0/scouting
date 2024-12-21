@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { UserPermLevel } from "../dbtypes.ts";
 import { authedLoggedProcedure } from "../trpc.ts";
 import { randomString } from "../utils/auth.ts";
+import { UserPermLevel } from "../utils/dbtypes.ts";
 
 export const editUser = authedLoggedProcedure
   .input(
@@ -33,8 +33,8 @@ export const editUser = authedLoggedProcedure
     }
 
     let query = "UPDATE Users SET ";
-    const changes = [];
-    const params = [];
+    const changes: string[] = [];
+    const params: string[] = [];
     if (opts.input.newUsername) {
       changes.push("username = ?");
       params.push(opts.input.newUsername);

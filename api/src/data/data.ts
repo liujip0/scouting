@@ -1,11 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { authedLoggedProcedure } from "../trpc.ts";
 import {
   TeamMatchEntry,
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
-} from "../dbtypes.ts";
-import { authedLoggedProcedure } from "../trpc.ts";
+} from "../utils/dbtypes.ts";
 
 export const data = authedLoggedProcedure
   .input(

@@ -3,7 +3,7 @@ import {
   UserColumn,
   UserColumns,
   UserPermLevel,
-} from "@isa2025/api/src/dbtypes.ts";
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import {
   ContentCopy,
   Delete,

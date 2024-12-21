@@ -1,4 +1,4 @@
-import { User } from "@isa2025/api/src/dbtypes.ts";
+import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { TabContext, TabList } from "@mui/lab";
 import {
   AppBar,
@@ -18,7 +18,6 @@ import {
   GridBorder,
 } from "../components/GridBorder.tsx";
 import { trpc } from "../utils/Trpc.tsx";
-import { setToken, token } from "./Data.tsx";
 import ExportData from "./ExportData.tsx";
 import Users from "./Users.tsx";
 import Util from "./Util.tsx";
@@ -32,14 +31,18 @@ export type DataViewerTab =
   | "util";
 
 type DataViewerLayoutProps = {
-  setLoggedIn: (value: boolean) => void;
+  token: string;
+  setToken: (
+    newToken: string,
+    expiresAt: number,
+    permLevel: User["permLevel"]
+  ) => void;
   permLevel: User["permLevel"];
-  setPermLevel: (value: User["permLevel"]) => void;
 };
 export default function DataViewerLayout({
-  setLoggedIn,
+  token,
+  setToken,
   permLevel,
-  setPermLevel,
 }: DataViewerLayoutProps) {
   const topBarHeightRem = 4;
   const navigate = useNavigate();
@@ -47,15 +50,11 @@ export default function DataViewerLayout({
 
   const logout = trpc.auth.logout.useMutation({
     onSuccess() {
-      setToken("", 0);
-      setPermLevel("none");
-      setLoggedIn(false);
+      setToken("", 0, "none");
     },
     onError() {
-      if (token === undefined) {
-        setToken("", 0);
-        setPermLevel("none");
-        setLoggedIn(false);
+      if (token === "") {
+        setToken("", 0, "none");
       }
     },
   });

@@ -1,4 +1,4 @@
-import { User } from "@isa2025/api/src/dbtypes.ts";
+import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Avatar,
@@ -18,13 +18,15 @@ import {
 } from "../components/GridBorder.tsx";
 import { TextFieldDoubleLabel } from "../TextFieldLabel.tsx";
 import { trpc } from "../utils/Trpc.tsx";
-import { setToken } from "./Data.tsx";
 
 type LoginProps = {
-  setLoggedIn: (value: boolean) => void;
-  setPermLevel: (value: User["permLevel"]) => void;
+  setToken: (
+    newToken: string,
+    expiresAt: number,
+    permLevel: User["permLevel"]
+  ) => void;
 };
-export default function Login({ setLoggedIn, setPermLevel }: LoginProps) {
+export default function Login({ setToken }: LoginProps) {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -35,9 +37,11 @@ export default function Login({ setLoggedIn, setPermLevel }: LoginProps) {
   const login = trpc.auth.login.useMutation({
     onSuccess(data) {
       if (data?.token) {
-        setToken(data.token, data.expiresAt);
-        setPermLevel(data.permLevel as User["permLevel"]);
-        setLoggedIn(true);
+        setToken(
+          data.token,
+          data.expiresAt,
+          data.permLevel as User["permLevel"]
+        );
       }
     },
     onError(error) {

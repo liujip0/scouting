@@ -1,4 +1,4 @@
-import { TeamMatchEntryColumns } from "@isa2025/api/src/dbtypes.ts";
+import { TeamMatchEntryColumns } from "@isa2025/api/src/utils/dbtypes.ts";
 import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,

@@ -1,12 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { UserPermLevel } from "../dbtypes.ts";
 import { authedLoggedProcedure } from "../trpc.ts";
 import {
   generateSaltToken,
   generateToken,
   hashPassword,
 } from "../utils/auth.ts";
+import { UserPermLevel } from "../utils/dbtypes.ts";
 
 export const createUser = authedLoggedProcedure
   .input(

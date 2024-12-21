@@ -1,4 +1,4 @@
-import { User } from "../dbtypes.ts";
+import { User } from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 import { data } from "./data.ts";
 

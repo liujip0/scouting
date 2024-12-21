@@ -1,4 +1,4 @@
-import { TeamMatchEntry } from "@isa2025/api/src/dbtypes.ts";
+import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Chip, Typography } from "@mui/material";
 import { useState } from "react";
 import { GridBorder } from "../components/GridBorder.tsx";
