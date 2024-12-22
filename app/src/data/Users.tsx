@@ -22,7 +22,6 @@ import {
   DialogTitle,
   FormControlLabel,
   IconButton,
-  InputAdornment,
   MenuItem,
   Paper,
   Stack,
@@ -225,7 +224,7 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
           <TableHead>
             <TableRow>
               {UserColumns.map((column) =>
-                column !== "hashedPassword" && column !== "saltToken" ?
+                column !== "hashedPassword" ?
                   <Th key={column}>{column}</Th>
                 : null
               )}
@@ -247,7 +246,7 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
               return (
                 <TableRow key={user.username}>
                   {UserColumns.map((column) =>
-                    column !== "hashedPassword" && column !== "saltToken" ?
+                    column !== "hashedPassword" ?
                       <Td key={column}>
                         {column !== "publicApiToken" ?
                           <Typography>{user[column as UserColumn]}</Typography>
@@ -345,52 +344,7 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
                 </MenuItem>
               ))}
             </TextField>
-            <TextField
-              value={
-                users.data?.filter(
-                  (user) => user.username === editUserOldUsername
-                )[0]?.publicApiToken ?? ""
-              }
-              disabled
-              type={editUserShowApiToken ? "text" : "password"}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => {
-                          setEditUserShowApiToken(!editUserShowApiToken);
-                        }}>
-                        {editUserShowApiToken ?
-                          <VisibilityOff color="primary" />
-                        : <Visibility color="primary" />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              label="publicApiToken"
-              sx={(theme) => {
-                return {
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: theme.palette.text.primary,
-                    color: theme.palette.text.primary,
-                  },
-                };
-              }}
-            />
           </Stack>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={editUserRegenerateToken}
-                onChange={(event) => {
-                  setEditUserRegenerateToken(event.currentTarget.checked);
-                }}
-              />
-            }
-            label="Regenerate publicApiToken"
-          />
         </DialogContent>
         <DialogActions>
           <Button
@@ -415,7 +369,6 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
                   oldUsername: editUserOldUsername!,
                   newUsername: editUserUsername!,
                   permLevel: editUserPermLevel!,
-                  regeneratePublicApiToken: editUserRegenerateToken,
                 });
                 closeEditUser();
               }

@@ -56,7 +56,6 @@ export default function Data() {
         {token === "" ?
           <Login setToken={setToken} />
         : <DataViewerLayout
-            token={token}
             setToken={setToken}
             permLevel={permLevel}
           />

@@ -108,17 +108,7 @@ export default function DeviceSetup({
             helperText={deviceIdError || "Must be unique within each team"}
             error={deviceIdError !== ""}
           />
-        </Stack>
-        <Divider
-          orientation="vertical"
-          flexItem
-        />
-        <Stack
-          sx={{
-            flex: 1,
-            padding: 2,
-          }}
-          gap={2}>
+          <Divider flexItem />
           <TextField
             value={deviceSetup.alliance}
             onChange={(event) => {
@@ -153,6 +143,16 @@ export default function DeviceSetup({
             error={robotNumberError !== ""}
           />
         </Stack>
+        <Divider
+          orientation="vertical"
+          flexItem
+        />
+        <Stack
+          sx={{
+            flex: 1,
+            padding: 2,
+          }}
+          gap={2}></Stack>
       </Stack>
     </ScoutLayout>
   );

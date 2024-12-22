@@ -4,8 +4,7 @@ import { publicOpts } from "./context.ts";
 export const data = async (opts: publicOpts): Promise<Response> => {
   if (
     opts.ctx.user === null ||
-    (opts.ctx.user?.permLevel !== "demo" &&
-      opts.ctx.user?.permLevel !== "team" &&
+    (opts.ctx.user?.permLevel !== "team" &&
       opts.ctx.user?.permLevel !== "datamanage" &&
       opts.ctx.user?.permLevel !== "admin")
   ) {

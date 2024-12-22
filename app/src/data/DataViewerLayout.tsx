@@ -17,7 +17,6 @@ import {
   borderWidthPx,
   GridBorder,
 } from "../components/GridBorder.tsx";
-import { trpc } from "../utils/Trpc.tsx";
 import ExportData from "./ExportData.tsx";
 import Users from "./Users.tsx";
 import Util from "./Util.tsx";
@@ -31,7 +30,6 @@ export type DataViewerTab =
   | "util";
 
 type DataViewerLayoutProps = {
-  token: string;
   setToken: (
     newToken: string,
     expiresAt: number,
@@ -40,7 +38,6 @@ type DataViewerLayoutProps = {
   permLevel: User["permLevel"];
 };
 export default function DataViewerLayout({
-  token,
   setToken,
   permLevel,
 }: DataViewerLayoutProps) {
@@ -48,18 +45,8 @@ export default function DataViewerLayout({
   const navigate = useNavigate();
   const [tab, setTab] = useState<DataViewerTab>("viewdata");
 
-  const logout = trpc.auth.logout.useMutation({
-    onSuccess() {
-      setToken("", 0, "none");
-    },
-    onError() {
-      if (token === "") {
-        setToken("", 0, "none");
-      }
-    },
-  });
-  const logoutFunction = () => {
-    logout.mutate(token);
+  const logout = () => {
+    setToken("", 0, "none");
   };
 
   return (
@@ -115,7 +102,7 @@ export default function DataViewerLayout({
           </Button>
           <Button
             onClick={() => {
-              logout.mutate(token);
+              logout();
             }}
             variant="outlined"
             color="secondary">
@@ -243,7 +230,7 @@ export default function DataViewerLayout({
                         <ViewData
                           key={"viewdata"}
                           hidden={tab !== "viewdata"}
-                          logoutFunction={logoutFunction}
+                          logoutFunction={logout}
                         />
                       );
                     }
@@ -271,7 +258,7 @@ export default function DataViewerLayout({
                         <Users
                           key={"users"}
                           hidden={tab !== "users"}
-                          logoutFunction={logoutFunction}
+                          logoutFunction={logout}
                         />
                       );
                     }

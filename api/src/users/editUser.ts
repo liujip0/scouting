@@ -1,7 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { authedLoggedProcedure } from "../trpc.ts";
-import { randomString } from "../utils/auth.ts";
 import { UserPermLevel } from "../utils/dbtypes.ts";
 
 export const editUser = authedLoggedProcedure
@@ -9,8 +8,7 @@ export const editUser = authedLoggedProcedure
     z.object({
       oldUsername: z.string(),
       newUsername: z.string().optional(),
-      permLevel: z.enum(UserPermLevel).optional(),
-      regeneratePublicApiToken: z.boolean().optional(),
+      permLevel: z.enum(UserPermLevel),
     })
   )
   .mutation(async (opts) => {
@@ -23,8 +21,7 @@ export const editUser = authedLoggedProcedure
 
     if (
       opts.input.newUsername === undefined &&
-      opts.input.permLevel === undefined &&
-      !opts.input.regeneratePublicApiToken
+      opts.input.permLevel === undefined
     ) {
       throw new TRPCError({
         code: "BAD_REQUEST",
@@ -42,10 +39,6 @@ export const editUser = authedLoggedProcedure
     if (opts.input.permLevel) {
       changes.push("permLevel = ?");
       params.push(opts.input.permLevel);
-    }
-    if (opts.input.regeneratePublicApiToken) {
-      changes.push("publicApiToken = ?");
-      params.push(randomString(32));
     }
     query += changes.join(", ");
     query += " WHERE username = ? LIMIT 1";

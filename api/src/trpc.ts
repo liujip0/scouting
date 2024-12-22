@@ -1,6 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Context } from "./context.ts";
+import { User } from "./utils/dbtypes.ts";
 
 const t = initTRPC.context<Context>().create();
 
@@ -35,16 +36,44 @@ export const authedLoggedProcedure = loggedPublicProcedure.use(async (opts) => {
     });
   }
 
-  let tokenPayload: JwtPayload;
+  let tokenPayload: JwtPayload & {
+    user: {
+      username: string;
+      permLevel: User["permLevel"];
+    };
+  };
   try {
     tokenPayload = jwt.verify(
       token,
       opts.ctx.env.JWT_PRIVATE_KEY
-    ) as JwtPayload;
+    ) as JwtPayload & {
+      user: {
+        username: string;
+        permLevel: User["permLevel"];
+      };
+    };
   } catch (err) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "Token could not be verified.",
+    });
+  }
+
+  const user = await opts.ctx.env.DB.prepare(
+    "SELECT username, permLevel FROM Users WHERE username = ? LIMIT 1"
+  )
+    .bind(tokenPayload.user.username)
+    .run<User>();
+  if (!user.success || user.results[0] === undefined) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "User account not found.",
+    });
+  }
+  if (user.results[0].permLevel !== tokenPayload.user.permLevel) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Token permLevel does not match database.",
     });
   }
 
@@ -54,55 +83,4 @@ export const authedLoggedProcedure = loggedPublicProcedure.use(async (opts) => {
     },
   });
   return result;
-
-  // const session = await opts.ctx.env.DB.prepare(
-  //   "SELECT sessionId, expiresAt, username FROM UserSessions WHERE token = ? LIMIT 1;"
-  // )
-  //   .bind(token)
-  //   .run<{
-  //     sessionId: string;
-  //     expiresAt: number;
-  //     username: string;
-  //   }>();
-  // if (!session.error && session.results[0]) {
-  //   if (session.results[0].expiresAt! > Date.now()) {
-  //     const userInfo = await opts.ctx.env.DB.prepare(
-  //       "SELECT permLevel FROM Users WHERE username = ?"
-  //     )
-  //       .bind(session.results[0].username)
-  //       .first<{
-  //         permLevel: User["permLevel"];
-  //       }>();
-  //     if (!userInfo) {
-  //       throw new TRPCError({
-  //         code: "INTERNAL_SERVER_ERROR",
-  //         message: "Unable to fetch user info after logging in.",
-  //       });
-  //     }
-  //     const result = await opts.next({
-  //       ctx: {
-  //         user: {
-  //           username: session.results[0].username,
-  //           permLevel: userInfo.permLevel,
-  //         },
-  //       },
-  //     });
-  //     return result;
-  //   } else {
-  //     await opts.ctx.env.DB.prepare(
-  //       "DELETE FROM UserSessions WHERE token = ? LIMIT 1;"
-  //     )
-  //       .bind(token)
-  //       .run();
-  //     throw new TRPCError({
-  //       code: "UNAUTHORIZED",
-  //       message: "Token expired. Please login again.",
-  //     });
-  //   }
-  // } else {
-  //   throw new TRPCError({
-  //     code: "UNAUTHORIZED",
-  //     message: "Invalid or missing token. Please login.",
-  //   });
-  // }
 });

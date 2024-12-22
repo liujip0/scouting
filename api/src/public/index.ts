@@ -1,3 +1,4 @@
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 import { data } from "./data.ts";
@@ -35,20 +36,29 @@ export const authedPublicEndpoint = async (
   } else if (opts.params.has("auth")) {
     token = opts.params.get("auth");
   }
+
   if (token) {
-    const authResults = await opts.env.DB.prepare(
-      "SELECT username, permLevel FROM Users WHERE publicApiToken = ? LIMIT 1"
-    )
-      .bind(token)
-      .run<{
+    let tokenPayload: JwtPayload & {
+      user: {
         username: string;
         permLevel: User["permLevel"];
-      }>();
-    if (!authResults.success) {
+      };
+    };
+    try {
+      tokenPayload = jwt.verify(
+        token,
+        opts.env.JWT_PRIVATE_KEY
+      ) as JwtPayload & {
+        user: {
+          username: string;
+          permLevel: User["permLevel"];
+        };
+      };
+    } catch (err) {
       return new Response(
         JSON.stringify({
           error: "401 Unauthorized",
-          errorMessage: "Invalid access token.",
+          errorMessage: "Token could not be verified.",
         }),
         {
           status: 401,
@@ -59,6 +69,43 @@ export const authedPublicEndpoint = async (
         }
       );
     }
+
+    const user = await opts.env.DB.prepare(
+      "SELECT username, permLevel FROM Users WHERE username = ? LIMIT 1"
+    )
+      .bind(tokenPayload.user.username)
+      .run<User>();
+    if (!user.success || user.results[0] === undefined) {
+      return new Response(
+        JSON.stringify({
+          error: "401 Unauthorized",
+          errorMessage: "User account not found.",
+        }),
+        {
+          status: 401,
+          statusText: "Unauthorized",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+    if (user.results[0].permLevel !== tokenPayload.user.permLevel) {
+      return new Response(
+        JSON.stringify({
+          error: "401 Unauthorized",
+          errorMessage: "Token permLevel does not match database.",
+        }),
+        {
+          status: 401,
+          statusText: "Unauthorized",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     return await endpoint({
       request: opts.request,
       path: opts.path,
@@ -66,10 +113,7 @@ export const authedPublicEndpoint = async (
       env: opts.env,
       ctx: {
         ...opts.ctx,
-        user: {
-          username: authResults.results[0].username,
-          permLevel: authResults.results[0].permLevel,
-        },
+        user: tokenPayload.user,
       },
     });
   }

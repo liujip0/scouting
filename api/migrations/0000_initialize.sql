@@ -46,15 +46,5 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE IF NOT EXISTS Users(
   username text UNIQUE PRIMARY KEY,
   permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team',
-  hashedPassword text,
-  saltToken text,
-  publicApiToken text
-);
-
-CREATE TABLE IF NOT EXISTS UserSessions(
-  sessionId integer PRIMARY KEY AUTOINCREMENT,
-  username text,
-  token text,
-  expiresAt integer,
-  FOREIGN KEY (username) REFERENCES Users(username)
+  hashedPassword text
 );

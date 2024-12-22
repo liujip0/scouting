@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
+import jwt from "jsonwebtoken";
 import { authedLoggedProcedure } from "../trpc.ts";
-import { User } from "../utils/dbtypes.ts";
 
 export const publicApiToken = authedLoggedProcedure.query(async (opts) => {
   if (
@@ -14,18 +14,13 @@ export const publicApiToken = authedLoggedProcedure.query(async (opts) => {
     });
   }
 
-  const result = await opts.ctx.env.DB.prepare(
-    "SELECT publicApiToken FROM Users WHERE username = ? LIMIT 1"
-  )
-    .bind(opts.ctx.user.username)
-    .first<User>();
-
-  if (result) {
-    return result.publicApiToken;
-  } else {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "Error while fetching publicApiToken.",
-    });
-  }
+  return jwt.sign(
+    {
+      user: {
+        username: opts.ctx.user.username,
+        permLevel: opts.ctx.user.permLevel,
+      },
+    },
+    opts.ctx.env.JWT_PRIVATE_KEY
+  );
 });

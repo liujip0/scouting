@@ -133,10 +133,8 @@ INSERT INTO TeamMatchEntry (
   ('2025mock','f1m11',9524,'Red',5,877,'device2',9309,'Gillian S',false,true,true,false,true,true,true,false,false,2,7,4,5,3,2,7,true,true,'climbed',1,4,true,true);
 
 
-INSERT INTO Users (username, publicApiToken, hashedPassword, saltToken)
+INSERT INTO Users (username, hashedPassword)
   VALUES (
     '9991',
-    '00be3599d340a71196115824a01a38b20c168f946c080ccab9755ce1b5fe98ab',
-    'b38ae1c3292b25b38b10119f3c83b07b369fae338589b3c56929c73e1f34d76a',
-    'sjt3pceewstwwl04edgom4am9mf33zb7'
+    '$2y$10$xYijwMdaddvORBDUl7Ao/.OQSVJ4z6F0muElMMjV/F/xuQvqJ/TWW'
   );

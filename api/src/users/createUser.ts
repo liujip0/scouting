@@ -1,11 +1,8 @@
 import { TRPCError } from "@trpc/server";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { authedLoggedProcedure } from "../trpc.ts";
-import {
-  generateSaltToken,
-  generateToken,
-  hashPassword,
-} from "../utils/auth.ts";
+import { saltRounds } from "../utils/auth.ts";
 import { UserPermLevel } from "../utils/dbtypes.ts";
 
 export const createUser = authedLoggedProcedure
@@ -24,25 +21,19 @@ export const createUser = authedLoggedProcedure
       });
     }
 
-    const saltToken = generateSaltToken();
+    const hashedPassword = await bcrypt.hash(opts.input.password, saltRounds);
+
     const result = await opts.ctx.env.DB.prepare(
-      "INSERT INTO Users (username, permLevel, hashedPassword, saltToken, publicApiToken) VALUES (?, ?, ?, ?, ?)"
+      "INSERT INTO Users (username, permLevel, hashedPassword) VALUES (?, ?, ?)"
     )
-      .bind(
-        opts.input.username,
-        opts.input.permLevel,
-        await hashPassword(opts.input.password, saltToken),
-        saltToken,
-        await generateToken(saltToken)
-      )
+      .bind(opts.input.username, opts.input.permLevel, hashedPassword)
       .run();
 
     if (result.success) {
       return;
-    } else {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Error while creating user.",
-      });
     }
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Error while creating user.",
+    });
   });

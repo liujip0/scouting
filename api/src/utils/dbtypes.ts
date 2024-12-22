@@ -74,6 +74,44 @@ export const TeamMatchEntryColumns = [
   "postmatchUnderHeavyDefense",
 ] as const;
 export type TeamMatchEntryColumn = (typeof TeamMatchEntryColumns)[number];
+//TODO: vvv
+// export const TeamMatchEntryInit= {
+//   eventKey: '',
+//   matchKey: '',
+//   teamNumber: 0,
+//   alliance: 'Red',
+//   robotNumber: 0,
+//   deviceTeamNumber: 0,
+//   deviceId: '',
+//   scoutTeamNumber: number,
+//   scoutName: string,
+
+//   autoNote1: boolean,
+//   autoNote2: boolean,
+//   autoNote3: boolean,
+//   autoNote4: boolean,
+//   autoNote5: boolean,
+//   autoNote6: boolean,
+//   autoNote7: boolean,
+//   autoNote8: boolean,
+//   autoLeftStartingZone: boolean,
+//   autoSpeaker: number,
+//   autoAmp: number,
+
+//   teleopSpeaker: number,
+//   teleopAmp: number,
+//   teleopTrap: number,
+//   teleopPassed: number,
+//   teleopStolen: number,
+//   teleopChuteIntake: boolean,
+//   teleopGroundIntake: boolean,
+//   teleopEndgame: "parked" | "climbed" | "none",
+//   teleopSpotlight: number,
+
+//   postmatchDriverSkill: number,
+//   postmatchPlayedDefense: boolean,
+//   postmatchUnderHeavyDefense: boolean,
+// }
 
 export const UserPermLevel = [
   "none",
@@ -86,14 +124,12 @@ export type User = {
   username: string;
   permLevel: (typeof UserPermLevel)[number];
   hashedPassword: string;
-  saltToken: string;
   publicApiToken: string;
 };
 export const UserColumns = [
   "username",
   "permLevel",
   "hashedPassword",
-  "saltToken",
   "publicApiToken",
 ] as const;
 export type UserColumn = (typeof UserColumns)[number];
