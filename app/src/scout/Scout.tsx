@@ -1,10 +1,16 @@
-import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  Event,
+  Match,
+  TeamMatchEntry,
+  TeamMatchEntryInit,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Chip, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GridBorder } from "../components/GridBorder.tsx";
+import { getStoreData, initIDB, Stores } from "../utils/IndexedDb.ts";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./DeviceSetup.tsx";
-import ScoutInfo from "./ScoutInfo.tsx";
+import MatchInfo from "./MatchInfo.tsx";
 
 export type ScoutPage = "devicesetup" | "scoutinfo" | "auto" | "teleop";
 export type DeviceSetupObj = {
@@ -14,6 +20,13 @@ export type DeviceSetupObj = {
   robotNumber: number;
 };
 export default function Scout() {
+  useEffect(() => {
+    const idbStatus = initIDB();
+    idbStatus.then((value) => {
+      console.log(value);
+    });
+  }, []);
+
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
     (): DeviceSetupObj => {
       if (localStorage.getItem("deviceSetup") !== null) {
@@ -43,6 +56,26 @@ export default function Scout() {
   };
   const [page, setPage] = useState<ScoutPage>("devicesetup");
 
+  const [match, setMatch] = useState<TeamMatchEntry>(TeamMatchEntryInit);
+  const [currentEvent, setCurrentEvent] = useState("");
+  const [events, setEvents] = useState<(Event & { matches: Match[] })[]>([]);
+  useEffect(() => {
+    getStoreData<Event>(Stores.Events).then((idbEvents) => {
+      const res: (Event & { matches: Match[] })[] = idbEvents.map((event) => ({
+        ...event,
+        matches: [],
+      }));
+      getStoreData<Match>(Stores.Matches).then((idbMatches) => {
+        idbMatches.forEach((match) => {
+          res
+            .find((event) => event.eventKey === match.eventKey)
+            ?.matches.push(match);
+        });
+        setEvents(res);
+      });
+    });
+  }, []);
+
   switch (page) {
     case "devicesetup": {
       return (
@@ -50,11 +83,18 @@ export default function Scout() {
           deviceSetup={deviceSetup}
           setDeviceSetup={setDeviceSetup}
           setPage={setPage}
+          events={events}
         />
       );
     }
     case "scoutinfo": {
-      return <ScoutInfo setPage={setPage} />;
+      return (
+        <MatchInfo
+          setPage={setPage}
+          match={match}
+          setMatch={setMatch}
+        />
+      );
     }
     case "auto": {
       return <Auto setPage={setPage} />;

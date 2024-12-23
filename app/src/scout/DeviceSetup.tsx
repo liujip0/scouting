@@ -1,5 +1,20 @@
-import { Alliance, TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Button, Divider, MenuItem, Stack, TextField } from "@mui/material";
+import {
+  Alliance,
+  Event,
+  Match,
+  TeamMatchEntry,
+} from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControlLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 import { DeviceSetupObj, ScoutLayout, ScoutPage } from "./Scout.tsx";
 
@@ -7,16 +22,25 @@ type DeviceSetupProps = {
   deviceSetup: DeviceSetupObj;
   setDeviceSetup: (value: DeviceSetupObj) => void;
   setPage: (newValue: ScoutPage) => void;
+  events: (Event & { matches: Match[] })[];
 };
 export default function DeviceSetup({
   deviceSetup,
   setDeviceSetup,
   setPage,
+  events,
 }: DeviceSetupProps) {
   const [deviceTeamNumberError, setDeviceTeamNumberError] = useState("");
   const [deviceIdError, setDeviceIdError] = useState("");
   const [allianceError, setAllianceError] = useState("");
   const [robotNumberError, setRobotNumberError] = useState("");
+
+  const [createEvent, setCreateEvent] = useState(false);
+  const [newEvent, setNewEvent] = useState<Event & { matches: Match[] }>({
+    eventKey: "",
+    eventName: "",
+    matches: [],
+  });
 
   return (
     <ScoutLayout
@@ -152,7 +176,44 @@ export default function DeviceSetup({
             flex: 1,
             padding: 2,
           }}
-          gap={2}></Stack>
+          gap={2}>
+          <Stack
+            direction="row"
+            gap={2}
+            sx={{
+              width: 1,
+            }}>
+            <Button
+              variant="outlined"
+              sx={{
+                flex: 1,
+              }}>
+              Download Event
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                flex: 1,
+              }}>
+              Create Event
+            </Button>
+          </Stack>
+          <Box
+            sx={{
+              flex: 1,
+            }}>
+            <RadioGroup>
+              {events.map((event) => (
+                <FormControlLabel
+                  key={event.eventKey}
+                  value={event.eventKey}
+                  control={<Radio />}
+                  label={event.eventKey}
+                />
+              ))}
+            </RadioGroup>
+          </Box>
+        </Stack>
       </Stack>
     </ScoutLayout>
   );

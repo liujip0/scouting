@@ -48,3 +48,25 @@ CREATE TABLE IF NOT EXISTS Users(
   permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team',
   hashedPassword text
 );
+
+
+DROP TABLE IF EXISTS Events;
+DROP TABLE IF EXISTS Matches;
+
+CREATE TABLE IF NOT EXISTS Events(
+  eventKey text PRIMARY KEY,
+  eventName text
+);
+
+CREATE TABLE IF NOT EXISTS Matches(
+  eventKey text,
+  matchKey text,
+  red1 integer,
+  red2 integer,
+  red3 integer,
+  blue1 integer,
+  blue2 integer,
+  blue3 integer,
+  PRIMARY KEY (eventKey, matchKey),
+  FOREIGN KEY(eventKey) REFERENCES Events(eventKey)
+);

@@ -1,11 +1,18 @@
+import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
-type ScoutInfoProps = {
+type MatchInfoProps = {
   setPage: (newValue: ScoutPage) => void;
+  match: TeamMatchEntry;
+  setMatch: (value: TeamMatchEntry) => void;
 };
-export default function ScoutInfo({ setPage }: ScoutInfoProps) {
+export default function MatchInfo({
+  setPage,
+  match,
+  setMatch,
+}: MatchInfoProps) {
   const navigate = useNavigate();
 
   return (
@@ -57,11 +64,25 @@ export default function ScoutInfo({ setPage }: ScoutInfoProps) {
           }}
           gap={2}>
           <TextField
+            value={match.scoutName}
+            onChange={(event) => {
+              setMatch({
+                ...match,
+                scoutName: event.currentTarget.value,
+              });
+            }}
             type="text"
             variant="outlined"
             label="Scout Name & Last Initial"
           />
           <TextField
+            value={match.scoutTeamNumber}
+            onChange={(event) => {
+              setMatch({
+                ...match,
+                scoutTeamNumber: parseInt(event.currentTarget.value),
+              });
+            }}
             type="number"
             variant="outlined"
             label="Scout Team Number"
@@ -79,19 +100,7 @@ export default function ScoutInfo({ setPage }: ScoutInfoProps) {
             pr: 4,
           }}
           gap={2}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-            }}>
-            <TextField
-              type="text"
-              variant="outlined"
-              label="Event Code"
-              disabled
-            />
-            <Button>Select</Button>
-          </Box>
+          <TextField label="Event Code" />
         </Stack>
       </Box>
     </ScoutLayout>
