@@ -11,7 +11,7 @@ export enum Stores {
 
 export const initIDB = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    request = indexedDB.open(dbname);
+    request = indexedDB.open(dbname, version);
 
     request.onupgradeneeded = () => {
       db = request.result;

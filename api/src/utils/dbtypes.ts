@@ -147,3 +147,13 @@ export type Match = {
   blue2: number;
   blue3: number;
 };
+export const MatchColumns = [
+  "eventKey",
+  "matchKey",
+  "red1",
+  "red2",
+  "red3",
+  "blue1",
+  "blue2",
+  "blue3",
+] as const;
