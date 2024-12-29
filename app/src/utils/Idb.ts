@@ -1,6 +1,6 @@
+import { DBEvent, Match } from "@isa2025/api/src/utils/dbtypes.ts";
 import { openDB } from "idb";
 
-let db;
 let version = 1;
 const dbname = "isa2025-idb";
 
@@ -11,7 +11,7 @@ export enum Stores {
 }
 
 export const initDB = async () => {
-  db = openDB(dbname, version, {
+  await openDB(dbname, version, {
     upgrade(db) {
       if (!db.objectStoreNames.contains(Stores.Events)) {
         db.createObjectStore(Stores.Events, { keyPath: "eventKey" });
@@ -35,4 +35,24 @@ export const initDB = async () => {
       }
     },
   });
+};
+
+export const getFromDBStore = async (store: Stores) => {
+  const db = await openDB(dbname, version);
+  const res = await db.getAll(store);
+  return res;
+};
+
+export const putDBEvent = async (event: DBEvent) => {
+  const db = await openDB(dbname, version);
+  await db.put(Stores.Events, event);
+};
+
+export const putDBMatches = async (matches: Match[]) => {
+  const db = await openDB(dbname, version);
+  const tx = db.transaction(Stores.Matches, "readwrite");
+  for (let i = 0; i < matches.length; i++) {
+    await tx.objectStore(Stores.Matches).put(matches[i]);
+  }
+  await tx.done;
 };

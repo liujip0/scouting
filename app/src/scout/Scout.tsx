@@ -1,5 +1,5 @@
 import {
-  Event,
+  DBEvent,
   Match,
   TeamMatchEntry,
   TeamMatchEntryInit,
@@ -7,9 +7,9 @@ import {
 import { Box, Chip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { GridBorder } from "../components/GridBorder.tsx";
-import { getStoreData, initIDB, Stores } from "../utils/IndexedDb.ts";
+import { getFromDBStore, initDB, Stores } from "../utils/Idb.ts";
 import Auto from "./Auto.tsx";
-import DeviceSetup from "./DeviceSetup.tsx";
+import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
 import MatchInfo from "./MatchInfo.tsx";
 
 export type ScoutPage = "devicesetup" | "scoutinfo" | "auto" | "teleop";
@@ -21,10 +21,7 @@ export type DeviceSetupObj = {
 };
 export default function Scout() {
   useEffect(() => {
-    const idbStatus = initIDB();
-    idbStatus.then((value) => {
-      console.log(value);
-    });
+    initDB();
   }, []);
 
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
@@ -58,14 +55,16 @@ export default function Scout() {
 
   const [match, setMatch] = useState<TeamMatchEntry>(TeamMatchEntryInit);
   const [currentEvent, setCurrentEvent] = useState("");
-  const [events, setEvents] = useState<(Event & { matches: Match[] })[]>([]);
+  const [events, setEvents] = useState<(DBEvent & { matches: Match[] })[]>([]);
   useEffect(() => {
-    getStoreData<Event>(Stores.Events).then((idbEvents) => {
-      const res: (Event & { matches: Match[] })[] = idbEvents.map((event) => ({
-        ...event,
-        matches: [],
-      }));
-      getStoreData<Match>(Stores.Matches).then((idbMatches) => {
+    getFromDBStore(Stores.Events).then((idbEvents: DBEvent[]) => {
+      const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
+        (event) => ({
+          ...event,
+          matches: [],
+        })
+      );
+      getFromDBStore(Stores.Matches).then((idbMatches: Match[]) => {
         idbMatches.forEach((match) => {
           res
             .find((event) => event.eventKey === match.eventKey)

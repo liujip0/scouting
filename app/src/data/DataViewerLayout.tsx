@@ -18,7 +18,7 @@ import {
   GridBorder,
 } from "../components/GridBorder.tsx";
 import ExportData from "./ExportData.tsx";
-import Users from "./Users.tsx";
+import Users from "./users/Users.tsx";
 import Util from "./Util.tsx";
 import ViewData from "./ViewData.tsx";
 

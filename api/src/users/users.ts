@@ -11,7 +11,7 @@ export const users = authedLoggedProcedure.query(async (opts) => {
   }
 
   const results = await opts.ctx.env.DB.prepare(
-    "SELECT username, publicApiToken, permLevel FROM Users"
+    "SELECT username, permLevel FROM Users"
   ).all<User>();
 
   if (results.success) {

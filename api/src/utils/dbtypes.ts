@@ -123,17 +123,11 @@ export type User = {
   username: string;
   permLevel: (typeof UserPermLevel)[number];
   hashedPassword: string;
-  publicApiToken: string;
 };
-export const UserColumns = [
-  "username",
-  "permLevel",
-  "hashedPassword",
-  "publicApiToken",
-] as const;
+export const UserColumns = ["username", "permLevel", "hashedPassword"] as const;
 export type UserColumn = (typeof UserColumns)[number];
 
-export type Event = {
+export type DBEvent = {
   eventKey: string;
   eventName: string;
 };
