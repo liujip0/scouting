@@ -101,6 +101,8 @@ export default function Scout() {
                 setPage={setPage}
                 events={events}
                 setEvents={setEvents}
+                currentEvent={currentEvent}
+                setCurrentEvent={setCurrentEvent}
               />
             ),
             matchinfo: (
@@ -108,6 +110,8 @@ export default function Scout() {
                 setPage={setPage}
                 match={match}
                 setMatch={setMatch}
+                events={events}
+                currentEvent={currentEvent}
               />
             ),
             auto: <Auto setPage={setPage} />,

@@ -1,4 +1,8 @@
-import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  DBEvent,
+  Match,
+  TeamMatchEntry,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
@@ -7,11 +11,15 @@ type MatchInfoProps = {
   setPage: (newValue: ScoutPage) => void;
   match: TeamMatchEntry;
   setMatch: (value: TeamMatchEntry) => void;
+  events: (DBEvent & { matches: Match[] })[];
+  currentEvent: string;
 };
 export default function MatchInfo({
   setPage,
   match,
   setMatch,
+  events,
+  currentEvent,
 }: MatchInfoProps) {
   const navigate = useNavigate();
 
@@ -100,7 +108,11 @@ export default function MatchInfo({
             pr: 4,
           }}
           gap={2}>
-          <TextField label="Event Code" />
+          <TextField
+            value={currentEvent}
+            label="Event Code"
+            disabled
+          />
         </Stack>
       </Box>
     </ScoutLayout>

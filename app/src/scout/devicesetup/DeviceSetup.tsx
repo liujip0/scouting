@@ -9,7 +9,9 @@ import {
   Box,
   Button,
   Divider,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   MenuItem,
   Radio,
   RadioGroup,
@@ -30,6 +32,8 @@ type DeviceSetupProps = {
   setPage: (newValue: ScoutPage) => void;
   events: (DBEvent & { matches: Match[] })[];
   setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
+  currentEvent: string;
+  setCurrentEvent: (value: string) => void;
 };
 export default function DeviceSetup({
   deviceSetup,
@@ -37,6 +41,8 @@ export default function DeviceSetup({
   setPage,
   events,
   setEvents,
+  currentEvent,
+  setCurrentEvent,
 }: DeviceSetupProps) {
   const navigate = useNavigate();
 
@@ -44,6 +50,7 @@ export default function DeviceSetup({
   const [deviceIdError, setDeviceIdError] = useState("");
   const [allianceError, setAllianceError] = useState("");
   const [robotNumberError, setRobotNumberError] = useState("");
+  const [currentEventError, setCurrentEventError] = useState("");
 
   const [createEvent, setCreateEvent] = useState(false);
   const openCreateEvent = () => {
@@ -105,6 +112,13 @@ export default function DeviceSetup({
                 error = true;
               } else {
                 setRobotNumberError("");
+              }
+
+              if (currentEvent === "") {
+                setCurrentEventError("Please select an event");
+                error = true;
+              } else {
+                setCurrentEventError("");
               }
 
               if (!error) {
@@ -258,18 +272,25 @@ export default function DeviceSetup({
               flex: 1,
               padding: 2,
             }}>
-            <RadioGroup>
-              {events
-                .sort((a, b) => (a.eventKey < b.eventKey ? -1 : 1))
-                .map((event) => (
-                  <FormControlLabel
-                    key={event.eventKey}
-                    value={event.eventKey}
-                    control={<Radio />}
-                    label={event.eventKey}
-                  />
-                ))}
-            </RadioGroup>
+            <FormControl error={currentEventError !== ""}>
+              <RadioGroup
+                value={currentEvent}
+                onChange={(event) => {
+                  setCurrentEvent(event.currentTarget.value);
+                }}>
+                {events
+                  .sort((a, b) => (a.eventKey < b.eventKey ? -1 : 1))
+                  .map((event) => (
+                    <FormControlLabel
+                      key={event.eventKey}
+                      value={event.eventKey}
+                      control={<Radio />}
+                      label={event.eventKey}
+                    />
+                  ))}
+              </RadioGroup>
+              <FormHelperText>{currentEventError}</FormHelperText>
+            </FormControl>
           </Box>
           <DownloadEvent
             downloadEvent={downloadEvent}
