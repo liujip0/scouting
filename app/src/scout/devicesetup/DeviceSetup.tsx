@@ -4,6 +4,7 @@ import {
   Match,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import { CloudUpload } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -16,22 +17,29 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
+import { trpc } from "../../utils/Trpc.tsx";
 import { DeviceSetupObj, ScoutLayout, ScoutPage } from "../Scout.tsx";
 import CreateEvent from "./CreateEvent.tsx";
+import DownloadEvent from "./DownloadEvent.tsx";
 
 type DeviceSetupProps = {
   deviceSetup: DeviceSetupObj;
   setDeviceSetup: (value: DeviceSetupObj) => void;
   setPage: (newValue: ScoutPage) => void;
   events: (DBEvent & { matches: Match[] })[];
+  setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
 };
 export default function DeviceSetup({
   deviceSetup,
   setDeviceSetup,
   setPage,
   events,
+  setEvents,
 }: DeviceSetupProps) {
+  const navigate = useNavigate();
+
   const [deviceTeamNumberError, setDeviceTeamNumberError] = useState("");
   const [deviceIdError, setDeviceIdError] = useState("");
   const [allianceError, setAllianceError] = useState("");
@@ -42,11 +50,22 @@ export default function DeviceSetup({
     setCreateEvent(true);
   };
 
+  const putEvents = trpc.events.putEvents.useMutation();
+
+  const [downloadEvent, setDownloadEvent] = useState(false);
+
   return (
     <ScoutLayout
       title="Device Setup"
       navButtons={
         <>
+          <Button
+            onClick={() => {
+              navigate("/");
+            }}
+            variant="outlined">
+            Return to Home
+          </Button>
           <Button
             onClick={() => {
               let error = false;
@@ -78,19 +97,22 @@ export default function DeviceSetup({
               if (!Number.isInteger(deviceSetup.robotNumber)) {
                 setRobotNumberError("Must be an integer");
                 error = true;
-              } else if (!(deviceSetup.robotNumber > 0)) {
-                setRobotNumberError("Must be greater than 0");
+              } else if (
+                deviceSetup.robotNumber < 1 ||
+                deviceSetup.robotNumber > 3
+              ) {
+                setRobotNumberError("Must be between 1 and 3");
                 error = true;
               } else {
                 setRobotNumberError("");
               }
 
               if (!error) {
-                setPage("scoutinfo");
+                setPage("matchinfo");
               }
             }}
             variant="contained">
-            Done
+            Continue
           </Button>
         </>
       }>
@@ -206,6 +228,9 @@ export default function DeviceSetup({
               width: 1,
             }}>
             <Button
+              onClick={() => {
+                setDownloadEvent(true);
+              }}
               variant="outlined"
               sx={{
                 flex: 1,
@@ -220,6 +245,13 @@ export default function DeviceSetup({
               onClick={openCreateEvent}>
               Create Event
             </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                putEvents.mutate(events);
+              }}>
+              <CloudUpload />
+            </Button>
           </Stack>
           <Box
             sx={{
@@ -227,19 +259,29 @@ export default function DeviceSetup({
               padding: 2,
             }}>
             <RadioGroup>
-              {events.map((event) => (
-                <FormControlLabel
-                  key={event.eventKey}
-                  value={event.eventKey}
-                  control={<Radio />}
-                  label={event.eventKey + " (" + event.eventName + ")"}
-                />
-              ))}
+              {events
+                .sort((a, b) => (a.eventKey < b.eventKey ? -1 : 1))
+                .map((event) => (
+                  <FormControlLabel
+                    key={event.eventKey}
+                    value={event.eventKey}
+                    control={<Radio />}
+                    label={event.eventKey}
+                  />
+                ))}
             </RadioGroup>
           </Box>
+          <DownloadEvent
+            downloadEvent={downloadEvent}
+            setDownloadEvent={setDownloadEvent}
+            events={events}
+            setEvents={setEvents}
+          />
           <CreateEvent
             createEvent={createEvent}
             setCreateEvent={setCreateEvent}
+            events={events}
+            setEvents={setEvents}
           />
         </Stack>
       </Stack>

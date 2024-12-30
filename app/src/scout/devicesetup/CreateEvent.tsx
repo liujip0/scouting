@@ -3,7 +3,7 @@ import {
   Match,
   MatchColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Delete, Done, Edit } from "@mui/icons-material";
+import { Delete, Done } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -23,15 +23,20 @@ import {
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { Th } from "../../components/Table.tsx";
-import { Overwrite } from "../../utils/Utils.ts";
+import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
+import { omit, Overwrite } from "../../utils/Utils.ts";
 
 type CreateEventProps = {
   createEvent: boolean;
   setCreateEvent: (value: boolean) => void;
+  events: (DBEvent & { matches: Match[] })[];
+  setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
 };
 export default function CreateEvent({
   createEvent,
   setCreateEvent,
+  events,
+  setEvents,
 }: CreateEventProps) {
   const [newEvent, setNewEvent] = useState<DBEvent & { matches: Match[] }>({
     eventKey: "",
@@ -151,10 +156,16 @@ export default function CreateEvent({
                         padding: 0.5,
                       }}>
                       <Stack direction="row">
-                        <IconButton color="primary">
-                          <Edit />
-                        </IconButton>
-                        <IconButton color="primary">
+                        <IconButton
+                          onClick={() => {
+                            setNewEvent({
+                              ...newEvent,
+                              matches: newEvent.matches.filter(
+                                (x) => x.matchKey !== match.matchKey
+                              ),
+                            });
+                          }}
+                          color="primary">
                           <Delete />
                         </IconButton>
                       </Stack>
@@ -235,6 +246,9 @@ export default function CreateEvent({
         <Button onClick={closeCreateEvent}>Cancel</Button>
         <Button
           onClick={() => {
+            setEvents([...events, newEvent]);
+            putDBEvent(omit("matches", newEvent) as DBEvent);
+            putDBMatches(newEvent.matches);
             closeCreateEvent();
           }}>
           Save

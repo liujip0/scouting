@@ -12,7 +12,7 @@ export default function Auto({ setPage }: AutoProps) {
         <>
           <Button
             onClick={() => {
-              setPage("scoutinfo");
+              setPage("matchinfo");
             }}
             variant="outlined">
             Back

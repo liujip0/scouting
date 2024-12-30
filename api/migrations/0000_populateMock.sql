@@ -138,3 +138,9 @@ INSERT INTO Users (username, hashedPassword)
     '9991',
     '$2y$10$xYijwMdaddvORBDUl7Ao/.OQSVJ4z6F0muElMMjV/F/xuQvqJ/TWW'
   );
+
+INSERT INTO Events (eventKey, eventName)
+  VALUES ('2025mock', '2025 mock event 0');
+
+INSERT INTO Matches (eventKey, matchKey, red1, red2, red3, blue1, blue2, blue3)
+  VALUES ('2025mock', 'qm2', 3494, 1501, 868, 4982, 3890, 135);

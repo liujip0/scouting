@@ -56,7 +56,7 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
     setEditUserUsername(username);
     setEditUserOldUsername(username);
     setEditUserPermLevel(
-      users.data?.filter((user) => user.username === username)[0].permLevel
+      users.data?.find((user) => user.username === username)?.permLevel
     );
   };
   const closeEditUser = () => {
