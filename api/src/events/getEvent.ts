@@ -34,8 +34,8 @@ export const getEvent = loggedPublicProcedure
       }
     } else {
       throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "No such event.",
+        code: "NOT_FOUND",
+        message: "Event not in ISA database. Try FRC Events API.",
       });
     }
   });

@@ -14,6 +14,8 @@ export interface Env {
   ADMIN_ACCOUNT_USERNAME: string;
 
   JWT_PRIVATE_KEY: string;
+
+  FIRST_API_TOKEN: string;
 }
 
 export default {

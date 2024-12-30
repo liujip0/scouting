@@ -29,7 +29,7 @@ export default function DownloadEvent({
   const [eventKey, setEventKey] = useState("");
   const [eventKeyError, setEventKeyError] = useState("");
 
-  const [tbaStatus, setTbaStatus] = useState("");
+  const [FrcStatus, setFrcStatus] = useState("");
   const [isaStatus, setIsaStatus] = useState("");
 
   const getEvent = trpc.events.getEvent.useMutation({
@@ -41,8 +41,16 @@ export default function DownloadEvent({
       putDBEvent(omit("matches", data) as DBEvent);
       putDBMatches(data.matches);
     },
-    onError() {
-      setIsaStatus("Unknown Problem (check browser console)");
+    onError(err) {
+      setIsaStatus(err.message);
+    },
+  });
+  const getFrcEvent = trpc.events.getFrcEvent.useMutation({
+    onSuccess(data) {
+      setFrcStatus("Success");
+    },
+    onError(err) {
+      setFrcStatus(err.message);
     },
   });
 
@@ -76,9 +84,6 @@ export default function DownloadEvent({
             }}>
             <Button
               variant="outlined"
-              sx={{
-                flex: 1,
-              }}
               onClick={() => {
                 let error = false;
                 if (eventKey === "") {
@@ -89,15 +94,13 @@ export default function DownloadEvent({
                 }
 
                 if (!error) {
+                  getFrcEvent.mutate(eventKey);
                 }
               }}>
-              TBA
+              FRC Events
             </Button>
             <Button
               variant="outlined"
-              sx={{
-                flex: 2,
-              }}
               onClick={async () => {
                 let error = false;
                 if (eventKey === "") {
@@ -115,7 +118,7 @@ export default function DownloadEvent({
             </Button>
           </Stack>
           <Box>
-            {tbaStatus ? "TBA: " + tbaStatus : ""}
+            {FrcStatus ? "TBA: " + FrcStatus : ""}
             <br />
             {isaStatus ? "ISA Server: " + isaStatus : ""}
           </Box>

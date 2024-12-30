@@ -151,3 +151,4 @@ export const MatchColumns = [
   "blue2",
   "blue3",
 ] as const;
+export type MatchColumn = (typeof MatchColumns)[number];
