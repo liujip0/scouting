@@ -14,12 +14,13 @@ export const getFrcEvent = loggedPublicProcedure
       {
         method: "GET",
         headers: {
-          Authorization: "Basic " + btoa(opts.ctx.env.FIRST_API_TOKEN),
+          Authorization:
+            "Basic " +
+            Buffer.from(opts.ctx.env.FIRST_API_TOKEN).toString("base64"),
           "If-Modifier-Since": "",
         },
       }
     );
-    console.log(await eventRes.text());
 
     if (eventRes.status === 200) {
       const eventBody = JSON.parse(await eventRes.text()).Events[0];
@@ -38,7 +39,9 @@ export const getFrcEvent = loggedPublicProcedure
         {
           method: "GET",
           headers: {
-            Authorization: "Basic " + btoa(opts.ctx.env.FIRST_API_TOKEN),
+            Authorization:
+              "Basic " +
+              Buffer.from(opts.ctx.env.FIRST_API_TOKEN).toString("base64"),
             "If-Modifier-Since": "",
           },
         }

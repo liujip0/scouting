@@ -123,7 +123,7 @@ export default function DownloadEvent({
             </Button>
           </Stack>
           <Box>
-            {FrcStatus ? "TBA: " + FrcStatus : ""}
+            {FrcStatus ? "FRC Events: " + FrcStatus : ""}
             <br />
             {isaStatus ? "ISA Server: " + isaStatus : ""}
           </Box>
