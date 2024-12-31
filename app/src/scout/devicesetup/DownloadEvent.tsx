@@ -48,6 +48,11 @@ export default function DownloadEvent({
   const getFrcEvent = trpc.events.getFrcEvent.useMutation({
     onSuccess(data) {
       setFrcStatus("Success");
+
+      setEvents([...events.filter((x) => x.eventKey !== data.eventKey), data]);
+
+      putDBEvent(omit("matches", data) as DBEvent);
+      putDBMatches(data.matches);
     },
     onError(err) {
       setFrcStatus(err.message);

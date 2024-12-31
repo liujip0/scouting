@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
-import { DBEvent, Match, MatchColumn } from "../utils/dbtypes.ts";
+import { DBEvent, Match } from "../utils/dbtypes.ts";
 
 export const getFrcEvent = loggedPublicProcedure
   .input(z.string())
@@ -14,7 +14,7 @@ export const getFrcEvent = loggedPublicProcedure
       {
         method: "GET",
         headers: {
-          Authorization: "Basic " + opts.ctx.env.FIRST_API_TOKEN,
+          Authorization: "Basic " + btoa(opts.ctx.env.FIRST_API_TOKEN),
           "If-Modifier-Since": "",
         },
       }
@@ -38,7 +38,7 @@ export const getFrcEvent = loggedPublicProcedure
         {
           method: "GET",
           headers: {
-            Authorization: "Basic " + opts.ctx.env.FIRST_API_TOKEN,
+            Authorization: "Basic " + btoa(opts.ctx.env.FIRST_API_TOKEN),
             "If-Modifier-Since": "",
           },
         }
@@ -70,7 +70,15 @@ export const getFrcEvent = loggedPublicProcedure
               blue3: 0,
             };
             match.teams.forEach((team) => {
-              newMatch["red1" as MatchColumn] = team.teamNumber;
+              newMatch[
+                team.station.toLowerCase() as
+                  | "red1"
+                  | "red2"
+                  | "red3"
+                  | "blue1"
+                  | "blue2"
+                  | "blue3"
+              ] = team.teamNumber;
             });
             event.matches.push(newMatch);
           }

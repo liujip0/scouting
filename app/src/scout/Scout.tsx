@@ -32,10 +32,6 @@ export type DeviceSetupObj = {
   robotNumber: number;
 };
 export default function Scout() {
-  useEffect(() => {
-    initDB();
-  }, []);
-
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
     (): DeviceSetupObj => {
       if (localStorage.getItem("deviceSetup") !== null) {
@@ -69,20 +65,24 @@ export default function Scout() {
   const [currentEvent, setCurrentEvent] = useState("");
   const [events, setEvents] = useState<(DBEvent & { matches: Match[] })[]>([]);
   useEffect(() => {
-    getFromDBStore(Stores.Events).then((idbEvents: DBEvent[]) => {
-      const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
-        (event) => ({
-          ...event,
-          matches: [],
-        })
-      );
-      getFromDBStore(Stores.Matches).then((idbMatches: Match[]) => {
-        idbMatches.forEach((match) => {
-          res
-            .find((event) => event.eventKey === match.eventKey)
-            ?.matches.push(match);
+    console.log("init");
+    initDB().then(() => {
+      console.log("inti2");
+      getFromDBStore(Stores.Events).then((idbEvents: DBEvent[]) => {
+        const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
+          (event) => ({
+            ...event,
+            matches: [],
+          })
+        );
+        getFromDBStore(Stores.Matches).then((idbMatches: Match[]) => {
+          idbMatches.forEach((match) => {
+            res
+              .find((event) => event.eventKey === match.eventKey)
+              ?.matches.push(match);
+          });
+          setEvents(res);
         });
-        setEvents(res);
       });
     });
   }, []);
