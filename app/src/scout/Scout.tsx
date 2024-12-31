@@ -65,26 +65,28 @@ export default function Scout() {
   const [currentEvent, setCurrentEvent] = useState("");
   const [events, setEvents] = useState<(DBEvent & { matches: Match[] })[]>([]);
   useEffect(() => {
-    console.log("init");
-    initDB().then(() => {
+    (async () => {
+      console.log("init");
+      await initDB();
       console.log("inti2");
-      getFromDBStore(Stores.Events).then((idbEvents: DBEvent[]) => {
-        const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
-          (event) => ({
-            ...event,
-            matches: [],
-          })
-        );
-        getFromDBStore(Stores.Matches).then((idbMatches: Match[]) => {
-          idbMatches.forEach((match) => {
-            res
-              .find((event) => event.eventKey === match.eventKey)
-              ?.matches.push(match);
-          });
-          setEvents(res);
-        });
+
+      const idbEvents: DBEvent[] = await getFromDBStore(Stores.Events);
+      const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
+        (event) => ({
+          ...event,
+          matches: [],
+        })
+      );
+
+      const idbMatches: Match[] = await getFromDBStore(Stores.Matches);
+      idbMatches.forEach((match) => {
+        res
+          .find((event) => event.eventKey === match.eventKey)
+          ?.matches.push(match);
       });
-    });
+
+      setEvents(res);
+    })();
   }, []);
 
   return (

@@ -1,3 +1,4 @@
+import { D1PreparedStatement } from "@cloudflare/workers-types";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
@@ -86,6 +87,35 @@ export const getFrcEvent = loggedPublicProcedure
             event.matches.push(newMatch);
           }
         );
+
+        const boundStmts: D1PreparedStatement[] = [];
+        boundStmts.push(
+          opts.ctx.env.DB.prepare(
+            `REPLACE INTO
+            Events(eventKey, eventName)
+          VALUES (?, ?);`
+          ).bind(event.eventKey, event.eventName)
+        );
+        const matchStmt = opts.ctx.env.DB.prepare(
+          `REPLACE INTO
+            Matches(eventKey, matchKey, red1, red2, red3, blue1, blue2, blue3)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
+        );
+        event.matches.forEach((match) => {
+          boundStmts.push(
+            matchStmt.bind(
+              match.eventKey,
+              match.matchKey,
+              match.red1,
+              match.red2,
+              match.red3,
+              match.blue1,
+              match.blue2,
+              match.blue3
+            )
+          );
+        });
+        await opts.ctx.env.DB.batch(boundStmts);
 
         return event;
       } else {
