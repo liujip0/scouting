@@ -1,11 +1,12 @@
 DROP TABLE IF EXISTS TeamMatchEntry;
+DROP TABLE IF EXISTS HumanPlayerEntry;
 
 CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   eventKey text,
   matchKey text,
   teamNumber integer,
   alliance text CHECK(alliance IN ('Red', 'Blue')),
-  robotNumber integer,
+  robotNumber integer CHECK(robotNumber IN (1, 2, 3)),
   deviceTeamNumber integer,
   deviceId text,
   scoutTeamNumber integer,
@@ -36,6 +37,24 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   postmatchDriverSkill integer,
   postmatchPlayedDefense boolean,
   postmatchUnderHeavyDefense boolean,
+
+  PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
+);
+
+CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
+  eventKey text,
+  matchKey text,
+  teamNumber integer,
+  alliance text CHECK(alliance IN ('Red', 'Blue')),
+  robotNumber integer CHECK(robotNumber IN (4)),
+  deviceTeamNumber integer,
+  deviceId text,
+  scoutTeamNumber integer,
+  scoutName text,
+
+  amplifications integer,
+  spotlights integer,
+
   PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
 );
 

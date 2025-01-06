@@ -35,7 +35,6 @@ export default function Scout() {
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
     (): DeviceSetupObj => {
       if (localStorage.getItem("deviceSetup") !== null) {
-        console.log(localStorage.getItem("deviceSetup"));
         return JSON.parse(localStorage.getItem("deviceSetup")!);
       }
       localStorage.setItem(
@@ -63,12 +62,11 @@ export default function Scout() {
 
   const [match, setMatch] = useState<TeamMatchEntry>(TeamMatchEntryInit);
   const [currentEvent, setCurrentEvent] = useState("");
+  const [matchNumber, setMatchNumber] = useState("qm1");
   const [events, setEvents] = useState<(DBEvent & { matches: Match[] })[]>([]);
   useEffect(() => {
     (async () => {
-      console.log("init");
       await initDB();
-      console.log("inti2");
 
       const idbEvents: DBEvent[] = await getFromDBStore(Stores.Events);
       const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
@@ -114,6 +112,9 @@ export default function Scout() {
                 setMatch={setMatch}
                 events={events}
                 currentEvent={currentEvent}
+                deviceSetup={deviceSetup}
+                matchNumber={matchNumber}
+                setMatchNumber={setMatchNumber}
               />
             ),
             auto: <Auto setPage={setPage} />,

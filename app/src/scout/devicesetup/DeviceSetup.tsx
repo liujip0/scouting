@@ -106,9 +106,9 @@ export default function DeviceSetup({
                 error = true;
               } else if (
                 deviceSetup.robotNumber < 1 ||
-                deviceSetup.robotNumber > 3
+                deviceSetup.robotNumber > 4
               ) {
-                setRobotNumberError("Must be between 1 and 3");
+                setRobotNumberError("Must be between 1 and 4");
                 error = true;
               } else {
                 setRobotNumberError("");
