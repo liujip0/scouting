@@ -13,9 +13,8 @@ import { GridBorder } from "../components/GridBorder.tsx";
 import { getFromDBStore, initDB, Stores } from "../utils/Idb.ts";
 import { trpc } from "../utils/Trpc.tsx";
 import Auto from "./Auto.tsx";
-import DeviceSetup from "./DeviceSetup.tsx";
-import ScoutInfo from "./ScoutInfo.tsx";
-import { Teleop } from "./Teleop.tsx";
+import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
+import MatchInfo from "./MatchInfo.tsx";
 
 const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
