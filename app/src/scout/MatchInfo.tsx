@@ -1,5 +1,6 @@
 import {
   DBEvent,
+  HumanPlayerEntry,
   Match,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
@@ -18,23 +19,17 @@ import { DeviceSetupObj, ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type MatchInfoProps = {
   setPage: (newValue: ScoutPage) => void;
-  match: TeamMatchEntry;
-  setMatch: (value: TeamMatchEntry) => void;
+  match: TeamMatchEntry | HumanPlayerEntry;
+  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
-  currentEvent: string;
   deviceSetup: DeviceSetupObj;
-  matchNumber: string;
-  setMatchNumber: (value: string) => void;
 };
 export default function MatchInfo({
   setPage,
   match,
   setMatch,
   events,
-  currentEvent,
   deviceSetup,
-  matchNumber,
-  setMatchNumber,
 }: MatchInfoProps) {
   const navigate = useNavigate();
 
@@ -71,7 +66,7 @@ export default function MatchInfo({
               if (
                 !events
                   .find((x) => x.eventKey === currentEvent)
-                  ?.matches.some((y) => y.matchKey === matchNumber)
+                  ?.matches.some((y) => y.matchKey === match.matchKey)
               ) {
                 if (
                   matchNumberError !==
@@ -176,9 +171,12 @@ export default function MatchInfo({
             }}
           />
           <TextField
-            value={matchNumber}
+            value={match.matchKey}
             onChange={(event) => {
-              setMatchNumber(event.currentTarget.value);
+              setMatch({
+                ...match,
+                matchKey: event.currentTarget.value,
+              });
             }}
             error={matchNumberError !== ""}
             helperText={matchNumberError}
@@ -188,10 +186,12 @@ export default function MatchInfo({
                 startAdornment: (
                   <IconButton
                     onClick={() => {
-                      if (/^qm\d+$/.test(matchNumber)) {
-                        setMatchNumber(
-                          "qm" + (parseInt(matchNumber.substring(2)) - 1)
-                        );
+                      if (/^qm\d+$/.test(match.matchKey)) {
+                        setMatch({
+                          ...match,
+                          matchKey:
+                            "qm" + (parseInt(match.matchKey.substring(2)) - 1),
+                        });
                       }
                     }}>
                     <Remove />
@@ -200,10 +200,12 @@ export default function MatchInfo({
                 endAdornment: (
                   <IconButton
                     onClick={() => {
-                      if (/^qm\d+$/.test(matchNumber)) {
-                        setMatchNumber(
-                          "qm" + (parseInt(matchNumber.substring(2)) + 1)
-                        );
+                      if (/^qm\d+$/.test(match.matchKey)) {
+                        setMatch({
+                          ...match,
+                          matchKey:
+                            "qm" + (parseInt(match.matchKey.substring(2)) + 1),
+                        });
                       }
                     }}>
                     <Add />

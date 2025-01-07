@@ -1,6 +1,7 @@
 import { TeamMatchEntry, TeamMatchEntryColumns } from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 
+//TODO: update to account for HumanPlayerEntries
 export const data = async (opts: publicOpts): Promise<Response> => {
   if (
     opts.ctx.user === null ||

@@ -3,6 +3,7 @@ import { User } from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 import { data } from "./data.ts";
 
+//TODO: update to account for HumanPlayerEntries
 export const publicRouter = async (opts: publicOpts): Promise<Response> => {
   switch (opts.path[0]) {
     case "data": {

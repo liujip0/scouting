@@ -1,8 +1,10 @@
 import {
   Alliance,
   DBEvent,
+  HumanPlayerEntry,
   Match,
   TeamMatchEntry,
+  TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { CloudUpload } from "@mui/icons-material";
 import {
@@ -32,8 +34,7 @@ type DeviceSetupProps = {
   setPage: (newValue: ScoutPage) => void;
   events: (DBEvent & { matches: Match[] })[];
   setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
-  currentEvent: string;
-  setCurrentEvent: (value: string) => void;
+  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
 };
 export default function DeviceSetup({
   deviceSetup,
@@ -41,8 +42,7 @@ export default function DeviceSetup({
   setPage,
   events,
   setEvents,
-  currentEvent,
-  setCurrentEvent,
+  setMatch,
 }: DeviceSetupProps) {
   const navigate = useNavigate();
 
@@ -114,7 +114,7 @@ export default function DeviceSetup({
                 setRobotNumberError("");
               }
 
-              if (currentEvent === "") {
+              if (deviceSetup.currentEvent === "") {
                 setCurrentEventError("Please select an event");
                 error = true;
               } else {
@@ -122,6 +122,14 @@ export default function DeviceSetup({
               }
 
               if (!error) {
+                if (deviceSetup.robotNumber < 4) {
+                  setMatch({
+                    ...TeamMatchEntryInit,
+                    eventKey: deviceSetup.currentEvent,
+                    alliance: deviceSetup.alliance,
+                    robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
+                  });
+                }
                 setPage("matchinfo");
               }
             }}
@@ -274,9 +282,12 @@ export default function DeviceSetup({
             }}>
             <FormControl error={currentEventError !== ""}>
               <RadioGroup
-                value={currentEvent}
+                value={deviceSetup.currentEvent}
                 onChange={(event) => {
-                  setCurrentEvent(event.currentTarget.value);
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    currentEvent: event.currentTarget.value,
+                  });
                 }}>
                 {events
                   .sort((a, b) => (a.eventKey < b.eventKey ? -1 : 1))

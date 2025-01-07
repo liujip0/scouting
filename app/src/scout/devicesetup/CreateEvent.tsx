@@ -246,7 +246,10 @@ export default function CreateEvent({
         <Button onClick={closeCreateEvent}>Cancel</Button>
         <Button
           onClick={() => {
-            setEvents([...events, newEvent]);
+            setEvents([
+              ...events.filter((event) => event.eventKey !== newEvent.eventKey),
+              newEvent,
+            ]);
             putDBEvent(omit("matches", newEvent) as DBEvent);
             putDBMatches(newEvent.matches);
             closeCreateEvent();

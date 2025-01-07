@@ -8,6 +8,7 @@ export enum Stores {
   Events = "Events",
   Matches = "Matches",
   TeamMatchEntry = "TeamMatchEntry",
+  HumanPlayerEntry = "HumanPlayerEntry",
 }
 
 export const initDB = async () => {
@@ -23,6 +24,18 @@ export const initDB = async () => {
       }
       if (!db.objectStoreNames.contains(Stores.TeamMatchEntry)) {
         db.createObjectStore(Stores.TeamMatchEntry, {
+          keyPath: [
+            "eventKey",
+            "matchKey",
+            "alliance",
+            "robotNumber",
+            "deviceTeamNumber",
+            "deviceId",
+          ],
+        });
+      }
+      if (!db.objectStoreNames.contains(Stores.HumanPlayerEntry)) {
+        db.createObjectStore(Stores.HumanPlayerEntry, {
           keyPath: [
             "eventKey",
             "matchKey",

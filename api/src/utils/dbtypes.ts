@@ -4,7 +4,7 @@ export interface TeamMatchEntry {
   matchKey: string;
   teamNumber: number;
   alliance: (typeof Alliance)[number];
-  robotNumber: number;
+  robotNumber: 1 | 2 | 3;
   deviceTeamNumber: number;
   deviceId: string;
   scoutTeamNumber: number;
@@ -76,10 +76,10 @@ export const TeamMatchEntryColumns = [
 export type TeamMatchEntryColumn = (typeof TeamMatchEntryColumns)[number];
 export const TeamMatchEntryInit: TeamMatchEntry = {
   eventKey: "",
-  matchKey: "",
+  matchKey: "qm1",
   teamNumber: 0,
   alliance: "Red",
-  robotNumber: 0,
+  robotNumber: 1,
   deviceTeamNumber: 0,
   deviceId: "",
   scoutTeamNumber: 0,
@@ -110,6 +110,50 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   postmatchDriverSkill: 0,
   postmatchPlayedDefense: false,
   postmatchUnderHeavyDefense: false,
+};
+
+export interface HumanPlayerEntry {
+  eventKey: string;
+  matchKey: string;
+  teamNumber: number;
+  alliance: (typeof Alliance)[number];
+  robotNumber: 4;
+  deviceTeamNumber: number;
+  deviceId: string;
+  scoutTeamNumber: number;
+  scoutName: string;
+
+  amplifications: number;
+  spotlights: number;
+}
+export const HumanPlayerEntryColumns = [
+  "eventKey",
+  "matchKey",
+  "teamNumber",
+  "alliance",
+  "robotNumber",
+  "deviceTeamNumber",
+  "deviceId",
+  "scoutTeamNumber",
+  "scoutName",
+
+  "amplifications",
+  "spotlights",
+] as const;
+export type HumanPlayerEntryColumn = (typeof HumanPlayerEntryColumns)[number];
+export const HumanPlayerEntryInit: HumanPlayerEntry = {
+  eventKey: "",
+  matchKey: "qm1",
+  teamNumber: 0,
+  alliance: "Red",
+  robotNumber: 4,
+  deviceTeamNumber: 0,
+  deviceId: "",
+  scoutTeamNumber: 0,
+  scoutName: "",
+
+  amplifications: 0,
+  spotlights: 0,
 };
 
 export const UserPermLevel = [

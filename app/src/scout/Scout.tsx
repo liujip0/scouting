@@ -1,5 +1,6 @@
 import {
   DBEvent,
+  HumanPlayerEntry,
   Match,
   TeamMatchEntry,
   TeamMatchEntryInit,
@@ -30,6 +31,7 @@ export type DeviceSetupObj = {
   deviceId: string;
   alliance: TeamMatchEntry["alliance"];
   robotNumber: number;
+  currentEvent: string;
 };
 export default function Scout() {
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
@@ -44,13 +46,15 @@ export default function Scout() {
           deviceId: "",
           alliance: "Red",
           robotNumber: 1,
-        })
+          currentEvent: "",
+        } as DeviceSetupObj)
       );
       return {
         deviceTeamNumber: 0,
         deviceId: "",
         alliance: "Red",
         robotNumber: 1,
+        currentEvent: "",
       };
     }
   );
@@ -60,9 +64,9 @@ export default function Scout() {
   };
   const [page, setPage] = useState<ScoutPage>("devicesetup");
 
-  const [match, setMatch] = useState<TeamMatchEntry>(TeamMatchEntryInit);
-  const [currentEvent, setCurrentEvent] = useState("");
-  const [matchNumber, setMatchNumber] = useState("qm1");
+  const [match, setMatch] = useState<TeamMatchEntry | HumanPlayerEntry>(
+    TeamMatchEntryInit
+  );
   const [events, setEvents] = useState<(DBEvent & { matches: Match[] })[]>([]);
   useEffect(() => {
     (async () => {
@@ -101,8 +105,7 @@ export default function Scout() {
                 setPage={setPage}
                 events={events}
                 setEvents={setEvents}
-                currentEvent={currentEvent}
-                setCurrentEvent={setCurrentEvent}
+                setMatch={setMatch}
               />
             ),
             matchinfo: (
@@ -111,10 +114,7 @@ export default function Scout() {
                 match={match}
                 setMatch={setMatch}
                 events={events}
-                currentEvent={currentEvent}
                 deviceSetup={deviceSetup}
-                matchNumber={matchNumber}
-                setMatchNumber={setMatchNumber}
               />
             ),
             auto: <Auto setPage={setPage} />,
