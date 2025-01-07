@@ -65,7 +65,7 @@ export default function MatchInfo({
 
               if (
                 !events
-                  .find((x) => x.eventKey === currentEvent)
+                  .find((x) => x.eventKey === deviceSetup.currentEvent)
                   ?.matches.some((y) => y.matchKey === match.matchKey)
               ) {
                 if (
@@ -143,7 +143,7 @@ export default function MatchInfo({
           }}
           gap={2}>
           <TextField
-            value={currentEvent}
+            value={deviceSetup.currentEvent}
             label="Event Code"
             helperText="Edit in Device Setup"
             disabled

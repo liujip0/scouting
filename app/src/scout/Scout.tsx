@@ -15,6 +15,7 @@ import { trpc } from "../utils/Trpc.tsx";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
 import MatchInfo from "./MatchInfo.tsx";
+import { Teleop } from "./Teleop.tsx";
 
 const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
@@ -118,7 +119,7 @@ export default function Scout() {
               />
             ),
             auto: <Auto setPage={setPage} />,
-            teleop: <></>,
+            teleop: <Teleop setPage={setPage} />,
           }[page]
         }
       </QueryClientProvider>

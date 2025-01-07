@@ -207,7 +207,9 @@ export default function DeviceSetup({
             }}
             type="number"
             label="Robot Number"
-            helperText={robotNumberError || "\u200b"}
+            helperText={
+              robotNumberError || "Set this to 4 to scout human players"
+            }
             error={robotNumberError !== ""}
           />
           <Button
