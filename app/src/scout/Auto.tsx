@@ -1,4 +1,13 @@
-import { Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControlLabel,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
@@ -25,6 +34,42 @@ export default function Auto({ setPage }: AutoProps) {
             Continue
           </Button>
         </>
-      }></ScoutLayout>
+      }>
+      <Stack
+        direction="row"
+        sx={{ width: 1, height: 1 }}>
+        <Box
+          sx={{
+            flex: 1,
+            // border: "1px solid red",
+          }}></Box>
+        <Divider orientation="vertical" />
+        <Stack
+          sx={{
+            flex: 1,
+            // border: "1px solid purple",
+          }}>
+          <FormControlLabel
+            control={<Switch />}
+            label="LEFT THE STARTING ZONE"
+            labelPlacement="start"
+          />
+          <NumberInput label="SPEAKER" />
+          <NumberInput label="AMP" />
+        </Stack>
+      </Stack>
+    </ScoutLayout>
+  );
+}
+
+type NumberInputProps = {
+  label: string;
+};
+function NumberInput({ label }: NumberInputProps) {
+  return (
+    <Stack direction={"row"}>
+      <Typography>{label}</Typography>
+      <TextField type="number" />
+    </Stack>
   );
 }

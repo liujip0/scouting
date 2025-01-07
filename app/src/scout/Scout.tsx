@@ -4,6 +4,7 @@ import { GridBorder } from "../components/GridBorder.tsx";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./DeviceSetup.tsx";
 import ScoutInfo from "./ScoutInfo.tsx";
+import { Teleop } from "./Teleop.tsx";
 
 export type ScoutPage = "devicesetup" | "scoutinfo" | "auto" | "teleop";
 
@@ -19,6 +20,9 @@ export default function Scout() {
     }
     case "auto": {
       return <Auto setPage={setPage} />;
+    }
+    case "teleop": {
+      return <Teleop setPage={setPage} />;
     }
   }
 }
