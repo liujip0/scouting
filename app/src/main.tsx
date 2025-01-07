@@ -12,26 +12,37 @@ import "./index.css";
 import LandingPage from "./LandingPage.tsx";
 import Scout from "./scout/Scout.tsx";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: "",
+          element: <LandingPage />,
+        },
+        {
+          path: "scout",
+          element: <Scout />,
+        },
+        {
+          path: "data",
+          element: <Data />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "",
-        element: <LandingPage />,
-      },
-      {
-        path: "scout",
-        element: <Scout />,
-      },
-      {
-        path: "data",
-        element: <Data />,
-      },
-    ],
-  },
-]);
+    future: {
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_relativeSplatPath: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  }
+);
 
 const theme = responsiveFontSizes(
   createTheme({
@@ -77,7 +88,10 @@ const theme = responsiveFontSizes(
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <RouterProvider
+        router={router}
+        future={{ v7_startTransition: true }}
+      />
     </ThemeProvider>
   </StrictMode>
 );

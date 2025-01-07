@@ -1,11 +1,11 @@
-import { TeamMatchEntry, TeamMatchEntryColumns } from "../dbtypes.ts";
+import { TeamMatchEntry, TeamMatchEntryColumns } from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 
+//TODO: update to account for HumanPlayerEntries
 export const data = async (opts: publicOpts): Promise<Response> => {
   if (
     opts.ctx.user === null ||
-    (opts.ctx.user?.permLevel !== "demo" &&
-      opts.ctx.user?.permLevel !== "team" &&
+    (opts.ctx.user?.permLevel !== "team" &&
       opts.ctx.user?.permLevel !== "datamanage" &&
       opts.ctx.user?.permLevel !== "admin")
   ) {

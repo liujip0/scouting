@@ -1,12 +1,14 @@
 import { authRouter } from "./auth/router.ts";
-import { data } from "./data.ts";
+import { dataRouter } from "./data/router.ts";
+import { eventsRouter } from "./events/router.ts";
 import { router } from "./trpc.ts";
-import { users } from "./users.ts";
+import { usersRouter } from "./users/router.ts";
 
 export const appRouter = router({
   auth: authRouter,
-  data: data,
-  users: users,
+  data: dataRouter,
+  events: eventsRouter,
+  users: usersRouter,
 });
 
 export type AppRouter = typeof appRouter;

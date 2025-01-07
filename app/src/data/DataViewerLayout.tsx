@@ -1,4 +1,4 @@
-import { User } from "@isa2025/api/src/dbtypes.ts";
+import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { TabContext, TabList } from "@mui/lab";
 import {
   AppBar,
@@ -17,9 +17,8 @@ import {
   borderWidthPx,
   GridBorder,
 } from "../components/GridBorder.tsx";
-import { trpc } from "../utils/Trpc.tsx";
-import { setToken, token } from "./Data.tsx";
-import Users from "./Users.tsx";
+import ExportData from "./ExportData.tsx";
+import Users from "./users/Users.tsx";
 import Util from "./Util.tsx";
 import ViewData from "./ViewData.tsx";
 
@@ -31,33 +30,24 @@ export type DataViewerTab =
   | "util";
 
 type DataViewerLayoutProps = {
-  setLoggedIn: (value: boolean) => void;
+  setToken: (
+    newToken: string,
+    expiresAt: number,
+    permLevel: User["permLevel"]
+  ) => void;
   permLevel: User["permLevel"];
-  setPermLevel: (value: User["permLevel"]) => void;
 };
 export default function DataViewerLayout({
-  setLoggedIn,
+  setToken,
   permLevel,
-  setPermLevel,
 }: DataViewerLayoutProps) {
   const topBarHeightRem = 4;
   const navigate = useNavigate();
   const [tab, setTab] = useState<DataViewerTab>("viewdata");
 
-  const logout = trpc.auth.logout.useMutation({
-    onSuccess() {
-      setToken("", 0);
-      setPermLevel("none");
-      setLoggedIn(false);
-    },
-    onError() {
-      if (token === undefined) {
-        setToken("", 0);
-        setPermLevel("none");
-        setLoggedIn(false);
-      }
-    },
-  });
+  const logout = () => {
+    setToken("", 0, "none");
+  };
 
   return (
     <Box
@@ -87,9 +77,15 @@ export default function DataViewerLayout({
           />
           <Typography
             variant="h2"
-            fontSize="large"
             sx={{
               flex: 1,
+              fontSize: {
+                xs: "1rem",
+                sm: "1.2rem",
+                md: "1.4rem",
+                lg: "1.6rem",
+                xl: "1.6rem",
+              },
             }}>
             Indiana Scouting Alliance
           </Typography>
@@ -106,7 +102,7 @@ export default function DataViewerLayout({
           </Button>
           <Button
             onClick={() => {
-              logout.mutate();
+              logout();
             }}
             variant="outlined"
             color="secondary">
@@ -216,44 +212,67 @@ export default function DataViewerLayout({
                     )
                   }
                 </Box>
-                {(() => {
-                  switch (tab) {
-                    case "viewdata": {
-                      if (
-                        ["demo", "team", "datamanage", "admin"].includes(
-                          permLevel
-                        )
-                      ) {
-                        return <ViewData />;
-                      }
-                      break;
+                <Box
+                  sx={{
+                    flex: 1,
+                    width: 1,
+                    overflow: "scroll",
+                  }}>
+                  {(() => {
+                    console.log(tab);
+                    const tabPanels = [];
+                    if (
+                      ["demo", "team", "datamanage", "admin"].includes(
+                        permLevel
+                      )
+                    ) {
+                      tabPanels.push(
+                        <ViewData
+                          key={"viewdata"}
+                          hidden={tab !== "viewdata"}
+                          logoutFunction={logout}
+                        />
+                      );
                     }
-                    case "exportdata": {
-                      if (["team", "datamanage", "admin"].includes(permLevel)) {
-                        return <Box>Export</Box>;
-                      }
-                      break;
+                    if (["team", "datamanage", "admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <ExportData
+                          key={"exportdata"}
+                          hidden={tab !== "exportdata"}
+                        />
+                      );
                     }
-                    case "reviewdata": {
-                      if (["datamanage", "admin"].includes(permLevel)) {
-                        return <Box>Review Data</Box>;
-                      }
-                      break;
+                    if (["datamanage", "admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Box
+                          key={"reviewdata"}
+                          sx={{
+                            display: tab !== "reviewdata" ? "none" : "block",
+                          }}>
+                          Review Data
+                        </Box>
+                      );
                     }
-                    case "users": {
-                      if (["admin"].includes(permLevel)) {
-                        return <Users />;
-                      }
-                      break;
+                    if (["admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Users
+                          key={"users"}
+                          hidden={tab !== "users"}
+                          logoutFunction={logout}
+                        />
+                      );
                     }
-                    case "util": {
-                      if (["admin"].includes(permLevel)) {
-                        return <Util />;
-                      }
-                      break;
+                    if (["admin"].includes(permLevel)) {
+                      tabPanels.push(
+                        <Util
+                          key={"util"}
+                          hidden={tab !== "util"}
+                        />
+                      );
                     }
-                  }
-                })()}
+                    return tabPanels;
+                  })()}
+                </Box>
               </Stack>
             </TabContext>
           )}

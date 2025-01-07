@@ -1,5 +1,5 @@
-import { User } from "../dbtypes.ts";
 import { Env } from "../index.ts";
+import { User } from "../utils/dbtypes.ts";
 
 export interface publicCtx {
   user: {

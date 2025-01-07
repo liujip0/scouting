@@ -12,6 +12,10 @@ export interface Env {
   DB: D1Database;
   ADMIN_ACCOUNT_PASSWORD: string;
   ADMIN_ACCOUNT_USERNAME: string;
+
+  JWT_PRIVATE_KEY: string;
+
+  FIRST_API_TOKEN: string;
 }
 
 export default {
@@ -43,7 +47,10 @@ export default {
       req: request,
       router: appRouter,
       createContext: (options: FetchCreateContextFnOptions) =>
-        createContext({ ...options, env }),
+        createContext({
+          ...options,
+          env,
+        }),
     });
   },
 };

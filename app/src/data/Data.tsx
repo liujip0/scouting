@@ -1,69 +1,63 @@
-import { User } from "@isa2025/api/src/dbtypes.ts";
+import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { useState } from "react";
-import { urls } from "../utils/Constants.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
 
-export let token: string;
-if (localStorage.getItem("token") !== "") {
-  token = localStorage.getItem("token")!;
-}
-// eslint-disable-next-line react-refresh/only-export-components
-export function setToken(newToken: string, expiresAt: number) {
-  localStorage.setItem("token", newToken);
-  localStorage.setItem("tokenExpiresAt", expiresAt.toString());
-  token = newToken;
-}
+const queryClient = new QueryClient();
+const trpcClient = trpc.createClient({
+  links: [
+    httpBatchLink({
+      url: import.meta.env.VITE_SERVER_URL + "/api",
+      headers() {
+        return {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        };
+      },
+    }),
+  ],
+});
 
 export default function Data() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(
-    localStorage.getItem("token") !== null &&
+  const [token, setTokenState] = useState<string>(() => {
+    if (
+      localStorage.getItem("token") !== null &&
       localStorage.getItem("tokenExpiresAt") !== null &&
-      Date.now() < parseInt(localStorage.getItem("tokenExpiresAt")!)
-  );
+      localStorage.getItem("permLevel") !== null
+    ) {
+      if (Date.now() < parseInt(localStorage.getItem("tokenExpiresAt")!)) {
+        return localStorage.getItem("token")!;
+      }
+    }
+    return "";
+  });
   const [permLevel, setPermLevelState] = useState<User["permLevel"]>(
-    (localStorage.getItem("permLevel") as User["permLevel"]) ?? "none"
+    (localStorage.getItem("permLevel") || "none") as User["permLevel"]
   );
-  const setPermLevel = (value: User["permLevel"]) => {
-    setPermLevelState(value);
-    localStorage.setItem("permLevel", value);
+  const setToken = (
+    newToken: string,
+    expiresAt: number,
+    permLevel: User["permLevel"]
+  ) => {
+    localStorage.setItem("token", newToken);
+    localStorage.setItem("tokenExpiresAt", expiresAt.toString());
+    setTokenState(newToken);
+    localStorage.setItem("permLevel", permLevel);
+    setPermLevelState(permLevel);
   };
-
-  const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      links: [
-        httpBatchLink({
-          url:
-            (import.meta.env.DEV ? urls.devServer : urls.productionServer) +
-            "/api",
-          headers() {
-            return {
-              Authorization: "Bearer " + token,
-            };
-          },
-        }),
-      ],
-    })
-  );
 
   return (
     <trpc.Provider
       client={trpcClient}
       queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        {!loggedIn ?
-          <Login
-            setLoggedIn={setLoggedIn}
-            setPermLevel={setPermLevel}
-          />
+        {token === "" ?
+          <Login setToken={setToken} />
         : <DataViewerLayout
-            setLoggedIn={setLoggedIn}
+            setToken={setToken}
             permLevel={permLevel}
-            setPermLevel={setPermLevel}
           />
         }
       </QueryClientProvider>
