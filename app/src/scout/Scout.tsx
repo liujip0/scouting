@@ -5,7 +5,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { useEffect, useState } from "react";
@@ -145,19 +145,17 @@ export function ScoutLayout({
 }: ScoutLayoutProps) {
   return (
     <GridBorder>
-      <Box
+      <Stack
         sx={{
           width: 1,
           height: 1,
-          display: "flex",
-          flexDirection: "column",
         }}>
-        <Box
+        <Stack
           sx={{
             width: 1,
-            display: "flex",
             padding: 2,
-          }}>
+          }}
+          direction="row">
           <Typography
             variant="h2"
             fontWeight="bold">
@@ -182,24 +180,25 @@ export function ScoutLayout({
               }}
             />
           )}
-        </Box>
+        </Stack>
         <Box
           sx={{
             width: 1,
             flex: 1,
+            overflowY: "scroll",
           }}>
           {children}
         </Box>
-        <Box
+        <Stack
           sx={{
-            display: "flex",
-            gap: 3,
             padding: 4,
             justifyContent: "right",
-          }}>
+          }}
+          direction="row"
+          gap={3}>
           {navButtons}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </GridBorder>
   );
 }
