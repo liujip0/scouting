@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj, ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type MatchInfoProps = {
-  setPage: (newValue: ScoutPage) => void;
+  setPage: (value: ScoutPage) => void;
   match: TeamMatchEntry | HumanPlayerEntry;
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
@@ -143,7 +143,7 @@ export default function MatchInfo({
           }}
           gap={2}>
           <TextField
-            value={deviceSetup.currentEvent}
+            value={match.eventKey}
             label="Event Code"
             helperText="Edit in Device Setup"
             disabled
@@ -157,7 +157,7 @@ export default function MatchInfo({
             }}
           />
           <TextField
-            value={deviceSetup.alliance + " " + deviceSetup.robotNumber}
+            value={match.alliance + " " + match.robotNumber}
             label="Position"
             helperText="Edit in Device Setup"
             disabled

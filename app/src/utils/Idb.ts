@@ -1,4 +1,9 @@
-import { DBEvent, Match } from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  DBEvent,
+  HumanPlayerEntry,
+  Match,
+  TeamMatchEntry,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import { openDB } from "idb";
 
 let version = 1;
@@ -78,4 +83,14 @@ export const putDBMatches = async (matches: Match[]) => {
     await tx.objectStore(Stores.Matches).put(matches[i]);
   }
   await tx.done;
+};
+
+export const putHumanPlayerEntry = async (match: HumanPlayerEntry) => {
+  const db = await openDB(dbname, version);
+  await db.put(Stores.HumanPlayerEntry, match);
+};
+
+export const putTeamMatchEntry = async (match: TeamMatchEntry) => {
+  const db = await openDB(dbname, version);
+  await db.put(Stores.TeamMatchEntry, match);
 };

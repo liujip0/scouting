@@ -23,7 +23,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
 import { trpc } from "../../utils/Trpc.tsx";
 import { DeviceSetupObj, ScoutLayout, ScoutPage } from "../Scout.tsx";
 import CreateEvent from "./CreateEvent.tsx";
@@ -126,12 +125,12 @@ export default function DeviceSetup({
 
               if (!error) {
                 if (deviceSetup.robotNumber < 4) {
-                  setMatch({
+                  const newMatch: TeamMatchEntry = {
                     ...TeamMatchEntryInit,
                     eventKey: deviceSetup.currentEvent,
                     alliance: deviceSetup.alliance,
                     robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
-                  });
+                  };
 
                   const eventMatches = events.find(
                     (event) => event.eventKey === deviceSetup.currentEvent
@@ -140,7 +139,7 @@ export default function DeviceSetup({
                     eventMatches?.some((x) => x.matchKey === match.matchKey)
                   ) {
                     setMatch({
-                      ...TeamMatchEntryInit,
+                      ...newMatch,
                       teamNumber: eventMatches.find(
                         (x) => x.matchKey === match.matchKey
                       )![
@@ -154,6 +153,8 @@ export default function DeviceSetup({
                           | "blue3"
                       ],
                     });
+                  } else {
+                    setMatch(newMatch);
                   }
                 } else {
                   setMatch({
@@ -245,28 +246,6 @@ export default function DeviceSetup({
             }
             error={robotNumberError !== ""}
           />
-          <Button
-            variant="outlined"
-            onClick={() => {
-              putDBEvent({
-                eventKey: "2025mock1",
-                eventName: "2025 mock 1",
-              });
-              putDBMatches([
-                {
-                  eventKey: "2025mock1",
-                  matchKey: "qm1",
-                  red1: 9991,
-                  red2: 9992,
-                  red3: 9993,
-                  blue1: 9994,
-                  blue2: 9995,
-                  blue3: 9996,
-                },
-              ]);
-            }}>
-            Test IDB
-          </Button>
         </Stack>
         <Divider
           orientation="vertical"

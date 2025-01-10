@@ -15,6 +15,7 @@ import { trpc } from "../utils/Trpc.tsx";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
 import MatchInfo from "./MatchInfo.tsx";
+import Postmatch from "./Postmatch.tsx";
 import { Teleop } from "./Teleop.tsx";
 
 const queryClient = new QueryClient();
@@ -26,7 +27,12 @@ const trpcClient = trpc.createClient({
   ],
 });
 
-export type ScoutPage = "devicesetup" | "matchinfo" | "auto" | "teleop";
+export type ScoutPage =
+  | "devicesetup"
+  | "matchinfo"
+  | "auto"
+  | "teleop"
+  | "postmatch";
 export type DeviceSetupObj = {
   deviceTeamNumber: number;
   deviceId: string;
@@ -121,6 +127,14 @@ export default function Scout() {
             ),
             auto: <Auto setPage={setPage} />,
             teleop: <Teleop setPage={setPage} />,
+            postmatch: (
+              <Postmatch
+                setPage={setPage}
+                match={match}
+                setMatch={setMatch}
+                events={events}
+              />
+            ),
           }[page]
         }
       </QueryClientProvider>

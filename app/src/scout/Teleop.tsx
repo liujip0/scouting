@@ -19,7 +19,7 @@ export function Teleop({ setPage }: TeleopProps) {
           </Button>
           <Button
             onClick={() => {
-              setPage("auto");
+              setPage("postmatch");
             }}
             variant="contained">
             Continue
