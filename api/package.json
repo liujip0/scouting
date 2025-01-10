@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "dev": "wrangler dev"
+  },
   "packageManager": "pnpm@9.12.3",
   "dependencies": {
     "@trpc/server": "11.0.0-rc.608",
