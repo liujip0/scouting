@@ -1,13 +1,21 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../utils/dbtypes.ts";
+import { all } from "./all.ts";
 import { publicOpts } from "./context.ts";
-import { data } from "./data.ts";
+import { humans } from "./humans.ts";
+import { robots } from "./robots.ts";
 
 //TODO: update to account for HumanPlayerEntries
 export const publicRouter = async (opts: publicOpts): Promise<Response> => {
   switch (opts.path[0]) {
-    case "data": {
-      return await authedPublicEndpoint(opts, data);
+    case "robots": {
+      return await authedPublicEndpoint(opts, robots);
+    }
+    case "humans": {
+      return await authedPublicEndpoint(opts, humans);
+    }
+    case "all": {
+      return await authedPublicEndpoint(opts, all);
     }
     default: {
       return new Response(

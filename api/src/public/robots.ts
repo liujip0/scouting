@@ -1,8 +1,8 @@
+import { D1Database, D1Result } from "@cloudflare/workers-types";
 import { TeamMatchEntry, TeamMatchEntryColumns } from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 
-//TODO: update to account for HumanPlayerEntries
-export const data = async (opts: publicOpts): Promise<Response> => {
+export const robots = async (opts: publicOpts): Promise<Response> => {
   if (
     opts.ctx.user === null ||
     (opts.ctx.user?.permLevel !== "team" &&
@@ -33,7 +33,7 @@ export const data = async (opts: publicOpts): Promise<Response> => {
 
   if (
     opts.params.has("include") &&
-    opts.params.get("include")?.length === columns.length
+    opts.params.get("include")?.length === TeamMatchEntryColumns.length
   ) {
     const newColumns: string[] = [];
     const include = opts.params.get("include")!;
@@ -50,40 +50,12 @@ export const data = async (opts: publicOpts): Promise<Response> => {
     columns = newColumns;
   }
 
-  let query = `SELECT ${columns.join(", ")}
-              FROM TeamMatchEntry
-              WHERE (`;
-  const bindParams: string[] = [];
-
-  if (opts.params.has("event")) {
-    query += opts.params
-      .getAll("event")
-      .map((value) => {
-        bindParams.push(value);
-        return "eventKey = ?";
-      })
-      .join(" OR ");
-  } else {
-    query += "1";
-  }
-  query += ") AND (";
-
-  if (opts.params.has("team")) {
-    query += opts.params
-      .getAll("team")
-      .map((value) => {
-        bindParams.push(value);
-        return "teamNumber = ?";
-      })
-      .join(" OR ");
-  } else {
-    query += "1";
-  }
-  query += ")";
-
-  const results = await opts.env.DB.prepare(query)
-    .bind(...bindParams)
-    .all<TeamMatchEntry>();
+  const results = await getRobotData(
+    columns,
+    opts.params.getAll("event"),
+    opts.params.getAll("team"),
+    opts.env.DB
+  );
 
   if (results.success) {
     switch (opts.path[1]) {
@@ -97,7 +69,12 @@ export const data = async (opts: publicOpts): Promise<Response> => {
         });
       }
       case "csv": {
+        //TODO: make csv response
         return new Response("CSV");
+      }
+      case "xlsx": {
+        //TODO: make xlsx response
+        return new Response("XLSX");
       }
       default: {
         return new Response(null, {
@@ -121,4 +98,44 @@ export const data = async (opts: publicOpts): Promise<Response> => {
       }
     );
   }
+};
+
+export const getRobotData = async (
+  columns: string[],
+  events: string[],
+  teams: string[],
+  DB: D1Database
+): Promise<D1Result<TeamMatchEntry>> => {
+  let query = `SELECT ${columns.join(", ")}
+            FROM TeamMatchEntry
+            WHERE (`;
+  const bindParams: string[] = [];
+
+  if (events.length > 0) {
+    query += events
+      .map((value) => {
+        bindParams.push(value);
+        return "eventKey = ?";
+      })
+      .join(" OR ");
+  } else {
+    query += "1";
+  }
+  query += ") AND (";
+
+  if (teams.length > 0) {
+    query += teams
+      .map((value) => {
+        bindParams.push(value);
+        return "teamNumber = ?";
+      })
+      .join(" OR ");
+  } else {
+    query += "1";
+  }
+  query += ")";
+
+  return await DB.prepare(query)
+    .bind(...bindParams)
+    .all<TeamMatchEntry>();
 };
