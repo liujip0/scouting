@@ -17,7 +17,7 @@ export const initDB = async (): Promise<boolean> => {
     dbReq.onupgradeneeded = () => {
       const db = dbReq.result;
       if (!db.objectStoreNames.contains(Stores.Events)) {
-        const EventsStore = db.createObjectStore(Stores.Events, {
+        db.createObjectStore(Stores.Events, {
           keyPath: "eventKey",
         });
       }
