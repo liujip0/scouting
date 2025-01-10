@@ -173,10 +173,37 @@ export default function MatchInfo({
           <TextField
             value={match.matchKey}
             onChange={(event) => {
-              setMatch({
-                ...match,
-                matchKey: event.currentTarget.value,
-              });
+              const eventMatches = events.find(
+                (event) => event.eventKey === deviceSetup.currentEvent
+              )?.matches;
+              if (
+                eventMatches?.some(
+                  (x) => x.matchKey === event.currentTarget.value
+                )
+              ) {
+                setMatch({
+                  ...match,
+                  matchKey: event.currentTarget.value,
+                  teamNumber: eventMatches.find(
+                    (x) => x.matchKey === event.currentTarget.value
+                  )![
+                    (deviceSetup.alliance.toLowerCase() +
+                      deviceSetup.robotNumber) as
+                      | "red1"
+                      | "red2"
+                      | "red3"
+                      | "blue1"
+                      | "blue2"
+                      | "blue3"
+                  ],
+                });
+              } else {
+                setMatch({
+                  ...match,
+                  matchKey: event.currentTarget.value,
+                  teamNumber: 0,
+                });
+              }
             }}
             error={matchNumberError !== ""}
             helperText={matchNumberError}
@@ -186,12 +213,43 @@ export default function MatchInfo({
                 startAdornment: (
                   <IconButton
                     onClick={() => {
+                      let newMatchKey = "";
+
                       if (/^qm\d+$/.test(match.matchKey)) {
-                        setMatch({
-                          ...match,
-                          matchKey:
-                            "qm" + (parseInt(match.matchKey.substring(2)) - 1),
-                        });
+                        newMatchKey =
+                          "qm" + (parseInt(match.matchKey.substring(2)) - 1);
+                      }
+
+                      if (newMatchKey) {
+                        const eventMatches = events.find(
+                          (event) => event.eventKey === deviceSetup.currentEvent
+                        )?.matches;
+                        if (
+                          eventMatches?.some((x) => x.matchKey === newMatchKey)
+                        ) {
+                          setMatch({
+                            ...match,
+                            matchKey: newMatchKey,
+                            teamNumber: eventMatches.find(
+                              (x) => x.matchKey === newMatchKey
+                            )![
+                              (deviceSetup.alliance.toLowerCase() +
+                                deviceSetup.robotNumber) as
+                                | "red1"
+                                | "red2"
+                                | "red3"
+                                | "blue1"
+                                | "blue2"
+                                | "blue3"
+                            ],
+                          });
+                        } else {
+                          setMatch({
+                            ...match,
+                            matchKey: newMatchKey,
+                            teamNumber: 0,
+                          });
+                        }
                       }
                     }}>
                     <Remove />
@@ -200,12 +258,43 @@ export default function MatchInfo({
                 endAdornment: (
                   <IconButton
                     onClick={() => {
+                      let newMatchKey = "";
+
                       if (/^qm\d+$/.test(match.matchKey)) {
-                        setMatch({
-                          ...match,
-                          matchKey:
-                            "qm" + (parseInt(match.matchKey.substring(2)) + 1),
-                        });
+                        newMatchKey =
+                          "qm" + (parseInt(match.matchKey.substring(2)) + 1);
+                      }
+
+                      if (newMatchKey) {
+                        const eventMatches = events.find(
+                          (event) => event.eventKey === deviceSetup.currentEvent
+                        )?.matches;
+                        if (
+                          eventMatches?.some((x) => x.matchKey === newMatchKey)
+                        ) {
+                          setMatch({
+                            ...match,
+                            matchKey: newMatchKey,
+                            teamNumber: eventMatches.find(
+                              (x) => x.matchKey === newMatchKey
+                            )![
+                              (deviceSetup.alliance.toLowerCase() +
+                                deviceSetup.robotNumber) as
+                                | "red1"
+                                | "red2"
+                                | "red3"
+                                | "blue1"
+                                | "blue2"
+                                | "blue3"
+                            ],
+                          });
+                        } else {
+                          setMatch({
+                            ...match,
+                            matchKey: newMatchKey,
+                            teamNumber: 0,
+                          });
+                        }
                       }
                     }}>
                     <Add />

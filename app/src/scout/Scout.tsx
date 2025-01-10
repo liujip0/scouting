@@ -106,6 +106,7 @@ export default function Scout() {
                 setPage={setPage}
                 events={events}
                 setEvents={setEvents}
+                match={match}
                 setMatch={setMatch}
               />
             ),

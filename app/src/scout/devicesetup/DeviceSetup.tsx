@@ -2,6 +2,7 @@ import {
   Alliance,
   DBEvent,
   HumanPlayerEntry,
+  HumanPlayerEntryInit,
   Match,
   TeamMatchEntry,
   TeamMatchEntryInit,
@@ -34,6 +35,7 @@ type DeviceSetupProps = {
   setPage: (newValue: ScoutPage) => void;
   events: (DBEvent & { matches: Match[] })[];
   setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
+  match: TeamMatchEntry | HumanPlayerEntry;
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
 };
 export default function DeviceSetup({
@@ -42,6 +44,7 @@ export default function DeviceSetup({
   setPage,
   events,
   setEvents,
+  match,
   setMatch,
 }: DeviceSetupProps) {
   const navigate = useNavigate();
@@ -128,6 +131,36 @@ export default function DeviceSetup({
                     eventKey: deviceSetup.currentEvent,
                     alliance: deviceSetup.alliance,
                     robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
+                  });
+
+                  const eventMatches = events.find(
+                    (event) => event.eventKey === deviceSetup.currentEvent
+                  )?.matches;
+                  if (
+                    eventMatches?.some((x) => x.matchKey === match.matchKey)
+                  ) {
+                    setMatch({
+                      ...TeamMatchEntryInit,
+                      teamNumber: eventMatches.find(
+                        (x) => x.matchKey === match.matchKey
+                      )![
+                        (deviceSetup.alliance.toLowerCase() +
+                          deviceSetup.robotNumber) as
+                          | "red1"
+                          | "red2"
+                          | "red3"
+                          | "blue1"
+                          | "blue2"
+                          | "blue3"
+                      ],
+                    });
+                  }
+                } else {
+                  setMatch({
+                    ...HumanPlayerEntryInit,
+                    eventKey: deviceSetup.currentEvent,
+                    alliance: deviceSetup.alliance,
+                    robotNumber: deviceSetup.robotNumber as 4,
                   });
                 }
                 setPage("matchinfo");
