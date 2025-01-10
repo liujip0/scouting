@@ -11,11 +11,15 @@ export enum Stores {
   HumanPlayerEntry = "HumanPlayerEntry",
 }
 
-export const initDB = async () => {
-  await openDB(dbname, version, {
-    upgrade(db) {
+export const initDB = async (): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    const dbReq = indexedDB.open(dbname, version);
+    dbReq.onupgradeneeded = () => {
+      const db = dbReq.result;
       if (!db.objectStoreNames.contains(Stores.Events)) {
-        db.createObjectStore(Stores.Events, { keyPath: "eventKey" });
+        const EventsStore = db.createObjectStore(Stores.Events, {
+          keyPath: "eventKey",
+        });
       }
       if (!db.objectStoreNames.contains(Stores.Matches)) {
         db.createObjectStore(Stores.Matches, {
@@ -46,7 +50,13 @@ export const initDB = async () => {
           ],
         });
       }
-    },
+    };
+    dbReq.onsuccess = () => {
+      resolve(true);
+    };
+    dbReq.onerror = () => {
+      reject();
+    };
   });
 };
 

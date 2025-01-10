@@ -214,7 +214,16 @@ export default function MatchInfo({
               },
             }}
           />
-          <TextField />
+          <TextField
+            label="Robot Team Number"
+            value={match.teamNumber}
+            onChange={(event) => {
+              setMatch({
+                ...match,
+                teamNumber: parseInt(event.currentTarget.value),
+              });
+            }}
+          />
         </Stack>
       </Box>
     </ScoutLayout>
