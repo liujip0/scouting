@@ -16,6 +16,7 @@ import Auto from "./Auto.tsx";
 import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
 import MatchInfo from "./MatchInfo.tsx";
 import Postmatch from "./Postmatch.tsx";
+import SavedMatches from "./SavedMatches.tsx";
 import { Teleop } from "./Teleop.tsx";
 
 const queryClient = new QueryClient();
@@ -32,7 +33,8 @@ export type ScoutPage =
   | "matchinfo"
   | "auto"
   | "teleop"
-  | "postmatch";
+  | "postmatch"
+  | "savedmatches";
 export type DeviceSetupObj = {
   deviceTeamNumber: number;
   deviceId: string;
@@ -129,6 +131,12 @@ export default function Scout() {
             teleop: <Teleop setPage={setPage} />,
             postmatch: (
               <Postmatch
+                setPage={setPage}
+                match={match}
+              />
+            ),
+            savedmatches: (
+              <SavedMatches
                 setPage={setPage}
                 match={match}
                 setMatch={setMatch}
