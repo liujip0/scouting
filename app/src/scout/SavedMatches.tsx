@@ -6,7 +6,14 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Button, Divider, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  Paper,
+  Stack,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFromDBStore, Stores } from "../utils/Idb.ts";
@@ -32,7 +39,16 @@ export default function SavedMatches({
   useEffect(() => {
     getFromDBStore(Stores.TeamMatchEntry).then((robotMatches) => {
       getFromDBStore(Stores.HumanPlayerEntry).then((humanMatches) => {
-        setMatches([...robotMatches, ...humanMatches]);
+        setMatches([
+          ...robotMatches.map((x) => ({
+            ...x,
+            export: false,
+          })),
+          ...humanMatches.map((x) => ({
+            ...x,
+            export: false,
+          })),
+        ]);
       });
     });
   });
@@ -123,17 +139,28 @@ export default function SavedMatches({
         <Stack
           sx={{
             flex: 1,
+            overflowY: "scroll",
           }}>
-          {matches.map((matchData) => (
-            <Typography>
-              {matchData.eventKey +
-                "_" +
-                matchData.matchKey +
-                " " +
-                matchData.alliance +
-                " " +
-                matchData.robotNumber}
-            </Typography>
+          {matches.map((matchData, index) => (
+            <Paper
+              key={index}
+              sx={{
+                margin: 2,
+                padding: 2,
+              }}>
+              <FormControlLabel
+                control={<Checkbox />}
+                label={
+                  matchData.eventKey +
+                  "_" +
+                  matchData.matchKey +
+                  " " +
+                  matchData.alliance +
+                  "\n" +
+                  matchData.robotNumber
+                }
+              />
+            </Paper>
           ))}
         </Stack>
         <Divider orientation="vertical" />
