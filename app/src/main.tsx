@@ -57,6 +57,7 @@ const theme = responsiveFontSizes(
       },
       background: {
         default: "#f1dc8e", // Light Indiana Flag Gold
+        paper: "#f8edc6", // Light Light Indiana Flag Gold
       },
     },
     typography: {

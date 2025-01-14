@@ -6,12 +6,15 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import { Close } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
   Divider,
   FormControlLabel,
+  IconButton,
   Paper,
+  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
@@ -57,6 +60,8 @@ export default function SavedMatches({
       });
     });
   }, []);
+
+  const [quickshareFailed, setQuickshareFailed] = useState(false);
 
   return (
     <ScoutLayout
@@ -144,51 +149,86 @@ export default function SavedMatches({
         <Stack
           sx={{
             flex: 1,
-            overflowY: "scroll",
           }}>
-          {matches.map((matchData, index) => (
-            <Paper
-              key={index}
-              sx={{
-                margin: 2,
-                padding: 2,
-              }}>
-              <FormControlLabel
-                checked={matchData.export}
-                onChange={(_event, checked) => {
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: "space-evenly",
+            }}>
+            <Button
+              onClick={() => {
+                if (matches.every((x) => x.export)) {
                   setMatches(
-                    matches.map((x) =>
-                      (
-                        x.eventKey === matchData.eventKey &&
-                        x.matchKey === matchData.matchKey &&
-                        x.alliance === matchData.alliance &&
-                        x.robotNumber === matchData.robotNumber
-                      ) ?
-                        {
-                          ...matchData,
-                          export: checked,
-                        }
-                      : x
-                    )
+                    matches.map((x) => ({
+                      ...x,
+                      export: false,
+                    }))
                   );
-                }}
-                control={<Checkbox />}
-                label={
-                  <Stack>
-                    <Typography>
-                      {matchData.eventKey + "_" + matchData.matchKey}
-                    </Typography>
-                    <Typography>
-                      {"\n" +
-                        matchData.alliance +
-                        "\u00a0" +
-                        matchData.robotNumber}
-                    </Typography>
-                  </Stack>
+                } else {
+                  setMatches(
+                    matches.map((x) => ({
+                      ...x,
+                      export: true,
+                    }))
+                  );
                 }
-              />
-            </Paper>
-          ))}
+              }}>
+              {matches.every((x) => x.export) ? "Deselect All" : "Select All"}
+            </Button>
+            <Button>Delete</Button>
+          </Stack>
+          <Stack
+            sx={{
+              flex: 1,
+              overflowY: "scroll",
+            }}>
+            {matches.map((matchData, index) => (
+              <Paper
+                key={index}
+                sx={{
+                  margin: 2,
+                  padding: 2,
+                  borderColor: "primary.main",
+                  borderWidth: 2,
+                  borderStyle: "solid",
+                }}>
+                <FormControlLabel
+                  checked={matchData.export}
+                  onChange={(_event, checked) => {
+                    setMatches(
+                      matches.map((x) =>
+                        (
+                          x.eventKey === matchData.eventKey &&
+                          x.matchKey === matchData.matchKey &&
+                          x.alliance === matchData.alliance &&
+                          x.robotNumber === matchData.robotNumber
+                        ) ?
+                          {
+                            ...matchData,
+                            export: checked,
+                          }
+                        : x
+                      )
+                    );
+                  }}
+                  control={<Checkbox />}
+                  label={
+                    <Stack>
+                      <Typography>
+                        {matchData.eventKey + "_" + matchData.matchKey}
+                      </Typography>
+                      <Typography>
+                        {"\n" +
+                          matchData.alliance +
+                          "\u00a0" +
+                          matchData.robotNumber}
+                      </Typography>
+                    </Stack>
+                  }
+                />
+              </Paper>
+            ))}
+          </Stack>
         </Stack>
         <Divider orientation="vertical" />
         <Stack
@@ -232,14 +272,42 @@ export default function SavedMatches({
                 });
               } catch (error) {
                 console.log(error);
+                setQuickshareFailed(true);
               }
             }}>
             Share via Quickshare
           </Button>
-          <Button>Share via Clipboard</Button>
+          <Snackbar
+            open={quickshareFailed}
+            autoHideDuration={3000}
+            onClose={() => {
+              setQuickshareFailed(false);
+            }}
+            message={"Your browser does not support navigator.share()"}
+            action={
+              <IconButton
+                onClick={() => {
+                  setQuickshareFailed(false);
+                }}>
+                <Close />
+              </IconButton>
+            }
+          />
+          <Button
+            variant="outlined"
+            onClick={() => {
+              const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
+                .filter((x) => x.export)
+                .map((x) =>
+                  omit("export", x as unknown as Record<string, unknown>)
+                ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
+
+              navigator.clipboard.writeText(JSON.stringify(data));
+            }}>
+            Share via Clipboard
+          </Button>
           <Button variant="outlined">Share via QR Code</Button>
         </Stack>
-        3
       </Stack>
     </ScoutLayout>
   );
