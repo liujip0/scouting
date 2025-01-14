@@ -13,10 +13,12 @@ import {
   FormControlLabel,
   Paper,
   Stack,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFromDBStore, Stores } from "../utils/Idb.ts";
+import { omit } from "../utils/Utils.ts";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type SavedMatchesProps = {
@@ -33,9 +35,12 @@ export default function SavedMatches({
 }: SavedMatchesProps) {
   const navigate = useNavigate();
 
-  const [matches, setMatches] = useState<(TeamMatchEntry | HumanPlayerEntry)[]>(
-    []
-  );
+  const [matches, setMatches] = useState<
+    (
+      | (TeamMatchEntry & { export: boolean })
+      | (HumanPlayerEntry & { export: boolean })
+    )[]
+  >([]);
   useEffect(() => {
     getFromDBStore(Stores.TeamMatchEntry).then((robotMatches) => {
       getFromDBStore(Stores.HumanPlayerEntry).then((humanMatches) => {
@@ -51,7 +56,7 @@ export default function SavedMatches({
         ]);
       });
     });
-  });
+  }, []);
 
   return (
     <ScoutLayout
@@ -149,15 +154,37 @@ export default function SavedMatches({
                 padding: 2,
               }}>
               <FormControlLabel
+                checked={matchData.export}
+                onChange={(_event, checked) => {
+                  setMatches(
+                    matches.map((x) =>
+                      (
+                        x.eventKey === matchData.eventKey &&
+                        x.matchKey === matchData.matchKey &&
+                        x.alliance === matchData.alliance &&
+                        x.robotNumber === matchData.robotNumber
+                      ) ?
+                        {
+                          ...matchData,
+                          export: checked,
+                        }
+                      : x
+                    )
+                  );
+                }}
                 control={<Checkbox />}
                 label={
-                  matchData.eventKey +
-                  "_" +
-                  matchData.matchKey +
-                  " " +
-                  matchData.alliance +
-                  "\n" +
-                  matchData.robotNumber
+                  <Stack>
+                    <Typography>
+                      {matchData.eventKey + "_" + matchData.matchKey}
+                    </Typography>
+                    <Typography>
+                      {"\n" +
+                        matchData.alliance +
+                        "\u00a0" +
+                        matchData.robotNumber}
+                    </Typography>
+                  </Stack>
                 }
               />
             </Paper>
@@ -167,7 +194,52 @@ export default function SavedMatches({
         <Stack
           sx={{
             flex: 1,
-          }}></Stack>
+            padding: 2,
+          }}
+          gap={2}>
+          <Button
+            variant="outlined"
+            onClick={async () => {
+              const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
+                .filter((x) => x.export)
+                .map((x) =>
+                  omit("export", x as unknown as Record<string, unknown>)
+                ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
+
+              try {
+                await navigator.share({
+                  text: JSON.stringify(data),
+                  files: data.map(
+                    (x) =>
+                      new File(
+                        [JSON.stringify(x)],
+                        "ISA_" +
+                          x.eventKey +
+                          "_" +
+                          x.matchKey +
+                          "_" +
+                          x.alliance +
+                          "_" +
+                          x.robotNumber +
+                          "_" +
+                          x.deviceTeamNumber +
+                          "_" +
+                          x.deviceId +
+                          ".txt",
+                        { type: "text/plain" }
+                      )
+                  ),
+                });
+              } catch (error) {
+                console.log(error);
+              }
+            }}>
+            Share via Quickshare
+          </Button>
+          <Button>Share via Clipboard</Button>
+          <Button variant="outlined">Share via QR Code</Button>
+        </Stack>
+        3
       </Stack>
     </ScoutLayout>
   );

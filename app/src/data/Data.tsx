@@ -1,7 +1,8 @@
 import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { initDB } from "../utils/Idb.ts";
 import { trpc } from "../utils/Trpc.tsx";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
@@ -47,6 +48,10 @@ export default function Data() {
     localStorage.setItem("permLevel", permLevel);
     setPermLevelState(permLevel);
   };
+
+  useEffect(() => {
+    initDB();
+  }, []);
 
   return (
     <trpc.Provider
