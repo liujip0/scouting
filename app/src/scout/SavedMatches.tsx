@@ -57,11 +57,11 @@ export default function SavedMatches({
         setMatches([
           ...robotMatches.map((x) => ({
             ...x,
-            selected: false,
+            selected: true,
           })),
           ...humanMatches.map((x) => ({
             ...x,
-            selected: false,
+            selected: true,
           })),
         ]);
       });
@@ -163,6 +163,7 @@ export default function SavedMatches({
             direction="row"
             sx={{
               justifyContent: "space-evenly",
+              marginBottom: 2,
             }}>
             <Button
               onClick={() => {
@@ -181,7 +182,8 @@ export default function SavedMatches({
                     }))
                   );
                 }
-              }}>
+              }}
+              variant="outlined">
               {matches.every((x) => x.selected) ? "Deselect All" : "Select All"}
             </Button>
             <Button
@@ -189,7 +191,8 @@ export default function SavedMatches({
                 if (matches.some((x) => x.selected)) {
                   setConfirmDeleteMatch(true);
                 }
-              }}>
+              }}
+              variant="outlined">
               Delete
             </Button>
             <Dialog
