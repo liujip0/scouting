@@ -57,7 +57,7 @@ export default function MatchInfo({
               navigate("/");
             }}
             variant="outlined">
-            Return to Home
+            Home
           </Button>
           <Button
             onClick={() => {

@@ -73,7 +73,7 @@ export default function DeviceSetup({
               navigate("/");
             }}
             variant="outlined">
-            Return to Home
+            Home
           </Button>
           <Button
             onClick={() => {

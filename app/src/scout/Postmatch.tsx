@@ -3,7 +3,7 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Button } from "@mui/material";
-import { putHumanPlayerEntry, putTeamMatchEntry } from "../utils/Idb.ts";
+import { putEntry } from "../utils/Idb.ts";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type PostmatchProps = {
@@ -25,12 +25,8 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              if (match.robotNumber < 4) {
-                putTeamMatchEntry(match as TeamMatchEntry);
-              } else {
-                putHumanPlayerEntry(match as HumanPlayerEntry);
-              }
+            onClick={async () => {
+              await putEntry(match as TeamMatchEntry | HumanPlayerEntry);
               setPage("savedmatches");
             }}>
             Continue

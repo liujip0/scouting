@@ -85,12 +85,34 @@ export const putDBMatches = async (matches: Match[]) => {
   await tx.done;
 };
 
-export const putHumanPlayerEntry = async (match: HumanPlayerEntry) => {
+export const putEntry = async (match: TeamMatchEntry | HumanPlayerEntry) => {
   const db = await openDB(dbname, version);
-  await db.put(Stores.HumanPlayerEntry, match);
+  if (match.robotNumber < 4) {
+    await db.put(Stores.TeamMatchEntry, match);
+  } else {
+    await db.put(Stores.HumanPlayerEntry, match);
+  }
 };
 
-export const putTeamMatchEntry = async (match: TeamMatchEntry) => {
+export const deleteEntry = async (match: HumanPlayerEntry | TeamMatchEntry) => {
   const db = await openDB(dbname, version);
-  await db.put(Stores.TeamMatchEntry, match);
+  if (match.robotNumber < 4) {
+    db.delete(Stores.TeamMatchEntry, [
+      match.eventKey,
+      match.matchKey,
+      match.alliance,
+      match.robotNumber,
+      match.deviceTeamNumber,
+      match.deviceId,
+    ]);
+  } else {
+    db.delete(Stores.HumanPlayerEntry, [
+      match.eventKey,
+      match.matchKey,
+      match.alliance,
+      match.robotNumber,
+      match.deviceTeamNumber,
+      match.deviceId,
+    ]);
+  }
 };

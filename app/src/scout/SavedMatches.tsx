@@ -10,9 +10,16 @@ import { Close } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   FormControlLabel,
   IconButton,
+  lighten,
+  List,
+  ListItem,
   Paper,
   Snackbar,
   Stack,
@@ -20,7 +27,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getFromDBStore, Stores } from "../utils/Idb.ts";
+import { deleteEntry, getFromDBStore, Stores } from "../utils/Idb.ts";
 import { omit } from "../utils/Utils.ts";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
@@ -40,8 +47,8 @@ export default function SavedMatches({
 
   const [matches, setMatches] = useState<
     (
-      | (TeamMatchEntry & { export: boolean })
-      | (HumanPlayerEntry & { export: boolean })
+      | (TeamMatchEntry & { selected: boolean })
+      | (HumanPlayerEntry & { selected: boolean })
     )[]
   >([]);
   useEffect(() => {
@@ -50,18 +57,19 @@ export default function SavedMatches({
         setMatches([
           ...robotMatches.map((x) => ({
             ...x,
-            export: false,
+            selected: false,
           })),
           ...humanMatches.map((x) => ({
             ...x,
-            export: false,
+            selected: false,
           })),
         ]);
       });
     });
   }, []);
 
-  const [quickshareFailed, setQuickshareFailed] = useState(false);
+  const [quickshareFailed, setQuickshareFailed] = useState("");
+  const [confirmDeleteMatch, setConfirmDeleteMatch] = useState(false);
 
   return (
     <ScoutLayout
@@ -80,7 +88,7 @@ export default function SavedMatches({
             onClick={() => {
               navigate("/");
             }}>
-            Return to Home
+            Home
           </Button>
           <Button
             variant="contained"
@@ -149,6 +157,7 @@ export default function SavedMatches({
         <Stack
           sx={{
             flex: 1,
+            padding: 2,
           }}>
           <Stack
             direction="row"
@@ -157,67 +166,172 @@ export default function SavedMatches({
             }}>
             <Button
               onClick={() => {
-                if (matches.every((x) => x.export)) {
+                if (matches.every((x) => x.selected)) {
                   setMatches(
                     matches.map((x) => ({
                       ...x,
-                      export: false,
+                      selected: false,
                     }))
                   );
                 } else {
                   setMatches(
                     matches.map((x) => ({
                       ...x,
-                      export: true,
+                      selected: true,
                     }))
                   );
                 }
               }}>
-              {matches.every((x) => x.export) ? "Deselect All" : "Select All"}
+              {matches.every((x) => x.selected) ? "Deselect All" : "Select All"}
             </Button>
-            <Button>Delete</Button>
+            <Button
+              onClick={() => {
+                if (matches.some((x) => x.selected)) {
+                  setConfirmDeleteMatch(true);
+                }
+              }}>
+              Delete
+            </Button>
+            <Dialog
+              open={confirmDeleteMatch}
+              onClose={() => {
+                setConfirmDeleteMatch(false);
+              }}>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+              <DialogContent>
+                <Stack>
+                  <Typography>
+                    Are you sure you want to delete the following matches? This
+                    canot be undone.
+                  </Typography>
+                  <List
+                    sx={{
+                      listStyleType: "disc",
+                      paddingLeft: 4,
+                    }}>
+                    {matches
+                      .filter((x) => x.selected)
+                      .map((x) => (
+                        <ListItem
+                          sx={{
+                            display: "list-item",
+                          }}>
+                          <Typography>
+                            {x.eventKey +
+                              "_" +
+                              x.matchKey +
+                              " " +
+                              x.alliance +
+                              " " +
+                              x.robotNumber}
+                          </Typography>
+                        </ListItem>
+                      ))}
+                  </List>
+                </Stack>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    setConfirmDeleteMatch(false);
+                  }}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={async () => {
+                    for (let i of matches.filter((x) => x.selected)) {
+                      await deleteEntry(i);
+                    }
+                    setMatches(matches.filter((x) => !x.selected));
+                    setConfirmDeleteMatch(false);
+                  }}>
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Stack>
           <Stack
             sx={{
               flex: 1,
               overflowY: "scroll",
-            }}>
+            }}
+            gap={1}>
             {matches.map((matchData, index) => (
               <Paper
                 key={index}
-                sx={{
-                  margin: 2,
+                sx={(theme) => ({
                   padding: 2,
                   borderColor: "primary.main",
                   borderWidth: 2,
                   borderStyle: "solid",
+                  backgroundColor: lighten(
+                    theme.palette.background.default,
+                    0.5
+                  ),
+                  cursor: "pointer",
+                })}
+                onClick={() => {
+                  setMatches(
+                    matches.map((x) =>
+                      (
+                        x.eventKey === matchData.eventKey &&
+                        x.matchKey === matchData.matchKey &&
+                        x.alliance === matchData.alliance &&
+                        x.robotNumber === matchData.robotNumber
+                      ) ?
+                        {
+                          ...matchData,
+                          selected: !x.selected,
+                        }
+                      : x
+                    )
+                  );
                 }}>
                 <FormControlLabel
-                  checked={matchData.export}
-                  onChange={(_event, checked) => {
-                    setMatches(
-                      matches.map((x) =>
-                        (
-                          x.eventKey === matchData.eventKey &&
-                          x.matchKey === matchData.matchKey &&
-                          x.alliance === matchData.alliance &&
-                          x.robotNumber === matchData.robotNumber
-                        ) ?
-                          {
-                            ...matchData,
-                            export: checked,
-                          }
-                        : x
-                      )
-                    );
-                  }}
+                  checked={matchData.selected}
                   control={<Checkbox />}
                   label={
                     <Stack>
-                      <Typography>
+                      <Typography
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setMatches(
+                            matches.map((x) =>
+                              (
+                                x.eventKey === matchData.eventKey &&
+                                x.matchKey === matchData.matchKey &&
+                                x.alliance === matchData.alliance &&
+                                x.robotNumber === matchData.robotNumber
+                              ) ?
+                                {
+                                  ...matchData,
+                                  selected: !x.selected,
+                                }
+                              : x
+                            )
+                          );
+                        }}>
                         {matchData.eventKey + "_" + matchData.matchKey}
                       </Typography>
-                      <Typography>
+                      <Typography
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setMatches(
+                            matches.map((x) =>
+                              (
+                                x.eventKey === matchData.eventKey &&
+                                x.matchKey === matchData.matchKey &&
+                                x.alliance === matchData.alliance &&
+                                x.robotNumber === matchData.robotNumber
+                              ) ?
+                                {
+                                  ...matchData,
+                                  selected: !x.selected,
+                                }
+                              : x
+                            )
+                          );
+                        }}>
                         {"\n" +
                           matchData.alliance +
                           "\u00a0" +
@@ -241,13 +355,14 @@ export default function SavedMatches({
             variant="outlined"
             onClick={async () => {
               const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
-                .filter((x) => x.export)
+                .filter((x) => x.selected)
                 .map((x) =>
-                  omit("export", x as unknown as Record<string, unknown>)
+                  omit("selected", x as unknown as Record<string, unknown>)
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
               try {
                 await navigator.share({
+                  title: "ISA Match Data",
                   text: JSON.stringify(data),
                   files: data.map(
                     (x) =>
@@ -270,26 +385,30 @@ export default function SavedMatches({
                       )
                   ),
                 });
-              } catch (error) {
+              } catch (error: any) {
                 console.log(error);
-                setQuickshareFailed(true);
+                setQuickshareFailed(error.toString() as string);
               }
             }}>
             Share via Quickshare
           </Button>
           <Snackbar
-            open={quickshareFailed}
+            open={quickshareFailed !== ""}
             autoHideDuration={3000}
             onClose={() => {
-              setQuickshareFailed(false);
+              setQuickshareFailed("");
             }}
-            message={"Your browser does not support navigator.share()"}
+            message={quickshareFailed}
             action={
               <IconButton
                 onClick={() => {
-                  setQuickshareFailed(false);
+                  setQuickshareFailed("");
                 }}>
-                <Close />
+                <Close
+                  sx={{
+                    color: "#ffffff",
+                  }}
+                />
               </IconButton>
             }
           />
@@ -297,9 +416,9 @@ export default function SavedMatches({
             variant="outlined"
             onClick={() => {
               const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
-                .filter((x) => x.export)
+                .filter((x) => x.selected)
                 .map((x) =>
-                  omit("export", x as unknown as Record<string, unknown>)
+                  omit("selected", x as unknown as Record<string, unknown>)
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
               navigator.clipboard.writeText(JSON.stringify(data));
