@@ -7,6 +7,7 @@ import { DBEvent, Match } from "../utils/dbtypes.ts";
 export const getFrcEvent = loggedPublicProcedure
   .input(z.string())
   .mutation(async (opts) => {
+    console.log(opts.input);
     const eventRes = await fetch(
       "https://frc-api.firstinspires.org/v3.0/" +
         opts.input.substring(0, 4) +
@@ -22,6 +23,7 @@ export const getFrcEvent = loggedPublicProcedure
         },
       }
     );
+    console.log(eventRes.status);
 
     if (eventRes.status === 200) {
       const eventBody = JSON.parse(await eventRes.text()).Events[0];
@@ -30,6 +32,7 @@ export const getFrcEvent = loggedPublicProcedure
         eventName: eventBody.name,
         matches: [],
       };
+      console.log(eventBody);
 
       const scheduleRes = await fetch(
         "https://frc-api.firstinspires.org/v3.0/" +
@@ -47,9 +50,11 @@ export const getFrcEvent = loggedPublicProcedure
           },
         }
       );
+      console.log(scheduleRes.status);
 
       if (scheduleRes.status === 200) {
         const scheduleBody = JSON.parse(await scheduleRes.text()).Schedule;
+        console.log(scheduleBody);
         scheduleBody.forEach(
           (match: {
             description: string;
