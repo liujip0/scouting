@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
@@ -29,7 +29,8 @@ export default function LandingPage() {
           gap: 2,
         }}>
         <LinkButton to="/scout">Scout</LinkButton>
-        <LinkButton to="/data">View or Manage Data</LinkButton>
+        <LinkButton to="/data">View Data</LinkButton>
+        <LinkButton to="/upload">Upload Data</LinkButton>
       </Box>
     </Box>
   );

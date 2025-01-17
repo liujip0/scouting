@@ -11,6 +11,7 @@ import ErrorPage from "./ErrorPage.tsx";
 import "./index.css";
 import LandingPage from "./LandingPage.tsx";
 import Scout from "./scout/Scout.tsx";
+import Upload from "./upload/Upload.tsx";
 
 const router = createBrowserRouter(
   [
@@ -29,6 +30,10 @@ const router = createBrowserRouter(
         {
           path: "data",
           element: <Data />,
+        },
+        {
+          path: "upload",
+          element: <Upload />,
         },
       ],
     },
