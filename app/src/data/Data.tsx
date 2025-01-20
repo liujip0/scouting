@@ -1,25 +1,8 @@
 import { User } from "@isa2025/api/src/utils/dbtypes.ts";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/react-query";
 import { useEffect, useState } from "react";
 import { initDB } from "../utils/Idb.ts";
-import { trpc } from "../utils/Trpc.tsx";
 import DataViewerLayout from "./DataViewerLayout.tsx";
 import Login from "./Login.tsx";
-
-const queryClient = new QueryClient();
-const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: import.meta.env.VITE_SERVER_URL + "/api",
-      headers() {
-        return {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        };
-      },
-    }),
-  ],
-});
 
 export default function Data() {
   const [token, setTokenState] = useState<string>(() => {
@@ -53,19 +36,10 @@ export default function Data() {
     initDB();
   }, []);
 
-  return (
-    <trpc.Provider
-      client={trpcClient}
-      queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        {token === "" ?
-          <Login setToken={setToken} />
-        : <DataViewerLayout
-            setToken={setToken}
-            permLevel={permLevel}
-          />
-        }
-      </QueryClientProvider>
-    </trpc.Provider>
-  );
+  return token === "" ?
+      <Login setToken={setToken} />
+    : <DataViewerLayout
+        setToken={setToken}
+        permLevel={permLevel}
+      />;
 }

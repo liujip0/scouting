@@ -164,7 +164,8 @@ export default function SavedMatches({
             sx={{
               justifyContent: "space-evenly",
               marginBottom: 2,
-            }}>
+            }}
+            gap={2}>
             <Button
               onClick={() => {
                 if (matches.every((x) => x.selected)) {
@@ -429,6 +430,58 @@ export default function SavedMatches({
             Share via Clipboard
           </Button>
           <Button variant="outlined">Share via QR Code</Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
+                .filter((x) => x.selected)
+                .map((x) =>
+                  omit("selected", x as unknown as Record<string, unknown>)
+                ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
+
+              const downloadInterval = setInterval(() => {
+                const x = data.pop();
+                console.log(x?.matchKey);
+                if (!x) {
+                  clearInterval(downloadInterval);
+                  return;
+                }
+
+                const a = document.createElement("a");
+                a.setAttribute(
+                  "href",
+                  URL.createObjectURL(
+                    new Blob([JSON.stringify(x)], {
+                      type: "text/plain",
+                    })
+                  )
+                );
+                a.setAttribute(
+                  "download",
+                  "ISA_" +
+                    x.eventKey +
+                    "_" +
+                    x.matchKey +
+                    "_" +
+                    x.alliance +
+                    "_" +
+                    x.robotNumber +
+                    "_" +
+                    x.deviceTeamNumber +
+                    "_" +
+                    x.deviceId +
+                    ".txt"
+                );
+                a.setAttribute("target", "_blank");
+                a.click();
+
+                if (data.length <= 0) {
+                  clearInterval(downloadInterval);
+                }
+              }, 300);
+            }}>
+            Download Data Files
+          </Button>
         </Stack>
       </Stack>
     </ScoutLayout>

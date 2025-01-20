@@ -6,27 +6,15 @@ import {
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Chip, Stack, Typography } from "@mui/material";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
 import { useEffect, useState } from "react";
 import { GridBorder } from "../components/GridBorder.tsx";
 import { getFromDBStore, initDB, Stores } from "../utils/Idb.ts";
-import { trpc } from "../utils/Trpc.tsx";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
 import MatchInfo from "./MatchInfo.tsx";
 import Postmatch from "./Postmatch.tsx";
 import SavedMatches from "./SavedMatches.tsx";
 import { Teleop } from "./Teleop.tsx";
-
-const queryClient = new QueryClient();
-const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: import.meta.env.VITE_SERVER_URL + "/api",
-    }),
-  ],
-});
 
 export type ScoutPage =
   | "devicesetup"
@@ -100,54 +88,44 @@ export default function Scout() {
     })();
   }, []);
 
-  return (
-    <trpc.Provider
-      client={trpcClient}
-      queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        {
-          {
-            devicesetup: (
-              <DeviceSetup
-                deviceSetup={deviceSetup}
-                setDeviceSetup={setDeviceSetup}
-                setPage={setPage}
-                events={events}
-                setEvents={setEvents}
-                match={match}
-                setMatch={setMatch}
-              />
-            ),
-            matchinfo: (
-              <MatchInfo
-                setPage={setPage}
-                match={match}
-                setMatch={setMatch}
-                events={events}
-                deviceSetup={deviceSetup}
-              />
-            ),
-            auto: <Auto setPage={setPage} />,
-            teleop: <Teleop setPage={setPage} />,
-            postmatch: (
-              <Postmatch
-                setPage={setPage}
-                match={match}
-              />
-            ),
-            savedmatches: (
-              <SavedMatches
-                setPage={setPage}
-                match={match}
-                setMatch={setMatch}
-                events={events}
-              />
-            ),
-          }[page]
-        }
-      </QueryClientProvider>
-    </trpc.Provider>
-  );
+  return {
+    devicesetup: (
+      <DeviceSetup
+        deviceSetup={deviceSetup}
+        setDeviceSetup={setDeviceSetup}
+        setPage={setPage}
+        events={events}
+        setEvents={setEvents}
+        match={match}
+        setMatch={setMatch}
+      />
+    ),
+    matchinfo: (
+      <MatchInfo
+        setPage={setPage}
+        match={match}
+        setMatch={setMatch}
+        events={events}
+        deviceSetup={deviceSetup}
+      />
+    ),
+    auto: <Auto setPage={setPage} />,
+    teleop: <Teleop setPage={setPage} />,
+    postmatch: (
+      <Postmatch
+        setPage={setPage}
+        match={match}
+      />
+    ),
+    savedmatches: (
+      <SavedMatches
+        setPage={setPage}
+        match={match}
+        setMatch={setMatch}
+        events={events}
+      />
+    ),
+  }[page];
 }
 
 type ScoutLayoutProps = {

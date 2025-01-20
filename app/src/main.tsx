@@ -3,6 +3,8 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -12,6 +14,7 @@ import "./index.css";
 import LandingPage from "./LandingPage.tsx";
 import Scout from "./scout/Scout.tsx";
 import Upload from "./upload/Upload.tsx";
+import { trpc } from "./utils/Trpc.tsx";
 
 const router = createBrowserRouter(
   [
@@ -91,13 +94,28 @@ const theme = responsiveFontSizes(
   })
 );
 
+const queryClient = new QueryClient();
+const trpcClient = trpc.createClient({
+  links: [
+    httpBatchLink({
+      url: import.meta.env.VITE_SERVER_URL + "/api",
+    }),
+  ],
+});
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <RouterProvider
-        router={router}
-        future={{ v7_startTransition: true }}
-      />
+      <trpc.Provider
+        client={trpcClient}
+        queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider
+            router={router}
+            future={{ v7_startTransition: true }}
+          />
+        </QueryClientProvider>
+      </trpc.Provider>
     </ThemeProvider>
   </StrictMode>
 );
