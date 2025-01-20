@@ -217,6 +217,19 @@ export default function SavedMatches({
                       .filter((x) => x.selected)
                       .map((x) => (
                         <ListItem
+                          key={
+                            x.eventKey +
+                            "_" +
+                            x.matchKey +
+                            "_" +
+                            x.alliance +
+                            "_" +
+                            x.robotNumber +
+                            "_" +
+                            x.deviceTeamNumber +
+                            "_" +
+                            x.deviceId
+                          }
                           sx={{
                             display: "list-item",
                           }}>
