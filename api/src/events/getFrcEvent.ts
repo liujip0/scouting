@@ -50,7 +50,6 @@ export const getFrcEvent = loggedPublicProcedure
 
       if (scheduleRes.status === 200) {
         const scheduleBody = JSON.parse(await scheduleRes.text()).Schedule;
-        console.log(scheduleBody);
         scheduleBody.forEach(
           (match: {
             description: string;

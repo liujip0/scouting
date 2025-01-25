@@ -4,7 +4,6 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { FileUpload } from "@mui/icons-material";
 import { Button, Stack, styled } from "@mui/material";
-import { useState } from "react";
 import { trpc } from "../utils/Trpc.tsx";
 
 const VisuallyHiddenInput = styled("input")({
@@ -21,10 +20,6 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Upload() {
   const putEntries = trpc.data.putEntries.useMutation();
-
-  const [popup, setPopup] = useState("");
-
-  const [json, setJson] = useState("");
 
   return (
     <Stack
@@ -56,7 +51,13 @@ export default function Upload() {
           multiple
         />
       </Button>
-      <Button>Paste from Clipboard</Button>
+      <Button
+        onClick={async () => {
+          const matches = JSON.parse(await navigator.clipboard.readText());
+          putEntries.mutate(matches);
+        }}>
+        Paste from Clipboard
+      </Button>
     </Stack>
   );
 }
