@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  FormControlLabel,
-  Stack,
-  Switch,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
@@ -35,7 +26,15 @@ export default function Auto({ setPage }: AutoProps) {
           </Button>
         </>
       }>
-      <Stack
+      {
+        //TODO: (For Iraa) Write Auto Layout
+        <div
+          style={{
+            margin: "2px",
+            marginBottom: "2px",
+          }}></div>
+      }
+      {/* <Stack
         direction="row"
         sx={{ width: 1, height: 1 }}>
         <Box
@@ -57,7 +56,7 @@ export default function Auto({ setPage }: AutoProps) {
           <NumberInput label="SPEAKER" />
           <NumberInput label="AMP" />
         </Stack>
-      </Stack>
+      </Stack> */}
     </ScoutLayout>
   );
 }
