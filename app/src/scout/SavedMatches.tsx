@@ -440,7 +440,7 @@ export default function SavedMatches({
 
               navigator.clipboard.writeText(JSON.stringify(data));
             }}>
-            Share via Clipboard
+            Copy to Clipboard
           </Button>
           <Button variant="outlined">Share via QR Code</Button>
           <Button

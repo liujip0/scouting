@@ -56,7 +56,13 @@ export default function Upload() {
           multiple
         />
       </Button>
-      <Button>Paste from Clipboard</Button>
+      <Button
+        onClick={async () => {
+          const matches = JSON.parse(await navigator.clipboard.readText());
+          putEntries.mutate(matches);
+        }}>
+        Paste from Clipboard
+      </Button>
     </Stack>
   );
 }
