@@ -4,7 +4,7 @@ export const borderMarginPx = 20;
 export const borderWidthPx = 5;
 
 type GridBorderProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 export function GridBorder({ children }: GridBorderProps) {
   return (
