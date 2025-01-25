@@ -131,6 +131,7 @@ export const getFrcEvent = loggedPublicProcedure
         message: "Event not found.",
       });
     } else {
+      console.log(eventRes);
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: eventRes.statusText,

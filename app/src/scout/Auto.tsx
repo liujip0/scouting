@@ -1,5 +1,6 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
+import { blue } from "@mui/material/colors";
 
 type AutoProps = {
   setPage: (value: ScoutPage) => void;
@@ -28,11 +29,22 @@ export default function Auto({ setPage }: AutoProps) {
       }>
       {
         //TODO: (For Iraa) Write Auto Layout
-        <div
-          style={{
-            margin: "2px",
-            marginBottom: "2px",
-          }}></div>
+        <Stack
+          direction="column"
+          spacing={2}>
+          <Box sx={{ padding: 2 }}>box 1</Box>
+          <Box
+            sx={{
+              padding: 2,
+              borderRadius: "4px",
+              backgroundColor: "#1976d2", // Blue background
+              color: "white", // White text color
+              borderTopLeftRadius: "4px", // Optional: rounded corners
+              height: "500px", // Set a fixed height (optional)
+            }}>
+            box 2
+          </Box>
+        </Stack>
       }
       {/* <Stack
         direction="row"
