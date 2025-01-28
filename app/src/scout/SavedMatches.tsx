@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteEntry, getFromDBStore, Stores } from "../utils/Idb.ts";
 import { omit } from "../utils/Utils.ts";
+import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type SavedMatchesProps = {
   setPage: (value: ScoutPage) => void;
