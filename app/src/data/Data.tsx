@@ -1,7 +1,7 @@
 import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { useEffect, useState } from "react";
 import { initDB } from "../utils/Idb.ts";
-import DataViewerLayout from "./DataViewerLayout.tsx";
+import DataLayout from "./DataLayout.tsx";
 import Login from "./Login.tsx";
 
 export default function Data() {
@@ -36,9 +36,12 @@ export default function Data() {
     initDB();
   }, []);
 
-  return token === "" ?
+  return (
+      token === "" &&
+        ["demo", "team", "datamanage", "admin"].includes(permLevel)
+    ) ?
       <Login setToken={setToken} />
-    : <DataViewerLayout
+    : <DataLayout
         setToken={setToken}
         permLevel={permLevel}
       />;

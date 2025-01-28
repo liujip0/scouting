@@ -7,12 +7,17 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import {
   borderMarginPx,
   borderWidthPx,
   GridBorder,
 } from "../components/GridBorder.tsx";
+import DataMenu from "./DataMenu.tsx";
+import Export from "./Export.tsx";
+import Users from "./users/Users.tsx";
+import Util from "./Util.tsx";
+import View from "./View.tsx";
 
 type DataLayoutProps = {
   setToken: (
@@ -20,18 +25,13 @@ type DataLayoutProps = {
     expiresAt: number,
     permLevel: User["permLevel"]
   ) => void;
-  level: "menu" | "page";
-  children?: React.ReactNode;
+  permLevel: User["permLevel"];
 };
-export default function DataLayout({
-  setToken,
-  level,
-  children,
-}: DataLayoutProps) {
+export default function DataLayout({ setToken, permLevel }: DataLayoutProps) {
   const topBarHeightRem = 4;
 
   const navigate = useNavigate();
-  const logout = () => {
+  const logoutFunction = () => {
     setToken("", 0, "none");
   };
 
@@ -77,18 +77,22 @@ export default function DataLayout({
           </Typography>
           <Button
             onClick={() => {
-              navigate(level === "menu" ? "/" : "/data");
+              if (window.location.pathname === "/data") {
+                navigate("/");
+              } else {
+                navigate("/data");
+              }
             }}
             variant="outlined"
             color="secondary"
             sx={{
               mr: 2,
             }}>
-            {level === "menu" ? "Return to Home" : "Return"}
+            Return
           </Button>
           <Button
             onClick={() => {
-              logout();
+              logoutFunction();
             }}
             variant="outlined"
             color="secondary">
@@ -103,7 +107,46 @@ export default function DataLayout({
           position: "relative",
           top: `calc(${topBarHeightRem}rem - ${borderMarginPx + borderWidthPx}px)`,
         }}>
-        <GridBorder>{children}</GridBorder>
+        <GridBorder>
+          <Routes>
+            {["demo", "team", "datamanage", "admin"].includes(permLevel) && (
+              <Route
+                path="/"
+                element={<DataMenu permLevel={permLevel} />}
+              />
+            )}
+            {["demo", "team", "datamanage", "admin"].includes(permLevel) && (
+              <Route
+                path="view"
+                element={<View logoutFunction={logoutFunction} />}
+              />
+            )}
+            {["team", "datamanage", "admin"].includes(permLevel) && (
+              <Route
+                path="export"
+                element={<Export />}
+              />
+            )}
+            {["datamanage", "admin"].includes(permLevel) && (
+              <Route
+                path="review"
+                element={<div>Review Data</div>}
+              />
+            )}
+            {["admin"].includes(permLevel) && (
+              <Route
+                path="users"
+                element={<Users logoutFunction={logoutFunction} />}
+              />
+            )}
+            {["admin"].includes(permLevel) && (
+              <Route
+                path="util"
+                element={<Util />}
+              />
+            )}
+          </Routes>
+        </GridBorder>
       </Box>
     </Box>
   );

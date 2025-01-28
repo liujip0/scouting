@@ -1,6 +1,5 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
-import { blue } from "@mui/material/colors";
 
 type AutoProps = {
   setPage: (value: ScoutPage) => void;

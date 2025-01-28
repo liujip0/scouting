@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { ScoutLayout, ScoutPage } from "./Scout";
+import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type TeleopProps = {
   setPage: (value: ScoutPage) => void;

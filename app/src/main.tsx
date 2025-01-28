@@ -7,50 +7,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Data from "./data/Data.tsx";
-import ErrorPage from "./ErrorPage.tsx";
+import App from "./App.tsx";
 import "./index.css";
-import LandingPage from "./LandingPage.tsx";
-import Scout from "./scout/Scout.tsx";
-import Upload from "./upload/Upload.tsx";
 import { trpc } from "./utils/Trpc.tsx";
-
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          path: "",
-          element: <LandingPage />,
-        },
-        {
-          path: "scout",
-          element: <Scout />,
-        },
-        {
-          path: "data",
-          element: <Data />,
-        },
-        {
-          path: "upload",
-          element: <Upload />,
-        },
-      ],
-    },
-  ],
-  {
-    future: {
-      v7_fetcherPersist: true,
-      v7_normalizeFormMethod: true,
-      v7_partialHydration: true,
-      v7_relativeSplatPath: true,
-      v7_skipActionErrorRevalidation: true,
-    },
-  }
-);
 
 const theme = responsiveFontSizes(
   createTheme({
@@ -115,10 +74,7 @@ createRoot(document.getElementById("root")!).render(
         client={trpcClient}
         queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider
-            router={router}
-            future={{ v7_startTransition: true }}
-          />
+          <App />
         </QueryClientProvider>
       </trpc.Provider>
     </ThemeProvider>

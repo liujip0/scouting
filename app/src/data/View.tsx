@@ -18,11 +18,10 @@ import { useState } from "react";
 import { BorderedTable, Td, Th } from "../components/Table.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 
-type ViewDataProps = {
-  hidden: boolean;
+type ViewProps = {
   logoutFunction: () => void;
 };
-export default function ViewData({ hidden, logoutFunction }: ViewDataProps) {
+export default function View({ logoutFunction }: ViewProps) {
   const [events, setEvents] = useState("");
   const [teams, setTeams] = useState("");
   const [match, setMatch] = useState("");
@@ -48,7 +47,6 @@ export default function ViewData({ hidden, logoutFunction }: ViewDataProps) {
         width: 1,
         height: 1,
         padding: 2,
-        display: hidden ? "none" : "flex",
       }}>
       <Paper
         sx={{

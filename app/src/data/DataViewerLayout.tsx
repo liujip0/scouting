@@ -17,10 +17,10 @@ import {
   borderWidthPx,
   GridBorder,
 } from "../components/GridBorder.tsx";
-import ExportData from "./ExportData.tsx";
+import Export from "./Export.tsx";
 import Users from "./users/Users.tsx";
 import Util from "./Util.tsx";
-import ViewData from "./ViewData.tsx";
+import View from "./View.tsx";
 
 export type DataViewerTab =
   | "viewdata"
@@ -227,7 +227,7 @@ export default function DataViewerLayout({
                       )
                     ) {
                       tabPanels.push(
-                        <ViewData
+                        <View
                           key={"viewdata"}
                           hidden={tab !== "viewdata"}
                           logoutFunction={logout}
@@ -236,7 +236,7 @@ export default function DataViewerLayout({
                     }
                     if (["team", "datamanage", "admin"].includes(permLevel)) {
                       tabPanels.push(
-                        <ExportData
+                        <Export
                           key={"exportdata"}
                           hidden={tab !== "exportdata"}
                         />

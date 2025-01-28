@@ -13,10 +13,7 @@ import {
 import { useState } from "react";
 import { trpc } from "../utils/Trpc.tsx";
 
-type ExportDataProps = {
-  hidden: boolean;
-};
-export default function ExportData({ hidden }: ExportDataProps) {
+export default function Export() {
   const [columns, setColumns] = useState<boolean[]>(
     new Array(TeamMatchEntryColumns.length).fill(true)
   );
@@ -32,7 +29,6 @@ export default function ExportData({ hidden }: ExportDataProps) {
         width: 1,
         height: 1,
         padding: 2,
-        display: hidden ? "none" : "flex",
       }}
       direction="row">
       <Stack

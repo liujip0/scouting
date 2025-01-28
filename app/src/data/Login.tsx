@@ -16,7 +16,7 @@ import {
   borderMarginPx,
   borderWidthPx,
 } from "../components/GridBorder.tsx";
-import { TextFieldDoubleLabel } from "../TextFieldLabel.tsx";
+import { TextFieldDoubleLabel } from "../components/TextFieldLabel.tsx";
 import { trpc } from "../utils/Trpc.tsx";
 
 type LoginProps = {

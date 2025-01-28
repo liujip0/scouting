@@ -25,10 +25,9 @@ import CreateUser from "./CreateUser.tsx";
 import EditUser from "./EditUser.tsx";
 
 type UsersProps = {
-  hidden: boolean;
   logoutFunction: () => void;
 };
-export default function Users({ hidden, logoutFunction }: UsersProps) {
+export default function Users({ logoutFunction }: UsersProps) {
   const users = trpc.users.users.useQuery(undefined, {
     retry: (_failureCount, error) => {
       if (error.data?.httpStatus === 401) {
@@ -73,7 +72,6 @@ export default function Users({ hidden, logoutFunction }: UsersProps) {
         width: 1,
         height: 1,
         padding: 2,
-        display: hidden ? "none" : "flex",
       }}>
       <Paper
         sx={{

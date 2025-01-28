@@ -24,9 +24,9 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { trpc } from "../../utils/Trpc.tsx";
-import { DeviceSetupObj, ScoutLayout, ScoutPage } from "../Scout.tsx";
 import CreateEvent from "./CreateEvent.tsx";
 import DownloadEvent from "./DownloadEvent.tsx";
+import { DeviceSetupObj, ScoutPage, ScoutLayout } from "../Scout.tsx";
 
 type DeviceSetupProps = {
   deviceSetup: DeviceSetupObj;
