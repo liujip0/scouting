@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
@@ -226,14 +226,15 @@ export default function Auto({ setPage }: AutoProps) {
   );
 }
 
-type NumberInputProps = {
-  label: string;
-};
-function NumberInput({ label }: NumberInputProps) {
-  return (
-    <Stack direction={"row"}>
-      <Typography>{label}</Typography>
-      <TextField type="number" />
-    </Stack>
-  );
-}
+// Commented out so build doesn't fail
+// type NumberInputProps = {
+//   label: string;
+// };
+// function NumberInput({ label }: NumberInputProps) {
+//   return (
+//     <Stack direction={"row"}>
+//       <Typography>{label}</Typography>
+//       <TextField type="number" />
+//     </Stack>
+//   );
+// }
