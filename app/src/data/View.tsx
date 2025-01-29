@@ -146,7 +146,7 @@ export default function View({ logoutFunction }: ViewProps) {
             {data.data?.map((teamMatchEntry, index) => {
               if (events) {
                 let correctEvent = false;
-                for (let event of events.replace(/ /g, "").split(",")) {
+                for (const event of events.replace(/ /g, "").split(",")) {
                   if (teamMatchEntry.eventKey.includes(event)) {
                     correctEvent = true;
                     break;
@@ -180,7 +180,7 @@ export default function View({ logoutFunction }: ViewProps) {
               }
               if (teams) {
                 let correctTeam = false;
-                for (let team of teams
+                for (const team of teams
                   .replace(/ /g, "")
                   .split(",")
                   .map((x) => parseInt(x))) {

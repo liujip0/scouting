@@ -37,8 +37,8 @@ export default function Data() {
   }, []);
 
   return (
-      token === "" &&
-        ["demo", "team", "datamanage", "admin"].includes(permLevel)
+      token === "" ||
+        !["demo", "team", "datamanage", "admin"].includes(permLevel)
     ) ?
       <Login setToken={setToken} />
     : <DataLayout

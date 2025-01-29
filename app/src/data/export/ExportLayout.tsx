@@ -10,18 +10,39 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { TRPCClientErrorLike } from "@trpc/client";
+import { UseTRPCQueryResult } from "@trpc/react-query/shared";
 import { useState } from "react";
-import { trpc } from "../utils/Trpc.tsx";
 
-export default function Export() {
+type ExportLayoutProps = {
+  showPublicApiToken: boolean;
+  setShowPublicApiToken: (value: boolean) => void;
+  linkIncludesToken: boolean;
+  setLinkIncludesToken: (value: boolean) => void;
+  showAuthorization: boolean;
+  setShowAuthorization: (value: boolean) => void;
+  publicApiToken: UseTRPCQueryResult<
+    string,
+    TRPCClientErrorLike<{
+      input: void;
+      output: string;
+      transformer: false;
+      errorShape: DefaultErrorShape;
+    }>
+  >;
+};
+export default function ExportLayout({
+  showPublicApiToken,
+  setShowPublicApiToken,
+  linkIncludesToken,
+  setLinkIncludesToken,
+  showAuthorization,
+  setShowAuthorization,
+  publicApiToken,
+}: ExportLayoutProps) {
   const [columns, setColumns] = useState<boolean[]>(
     new Array(TeamMatchEntryColumns.length).fill(true)
   );
-  const [showPublicApiToken, setShowPublicApiToken] = useState(false);
-  const [linkIncludesToken, setLinkIncludesToken] = useState(false);
-  const [showAuthorization, setShowAuthorization] = useState(false);
-
-  const publicApiToken = trpc.users.publicApiToken.useQuery();
 
   return (
     <Stack
@@ -106,6 +127,9 @@ export default function Export() {
                   </IconButton>
                 </>
               ),
+            },
+            inputLabel: {
+              shrink: true,
             },
           }}
           type={showPublicApiToken ? "text" : "password"}
@@ -213,9 +237,7 @@ export default function Export() {
         {
           //TODO: export as file
         }
-        <Button variant="outlined">Export as JSON</Button>
-        <Button variant="outlined">Export as CSV</Button>
-        <Button variant="outlined">Export as XLSX</Button>
+        <Button variant="outlined">Download File</Button>
       </Stack>
     </Stack>
   );

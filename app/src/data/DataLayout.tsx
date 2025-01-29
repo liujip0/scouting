@@ -14,7 +14,7 @@ import {
   GridBorder,
 } from "../components/GridBorder.tsx";
 import DataMenu from "./DataMenu.tsx";
-import Export from "./Export.tsx";
+import Export from "./export/Export.tsx";
 import Users from "./users/Users.tsx";
 import Util from "./Util.tsx";
 import View from "./View.tsx";
