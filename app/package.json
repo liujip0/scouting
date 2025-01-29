@@ -14,10 +14,10 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.1.1",
-    "@mui/icons-material": "^6.4.1",
+    "@mui/icons-material": "^6.4.2",
     "@mui/lab": "6.0.0-beta.15",
-    "@mui/material": "^6.4.1",
-    "@tanstack/react-query": "^5.65.0",
+    "@mui/material": "^6.4.2",
+    "@tanstack/react-query": "^5.65.1",
     "@trpc/client": "11.0.0-rc.608",
     "@trpc/react-query": "11.0.0-rc.608",
     "@trpc/server": "11.0.0-rc.608",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "@isa2025/api": "workspace:*",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.12.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
@@ -44,6 +44,6 @@
     "typescript-eslint": "^8.22.0",
     "vite": "^5.4.14",
     "vite-plugin-pwa": "^0.20.5",
-    "wrangler": "^3.105.1"
+    "wrangler": "^3.106.0"
   }
 }
