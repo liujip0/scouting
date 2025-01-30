@@ -123,7 +123,7 @@ export default function DataLayout({ setToken, permLevel }: DataLayoutProps) {
             )}
             {["team", "datamanage", "admin"].includes(permLevel) && (
               <Route
-                path="export"
+                path="export/*"
                 element={<Export />}
               />
             )}

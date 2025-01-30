@@ -1,7 +1,6 @@
-import { TabPanel } from "@mui/lab";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, Route, Routes, useResolvedPath } from "react-router-dom";
 import { trpc } from "../../utils/Trpc.tsx";
 import ExportLayout from "./ExportLayout.tsx";
 
@@ -10,42 +9,93 @@ export default function Export() {
   const [linkIncludesToken, setLinkIncludesToken] = useState(false);
   const [showAuthorization, setShowAuthorization] = useState(false);
 
-  const location = useLocation();
-  const pathend = location.pathname.split("/").pop();
+  const resolvedPath = useResolvedPath("");
+  const pathend = resolvedPath.pathname.split("/").pop();
+
   const publicApiToken = trpc.users.publicApiToken.useQuery();
 
   return (
-    <Box
+    <Stack
       sx={{
         width: 1,
         height: 1,
         padding: 2,
       }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={pathname}>
+        <Tabs value={pathend === "" ? "/" : pathend}>
           <Tab
             label="Robot Data"
             value="robot"
+            component={Link}
+            to={
+              resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/robot"
+            }
           />
           <Tab
             label="Human Data"
             value="human"
+            component={Link}
+            to={
+              resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/human"
+            }
           />
           <Tab
             label="All Data"
-            value="all"
+            value="/"
+            component={Link}
+            to={resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/"}
           />
         </Tabs>
       </Box>
-      <TabPanel value="robot">
-        <ExportLayout />
-      </TabPanel>
-      <TabPanel value="human">
-        <ExportLayout />
-      </TabPanel>
-      <TabPanel value="all">
-        <ExportLayout />
-      </TabPanel>
-    </Box>
+      <Box
+        sx={{
+          flex: 1,
+        }}>
+        <Routes>
+          <Route
+            path="robot"
+            element={
+              <ExportLayout
+                showPublicApiToken={showPublicApiToken}
+                setShowPublicApiToken={setShowPublicApiToken}
+                linkIncludesToken={linkIncludesToken}
+                setLinkIncludesToken={setLinkIncludesToken}
+                showAuthorization={showAuthorization}
+                setShowAuthorization={setShowAuthorization}
+                publicApiToken={publicApiToken.data}
+              />
+            }
+          />
+          <Route
+            path="human"
+            element={
+              <ExportLayout
+                showPublicApiToken={showPublicApiToken}
+                setShowPublicApiToken={setShowPublicApiToken}
+                linkIncludesToken={linkIncludesToken}
+                setLinkIncludesToken={setLinkIncludesToken}
+                showAuthorization={showAuthorization}
+                setShowAuthorization={setShowAuthorization}
+                publicApiToken={publicApiToken.data}
+              />
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ExportLayout
+                showPublicApiToken={showPublicApiToken}
+                setShowPublicApiToken={setShowPublicApiToken}
+                linkIncludesToken={linkIncludesToken}
+                setLinkIncludesToken={setLinkIncludesToken}
+                showAuthorization={showAuthorization}
+                setShowAuthorization={setShowAuthorization}
+                publicApiToken={publicApiToken.data}
+              />
+            }
+          />
+        </Routes>
+      </Box>
+    </Stack>
   );
 }

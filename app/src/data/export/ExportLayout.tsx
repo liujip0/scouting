@@ -10,8 +10,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { TRPCClientErrorLike } from "@trpc/client";
-import { UseTRPCQueryResult } from "@trpc/react-query/shared";
 import { useState } from "react";
 
 type ExportLayoutProps = {
@@ -21,15 +19,7 @@ type ExportLayoutProps = {
   setLinkIncludesToken: (value: boolean) => void;
   showAuthorization: boolean;
   setShowAuthorization: (value: boolean) => void;
-  publicApiToken: UseTRPCQueryResult<
-    string,
-    TRPCClientErrorLike<{
-      input: void;
-      output: string;
-      transformer: false;
-      errorShape: DefaultErrorShape;
-    }>
-  >;
+  publicApiToken: string | undefined;
 };
 export default function ExportLayout({
   showPublicApiToken,
@@ -56,6 +46,7 @@ export default function ExportLayout({
         sx={{
           flex: 1,
           padding: 1,
+          height: 1,
         }}>
         <Typography
           variant="body1"
@@ -68,8 +59,64 @@ export default function ExportLayout({
         <Stack
           sx={{
             flex: 1,
+            height: 1,
             overflowY: "scroll",
           }}>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          <div>asdlkfasdlfkj</div>
+          {/*
           {TeamMatchEntryColumns.map((column, columnIndex) => (
             <FormControlLabel
               key={column}
@@ -93,7 +140,7 @@ export default function ExportLayout({
                 : column
               }
             />
-          ))}
+          ))}*/}
         </Stack>
       </Stack>
       <Divider orientation="vertical" />
@@ -104,7 +151,7 @@ export default function ExportLayout({
         }}
         gap={1}>
         <TextField
-          value={publicApiToken.data}
+          value={publicApiToken ?? ""}
           slotProps={{
             input: {
               endAdornment: (
@@ -119,8 +166,8 @@ export default function ExportLayout({
                   </IconButton>
                   <IconButton
                     onClick={() => {
-                      if (publicApiToken.data) {
-                        navigator.clipboard.writeText(publicApiToken.data);
+                      if (publicApiToken) {
+                        navigator.clipboard.writeText(publicApiToken);
                       }
                     }}>
                     <ContentCopy />
@@ -167,21 +214,19 @@ export default function ExportLayout({
             import.meta.env.VITE_SERVER_URL +
             "/public/data?include=" +
             columns.map((value) => (value ? 1 : 0)).join("") +
-            (linkIncludesToken ? "&token=" + publicApiToken.data : "")
+            (linkIncludesToken ? "&token=" + publicApiToken : "")
           }
           slotProps={{
             input: {
               endAdornment: (
                 <IconButton
                   onClick={() => {
-                    if (publicApiToken.data) {
+                    if (publicApiToken) {
                       navigator.clipboard.writeText(
                         import.meta.env.VITE_SERVER_URL +
                           "/public/data?include=" +
                           columns.map((value) => (value ? 1 : 0)).join("") +
-                          (linkIncludesToken ?
-                            "&token=" + publicApiToken.data
-                          : "")
+                          (linkIncludesToken ? "&token=" + publicApiToken : "")
                       );
                     }
                   }}>
@@ -197,7 +242,7 @@ export default function ExportLayout({
         />
         {!linkIncludesToken && (
           <TextField
-            value={"Bearer " + publicApiToken.data}
+            value={"Bearer " + publicApiToken}
             slotProps={{
               input: {
                 endAdornment: (
@@ -212,9 +257,9 @@ export default function ExportLayout({
                     </IconButton>
                     <IconButton
                       onClick={() => {
-                        if (publicApiToken.data) {
+                        if (publicApiToken) {
                           navigator.clipboard.writeText(
-                            "Bearer " + publicApiToken.data
+                            "Bearer " + publicApiToken
                           );
                         }
                       }}>

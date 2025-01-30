@@ -10,8 +10,9 @@ import { appRouter } from "./router.ts";
 
 export interface Env {
   DB: D1Database;
-  ADMIN_ACCOUNT_PASSWORD: string;
+
   ADMIN_ACCOUNT_USERNAME: string;
+  ADMIN_ACCOUNT_PASSWORD: string;
 
   JWT_PRIVATE_KEY: string;
 
