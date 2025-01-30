@@ -1,4 +1,8 @@
-import { TeamMatchEntryColumns } from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  HumanPlayerEntryColumn,
+  TeamMatchEntryColumn,
+  TeamMatchEntryColumns,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -20,6 +24,8 @@ type ExportLayoutProps = {
   showAuthorization: boolean;
   setShowAuthorization: (value: boolean) => void;
   publicApiToken: string | undefined;
+  columnsInit: (TeamMatchEntryColumn | HumanPlayerEntryColumn)[];
+  linkBase: string;
 };
 export default function ExportLayout({
   showPublicApiToken,
@@ -29,9 +35,11 @@ export default function ExportLayout({
   showAuthorization,
   setShowAuthorization,
   publicApiToken,
+  columnsInit,
+  linkBase,
 }: ExportLayoutProps) {
   const [columns, setColumns] = useState<boolean[]>(
-    new Array(TeamMatchEntryColumns.length).fill(true)
+    new Array(columnsInit.length).fill(true)
   );
 
   return (
@@ -62,61 +70,6 @@ export default function ExportLayout({
             height: 1,
             overflowY: "scroll",
           }}>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          <div>asdlkfasdlfkj</div>
-          {/*
           {TeamMatchEntryColumns.map((column, columnIndex) => (
             <FormControlLabel
               key={column}
@@ -140,7 +93,7 @@ export default function ExportLayout({
                 : column
               }
             />
-          ))}*/}
+          ))}
         </Stack>
       </Stack>
       <Divider orientation="vertical" />
@@ -212,7 +165,8 @@ export default function ExportLayout({
         <TextField
           value={
             import.meta.env.VITE_SERVER_URL +
-            "/public/data?include=" +
+            linkBase +
+            "?include=" +
             columns.map((value) => (value ? 1 : 0)).join("") +
             (linkIncludesToken ? "&token=" + publicApiToken : "")
           }
@@ -224,7 +178,8 @@ export default function ExportLayout({
                     if (publicApiToken) {
                       navigator.clipboard.writeText(
                         import.meta.env.VITE_SERVER_URL +
-                          "/public/data?include=" +
+                          linkBase +
+                          "?include=" +
                           columns.map((value) => (value ? 1 : 0)).join("") +
                           (linkIncludesToken ? "&token=" + publicApiToken : "")
                       );

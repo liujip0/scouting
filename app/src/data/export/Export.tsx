@@ -1,3 +1,7 @@
+import {
+  HumanPlayerEntryColumns,
+  TeamMatchEntryColumns,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { Link, Route, Routes, useResolvedPath } from "react-router-dom";
@@ -50,6 +54,7 @@ export default function Export() {
       <Box
         sx={{
           flex: 1,
+          overflowY: "scroll",
         }}>
         <Routes>
           <Route
@@ -63,6 +68,11 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
+                columnsInit={
+                  [...TeamMatchEntryColumns]
+                  //TODO: find a better way to do this
+                }
+                linkBase="/public/robot"
               />
             }
           />
@@ -77,6 +87,8 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
+                columnsInit={[...HumanPlayerEntryColumns]}
+                linkBase="/public/human"
               />
             }
           />
@@ -91,6 +103,11 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
+                columnsInit={[
+                  ...TeamMatchEntryColumns,
+                  ...HumanPlayerEntryColumns,
+                ]}
+                linkBase="/public/all"
               />
             }
           />
