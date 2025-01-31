@@ -132,7 +132,7 @@ type ScoutLayoutProps = {
   title: string;
   nowScouting?: {
     teamNumber: number;
-    alliance: "red" | "blue";
+    alliance: "Red" | "Blue";
     robotPosition: number;
   };
   navButtons?: React.ReactNode;
@@ -173,7 +173,7 @@ export function ScoutLayout({
               }
               sx={{
                 backgroundColor:
-                  nowScouting.alliance === "blue" ? "#0000ff" : "#ff0000",
+                  nowScouting.alliance === "Blue" ? "#0000ff" : "#ff0000",
                 color: "white",
                 ml: "auto",
                 fontSize: "large",

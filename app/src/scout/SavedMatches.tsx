@@ -107,6 +107,8 @@ export default function SavedMatches({
                 eventKey: match.eventKey,
                 alliance: match.alliance,
                 robotNumber: match.robotNumber,
+                scoutName: match.scoutName,
+                scoutTeamNumber: match.scoutTeamNumber,
               } as TeamMatchEntry | HumanPlayerEntry;
 
               if (newMatchKey) {
@@ -256,7 +258,7 @@ export default function SavedMatches({
                 </Button>
                 <Button
                   onClick={async () => {
-                    for (let i of matches.filter((x) => x.selected)) {
+                    for (const i of matches.filter((x) => x.selected)) {
                       await deleteEntry(i);
                     }
                     setMatches(matches.filter((x) => !x.selected));
@@ -402,6 +404,7 @@ export default function SavedMatches({
                       )
                   ),
                 });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } catch (error: any) {
                 console.log(error);
                 setQuickshareFailed(error.toString() as string);

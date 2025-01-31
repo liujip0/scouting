@@ -8,6 +8,12 @@ export function Teleop({ setPage }: TeleopProps) {
   return (
     <ScoutLayout
       title="Teleop"
+      //TODO: uncomment when match is present as a prop
+      // nowScouting={{
+      //   teamNumber: match.teamNumber,
+      //   alliance: match.alliance,
+      //   robotPosition: match.robotNumber,
+      // }}
       navButtons={
         <>
           <Button

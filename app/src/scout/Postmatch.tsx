@@ -14,6 +14,11 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
   return (
     <ScoutLayout
       title="Postmatch"
+      nowScouting={{
+        teamNumber: match.teamNumber,
+        alliance: match.alliance,
+        robotPosition: match.robotNumber,
+      }}
       navButtons={
         <>
           <Button

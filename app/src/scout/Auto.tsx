@@ -8,6 +8,12 @@ export default function Auto({ setPage }: AutoProps) {
   return (
     <ScoutLayout
       title="Auto"
+      //TODO: uncomment when match is present as a prop
+      // nowScouting={{
+      //   teamNumber: match.teamNumber,
+      //   alliance: match.alliance,
+      //   robotPosition: math.robotNumbers,
+      // }}
       navButtons={
         <>
           <Button

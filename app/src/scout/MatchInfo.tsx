@@ -39,9 +39,9 @@ export default function MatchInfo({
     <ScoutLayout
       title="Scout & Match Info"
       nowScouting={{
-        teamNumber: 3494,
-        alliance: "red",
-        robotPosition: 1,
+        teamNumber: match.teamNumber,
+        alliance: match.alliance,
+        robotPosition: match.robotNumber,
       }}
       navButtons={
         <>
