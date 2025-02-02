@@ -64,6 +64,14 @@ export default function ExportLayout({
 
   const [fileType, setFileType] = useState<"json" | "csv" | "xlsx">("json");
 
+  const apiLink =
+    import.meta.env.VITE_SERVER_URL +
+    linkBase +
+    fileType +
+    "?include=" +
+    robotColumns.map((value) => (value ? 1 : 0)).join("") +
+    (linkIncludesToken ? "&token=" + publicApiToken : "");
+
   return (
     <Stack
       sx={{
@@ -163,6 +171,7 @@ export default function ExportLayout({
         sx={{
           flex: 1,
           padding: 2,
+          overflowY: "scroll",
         }}
         gap={1}>
         <ToggleButtonGroup
@@ -247,30 +256,14 @@ export default function ExportLayout({
           label="Include token in link"
         />
         <TextField
-          value={
-            import.meta.env.VITE_SERVER_URL +
-            linkBase +
-            fileType +
-            "?include=" +
-            robotColumns.map((value) => (value ? 1 : 0)).join("") +
-            (linkIncludesToken ? "&token=" + publicApiToken : "")
-          }
+          value={apiLink}
           slotProps={{
             input: {
               endAdornment: (
                 <IconButton
                   onClick={() => {
                     if (publicApiToken) {
-                      navigator.clipboard.writeText(
-                        import.meta.env.VITE_SERVER_URL +
-                          linkBase +
-                          fileType +
-                          "?include=" +
-                          robotColumns
-                            .map((value) => (value ? 1 : 0))
-                            .join("") +
-                          (linkIncludesToken ? "&token=" + publicApiToken : "")
-                      );
+                      navigator.clipboard.writeText(apiLink);
                     }
                   }}>
                   <ContentCopy />
@@ -322,10 +315,95 @@ export default function ExportLayout({
             mb: 2,
           }}
         />
-        {
-          //TODO: export as file
-        }
-        <Button variant="outlined">Download File</Button>
+        <Button
+          variant="outlined"
+          onClick={async () => {
+            const res = await (
+              await fetch(apiLink, {
+                headers: {
+                  Authorization: "Bearer " + publicApiToken,
+                },
+              })
+            ).text();
+            console.log(res);
+
+            const date = new Date();
+
+            const a = document.createElement("a");
+            a.setAttribute(
+              "href",
+              URL.createObjectURL(
+                new Blob([res], {
+                  type: "text/plain",
+                })
+              )
+            );
+            a.setAttribute(
+              "download",
+              "ISA_" +
+                date.getFullYear().toString().padStart(4, "0") +
+                "." +
+                (date.getMonth() + 1).toString().padStart(2, "0") +
+                "." +
+                date.getDate().toString().padStart(2, "0") +
+                "_" +
+                date.getHours().toString().padStart(2, "0") +
+                "." +
+                date.getMinutes().toString().padStart(2, "0") +
+                "." +
+                date.getSeconds().toString().padStart(2, "0") +
+                "." +
+                fileType
+            );
+            a.setAttribute("target", "_blank");
+            a.click();
+          }}>
+          Download File
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={async () => {
+            const res = await (
+              await fetch(apiLink, {
+                headers: {
+                  Authorization: "Bearer " + publicApiToken,
+                },
+              })
+            ).text();
+            console.log(res);
+
+            const date = new Date();
+
+            const a = document.createElement("a");
+            a.setAttribute(
+              "href",
+              URL.createObjectURL(
+                new Blob([res], {
+                  type: "text/plain",
+                })
+              )
+            );
+            a.setAttribute(
+              "download",
+              "ISA_" +
+                date.getFullYear().toString().padStart(4, "0") +
+                "." +
+                (date.getMonth() + 1).toString().padStart(2, "0") +
+                "." +
+                date.getDate().toString().padStart(2, "0") +
+                "_" +
+                date.getHours().toString().padStart(2, "0") +
+                "." +
+                date.getMinutes().toString().padStart(2, "0") +
+                "." +
+                date.getSeconds().toString().padStart(2, "0") +
+                ".txt"
+            );
+            a.setAttribute("target", "_blank");
+            a.click();
+          }}>
+          Download as TXT
+        </Button>
       </Stack>
     </Stack>
   );
