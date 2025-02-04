@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, SxProps } from "@mui/material";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
@@ -14,6 +14,11 @@ export default function Auto({ setPage }: AutoProps) {
       //   alliance: match.alliance,
       //   robotPosition: math.robotNumbers,
       // }}
+      nowScouting={{
+        teamNumber: 3494,
+        alliance: "Red",
+        robotPosition: 2,
+      }}
       navButtons={
         <>
           <Button
@@ -38,42 +43,29 @@ export default function Auto({ setPage }: AutoProps) {
         //main: "#d59f0f", // Indiana Flag Gold
         //default: "##f1dc8e", // Light Indiana Flag Gold
       }
-      ,
       <Stack
         direction="row"
-        spacing={2}>
-        <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+        }}></Stack>
+      {/* <Stack
+        direction="row"
+        gap={2}>
+        <NumberBox sx={{}}>box 1</NumberBox>
+        <NumberBox
           sx={{
-            height: "60px", // Set height to 20px
-            width: "60px", // Set width to 50px
-            backgroundColor: "##f1dc8e", // Pink background color
-            border: "7px solid #000f5d", // Orange border with 2px thickness
-            borderRadius: "4px", // Optional: rounded corners
-            position: "absolute", // Position the box absolutely
-            right: "0", // Place it at the right side of the screen
-            top: "20%", // Optionally center it vertically (adjust as needed)
-            transform: "translateX(-150%)", // Optionally center it vertically (adjust as needed)
-          }}>
-          box 1
-        </Box>
-        <Box
-          sx={{
-            height: "60px", // Set height to 20px
-            width: "60px", // Set width to 50px
-            backgroundColor: "##f1dc8e", // Pink background color
-            border: "7px solid #000f5d", // Orange border with 2px thickness
-            borderRadius: "4px", // Optional: rounded corners
             position: "absolute", // Position the box absolutely
             right: "0", // Place it at the right side of the screen
             top: "20%", // Optionally center it vertically (adjust as needed)
             transform: "translateX(-400%)", // Optionally center it vertically (adjust as needed)
           }}>
           box 2
-        </Box>
+        </NumberBox>
       </Stack>
       <Stack
         direction="row"
-        spacing={2}>
+        gap={2}>
         <Box
           sx={{
             height: "60px",
@@ -100,24 +92,6 @@ export default function Auto({ setPage }: AutoProps) {
             top: "40%",
           }}>
           box 4
-        </Box>
-        <Box
-          sx={{
-            height: "40px",
-            width: "128px",
-            borderRadius: "15px",
-            backgroundColor: "red",
-            position: "absolute",
-            right: "3%",
-            top: "6%",
-            color: "white", // Make text color white
-            display: "flex", // Use flexbox for centering
-            justifyContent: "center", // Center horizontally
-            alignItems: "center", // Center vertically
-            fontFamily: "Arial",
-            fontSize: "18px",
-          }}>
-          3494/ RED 1
         </Box>
         <Box
           sx={{
@@ -204,7 +178,7 @@ export default function Auto({ setPage }: AutoProps) {
         <Box>
           <img />
         </Box>
-      </Stack>
+      </Stack> */}
       {/* <Stack
         direction="row"
         sx={{ width: 1, height: 1 }}>
@@ -244,3 +218,23 @@ export default function Auto({ setPage }: AutoProps) {
 //     </Stack>
 //   );
 // }
+
+type NumberBoxProps = {
+  sx: SxProps;
+  children: React.ReactNode;
+};
+function NumberBox({ sx, children }: NumberBoxProps) {
+  return (
+    <Box
+      sx={{
+        ...sx,
+        height: "60px", // Set height to 20px
+        width: "60px", // Set width to 50px
+        backgroundColor: "##f1dc8e", // Pink background color
+        border: "7px solid #000f5d", // Orange border with 2px thickness
+        borderRadius: "4px", // Optional: rounded corners
+      }}>
+      {children}
+    </Box>
+  );
+}
