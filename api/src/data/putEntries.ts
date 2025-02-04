@@ -1,6 +1,10 @@
 import { D1PreparedStatement } from "@cloudflare/workers-types";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
+import {
+  HumanPlayerEntryColumns,
+  TeamMatchEntryColumns,
+} from "../utils/dbtypes.ts";
 
 export const putEntries = loggedPublicProcedure
   .input(
@@ -16,6 +20,7 @@ export const putEntries = loggedPublicProcedure
           deviceId: z.string(),
           scoutTeamNumber: z.number().int().nonnegative(),
           scoutName: z.string(),
+          flagged: z.boolean(),
 
           autoNote1: z.boolean(),
           autoNote2: z.boolean(),
@@ -57,6 +62,7 @@ export const putEntries = loggedPublicProcedure
           deviceId: z.string(),
           scoutTeamNumber: z.number().int().nonnegative(),
           scoutName: z.string(),
+          flagged: z.boolean(),
 
           amplifications: z.number().int().nonnegative(),
           spotlights: z.number().int().nonnegative(),
@@ -70,80 +76,31 @@ export const putEntries = loggedPublicProcedure
     const teamMatchEntryStmt = opts.ctx.env.DB.prepare(
       `REPLACE INTO
         TeamMatchEntry(
-          eventKey, matchKey, teamNumber, alliance, robotNumber, deviceTeamNumber, deviceId, scoutTeamNumber, scoutName,
-          autoNote1, autoNote2, autoNote3, autoNote4, autoNote5, autoNote6, autoNote7, autoNote8, autoLeftStartingZone, autoSpeaker, autoAmp,
-          teleopSpeaker, teleopAmp, teleopTrap, teleopPassed, teleopStolen, teleopChuteIntake, teleopGroundIntake, teleopEndgame, teleopSpotlight,
-          postmatchDriverSkill, postmatchPlayedDefense, postmatchUnderHeavyDefense
+          ${TeamMatchEntryColumns.join(", ")}
         )
       VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+        (${"?, ".repeat(TeamMatchEntryColumns.length - 1)}?);`
     );
     const humanPlayerEntryStmt = opts.ctx.env.DB.prepare(
       `REPLACE INTO
         HumanPlayerEntry(
-          eventKey, matchKey, teamNumber, alliance, robotNumber, deviceTeamNumber, deviceId, scoutTeamNumber, scoutName,
-          amplifications, spotlights
+          ${HumanPlayerEntryColumns.join(", ")}
         )
       VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?, ?);`
+        (${"?, ".repeat(HumanPlayerEntryColumns.length - 1)}?);`
     );
 
     for (let match of opts.input) {
       if (match.robotNumber === 4) {
         boundStmts.push(
           humanPlayerEntryStmt.bind(
-            match.eventKey,
-            match.matchKey,
-            match.teamNumber,
-            match.alliance,
-            match.robotNumber,
-            match.deviceTeamNumber,
-            match.deviceId,
-            match.scoutTeamNumber,
-            match.scoutName,
-
-            match.amplifications,
-            match.spotlights
+            HumanPlayerEntryColumns.map((column) => match[column])
           )
         );
       } else {
         boundStmts.push(
           teamMatchEntryStmt.bind(
-            match.eventKey,
-            match.matchKey,
-            match.teamNumber,
-            match.alliance,
-            match.robotNumber,
-            match.deviceTeamNumber,
-            match.deviceId,
-            match.scoutTeamNumber,
-            match.scoutName,
-
-            match.autoNote1,
-            match.autoNote2,
-            match.autoNote3,
-            match.autoNote4,
-            match.autoNote5,
-            match.autoNote6,
-            match.autoNote7,
-            match.autoNote8,
-            match.autoLeftStartingZone,
-            match.autoSpeaker,
-            match.autoAmp,
-
-            match.teleopSpeaker,
-            match.teleopAmp,
-            match.teleopTrap,
-            match.teleopPassed,
-            match.teleopStolen,
-            match.teleopChuteIntake,
-            match.teleopGroundIntake,
-            match.teleopEndgame,
-            match.teleopSpotlight,
-
-            match.postmatchDriverSkill,
-            match.postmatchPlayedDefense,
-            match.postmatchUnderHeavyDefense
+            TeamMatchEntryColumns.map((column) => match[column])
           )
         );
       }

@@ -9,6 +9,7 @@ export interface TeamMatchEntry {
   deviceId: string;
   scoutTeamNumber: number;
   scoutName: string;
+  flagged: boolean;
 
   autoNote1: boolean;
   autoNote2: boolean;
@@ -46,6 +47,7 @@ export const TeamMatchEntryColumns = [
   "deviceId",
   "scoutTeamNumber",
   "scoutName",
+  "flagged",
 
   "autoNote1",
   "autoNote2",
@@ -84,6 +86,7 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   deviceId: "",
   scoutTeamNumber: 0,
   scoutName: "",
+  flagged: false,
 
   autoNote1: false,
   autoNote2: false,
@@ -122,6 +125,7 @@ export interface HumanPlayerEntry {
   deviceId: string;
   scoutTeamNumber: number;
   scoutName: string;
+  flagged: boolean;
 
   amplifications: number;
   spotlights: number;
@@ -136,6 +140,7 @@ export const HumanPlayerEntryColumns = [
   "deviceId",
   "scoutTeamNumber",
   "scoutName",
+  "flagged",
 
   "amplifications",
   "spotlights",
@@ -151,6 +156,7 @@ export const HumanPlayerEntryInit: HumanPlayerEntry = {
   deviceId: "",
   scoutTeamNumber: 0,
   scoutName: "",
+  flagged: false,
 
   amplifications: 0,
   spotlights: 0,

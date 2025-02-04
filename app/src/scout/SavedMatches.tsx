@@ -6,7 +6,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Close } from "@mui/icons-material";
+import { Close, Star } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
@@ -47,8 +47,14 @@ export default function SavedMatches({
 
   const [matches, setMatches] = useState<
     (
-      | (TeamMatchEntry & { selected: boolean })
-      | (HumanPlayerEntry & { selected: boolean })
+      | (TeamMatchEntry & {
+          exported: boolean;
+          selected: boolean;
+        })
+      | (HumanPlayerEntry & {
+          exported: boolean;
+          selected: boolean;
+        })
     )[]
   >([]);
   useEffect(() => {
@@ -57,11 +63,11 @@ export default function SavedMatches({
         setMatches([
           ...robotMatches.map((x) => ({
             ...x,
-            selected: true,
+            selected: x.exported ? false : true,
           })),
           ...humanMatches.map((x) => ({
             ...x,
-            selected: true,
+            selected: x.exported ? false : true,
           })),
         ]);
       });
@@ -208,7 +214,7 @@ export default function SavedMatches({
                 <Stack>
                   <Typography>
                     Are you sure you want to delete the following matches? This
-                    canot be undone.
+                    cannot be undone.
                   </Typography>
                   <List
                     sx={{
@@ -310,52 +316,57 @@ export default function SavedMatches({
                   checked={matchData.selected}
                   control={<Checkbox />}
                   label={
-                    <Stack>
-                      <Typography
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setMatches(
-                            matches.map((x) =>
-                              (
-                                x.eventKey === matchData.eventKey &&
-                                x.matchKey === matchData.matchKey &&
-                                x.alliance === matchData.alliance &&
-                                x.robotNumber === matchData.robotNumber
-                              ) ?
-                                {
-                                  ...matchData,
-                                  selected: !x.selected,
-                                }
-                              : x
-                            )
-                          );
-                        }}>
-                        {matchData.eventKey + "_" + matchData.matchKey}
-                      </Typography>
-                      <Typography
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setMatches(
-                            matches.map((x) =>
-                              (
-                                x.eventKey === matchData.eventKey &&
-                                x.matchKey === matchData.matchKey &&
-                                x.alliance === matchData.alliance &&
-                                x.robotNumber === matchData.robotNumber
-                              ) ?
-                                {
-                                  ...matchData,
-                                  selected: !x.selected,
-                                }
-                              : x
-                            )
-                          );
-                        }}>
-                        {"\n" +
-                          matchData.alliance +
-                          "\u00a0" +
-                          matchData.robotNumber}
-                      </Typography>
+                    <Stack
+                      direction="row"
+                      gap={2}>
+                      <Stack>
+                        <Typography
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setMatches(
+                              matches.map((x) =>
+                                (
+                                  x.eventKey === matchData.eventKey &&
+                                  x.matchKey === matchData.matchKey &&
+                                  x.alliance === matchData.alliance &&
+                                  x.robotNumber === matchData.robotNumber
+                                ) ?
+                                  {
+                                    ...matchData,
+                                    selected: !x.selected,
+                                  }
+                                : x
+                              )
+                            );
+                          }}>
+                          {matchData.eventKey + "_" + matchData.matchKey}
+                        </Typography>
+                        <Typography
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setMatches(
+                              matches.map((x) =>
+                                (
+                                  x.eventKey === matchData.eventKey &&
+                                  x.matchKey === matchData.matchKey &&
+                                  x.alliance === matchData.alliance &&
+                                  x.robotNumber === matchData.robotNumber
+                                ) ?
+                                  {
+                                    ...matchData,
+                                    selected: !x.selected,
+                                  }
+                                : x
+                              )
+                            );
+                          }}>
+                          {"\n" +
+                            matchData.alliance +
+                            "\u00a0" +
+                            matchData.robotNumber}
+                        </Typography>
+                      </Stack>
+                      {!matchData.exported && <Star />}
                     </Stack>
                   }
                 />

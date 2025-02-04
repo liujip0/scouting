@@ -31,7 +31,12 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
           <Button
             variant="contained"
             onClick={async () => {
-              await putEntry(match as TeamMatchEntry | HumanPlayerEntry);
+              await putEntry({
+                ...match,
+                exported: false,
+              } as
+                | (TeamMatchEntry & { exported: boolean })
+                | (HumanPlayerEntry & { exported: boolean }));
               setPage("savedmatches");
             }}>
             Continue

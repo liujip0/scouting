@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   deviceId text,
   scoutTeamNumber integer,
   scoutName text,
+  flagged boolean,
 
   autoNote1 boolean,
   autoNote2 boolean,
@@ -51,6 +52,7 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   deviceId text,
   scoutTeamNumber integer,
   scoutName text,
+  flagged boolean,
 
   amplifications integer,
   spotlights integer,

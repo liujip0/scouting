@@ -6,7 +6,7 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { openDB } from "idb";
 
-let version = 1;
+const version = 1;
 const dbname = "isa2025-idb";
 
 export enum Stores {
@@ -85,7 +85,11 @@ export const putDBMatches = async (matches: Match[]) => {
   await tx.done;
 };
 
-export const putEntry = async (match: TeamMatchEntry | HumanPlayerEntry) => {
+export const putEntry = async (
+  match:
+    | (TeamMatchEntry & { exported: boolean })
+    | (HumanPlayerEntry & { exported: boolean })
+) => {
   const db = await openDB(dbname, version);
   if (match.robotNumber < 4) {
     await db.put(Stores.TeamMatchEntry, match);
