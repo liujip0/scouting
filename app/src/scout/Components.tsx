@@ -40,12 +40,12 @@ export function LabeledNumberInput({
           value={value}
           //   This (event) => {} is the same as function(event) {}
           onChange={(event) => {
-            //  This vvvvvvvv converts a string into an integer
+            //  This vvvvvvvv converts ("parses") a string into an integer
             setValue(parseInt(event.currentTarget.value));
             //          This  ^^^^^^^^^^^^^^^^^^^^^^^^^ is how you get the current value of the textbox
           }}
           sx={{
-            width: "10em",
+            width: "5em",
           }}
         />
         <Button

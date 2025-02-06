@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteEntry, getFromDBStore, Stores } from "../utils/Idb.ts";
+import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/Idb.ts";
 import { omit } from "../utils/Utils.ts";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
@@ -76,6 +76,27 @@ export default function SavedMatches({
 
   const [quickshareFailed, setQuickshareFailed] = useState("");
   const [confirmDeleteMatch, setConfirmDeleteMatch] = useState(false);
+
+  const markExportedEntries = () => {
+    setMatches(
+      matches.map((x) => {
+        if (x.selected) {
+          putEntry({
+            ...omit("selected", x as unknown as Record<string, unknown>),
+            exported: true,
+          } as
+            | (TeamMatchEntry & { exported: boolean })
+            | (HumanPlayerEntry & { exported: boolean }));
+          return {
+            ...x,
+            exported: true,
+          };
+        } else {
+          return x;
+        }
+      })
+    );
+  };
 
   return (
     <ScoutLayout
@@ -341,32 +362,34 @@ export default function SavedMatches({
                           }}>
                           {matchData.eventKey + "_" + matchData.matchKey}
                         </Typography>
-                        <Typography
-                          onClick={(event) => {
-                            event.preventDefault();
-                            setMatches(
-                              matches.map((x) =>
-                                (
-                                  x.eventKey === matchData.eventKey &&
-                                  x.matchKey === matchData.matchKey &&
-                                  x.alliance === matchData.alliance &&
-                                  x.robotNumber === matchData.robotNumber
-                                ) ?
-                                  {
-                                    ...matchData,
-                                    selected: !x.selected,
-                                  }
-                                : x
-                              )
-                            );
-                          }}>
-                          {"\n" +
-                            matchData.alliance +
-                            "\u00a0" +
-                            matchData.robotNumber}
-                        </Typography>
+                        <Stack direction="row">
+                          <Typography
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setMatches(
+                                matches.map((x) =>
+                                  (
+                                    x.eventKey === matchData.eventKey &&
+                                    x.matchKey === matchData.matchKey &&
+                                    x.alliance === matchData.alliance &&
+                                    x.robotNumber === matchData.robotNumber
+                                  ) ?
+                                    {
+                                      ...matchData,
+                                      selected: !x.selected,
+                                    }
+                                  : x
+                                )
+                              );
+                            }}>
+                            {"\n" +
+                              matchData.alliance +
+                              "\u00a0" +
+                              matchData.robotNumber}
+                          </Typography>
+                          {!matchData.exported && <Star />}
+                        </Stack>
                       </Stack>
-                      {!matchData.exported && <Star />}
                     </Stack>
                   }
                 />
@@ -390,6 +413,7 @@ export default function SavedMatches({
                   omit("selected", x as unknown as Record<string, unknown>)
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
+              let exception = false;
               try {
                 await navigator.share({
                   title: "ISA Match Data",
@@ -417,8 +441,12 @@ export default function SavedMatches({
                 });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } catch (error: any) {
+                exception = true;
                 console.log(error);
                 setQuickshareFailed(error.toString() as string);
+              }
+              if (!exception) {
+                markExportedEntries();
               }
             }}>
             Share via Quickshare
@@ -452,11 +480,26 @@ export default function SavedMatches({
                   omit("selected", x as unknown as Record<string, unknown>)
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
-              navigator.clipboard.writeText(JSON.stringify(data));
+              let exception = false;
+              try {
+                navigator.clipboard.writeText(JSON.stringify(data));
+              } catch {
+                exception = true;
+              }
+
+              if (!exception) {
+                markExportedEntries();
+              }
             }}>
             Copy to Clipboard
           </Button>
-          <Button variant="outlined">Share via QR Code</Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              //TODO: make this work
+            }}>
+            Share via QR Code
+          </Button>
           <Button
             variant="outlined"
             onClick={() => {
@@ -466,46 +509,55 @@ export default function SavedMatches({
                   omit("selected", x as unknown as Record<string, unknown>)
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
-              const downloadInterval = setInterval(() => {
-                const x = data.pop();
-                console.log(x?.matchKey);
-                if (!x) {
-                  clearInterval(downloadInterval);
-                  return;
-                }
+              let exception = false;
+              try {
+                const downloadInterval = setInterval(() => {
+                  const x = data.pop();
+                  console.log(x?.matchKey);
+                  if (!x) {
+                    clearInterval(downloadInterval);
+                    return;
+                  }
 
-                const a = document.createElement("a");
-                a.setAttribute(
-                  "href",
-                  URL.createObjectURL(
-                    new Blob([JSON.stringify(x)], {
-                      type: "text/plain",
-                    })
-                  )
-                );
-                a.setAttribute(
-                  "download",
-                  "ISA_" +
-                    x.eventKey +
-                    "_" +
-                    x.matchKey +
-                    "_" +
-                    x.alliance +
-                    "_" +
-                    x.robotNumber +
-                    "_" +
-                    x.deviceTeamNumber +
-                    "_" +
-                    x.deviceId +
-                    ".txt"
-                );
-                a.setAttribute("target", "_blank");
-                a.click();
+                  const a = document.createElement("a");
+                  a.setAttribute(
+                    "href",
+                    URL.createObjectURL(
+                      new Blob([JSON.stringify(x)], {
+                        type: "text/plain",
+                      })
+                    )
+                  );
+                  a.setAttribute(
+                    "download",
+                    "ISA_" +
+                      x.eventKey +
+                      "_" +
+                      x.matchKey +
+                      "_" +
+                      x.alliance +
+                      "_" +
+                      x.robotNumber +
+                      "_" +
+                      x.deviceTeamNumber +
+                      "_" +
+                      x.deviceId +
+                      ".txt"
+                  );
+                  a.setAttribute("target", "_blank");
+                  a.click();
 
-                if (data.length <= 0) {
-                  clearInterval(downloadInterval);
-                }
-              }, 300);
+                  if (data.length <= 0) {
+                    clearInterval(downloadInterval);
+
+                    if (!exception) {
+                      markExportedEntries();
+                    }
+                  }
+                }, 300);
+              } catch {
+                exception = true;
+              }
             }}>
             Download Data Files
           </Button>
