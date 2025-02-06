@@ -1,10 +1,17 @@
-import { Box, Button, Stack, SxProps } from "@mui/material";
+import {
+  HumanPlayerEntry,
+  TeamMatchEntry,
+} from "@isa2025/api/src/utils/dbtypes.ts";
+import { Box, Button, Divider, Stack, SxProps } from "@mui/material";
+import { LabeledNumberInput } from "./Components.tsx";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
   setPage: (value: ScoutPage) => void;
+  match: TeamMatchEntry | HumanPlayerEntry;
+  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
 };
-export default function Auto({ setPage }: AutoProps) {
+export default function Auto({ setPage, match, setMatch }: AutoProps) {
   return (
     <ScoutLayout
       title="Auto"
@@ -46,9 +53,63 @@ export default function Auto({ setPage }: AutoProps) {
       <Stack
         direction="row"
         sx={{
-          width: "100%",
-          height: "100%",
-        }}></Stack>
+          //width: 1 and height: 1 are the same as width: '100%' and height: '100%'
+          width: 1,
+          height: 1,
+        }}>
+        {(
+          match.robotNumber === 4 // Scout is scouting human players? Human player robotNumber=4, robot robotNumber=1 or 2 or 3
+        ) ?
+          //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator
+          <></>
+        : <>
+            <Stack
+              sx={{
+                //This stack will take up as much space as possible without covering anything else
+                flex: 1,
+              }}>
+              {
+                //TODO: Field image w/ auto notes
+              }
+            </Stack>
+            <Divider orientation="vertical" />
+            <Stack
+              sx={{
+                flex: 1,
+                padding: 2, //Add 2*8=16px padding
+              }}
+              gap={2} //Add a gap of 2*8=16px between each flex item
+            >
+              {
+                //LabeledNumberInput function definition is in Components.tsx
+              }
+              <LabeledNumberInput
+                label="Speaker"
+                value={match.autoSpeaker}
+                //   This (value) => {} is the same as function(value) {}
+                setValue={(value) => {
+                  //Set the variable match which has all the data for this match
+                  setMatch({
+                    ...match, //Include the rest of match that we didn't change
+                    autoSpeaker: value, //Change the autoSpeaker value
+                  });
+                }}
+              />
+              <LabeledNumberInput
+                label="Amp"
+                value={match.autoAmp}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    autoAmp: value,
+                  });
+                }}
+              />
+            </Stack>
+          </>
+        }
+      </Stack>
+
       {/* <Stack
         direction="row"
         gap={2}>

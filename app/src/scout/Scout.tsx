@@ -109,7 +109,13 @@ export default function Scout() {
         deviceSetup={deviceSetup}
       />
     ),
-    auto: <Auto setPage={setPage} />,
+    auto: (
+      <Auto
+        setPage={setPage}
+        match={match}
+        setMatch={setMatch}
+      />
+    ),
     teleop: <Teleop setPage={setPage} />,
     postmatch: (
       <Postmatch
