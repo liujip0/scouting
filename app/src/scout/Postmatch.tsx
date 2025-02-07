@@ -13,6 +13,18 @@ type PostmatchProps = {
 };
 export default function Postmatch({ setPage, match }: PostmatchProps) {
   const putEntries = trpc.data.putEntries.useMutation({
+    onMutate() {
+      setInterval(async () => {
+        putEntries.reset();
+        await putEntry({
+          ...match,
+          exported: false,
+        } as
+          | (TeamMatchEntry & { exported: boolean })
+          | (HumanPlayerEntry & { exported: boolean }));
+        setPage("savedmatches");
+      }, 3000);
+    },
     async onSuccess() {
       await putEntry({
         ...match,
