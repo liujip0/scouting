@@ -16,6 +16,7 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
   let putEntriesPending = false;
   const putEntries = trpc.data.putEntries.useMutation({
     onMutate() {
+      putEntriesPending = true;
       putEntriesInterval = setTimeout(async () => {
         if (putEntriesPending) {
           putEntries.reset();
@@ -30,7 +31,6 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
       }, 3000);
     },
     async onSuccess() {
-      putEntriesPending = true;
       clearTimeout(putEntriesInterval);
       await putEntry({
         ...match,
@@ -41,7 +41,6 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
       setPage("savedmatches");
     },
     async onError(error) {
-      putEntriesPending = true;
       clearTimeout(putEntriesInterval);
       console.error(error);
       await putEntry({
