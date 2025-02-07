@@ -2,7 +2,7 @@ import {
   HumanPlayerEntry,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Box, Button, Divider, Stack, SxProps } from "@mui/material";
+import { Button, Divider, Stack } from "@mui/material";
 import { Counter } from "./Components.tsx";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
@@ -280,22 +280,22 @@ export default function Auto({ setPage, match, setMatch }: AutoProps) {
 //   );
 // }
 
-type NumberBoxProps = {
-  sx: SxProps;
-  children: React.ReactNode;
-};
-function NumberBox({ sx, children }: NumberBoxProps) {
-  return (
-    <Box
-      sx={{
-        ...sx,
-        height: "60px", // Set height to 20px
-        width: "60px", // Set width to 50px
-        backgroundColor: "##f1dc8e", // Pink background color
-        border: "7px solid #000f5d", // Orange border with 2px thickness
-        borderRadius: "4px", // Optional: rounded corners
-      }}>
-      {children}
-    </Box>
-  );
-}
+// type NumberBoxProps = {
+//   sx: SxProps;
+//   children: React.ReactNode;
+// };
+// function NumberBox({ sx, children }: NumberBoxProps) {
+//   return (
+//     <Box
+//       sx={{
+//         ...sx,
+//         height: "60px", // Set height to 20px
+//         width: "60px", // Set width to 50px
+//         backgroundColor: "##f1dc8e", // Pink background color
+//         border: "7px solid #000f5d", // Orange border with 2px thickness
+//         borderRadius: "4px", // Optional: rounded corners
+//       }}>
+//       {children}
+//     </Box>
+//   );
+// }
