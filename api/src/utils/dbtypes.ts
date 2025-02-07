@@ -1,42 +1,49 @@
+import { z } from "zod";
+
 export const Alliance = ["Red", "Blue"] as const;
-export interface TeamMatchEntry {
-  eventKey: string;
-  matchKey: string;
-  teamNumber: number;
-  alliance: (typeof Alliance)[number];
-  robotNumber: 1 | 2 | 3;
-  deviceTeamNumber: number;
-  deviceId: string;
-  scoutTeamNumber: number;
-  scoutName: string;
-  flagged: boolean;
+export const TeamMatchEntrySchema = z.object({
+  eventKey: z.string(),
+  matchKey: z.string(),
+  teamNumber: z.number().int().nonnegative(),
+  alliance: z.union([z.literal("Red"), z.literal("Blue")]),
+  robotNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+  deviceTeamNumber: z.number().int().nonnegative(),
+  deviceId: z.string(),
+  scoutTeamNumber: z.number().int().nonnegative(),
+  scoutName: z.string(),
+  flagged: z.boolean(),
 
-  autoNote1: boolean;
-  autoNote2: boolean;
-  autoNote3: boolean;
-  autoNote4: boolean;
-  autoNote5: boolean;
-  autoNote6: boolean;
-  autoNote7: boolean;
-  autoNote8: boolean;
-  autoLeftStartingZone: boolean;
-  autoSpeaker: number;
-  autoAmp: number;
+  autoNote1: z.boolean(),
+  autoNote2: z.boolean(),
+  autoNote3: z.boolean(),
+  autoNote4: z.boolean(),
+  autoNote5: z.boolean(),
+  autoNote6: z.boolean(),
+  autoNote7: z.boolean(),
+  autoNote8: z.boolean(),
+  autoLeftStartingZone: z.boolean(),
+  autoSpeaker: z.number().int().nonnegative(),
+  autoAmp: z.number().int().nonnegative(),
 
-  teleopSpeaker: number;
-  teleopAmp: number;
-  teleopTrap: number;
-  teleopPassed: number;
-  teleopStolen: number;
-  teleopChuteIntake: boolean;
-  teleopGroundIntake: boolean;
-  teleopEndgame: "parked" | "climbed" | "none";
-  teleopSpotlight: number;
+  teleopSpeaker: z.number().int().nonnegative(),
+  teleopAmp: z.number().int().nonnegative(),
+  teleopTrap: z.number().int().nonnegative(),
+  teleopPassed: z.number().int().nonnegative(),
+  teleopStolen: z.number().int().nonnegative(),
+  teleopChuteIntake: z.boolean(),
+  teleopGroundIntake: z.boolean(),
+  teleopEndgame: z.union([
+    z.literal("parked"),
+    z.literal("climbed"),
+    z.literal("none"),
+  ]),
+  teleopSpotlight: z.number().int().nonnegative(),
 
-  postmatchDriverSkill: number;
-  postmatchPlayedDefense: boolean;
-  postmatchUnderHeavyDefense: boolean;
-}
+  postmatchDriverSkill: z.number().int().nonnegative(),
+  postmatchPlayedDefense: z.boolean(),
+  postmatchUnderHeavyDefense: z.boolean(),
+});
+export type TeamMatchEntry = z.infer<typeof TeamMatchEntrySchema>;
 export const TeamMatchEntryColumns = [
   "eventKey",
   "matchKey",
@@ -115,21 +122,22 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   postmatchUnderHeavyDefense: false,
 };
 
-export interface HumanPlayerEntry {
-  eventKey: string;
-  matchKey: string;
-  teamNumber: number;
-  alliance: (typeof Alliance)[number];
-  robotNumber: 4;
-  deviceTeamNumber: number;
-  deviceId: string;
-  scoutTeamNumber: number;
-  scoutName: string;
-  flagged: boolean;
+export const HumanPlayerEntrySchema = z.object({
+  eventKey: z.string(),
+  matchKey: z.string(),
+  teamNumber: z.number().int().nonnegative(),
+  alliance: z.union([z.literal("Red"), z.literal("Blue")]),
+  robotNumber: z.literal(4),
+  deviceTeamNumber: z.number().int().nonnegative(),
+  deviceId: z.string(),
+  scoutTeamNumber: z.number().int().nonnegative(),
+  scoutName: z.string(),
+  flagged: z.boolean(),
 
-  amplifications: number;
-  spotlights: number;
-}
+  amplifications: z.number().int().nonnegative(),
+  spotlights: z.number().int().nonnegative(),
+});
+export type HumanPlayerEntry = z.infer<typeof HumanPlayerEntrySchema>;
 export const HumanPlayerEntryColumns = [
   "eventKey",
   "matchKey",

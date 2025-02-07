@@ -24,9 +24,9 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { trpc } from "../../utils/Trpc.tsx";
+import { DeviceSetupObj, ScoutLayout, ScoutPage } from "../Scout.tsx";
 import CreateEvent from "./CreateEvent.tsx";
 import DownloadEvent from "./DownloadEvent.tsx";
-import { DeviceSetupObj, ScoutPage, ScoutLayout } from "../Scout.tsx";
 
 type DeviceSetupProps = {
   deviceSetup: DeviceSetupObj;
@@ -130,6 +130,8 @@ export default function DeviceSetup({
                     eventKey: deviceSetup.currentEvent,
                     alliance: deviceSetup.alliance,
                     robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
+                    deviceTeamNumber: deviceSetup.deviceTeamNumber,
+                    deviceId: deviceSetup.deviceId,
                   };
 
                   const eventMatches = events.find(
@@ -162,6 +164,8 @@ export default function DeviceSetup({
                     eventKey: deviceSetup.currentEvent,
                     alliance: deviceSetup.alliance,
                     robotNumber: deviceSetup.robotNumber as 4,
+                    deviceTeamNumber: deviceSetup.deviceTeamNumber,
+                    deviceId: deviceSetup.deviceId,
                   });
                 }
                 setPage("matchinfo");

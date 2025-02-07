@@ -4,6 +4,7 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Button } from "@mui/material";
 import { putEntry } from "../utils/Idb.ts";
+import { trpc } from "../utils/Trpc.tsx";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type PostmatchProps = {
@@ -11,6 +12,28 @@ type PostmatchProps = {
   match: TeamMatchEntry | HumanPlayerEntry;
 };
 export default function Postmatch({ setPage, match }: PostmatchProps) {
+  const putEntries = trpc.data.putEntries.useMutation({
+    async onSuccess() {
+      await putEntry({
+        ...match,
+        exported: true,
+      } as
+        | (TeamMatchEntry & { exported: boolean })
+        | (HumanPlayerEntry & { exported: boolean }));
+      setPage("savedmatches");
+    },
+    async onError(error) {
+      console.error(error);
+      await putEntry({
+        ...match,
+        exported: false,
+      } as
+        | (TeamMatchEntry & { exported: boolean })
+        | (HumanPlayerEntry & { exported: boolean }));
+      setPage("savedmatches");
+    },
+  });
+
   return (
     <ScoutLayout
       title="Postmatch"
@@ -31,13 +54,7 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
           <Button
             variant="contained"
             onClick={async () => {
-              await putEntry({
-                ...match,
-                exported: false,
-              } as
-                | (TeamMatchEntry & { exported: boolean })
-                | (HumanPlayerEntry & { exported: boolean }));
-              setPage("savedmatches");
+              putEntries.mutate([match]);
             }}>
             Continue
           </Button>

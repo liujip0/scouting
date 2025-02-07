@@ -5,6 +5,7 @@ import {
   Match,
   TeamMatchEntry,
   TeamMatchEntryInit,
+  TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Close, Star } from "@mui/icons-material";
 import {
@@ -28,6 +29,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/Idb.ts";
+import { trpc } from "../utils/Trpc.tsx";
 import { omit } from "../utils/Utils.ts";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
@@ -76,6 +78,15 @@ export default function SavedMatches({
 
   const [quickshareFailed, setQuickshareFailed] = useState("");
   const [confirmDeleteMatch, setConfirmDeleteMatch] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const putEntries = trpc.data.putEntries.useMutation({
+    onSuccess() {
+      setUploadStatus("Success");
+    },
+    onError(error) {
+      setUploadStatus("Error: " + error.message);
+    },
+  });
 
   const markExportedEntries = () => {
     setMatches(
@@ -471,6 +482,7 @@ export default function SavedMatches({
               </IconButton>
             }
           />
+
           <Button
             variant="outlined"
             onClick={() => {
@@ -493,6 +505,7 @@ export default function SavedMatches({
             }}>
             Copy to Clipboard
           </Button>
+
           <Button
             variant="outlined"
             onClick={() => {
@@ -500,6 +513,7 @@ export default function SavedMatches({
             }}>
             Share via QR Code
           </Button>
+
           <Button
             variant="outlined"
             onClick={() => {
@@ -561,6 +575,71 @@ export default function SavedMatches({
             }}>
             Download Data Files
           </Button>
+
+          <Button
+            variant="outlined"
+            onClick={() => {
+              console.log(
+                matches
+                  .filter((x) => x.selected)
+                  .map((x) =>
+                    omit(
+                      "exported",
+                      omit("selected", x as unknown as Record<string, unknown>)
+                    )
+                  ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[]
+              );
+
+              console.log(
+                TeamMatchEntrySchema.parse(
+                  (
+                    matches
+                      .filter((x) => x.selected)
+                      .map((x) =>
+                        omit(
+                          "exported",
+                          omit(
+                            "selected",
+                            x as unknown as Record<string, unknown>
+                          )
+                        )
+                      ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[]
+                  )[0]
+                )
+              );
+              putEntries.mutate(
+                matches
+                  .filter((x) => x.selected)
+                  .map((x) =>
+                    omit(
+                      "exported",
+                      omit("selected", x as unknown as Record<string, unknown>)
+                    )
+                  ) as (TeamMatchEntry | HumanPlayerEntry)[]
+              );
+            }}>
+            Direct Upload
+          </Button>
+          <Snackbar
+            open={uploadStatus !== ""}
+            autoHideDuration={3000}
+            onClose={() => {
+              setUploadStatus("");
+            }}
+            message={uploadStatus}
+            action={
+              <IconButton
+                onClick={() => {
+                  setUploadStatus("");
+                }}>
+                <Close
+                  sx={{
+                    color: "#ffffff",
+                  }}
+                />
+              </IconButton>
+            }
+          />
         </Stack>
       </Stack>
     </ScoutLayout>

@@ -1,16 +1,16 @@
 import { Add, Remove } from "@mui/icons-material";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 
-type LabeledNumberInputProps = {
+type CounterProps = {
   label: string;
   value: number;
   setValue: (value: number) => void;
 };
-export function LabeledNumberInput({
+export function Counter({
   label,
   value, //Value of the input box
   setValue,
-}: LabeledNumberInputProps) {
+}: CounterProps) {
   return (
     <Stack
       direction="row"

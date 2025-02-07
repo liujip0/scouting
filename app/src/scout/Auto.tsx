@@ -3,7 +3,7 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Divider, Stack, SxProps } from "@mui/material";
-import { LabeledNumberInput } from "./Components.tsx";
+import { Counter } from "./Components.tsx";
 import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
@@ -83,7 +83,7 @@ export default function Auto({ setPage, match, setMatch }: AutoProps) {
               {
                 //LabeledNumberInput function definition is in Components.tsx
               }
-              <LabeledNumberInput
+              <Counter
                 label="Speaker"
                 value={match.autoSpeaker}
                 //   This (value) => {} is the same as function(value) {}
@@ -95,7 +95,7 @@ export default function Auto({ setPage, match, setMatch }: AutoProps) {
                   });
                 }}
               />
-              <LabeledNumberInput
+              <Counter
                 label="Amp"
                 value={match.autoAmp}
                 setValue={(value) => {
