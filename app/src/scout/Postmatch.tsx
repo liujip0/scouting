@@ -12,9 +12,10 @@ type PostmatchProps = {
   match: TeamMatchEntry | HumanPlayerEntry;
 };
 export default function Postmatch({ setPage, match }: PostmatchProps) {
+  let putEntriesInterval: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
     onMutate() {
-      setInterval(async () => {
+      putEntriesInterval = setTimeout(async () => {
         putEntries.reset();
         await putEntry({
           ...match,
@@ -26,6 +27,7 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
       }, 3000);
     },
     async onSuccess() {
+      clearTimeout(putEntriesInterval);
       await putEntry({
         ...match,
         exported: true,
@@ -35,6 +37,7 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
       setPage("savedmatches");
     },
     async onError(error) {
+      clearTimeout(putEntriesInterval);
       console.error(error);
       await putEntry({
         ...match,
