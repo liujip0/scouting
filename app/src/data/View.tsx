@@ -48,6 +48,9 @@ export default function View({ logoutFunction }: ViewProps) {
         height: 1,
         padding: 2,
       }}>
+      Note: this page currently does not display human player data. I'm
+      currently prioritizing other things but ping @liujip0 in Discord if you
+      need it.
       <Paper
         sx={{
           display: "flex",

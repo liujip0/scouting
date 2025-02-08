@@ -1,14 +1,19 @@
 import {
   DBEvent,
   HumanPlayerEntry,
+  HumanPlayerEntryColumn,
+  HumanPlayerEntryColumns,
   HumanPlayerEntryInit,
   Match,
   TeamMatchEntry,
+  TeamMatchEntryColumn,
+  TeamMatchEntryColumns,
   TeamMatchEntryInit,
   TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Close, Star } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Checkbox,
   Dialog,
@@ -26,7 +31,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/Idb.ts";
 import { trpc } from "../utils/Trpc.tsx";
@@ -108,6 +114,10 @@ export default function SavedMatches({
       })
     );
   };
+
+  const [qrMatches, setQrMatches] = useState<string[]>([]);
+  const [qrIndex, setQrIndex] = useState(0);
+  const qrRef = useRef<HTMLDivElement>(null);
 
   return (
     <ScoutLayout
@@ -510,9 +520,145 @@ export default function SavedMatches({
             variant="outlined"
             onClick={() => {
               //TODO: make this work
+              setQrMatches(
+                matches
+                  .filter((x) => x.selected)
+                  .map((x) =>
+                    x.robotNumber === 4 ?
+                      JSON.stringify(
+                        HumanPlayerEntryColumns.map(
+                          (column) => x[column as HumanPlayerEntryColumn]
+                        )
+                      ) + "`"
+                    : JSON.stringify(
+                        TeamMatchEntryColumns.map(
+                          (column) => x[column as TeamMatchEntryColumn]
+                        )
+                      ) + "`"
+                  )
+              );
+              setQrIndex(0);
             }}>
             Share via QR Code
           </Button>
+          <Dialog open={qrMatches.length > 0}>
+            <DialogTitle>
+              QR Code {qrIndex + 1} of {qrMatches.length}
+            </DialogTitle>
+            <DialogContent>
+              <Box ref={qrRef}>
+                <QRCodeSVG
+                  value={qrMatches[qrIndex]}
+                  size={Math.min(
+                    (70 * innerWidth) / 100,
+                    (70 * innerHeight) / 100
+                  )}
+                  marginSize={4}
+                />
+              </Box>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                pl: 4,
+                pr: 4,
+                pb: 4,
+              }}>
+              {qrMatches.length === 1 ?
+                <>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      setQrMatches([]);
+                    }}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      markExportedEntries();
+                      setQrMatches([]);
+                    }}>
+                    Done
+                  </Button>
+                </>
+              : qrIndex === 0 ?
+                <>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      setQrMatches([]);
+                    }}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      setQrIndex(qrIndex + 1);
+                    }}>
+                    Next
+                  </Button>
+                </>
+              : qrIndex === qrMatches.length - 1 ?
+                <>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      setQrIndex(qrIndex - 1);
+                    }}>
+                    Previous
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      markExportedEntries();
+                      setQrMatches([]);
+                    }}>
+                    Done
+                  </Button>
+                </>
+              : <>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      setQrIndex(qrIndex - 1);
+                    }}>
+                    Previous
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                    }}
+                    onClick={() => {
+                      setQrIndex(qrIndex + 1);
+                    }}>
+                    Next
+                  </Button>
+                </>
+              }
+            </DialogActions>
+          </Dialog>
 
           <Button
             variant="outlined"

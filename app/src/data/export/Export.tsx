@@ -68,7 +68,7 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
-                robotColumnsInit={[...TeamMatchEntryColumns]}
+                robotColumnsInit={TeamMatchEntryColumns}
                 humanColumnsInit={[]}
                 linkBase="/public/robot/"
               />
@@ -86,7 +86,7 @@ export default function Export() {
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
                 robotColumnsInit={[]}
-                humanColumnsInit={[...HumanPlayerEntryColumns]}
+                humanColumnsInit={HumanPlayerEntryColumns}
                 linkBase="/public/human/"
               />
             }
@@ -102,8 +102,8 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
-                robotColumnsInit={[...TeamMatchEntryColumns]}
-                humanColumnsInit={[...HumanPlayerEntryColumns]}
+                robotColumnsInit={TeamMatchEntryColumns}
+                humanColumnsInit={HumanPlayerEntryColumns}
                 linkBase="/public/all/"
               />
             }

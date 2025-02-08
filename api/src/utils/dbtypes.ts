@@ -1,17 +1,43 @@
 import { z } from "zod";
 
 export const Alliance = ["Red", "Blue"] as const;
-export const TeamMatchEntrySchema = z.object({
+
+export const CommonEntrySchema = z.object({
   eventKey: z.string(),
   matchKey: z.string(),
   teamNumber: z.number().int().nonnegative(),
   alliance: z.union([z.literal("Red"), z.literal("Blue")]),
-  robotNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+  robotNumber: z.union([
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+  ]),
   deviceTeamNumber: z.number().int().nonnegative(),
   deviceId: z.string(),
   scoutTeamNumber: z.number().int().nonnegative(),
   scoutName: z.string(),
   flagged: z.boolean(),
+});
+export type CommonEntry = z.infer<typeof CommonEntrySchema>;
+export type CommonEntryColumn = keyof CommonEntry;
+export const CommonEntryColumns: CommonEntryColumn[] = [
+  "eventKey",
+  "matchKey",
+  "teamNumber",
+  "alliance",
+  "robotNumber",
+  "deviceTeamNumber",
+  "deviceId",
+  "scoutTeamNumber",
+  "scoutName",
+  "flagged",
+] as CommonEntryColumn[];
+
+export const TeamMatchEntrySchema = CommonEntrySchema.omit({
+  robotNumber: true,
+}).extend({
+  robotNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
 
   autoNote1: z.boolean(),
   autoNote2: z.boolean(),
@@ -44,17 +70,9 @@ export const TeamMatchEntrySchema = z.object({
   postmatchUnderHeavyDefense: z.boolean(),
 });
 export type TeamMatchEntry = z.infer<typeof TeamMatchEntrySchema>;
-export const TeamMatchEntryColumns = [
-  "eventKey",
-  "matchKey",
-  "teamNumber",
-  "alliance",
-  "robotNumber",
-  "deviceTeamNumber",
-  "deviceId",
-  "scoutTeamNumber",
-  "scoutName",
-  "flagged",
+export type TeamMatchEntryColumn = keyof TeamMatchEntry;
+export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
+  ...CommonEntryColumns,
 
   "autoNote1",
   "autoNote2",
@@ -81,8 +99,7 @@ export const TeamMatchEntryColumns = [
   "postmatchDriverSkill",
   "postmatchPlayedDefense",
   "postmatchUnderHeavyDefense",
-] as const;
-export type TeamMatchEntryColumn = (typeof TeamMatchEntryColumns)[number];
+] as TeamMatchEntryColumn[];
 export const TeamMatchEntryInit: TeamMatchEntry = {
   eventKey: "",
   matchKey: "qm1",
@@ -122,38 +139,22 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   postmatchUnderHeavyDefense: false,
 };
 
-export const HumanPlayerEntrySchema = z.object({
-  eventKey: z.string(),
-  matchKey: z.string(),
-  teamNumber: z.number().int().nonnegative(),
-  alliance: z.union([z.literal("Red"), z.literal("Blue")]),
+export const HumanPlayerEntrySchema = CommonEntrySchema.omit({
+  robotNumber: true,
+}).extend({
   robotNumber: z.literal(4),
-  deviceTeamNumber: z.number().int().nonnegative(),
-  deviceId: z.string(),
-  scoutTeamNumber: z.number().int().nonnegative(),
-  scoutName: z.string(),
-  flagged: z.boolean(),
 
   amplifications: z.number().int().nonnegative(),
   spotlights: z.number().int().nonnegative(),
 });
 export type HumanPlayerEntry = z.infer<typeof HumanPlayerEntrySchema>;
-export const HumanPlayerEntryColumns = [
-  "eventKey",
-  "matchKey",
-  "teamNumber",
-  "alliance",
-  "robotNumber",
-  "deviceTeamNumber",
-  "deviceId",
-  "scoutTeamNumber",
-  "scoutName",
-  "flagged",
+export type HumanPlayerEntryColumn = keyof HumanPlayerEntry;
+export const HumanPlayerEntryColumns: HumanPlayerEntryColumn[] = [
+  ...CommonEntryColumns,
 
   "amplifications",
   "spotlights",
-] as const;
-export type HumanPlayerEntryColumn = (typeof HumanPlayerEntryColumns)[number];
+] as HumanPlayerEntryColumn[];
 export const HumanPlayerEntryInit: HumanPlayerEntry = {
   eventKey: "",
   matchKey: "qm1",
