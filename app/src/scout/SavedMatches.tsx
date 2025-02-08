@@ -11,7 +11,15 @@ import {
   TeamMatchEntryInit,
   TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Close, Star } from "@mui/icons-material";
+import {
+  Close,
+  ContentCopy,
+  Download,
+  QrCode,
+  SendToMobile,
+  Star,
+  Upload,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -469,7 +477,8 @@ export default function SavedMatches({
               if (!exception) {
                 markExportedEntries();
               }
-            }}>
+            }}
+            startIcon={<SendToMobile />}>
             Share via Quickshare
           </Button>
           <Snackbar
@@ -512,7 +521,8 @@ export default function SavedMatches({
               if (!exception) {
                 markExportedEntries();
               }
-            }}>
+            }}
+            startIcon={<ContentCopy />}>
             Copy to Clipboard
           </Button>
 
@@ -538,7 +548,8 @@ export default function SavedMatches({
                   )
               );
               setQrIndex(0);
-            }}>
+            }}
+            startIcon={<QrCode />}>
             Share via QR Code
           </Button>
           <Dialog open={qrMatches.length > 0}>
@@ -718,7 +729,8 @@ export default function SavedMatches({
               } catch {
                 exception = true;
               }
-            }}>
+            }}
+            startIcon={<Download />}>
             Download Data Files
           </Button>
 
@@ -763,7 +775,8 @@ export default function SavedMatches({
                     )
                   ) as (TeamMatchEntry | HumanPlayerEntry)[]
               );
-            }}>
+            }}
+            startIcon={<Upload />}>
             Direct Upload
           </Button>
           <Snackbar

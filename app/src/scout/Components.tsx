@@ -11,6 +11,12 @@ export function Counter({
   value, //Value of the input box
   setValue,
 }: CounterProps) {
+  const buttonSx = {
+    padding: 1,
+    width: "min-content",
+    height: 1,
+  };
+
   return (
     <Stack
       direction="row"
@@ -32,7 +38,8 @@ export function Counter({
           // It's just another syntax for defining functions
           onClick={() => {
             setValue(value - 1);
-          }}>
+          }}
+          sx={buttonSx}>
           <Remove />
         </Button>
         <TextField
@@ -47,12 +54,20 @@ export function Counter({
           sx={{
             width: "5em",
           }}
+          slotProps={{
+            htmlInput: {
+              sx: {
+                padding: 1,
+              },
+            },
+          }}
         />
         <Button
           variant="contained"
           onClick={() => {
             setValue(value + 1);
-          }}>
+          }}
+          sx={buttonSx}>
           <Add />
         </Button>
       </Stack>

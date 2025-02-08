@@ -5,13 +5,21 @@ import {
   TeamMatchEntry,
   TeamMatchEntryColumn,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { FileUpload } from "@mui/icons-material";
+import {
+  CameraAlt,
+  Close,
+  ContentPaste,
+  FileUpload,
+  QrCodeScanner,
+} from "@mui/icons-material";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  Snackbar,
   Stack,
   styled,
   TextField,
@@ -34,7 +42,17 @@ const VisuallyHiddenInput = styled("input")({
 
 export default function Upload() {
   const navigate = useNavigate();
-  const putEntries = trpc.data.putEntries.useMutation();
+
+  const [status, setStatus] = useState("");
+
+  const putEntries = trpc.data.putEntries.useMutation({
+    onSuccess() {
+      setStatus("Success");
+    },
+    onError(error) {
+      setStatus("Error: " + error.message);
+    },
+  });
 
   const [qrUpload, setQrUpload] = useState(false);
   const [qrData, setQrData] = useState("");
@@ -46,6 +64,27 @@ export default function Upload() {
         width: 1,
         height: 1,
       }}>
+      <Snackbar
+        open={status !== ""}
+        autoHideDuration={3000}
+        onClose={() => {
+          setStatus("");
+        }}
+        message={status}
+        action={
+          <IconButton
+            onClick={() => {
+              setStatus("");
+            }}>
+            <Close
+              sx={{
+                color: "#ffffff",
+              }}
+            />
+          </IconButton>
+        }
+      />
+
       <Button
         component="label"
         startIcon={<FileUpload />}>
@@ -74,14 +113,16 @@ export default function Upload() {
         onClick={async () => {
           const matches = JSON.parse(await navigator.clipboard.readText());
           putEntries.mutate(matches);
-        }}>
+        }}
+        startIcon={<ContentPaste />}>
         Paste from Clipboard
       </Button>
 
       <Button
         onClick={() => {
           setQrUpload(true);
-        }}>
+        }}
+        startIcon={<QrCodeScanner />}>
         Scan QR with Scanner
       </Button>
       <Dialog open={qrUpload}>
@@ -114,6 +155,7 @@ export default function Upload() {
                   });
                   return parsedMatch as TeamMatchEntry | HumanPlayerEntry;
                 });
+              putEntries.mutate(matches);
               setQrData("");
               setQrUpload(false);
             }}>
@@ -125,8 +167,16 @@ export default function Upload() {
       <Button
         onClick={() => {
           //TODO
-        }}>
+        }}
+        startIcon={<CameraAlt />}>
         Scan QR with Camera
+      </Button>
+
+      <Button
+        onClick={() => {
+          setStatus("test");
+        }}>
+        Test Button
       </Button>
 
       <Button
