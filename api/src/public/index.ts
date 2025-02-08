@@ -42,8 +42,8 @@ export const authedPublicEndpoint = async (
   let token;
   if (opts.request.headers.has("Authorization")) {
     token = opts.request.headers.get("Authorization")?.split(" ")[1];
-  } else if (opts.params.has("auth")) {
-    token = opts.params.get("auth");
+  } else if (opts.params.has("token")) {
+    token = opts.params.get("token");
   }
 
   if (token) {

@@ -29,18 +29,20 @@ export default function Export() {
         <Tabs value={pathend === "" ? "/" : pathend}>
           <Tab
             label="Robot Data"
-            value="robot"
+            value="robots"
             component={Link}
             to={
-              resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/robot"
+              resolvedPath.pathname.split("/").slice(0, -1).join("/") +
+              "/robots"
             }
           />
           <Tab
             label="Human Data"
-            value="human"
+            value="humans"
             component={Link}
             to={
-              resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/human"
+              resolvedPath.pathname.split("/").slice(0, -1).join("/") +
+              "/humans"
             }
           />
           <Tab
@@ -58,7 +60,7 @@ export default function Export() {
         }}>
         <Routes>
           <Route
-            path="robot"
+            path="robots"
             element={
               <ExportLayout
                 showPublicApiToken={showPublicApiToken}
@@ -70,12 +72,12 @@ export default function Export() {
                 publicApiToken={publicApiToken.data}
                 robotColumnsInit={TeamMatchEntryColumns}
                 humanColumnsInit={[]}
-                linkBase="/public/robot/"
+                linkBase="/public/robots/"
               />
             }
           />
           <Route
-            path="human"
+            path="humans"
             element={
               <ExportLayout
                 showPublicApiToken={showPublicApiToken}
@@ -87,7 +89,7 @@ export default function Export() {
                 publicApiToken={publicApiToken.data}
                 robotColumnsInit={[]}
                 humanColumnsInit={HumanPlayerEntryColumns}
-                linkBase="/public/human/"
+                linkBase="/public/humans/"
               />
             }
           />

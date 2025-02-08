@@ -1,5 +1,9 @@
 import { D1Database, D1Result } from "@cloudflare/workers-types";
-import { HumanPlayerEntry, HumanPlayerEntryColumns } from "../utils/dbtypes.ts";
+import {
+  HumanPlayerEntry,
+  HumanPlayerEntryColumn,
+  HumanPlayerEntryColumns,
+} from "../utils/dbtypes.ts";
 import { publicOpts } from "./context.ts";
 
 export const humans = async (opts: publicOpts): Promise<Response> => {
@@ -69,8 +73,32 @@ export const humans = async (opts: publicOpts): Promise<Response> => {
         });
       }
       case "csv": {
-        //TODO: make csv response
-        return new Response("CSV");
+        return new Response(
+          columns
+            .map((column) =>
+              column.includes(" AS ") ? column.split(" AS ")[1] : column
+            )
+            .join(",") +
+            "\n" +
+            results.results
+              .map((row) =>
+                columns
+                  .map((column) =>
+                    column.includes(" AS ") ?
+                      row[column.split(" AS ")[0] as HumanPlayerEntryColumn]
+                    : row[column as HumanPlayerEntryColumn]
+                  )
+                  .join(",")
+              )
+              .join("\n"),
+          {
+            status: 200,
+            statusText: "OK",
+            headers: {
+              "Content-Type": "text/csv",
+            },
+          }
+        );
       }
       case "xlsx": {
         //TODO: make xlsx response

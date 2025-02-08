@@ -17,7 +17,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -61,16 +61,28 @@ export default function ExportLayout({
   const [humanColumns, setHumanColumns] = useState<boolean[]>(
     new Array(humanColumnsInit.length).fill(true)
   );
+  useEffect(() => {
+    setRobotColumns(new Array(robotColumnsInit.length).fill(true));
+    setHumanColumns(new Array(humanColumnsInit.length).fill(true));
+  }, [robotColumnsInit, humanColumnsInit]);
 
   const [fileType, setFileType] = useState<"json" | "csv" | "xlsx">("json");
 
-  const apiLink =
-    import.meta.env.VITE_SERVER_URL +
-    linkBase +
-    fileType +
-    "?include=" +
-    robotColumns.map((value) => (value ? 1 : 0)).join("") +
-    (linkIncludesToken ? "&token=" + publicApiToken : "");
+  const getApiLink = () => {
+    return (
+      import.meta.env.VITE_SERVER_URL +
+      linkBase +
+      fileType +
+      "?include=" +
+      (robotColumnsInit.length > 0 ?
+        robotColumns.map((value) => (value ? 1 : 0)).join("")
+      : "") +
+      (humanColumnsInit.length > 0 ?
+        humanColumns.map((value) => (value ? 1 : 0)).join("")
+      : "") +
+      (linkIncludesToken ? "&token=" + publicApiToken : "")
+    );
+  };
 
   return (
     <Stack
@@ -256,14 +268,14 @@ export default function ExportLayout({
           label="Include token in link"
         />
         <TextField
-          value={apiLink}
+          value={getApiLink()}
           slotProps={{
             input: {
               endAdornment: (
                 <IconButton
                   onClick={() => {
                     if (publicApiToken) {
-                      navigator.clipboard.writeText(apiLink);
+                      navigator.clipboard.writeText(getApiLink());
                     }
                   }}>
                   <ContentCopy />
@@ -319,7 +331,7 @@ export default function ExportLayout({
           variant="outlined"
           onClick={async () => {
             const res = await (
-              await fetch(apiLink, {
+              await fetch(getApiLink(), {
                 headers: {
                   Authorization: "Bearer " + publicApiToken,
                 },
@@ -364,7 +376,7 @@ export default function ExportLayout({
           variant="outlined"
           onClick={async () => {
             const res = await (
-              await fetch(apiLink, {
+              await fetch(getApiLink(), {
                 headers: {
                   Authorization: "Bearer " + publicApiToken,
                 },
