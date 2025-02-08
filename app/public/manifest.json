@@ -6,6 +6,7 @@
   "start_url": "/",
   "background_color": "#000f5d",
   "theme_color": "#000f5d",
+  "display": "fullscreen",
   "icons": [
     {
       "src": "/pwa-192x192.png",
