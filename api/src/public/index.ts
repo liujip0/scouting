@@ -5,7 +5,6 @@ import { publicOpts } from "./context.ts";
 import { humans } from "./humans.ts";
 import { robots } from "./robots.ts";
 
-//TODO: update to account for HumanPlayerEntries
 export const publicRouter = async (opts: publicOpts): Promise<Response> => {
   switch (opts.path[0]) {
     case "robots": {

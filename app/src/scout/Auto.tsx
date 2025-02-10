@@ -58,6 +58,7 @@ export default function Auto({ setPage, match, setMatch }: AutoProps) {
           height: 1,
         }}>
         {(
+          //TODO: make this happen one layer up, so we can have a diff # of pages for human and robot
           match.robotNumber === 4 // Scout is scouting human players? Human player robotNumber=4, robot robotNumber=1 or 2 or 3
         ) ?
           //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator
@@ -84,24 +85,24 @@ export default function Auto({ setPage, match, setMatch }: AutoProps) {
                 //LabeledNumberInput function definition is in Components.tsx
               }
               <Counter
-                label="Speaker"
-                value={match.autoSpeaker}
+                label="Algae in Processor"
+                value={match.autoProcessor}
                 //   This (value) => {} is the same as function(value) {}
                 setValue={(value) => {
                   //Set the variable match which has all the data for this match
                   setMatch({
                     ...match, //Include the rest of match that we didn't change
-                    autoSpeaker: value, //Change the autoSpeaker value
+                    autoProcessor: value, //Change the autoSpeaker value
                   });
                 }}
               />
               <Counter
-                label="Amp"
-                value={match.autoAmp}
+                label="Algae in Net"
+                value={match.autoNet}
                 setValue={(value) => {
                   setMatch({
                     ...match,
-                    autoAmp: value,
+                    autoNet: value,
                   });
                 }}
               />

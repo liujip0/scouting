@@ -17,7 +17,7 @@ export const CommonEntrySchema = z.object({
   deviceId: z.string(),
   scoutTeamNumber: z.number().int().nonnegative(),
   scoutName: z.string(),
-  flagged: z.boolean(),
+  flag: z.string(),
 });
 export type CommonEntry = z.infer<typeof CommonEntrySchema>;
 export type CommonEntryColumn = keyof CommonEntry;
@@ -31,7 +31,7 @@ export const CommonEntryColumns: CommonEntryColumn[] = [
   "deviceId",
   "scoutTeamNumber",
   "scoutName",
-  "flagged",
+  "flag",
 ] as CommonEntryColumn[];
 
 export const TeamMatchEntrySchema = CommonEntrySchema.omit({
@@ -39,66 +39,66 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
 }).extend({
   robotNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
 
-  autoNote1: z.boolean(),
-  autoNote2: z.boolean(),
-  autoNote3: z.boolean(),
-  autoNote4: z.boolean(),
-  autoNote5: z.boolean(),
-  autoNote6: z.boolean(),
-  autoNote7: z.boolean(),
-  autoNote8: z.boolean(),
-  autoLeftStartingZone: z.boolean(),
-  autoSpeaker: z.number().int().nonnegative(),
-  autoAmp: z.number().int().nonnegative(),
+  noShow: z.boolean(),
+  //TODO: Starting Location
+  died: z.boolean(),
+  playedDefense: z.boolean(),
+  goodAtCoral: z.boolean(),
+  goodAtAlgae: z.boolean(),
+  goodAtClimb: z.boolean(),
+  goodAtDefense: z.boolean(),
+  goodAtWorkingWithAlliance: z.boolean(),
+  //TODO: Outstanding Tasks
+  comments: z.string(),
 
-  teleopSpeaker: z.number().int().nonnegative(),
-  teleopAmp: z.number().int().nonnegative(),
-  teleopTrap: z.number().int().nonnegative(),
-  teleopPassed: z.number().int().nonnegative(),
-  teleopStolen: z.number().int().nonnegative(),
-  teleopChuteIntake: z.boolean(),
-  teleopGroundIntake: z.boolean(),
-  teleopEndgame: z.union([
-    z.literal("parked"),
-    z.literal("climbed"),
-    z.literal("none"),
-  ]),
-  teleopSpotlight: z.number().int().nonnegative(),
+  autoCrossedRSL: z.boolean(),
+  //TODO: Exact Coral Placement
+  autoProcessor: z.number().int().nonnegative(),
+  autoNet: z.number().int().nonnegative(),
+  autoRemovedAlgaeFromReef: z.boolean(),
 
-  postmatchDriverSkill: z.number().int().nonnegative(),
-  postmatchPlayedDefense: z.boolean(),
-  postmatchUnderHeavyDefense: z.boolean(),
+  teleopL1: z.number().int().nonnegative(),
+  teleopL2: z.number().int().nonnegative(),
+  teleopL3: z.number().int().nonnegative(),
+  teleopL4: z.number().int().nonnegative(),
+  teleopProcessor: z.number().int().nonnegative(),
+  teleopNet: z.number().int().nonnegative(),
+  teleopRemovedAlgaeFromReef: z.boolean(),
+  teleopAttemptedClimb: z.boolean(),
+  teleopSuccessfulClimb: z.boolean(),
 });
 export type TeamMatchEntry = z.infer<typeof TeamMatchEntrySchema>;
 export type TeamMatchEntryColumn = keyof TeamMatchEntry;
 export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   ...CommonEntryColumns,
 
-  "autoNote1",
-  "autoNote2",
-  "autoNote3",
-  "autoNote4",
-  "autoNote5",
-  "autoNote6",
-  "autoNote7",
-  "autoNote8",
-  "autoLeftStartingZone",
-  "autoSpeaker",
-  "autoAmp",
+  "noShow",
+  //TODO: Starting Location
+  "died",
+  "playedDefense",
+  "goodAtCoral",
+  "goodAtAlgae",
+  "goodAtClimb",
+  "goodAtDefense",
+  "goodAtWorkingWithAlliance",
+  //TODO: Outstanding Tasks
+  "comments",
 
-  "teleopSpeaker",
-  "teleopAmp",
-  "teleopTrap",
-  "teleopPassed",
-  "teleopStolen",
-  "teleopChuteIntake",
-  "teleopGroundIntake",
-  "teleopEndgame",
-  "teleopSpotlight",
+  "autoCrossedRSL",
+  //TODO: Exact Coral Placement
+  "autoProcessor",
+  "autoNet",
+  "autoRemovedAlgaeFromReef",
 
-  "postmatchDriverSkill",
-  "postmatchPlayedDefense",
-  "postmatchUnderHeavyDefense",
+  "teleopL1",
+  "teleopL2",
+  "teleopL3",
+  "teleopL4",
+  "teleopProcessor",
+  "teleopNet",
+  "teleopRemovedAlgaeFromReef",
+  "teleopAttemptedClimb",
+  "teleopSuccessfulClimb",
 ] as TeamMatchEntryColumn[];
 export const TeamMatchEntryInit: TeamMatchEntry = {
   eventKey: "",
@@ -110,33 +110,35 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   deviceId: "",
   scoutTeamNumber: 0,
   scoutName: "",
-  flagged: false,
+  flag: "",
 
-  autoNote1: false,
-  autoNote2: false,
-  autoNote3: false,
-  autoNote4: false,
-  autoNote5: false,
-  autoNote6: false,
-  autoNote7: false,
-  autoNote8: false,
-  autoLeftStartingZone: false,
-  autoSpeaker: 0,
-  autoAmp: 0,
+  noShow: false,
+  //Starting Location
+  died: false,
+  playedDefense: false,
+  goodAtCoral: false,
+  goodAtAlgae: false,
+  goodAtClimb: false,
+  goodAtDefense: false,
+  goodAtWorkingWithAlliance: false,
+  //Outstanding Tasks
+  comments: "",
 
-  teleopSpeaker: 0,
-  teleopAmp: 0,
-  teleopTrap: 0,
-  teleopPassed: 0,
-  teleopStolen: 0,
-  teleopChuteIntake: false,
-  teleopGroundIntake: false,
-  teleopEndgame: "none",
-  teleopSpotlight: 0,
+  autoCrossedRSL: false,
+  //Exact Coral Placement
+  autoProcessor: 0,
+  autoNet: 0,
+  autoRemovedAlgaeFromReef: false,
 
-  postmatchDriverSkill: 0,
-  postmatchPlayedDefense: false,
-  postmatchUnderHeavyDefense: false,
+  teleopL1: 0,
+  teleopL2: 0,
+  teleopL3: 0,
+  teleopL4: 0,
+  teleopProcessor: 0,
+  teleopNet: 0,
+  teleopRemovedAlgaeFromReef: false,
+  teleopAttemptedClimb: false,
+  teleopSuccessfulClimb: false,
 };
 
 export const HumanPlayerEntrySchema = CommonEntrySchema.omit({
@@ -144,16 +146,18 @@ export const HumanPlayerEntrySchema = CommonEntrySchema.omit({
 }).extend({
   robotNumber: z.literal(4),
 
-  amplifications: z.number().int().nonnegative(),
-  spotlights: z.number().int().nonnegative(),
+  humanAttemptedNet: z.number().int().nonnegative(),
+  humanSuccessfulNet: z.number().int().nonnegative(),
+  comments: z.string(),
 });
 export type HumanPlayerEntry = z.infer<typeof HumanPlayerEntrySchema>;
 export type HumanPlayerEntryColumn = keyof HumanPlayerEntry;
 export const HumanPlayerEntryColumns: HumanPlayerEntryColumn[] = [
   ...CommonEntryColumns,
 
-  "amplifications",
-  "spotlights",
+  "humanAttemptedNet",
+  "humanSuccessfulNet",
+  "comments",
 ] as HumanPlayerEntryColumn[];
 export const HumanPlayerEntryInit: HumanPlayerEntry = {
   eventKey: "",
@@ -165,10 +169,11 @@ export const HumanPlayerEntryInit: HumanPlayerEntry = {
   deviceId: "",
   scoutTeamNumber: 0,
   scoutName: "",
-  flagged: false,
+  flag: "",
 
-  amplifications: 0,
-  spotlights: 0,
+  humanAttemptedNet: 0,
+  humanSuccessfulNet: 0,
+  comments: "",
 };
 
 export const UserPermLevel = [

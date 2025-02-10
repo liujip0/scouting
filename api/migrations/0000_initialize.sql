@@ -11,33 +11,35 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   deviceId text,
   scoutTeamNumber integer,
   scoutName text,
-  flagged boolean,
+  flag text,
 
-  autoNote1 boolean,
-  autoNote2 boolean,
-  autoNote3 boolean,
-  autoNote4 boolean,
-  autoNote5 boolean,
-  autoNote6 boolean,
-  autoNote7 boolean,
-  autoNote8 boolean,
-  autoLeftStartingZone boolean,
-  autoSpeaker integer,
-  autoAmp integer,
+  noShow boolean,
+  --TODO: Starting Location
+  died boolean,
+  playedDefense boolean,
+  goodAtCoral boolean,
+  goodAtAlgae boolean,
+  goodAtClimb boolean,
+  goodAtDefense boolean,
+  goodAtWorkingWithAlliance boolean,
+  --TODO: Outstanding Tasks
+  comments text,
 
-  teleopSpeaker integer,
-  teleopAmp integer,
-  teleopTrap integer,
-  teleopPassed integer,
-  teleopStolen integer,
-  teleopChuteIntake boolean,
-  teleopGroundIntake boolean,
-  teleopEndgame text CHECK(teleopEndgame IN ('parked', 'climbed', 'none')),
-  teleopSpotlight integer,
+  autoCrossedRSL boolean,
+  --TODO: Exact Coral Placement
+  autoProcessor integer,
+  autoNet integer,
+  autoRemovedAlgaeFromReef boolean,
 
-  postmatchDriverSkill integer,
-  postmatchPlayedDefense boolean,
-  postmatchUnderHeavyDefense boolean,
+  teleopL1 integer,
+  teleopL2 integer,
+  teleopL3 integer,
+  teleopL4 integer,
+  teleopProcessor integer,
+  teleopNet integer,
+  teleopRemovedAlgaeFromReef boolean,
+  teleopAttemptedClimb boolean,
+  teleopSuccessfulClimb boolean,
 
   PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
 );
@@ -52,10 +54,11 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   deviceId text,
   scoutTeamNumber integer,
   scoutName text,
-  flagged boolean,
+  flag text,
 
-  amplifications integer,
-  spotlights integer,
+  humanAttemptedNet integer,
+  humanSuccessfulNet integer,
+  comments text,
 
   PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
 );

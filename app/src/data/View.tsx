@@ -136,9 +136,9 @@ export default function View({ logoutFunction }: ViewProps) {
                 <Th
                   key={column}
                   thickRightBorder={
-                    column === "scoutName" ||
-                    column === "autoAmp" ||
-                    column === "teleopSpotlight"
+                    column === "flagged" ||
+                    column === "comments" ||
+                    column === "autoRemovedAlgaeFromReef"
                   }>
                   {column}
                 </Th>
@@ -202,9 +202,9 @@ export default function View({ logoutFunction }: ViewProps) {
                     <Td
                       key={column}
                       thickRightBorder={
-                        column === "scoutName" ||
-                        column === "autoAmp" ||
-                        column === "teleopSpotlight"
+                        column === "flagged" ||
+                        column === "comments" ||
+                        column === "autoRemovedAlgaeFromReef"
                       }>
                       <Typography>
                         {teamMatchEntry[column as TeamMatchEntryColumn]}
