@@ -136,7 +136,7 @@ export default function View({ logoutFunction }: ViewProps) {
                 <Th
                   key={column}
                   thickRightBorder={
-                    column === "flagged" ||
+                    column === "flag" ||
                     column === "comments" ||
                     column === "autoRemovedAlgaeFromReef"
                   }>
@@ -202,7 +202,7 @@ export default function View({ logoutFunction }: ViewProps) {
                     <Td
                       key={column}
                       thickRightBorder={
-                        column === "flagged" ||
+                        column === "flag" ||
                         column === "comments" ||
                         column === "autoRemovedAlgaeFromReef"
                       }>
