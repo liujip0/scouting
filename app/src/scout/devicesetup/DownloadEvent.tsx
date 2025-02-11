@@ -99,6 +99,7 @@ export default function DownloadEvent({
                 }
 
                 if (!error) {
+                  setFrcStatus('Loading...')
                   getFrcEvent.mutate(eventKey);
                 }
               }}>
@@ -116,6 +117,7 @@ export default function DownloadEvent({
                 }
 
                 if (!error) {
+                  setIsaStatus('Loading...')
                   getEvent.mutate(eventKey);
                 }
               }}>

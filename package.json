@@ -11,6 +11,6 @@
   "packageManager": "pnpm@9.13.1+sha256.dd98691b127b5d2c4d0605b594e98ec0bcbe5fba86358184de706c3312a4e2ee",
   "devDependencies": {
     "concurrently": "^9.1.2",
-    "prettier": "^3.4.2"
+    "prettier": "^3.5.0"
   }
 }

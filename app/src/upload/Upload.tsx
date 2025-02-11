@@ -21,24 +21,12 @@ import {
   IconButton,
   Snackbar,
   Stack,
-  styled,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { trpc } from "../utils/Trpc.tsx";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import { VisuallyHiddenInput } from '../components/VisuallyHiddenInput.tsx';
 
 export default function Upload() {
   const navigate = useNavigate();

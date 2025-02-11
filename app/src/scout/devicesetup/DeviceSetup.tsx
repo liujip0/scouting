@@ -7,7 +7,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { CloudUpload } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -15,15 +15,20 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  IconButton,
   MenuItem,
   Radio,
   RadioGroup,
+  Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
+import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
 import { trpc } from "../../utils/Trpc.tsx";
+import { omit } from "../../utils/Utils.ts";
 import { DeviceSetupObj, ScoutLayout, ScoutPage } from "../Scout.tsx";
 import CreateEvent from "./CreateEvent.tsx";
 import DownloadEvent from "./DownloadEvent.tsx";
@@ -62,6 +67,8 @@ export default function DeviceSetup({
   const putEvents = trpc.events.putEvents.useMutation();
 
   const [downloadEvent, setDownloadEvent] = useState(false);
+
+  const [status, setStatus] = useState("");
 
   return (
     <ScoutLayout
@@ -182,6 +189,26 @@ export default function DeviceSetup({
           height: 1,
           width: 1,
         }}>
+        <Snackbar
+          open={status !== ""}
+          autoHideDuration={3000}
+          onClose={() => {
+            setStatus("");
+          }}
+          message={status}
+          action={
+            <IconButton
+              onClick={() => {
+                setStatus("");
+              }}>
+              <Close
+                sx={{
+                  color: "#ffffff",
+                }}
+              />
+            </IconButton>
+          }
+        />
         <Stack
           sx={{
             flex: 1,
@@ -263,6 +290,80 @@ export default function DeviceSetup({
           gap={2}>
           <Stack
             direction="row"
+            gap={2}>
+            <Button
+              component="label"
+              variant="outlined"
+              sx={{
+                textAlign: "center",
+              }}>
+              Upload Schedule
+              <VisuallyHiddenInput
+                type="file"
+                accept="text/csv"
+                onChange={async (event) => {
+                  try {
+                    if (event.currentTarget.files) {
+                      for (const file of event.currentTarget.files) {
+                        const schedule = (await file.text())
+                          .split("\n")
+                          .map((x) => x.split(","));
+                        console.log(schedule);
+ 
+                        if (
+                          schedule.length < 2 ||
+                          schedule.some((x, index) =>
+                            index === 0 ? x.length < 2 : x.length < 7
+                          )
+                        ) {
+                          setStatus("Error: Invalid schedule");
+                          return;
+                        }
+
+                        const newEvent: DBEvent & { matches: Match[] } = {
+                          eventKey: schedule[0][0],
+                          eventName: schedule[0][1] ?? schedule[0][0],
+                          matches: schedule.slice(1).map((x) => ({
+                            eventKey: schedule[0][0],
+                            eventName: schedule[0][1] ?? schedule[0][0],
+                            matchKey: x[0],
+                            red1: parseInt(x[1]),
+                            red2: parseInt(x[2]),
+                            red3: parseInt(x[3]),
+                            blue1: parseInt(x[4]),
+                            blue2: parseInt(x[5]),
+                            blue3: parseInt(x[6]),
+                          })),
+                        };
+
+                        setEvents([
+                          ...events.filter(
+                            (event) => event.eventKey !== newEvent.eventKey
+                          ),
+                          newEvent,
+                        ]);
+                        putDBEvent(omit("matches", newEvent) as DBEvent);
+                        putDBMatches(newEvent.matches);
+                      }
+                    }
+                  } catch (error) {
+                    console.log(error);
+                    setStatus("Error (see console)");
+                  }
+                }}
+                multiple
+              />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setDownloadEvent(true);
+              }}>
+              Download Schedule
+            </Button>
+          </Stack>
+          {/* <Stack
+            direction="row"
             gap={2}
             sx={{
               width: 1,
@@ -292,7 +393,7 @@ export default function DeviceSetup({
               }}>
               <CloudUpload />
             </Button>
-          </Stack>
+          </Stack> */}
           <Box
             sx={{
               flex: 1,
