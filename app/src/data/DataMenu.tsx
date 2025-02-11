@@ -15,13 +15,16 @@ export default function DataMenu({ permLevel }: DataMenuProps) {
         justifyContent: "center",
       }}>
       <Stack gap={2}>
-        {["demo", "team", "datamanage", "admin"].includes(permLevel) && (
-          <LinkButton
-            to="/data/view"
-            color="primary">
-            View Data
-          </LinkButton>
-        )}
+        {
+          //TODO: uncomment when data viewer actually works well
+          // ["demo", "team", "datamanage", "admin"].includes(permLevel) && (
+          //   <LinkButton
+          //     to="/data/view"
+          //     color="primary">
+          //     View Data
+          //   </LinkButton>
+          // )
+        }
         {["team", "datamanage", "admin"].includes(permLevel) && (
           <LinkButton
             to="/data/export/"
