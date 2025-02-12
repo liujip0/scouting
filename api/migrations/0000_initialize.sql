@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   teleopSuccessfulShallow boolean,
   teleopSuccessfulDeep boolean,
 
-  PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
+  PRIMARY KEY (eventKey, matchKey, teamNumber, deviceTeamNumber, deviceId)
 );
 
 CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   humanSuccessfulNet integer,
   comments text,
 
-  PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
+  PRIMARY KEY (eventKey, matchKey, teamNumber, deviceTeamNumber, deviceId)
 );
 
 

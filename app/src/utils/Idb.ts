@@ -36,8 +36,7 @@ export const initDB = async (): Promise<boolean> => {
           keyPath: [
             "eventKey",
             "matchKey",
-            "alliance",
-            "robotNumber",
+            "teamNumber",
             "deviceTeamNumber",
             "deviceId",
           ],
@@ -48,8 +47,7 @@ export const initDB = async (): Promise<boolean> => {
           keyPath: [
             "eventKey",
             "matchKey",
-            "alliance",
-            "robotNumber",
+            "teamNumber",
             "deviceTeamNumber",
             "deviceId",
           ],
