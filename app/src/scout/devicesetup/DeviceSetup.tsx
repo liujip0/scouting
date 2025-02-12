@@ -178,7 +178,7 @@ export default function DeviceSetup({
               }
             }}
             variant="contained">
-            Continue
+            Done
           </Button>
         </>
       }>
@@ -306,6 +306,7 @@ export default function DeviceSetup({
                       for (const file of event.currentTarget.files) {
                         const schedule = (await file.text())
                           .split("\n")
+                          .filter((x) => x !== "")
                           .map((x) => x.split(","));
                         console.log(schedule);
 

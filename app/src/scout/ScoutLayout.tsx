@@ -100,7 +100,54 @@ export default function ScoutLayout({
             <Tabs
               value={matchStage}
               onChange={(_event, value) => {
-                setMatchStage(value);
+                if (matchStage === "prematch") {
+                  let error = false;
+
+                  if (
+                    !events
+                      .find((x) => x.eventKey === deviceSetup.currentEvent)
+                      ?.matches.some((y) => y.matchKey === match.matchKey)
+                  ) {
+                    if (
+                      matchNumberError !==
+                      "Invalid match key. Press Next again to ignore."
+                    ) {
+                      error = true;
+                    }
+                    setMatchNumberError(
+                      "Invalid match key. Press Next again to ignore."
+                    );
+                  } else {
+                    setMatchNumberError("");
+                  }
+
+                  if (!match.scoutName) {
+                    error = true;
+                    setScoutNameError("Cannot be empty.");
+                  } else {
+                    setScoutNameError("");
+                  }
+
+                  if (!match.scoutTeamNumber || match.scoutTeamNumber < 0) {
+                    error = true;
+                    setScoutTeamNumberError("Invalid team number.");
+                  } else {
+                    setScoutTeamNumberError("");
+                  }
+
+                  if (!match.teamNumber || match.teamNumber < 0) {
+                    error = true;
+                    setTeamNumberError("Invalid team number.");
+                  } else {
+                    setTeamNumberError("");
+                  }
+
+                  if (!error) {
+                    setMatchStage(value);
+                  }
+                } else {
+                  setMatchStage(value);
+                }
               }}
               variant="scrollable"
               scrollButtons
