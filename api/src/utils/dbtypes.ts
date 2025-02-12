@@ -40,9 +40,9 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
   robotNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
 
   noShow: z.boolean(),
-  startingLocation: z
-    .union([z.literal(""), z.literal("A"), z.literal("B"), z.literal("C")])
-    .nullable(),
+  startingLocationA: z.boolean().nullable(),
+  startingLocationB: z.boolean().nullable(),
+  startingLocationC: z.boolean().nullable(),
   died: z.boolean().nullable(),
   playedDefense: z.boolean().nullable(),
   goodAtCoralL1: z.boolean().nullable(),
@@ -130,7 +130,9 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   ...CommonEntryColumns,
 
   "noShow",
-  "startingLocation",
+  "startingLocationA",
+  "startingLocationB",
+  "startingLocationC",
   "died",
   "playedDefense",
   "goodAtCoralL1",
@@ -225,7 +227,9 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   flag: "",
 
   noShow: false,
-  startingLocation: "",
+  startingLocationA: false,
+  startingLocationB: false,
+  startingLocationC: false,
   died: false,
   playedDefense: false,
   goodAtCoralL1: false,
@@ -320,7 +324,9 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   flag: "",
 
   noShow: true,
-  startingLocation: null,
+  startingLocationA: null,
+  startingLocationB: null,
+  startingLocationC: null,
   died: null,
   playedDefense: null,
   goodAtCoralL1: null,

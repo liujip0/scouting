@@ -1,16 +1,45 @@
 import { Add, Remove } from "@mui/icons-material";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 type CounterProps = {
+  value: number;
+  setValue: (value: number) => void;
+};
+export function Counter({ value, setValue }: CounterProps) {
+  //TODO
+  return (
+    <Stack direction="row">
+      <IconButton>
+        <Add />
+        <TextField
+          value={value}
+          onChange={(event) => {
+            setValue(parseInt(event.currentTarget.value));
+          }}
+        />
+        <Remove />
+      </IconButton>
+    </Stack>
+  );
+}
+
+//TODO: remove soon
+type OldCounterProps = {
   label: string;
   value: number;
   setValue: (value: number) => void;
 };
-export function Counter({
+export function OldCounter({
   label,
   value, //Value of the input box
   setValue,
-}: CounterProps) {
+}: OldCounterProps) {
   const buttonSx = {
     padding: 1,
     width: "min-content",

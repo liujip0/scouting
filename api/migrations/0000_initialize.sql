@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   flag text NOT NULL,
 
   noShow boolean NOT NULL,
-  startingLocation text CHECK(startingLocation IN ('A', 'B', 'C')),
+  startingLocationA boolean,
+  startingLocationB boolean,
+  startingLocationC boolean,
   died boolean,
   playedDefense boolean,
   goodAtCoralL1 boolean,

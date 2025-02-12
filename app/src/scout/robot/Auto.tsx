@@ -3,7 +3,7 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Divider, Stack } from "@mui/material";
-import { Counter } from "../Components.tsx";
+import { OldCounter } from "../Components.tsx";
 
 type AutoProps = {
   match: TeamMatchEntry | HumanPlayerEntry;
@@ -52,7 +52,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
               {
                 //LabeledNumberInput function definition is in Components.tsx
               }
-              <Counter
+              <OldCounter
                 label="Algae in Processor"
                 value={match.autoProcessor!}
                 //   This (value) => {} is the same as function(value) {}
@@ -64,7 +64,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   });
                 }}
               />
-              <Counter
+              <OldCounter
                 label="Algae in Net"
                 value={match.autoNet!}
                 setValue={(value) => {
