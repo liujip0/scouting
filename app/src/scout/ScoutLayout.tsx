@@ -81,20 +81,23 @@ export default function ScoutLayout({
   });
 
   const [matchNumberError, setMatchNumberError] = useState("");
+  const [scoutNameError, setScoutNameError] = useState("");
+  const [scoutTeamNumberError, setScoutTeamNumberError] = useState("");
+  const [teamNumberError, setTeamNumberError] = useState("");
 
   return (
     <ScoutPageContainer
       title={
-        <Box
-          sx={{
-            flex: 1,
-            borderBottom: 1,
-            borderColor: "divider",
-            overflowX: "scroll",
-          }}>
-          {match.robotNumber === 4 ?
-            "Human Player Data"
-          : <Tabs
+        match.robotNumber === 4 ?
+          "Human Player Data"
+        : <Box
+            sx={{
+              flex: 1,
+              borderBottom: 1,
+              borderColor: "divider",
+              overflowX: "scroll",
+            }}>
+            <Tabs
               value={matchStage}
               onChange={(_event, value) => {
                 setMatchStage(value);
@@ -119,8 +122,7 @@ export default function ScoutLayout({
                 value="postmatch"
               />
             </Tabs>
-          }
-        </Box>
+          </Box>
       }
       nowScouting={{
         teamNumber: match.teamNumber,
@@ -152,59 +154,113 @@ export default function ScoutLayout({
           <Button
             variant="contained"
             onClick={() => {
-              if (matchStage === "postmatch") {
-                if ((match as TeamMatchEntry).noShow) {
-                  putEntries.mutate([
-                    {
-                      ...TeamMatchEntryNoShowInit,
-                      eventKey: match.eventKey,
-                      matchKey: match.matchKey,
-                      teamNumber: match.teamNumber,
-                      alliance: match.alliance,
-                      robotNumber: match.robotNumber as 1 | 2 | 3,
-                      deviceTeamNumber: match.deviceTeamNumber,
-                      deviceId: match.deviceId,
-                      scoutTeamNumber: match.scoutTeamNumber,
-                      scoutName: match.scoutName,
-                      flag: match.flag,
-                    },
-                  ]);
-                } else {
-                  putEntries.mutate([match]);
-                }
-              } else if (matchStage === "human") {
-                putEntries.mutate([match]);
-              } else if (matchStage === "prematch") {
-                let error = false;
+              switch (matchStage) {
+                case "prematch": {
+                  let error = false;
 
-                if (
-                  !events
-                    .find((x) => x.eventKey === deviceSetup.currentEvent)
-                    ?.matches.some((y) => y.matchKey === match.matchKey)
-                ) {
                   if (
-                    matchNumberError !==
-                    "Invalid match key. Press Continue again to ignore."
+                    !events
+                      .find((x) => x.eventKey === deviceSetup.currentEvent)
+                      ?.matches.some((y) => y.matchKey === match.matchKey)
                   ) {
-                    error = true;
+                    if (
+                      matchNumberError !==
+                      "Invalid match key. Press Continue again to ignore."
+                    ) {
+                      error = true;
+                    }
+                    setMatchNumberError(
+                      "Invalid match key. Press Continue again to ignore."
+                    );
+                  } else {
+                    setMatchNumberError("");
                   }
-                  setMatchNumberError(
-                    "Invalid match key. Press Continue again to ignore."
-                  );
-                } else {
-                  setMatchNumberError("");
-                }
 
-                if (!error) {
-                  setMatchStage("auto");
+                  if (!match.scoutName) {
+                    error = true;
+                    setScoutNameError("Cannot be empty.");
+                  } else {
+                    setScoutNameError("");
+                  }
+
+                  if (!match.scoutTeamNumber || match.scoutTeamNumber < 0) {
+                    error = true;
+                    setScoutTeamNumberError("Invalid team number.");
+                  } else {
+                    setScoutTeamNumberError("");
+                  }
+
+                  if (!match.teamNumber || match.teamNumber < 0) {
+                    error = true;
+                    setTeamNumberError("Invalid team number.");
+                  } else {
+                    setTeamNumberError("");
+                  }
+
+                  if (!error) {
+                    setMatchStage("auto");
+                  }
+                  break;
                 }
-              } else {
-                setMatchStage(
-                  {
-                    auto: "teleop",
-                    teleop: "postmatch",
-                  }[matchStage] as MatchStage
-                );
+                case "auto": {
+                  setMatchStage("teleop");
+                  break;
+                }
+                case "teleop": {
+                  setMatchStage("postmatch");
+                  break;
+                }
+                case "postmatch": {
+                  if ((match as TeamMatchEntry).noShow) {
+                    putEntries.mutate([
+                      {
+                        ...TeamMatchEntryNoShowInit,
+                        eventKey: match.eventKey,
+                        matchKey: match.matchKey,
+                        teamNumber: match.teamNumber,
+                        alliance: match.alliance,
+                        robotNumber: match.robotNumber as 1 | 2 | 3,
+                        deviceTeamNumber: match.deviceTeamNumber,
+                        deviceId: match.deviceId,
+                        scoutTeamNumber: match.scoutTeamNumber,
+                        scoutName: match.scoutName,
+                        flag: match.flag,
+                      },
+                    ]);
+                  } else {
+                    putEntries.mutate([match]);
+                  }
+                  break;
+                }
+                case "human": {
+                  let error = false;
+
+                  if (!match.scoutName) {
+                    error = true;
+                    setScoutNameError("Cannot be empty.");
+                  } else {
+                    setScoutNameError("");
+                  }
+
+                  if (!match.scoutTeamNumber || match.scoutTeamNumber < 0) {
+                    error = true;
+                    setScoutTeamNumberError("Invalid team number.");
+                  } else {
+                    setScoutTeamNumberError("");
+                  }
+
+                  if (!match.teamNumber || match.teamNumber < 0) {
+                    error = true;
+                    setTeamNumberError("Invalid team number.");
+                  } else {
+                    setTeamNumberError("");
+                  }
+
+                  if (!error) {
+                    putEntries.mutate([match]);
+                  }
+                  break;
+                }
               }
             }}>
             {matchStage === "postmatch" || matchStage === "human" ?
@@ -232,6 +288,9 @@ export default function ScoutLayout({
                   events={events}
                   deviceSetup={deviceSetup}
                   matchNumberError={matchNumberError}
+                  scoutNameError={scoutNameError}
+                  scoutTeamNumberError={scoutTeamNumberError}
+                  teamNumberError={teamNumberError}
                 />
               ),
               auto: (
@@ -256,6 +315,9 @@ export default function ScoutLayout({
                 <Human
                   match={match}
                   setMatch={setMatch}
+                  scoutNameError={scoutNameError}
+                  scoutTeamNumberError={scoutTeamNumberError}
+                  teamNumberError={teamNumberError}
                 />
               ),
             }[matchStage]

@@ -14,6 +14,9 @@ type PrematchProps = {
   events: (DBEvent & { matches: Match[] })[];
   deviceSetup: DeviceSetupObj;
   matchNumberError: string;
+  scoutNameError: string;
+  scoutTeamNumberError: string;
+  teamNumberError: string;
 };
 export default function Prematch({
   match,
@@ -21,6 +24,9 @@ export default function Prematch({
   events,
   deviceSetup,
   matchNumberError,
+  scoutNameError,
+  scoutTeamNumberError,
+  teamNumberError,
 }: PrematchProps) {
   return (
     <Stack
@@ -48,6 +54,8 @@ export default function Prematch({
           type="text"
           variant="outlined"
           label="Scout Name & Last Initial"
+          error={scoutNameError !== ""}
+          helperText={scoutNameError}
         />
         <TextField
           value={match.scoutTeamNumber}
@@ -60,6 +68,8 @@ export default function Prematch({
           type="number"
           variant="outlined"
           label="Scout Team Number"
+          error={scoutTeamNumberError !== ""}
+          helperText={scoutTeamNumberError}
         />
         <TextField
           value={match.matchKey}
@@ -203,6 +213,8 @@ export default function Prematch({
               teamNumber: parseInt(event.currentTarget.value),
             });
           }}
+          error={teamNumberError !== ""}
+          helperText={teamNumberError}
         />
       </Stack>
       <Divider

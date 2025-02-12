@@ -54,7 +54,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
               }
               <Counter
                 label="Algae in Processor"
-                value={match.autoProcessor}
+                value={match.autoProcessor!}
                 //   This (value) => {} is the same as function(value) {}
                 setValue={(value) => {
                   //Set the variable match which has all the data for this match
@@ -66,7 +66,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
               />
               <Counter
                 label="Algae in Net"
-                value={match.autoNet}
+                value={match.autoNet!}
                 setValue={(value) => {
                   setMatch({
                     ...match,
