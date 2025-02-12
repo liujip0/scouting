@@ -23,9 +23,11 @@ import {
   Snackbar,
   Stack,
   TextField,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { StyledToggleButton } from "../../components/ToggleButton.tsx";
 import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
 import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
 import { DeviceSetupObj, ScoutPage } from "../Scout.tsx";
@@ -212,6 +214,7 @@ export default function DeviceSetup({
           sx={{
             flex: 1,
             padding: 2,
+            overflowY: "scroll",
           }}
           gap={2}>
           <TextField
@@ -276,6 +279,26 @@ export default function DeviceSetup({
             }
             error={robotNumberError !== ""}
           />
+          <ToggleButtonGroup
+            value={deviceSetup.fieldOrientation}
+            exclusive
+            onChange={(_event, value) => {
+              if (value) {
+                setDeviceSetup({
+                  ...deviceSetup,
+                  fieldOrientation: value,
+                });
+              }
+            }}
+            color="primary"
+            sx={{
+              width: 1,
+            }}>
+            <StyledToggleButton value="barge">Barge Side</StyledToggleButton>
+            <StyledToggleButton value="processor">
+              Processor Side
+            </StyledToggleButton>
+          </ToggleButtonGroup>
         </Stack>
         <Divider
           orientation="vertical"

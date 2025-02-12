@@ -5,8 +5,12 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
-import { Divider, IconButton, Stack, TextField } from "@mui/material";
+import { Box, Divider, IconButton, Stack, TextField } from "@mui/material";
 import { DeviceSetupObj } from "../Scout.tsx";
+import BlueBarge from "../images/BlueBarge.png";
+import BlueProcessor from "../images/BlueProcessor.png";
+import RedBarge from "../images/RedBarge.png";
+import RedProcessor from "../images/RedProcessor.png";
 
 type PrematchProps = {
   match: TeamMatchEntry | HumanPlayerEntry;
@@ -225,10 +229,30 @@ export default function Prematch({
       <Stack
         sx={{
           flex: 1,
-          pl: 4,
-          pr: 4,
+          pl: 2,
+          pr: 2,
         }}
-        gap={2}></Stack>
+        gap={2}>
+        <Box
+          sx={{
+            width: 1,
+          }}>
+          <img
+            src={
+              match.alliance === "Red" ?
+                deviceSetup.fieldOrientation === "barge" ?
+                  RedBarge
+                : RedProcessor
+              : deviceSetup.fieldOrientation === "barge" ?
+                BlueBarge
+              : BlueProcessor
+            }
+            style={{
+              width: "100%",
+            }}
+          />
+        </Box>
+      </Stack>
     </Stack>
   );
 }
