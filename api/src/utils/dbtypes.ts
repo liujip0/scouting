@@ -121,8 +121,11 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
   teleopProcessor: z.number().int().nonnegative(),
   teleopNet: z.number().int().nonnegative(),
   teleopRemovedAlgaeFromReef: z.boolean(),
-  teleopAttemptedClimb: z.boolean(),
-  teleopSuccessfulClimb: z.boolean(),
+  teleopPark: z.boolean(),
+  teleopAttemptedShallow: z.boolean(),
+  teleopAttemptedDeep: z.boolean(),
+  teleopSuccessfulShallow: z.boolean(),
+  teleopSuccessfulDeep: z.boolean(),
 });
 export type TeamMatchEntry = z.infer<typeof TeamMatchEntrySchema>;
 export type TeamMatchEntryColumn = keyof TeamMatchEntry;

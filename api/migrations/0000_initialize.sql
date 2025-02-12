@@ -54,8 +54,11 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   teleopProcessor integer,
   teleopNet integer,
   teleopRemovedAlgaeFromReef boolean,
-  teleopAttemptedClimb boolean,
-  teleopSuccessfulClimb boolean,
+  teleopPark boolean,
+  teleopAttemptedShallow boolean,
+  teleopAttemptedDeep boolean,
+  teleopSuccessfulShallow boolean,
+  teleopSuccessfulDeep boolean,
 
   PRIMARY KEY (eventKey, matchKey, alliance, robotNumber, deviceTeamNumber, deviceId)
 );

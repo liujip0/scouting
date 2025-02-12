@@ -25,7 +25,11 @@ export default function Export() {
         height: 1,
         padding: 2,
       }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+        }}>
         <Tabs value={pathend === "" ? "/" : pathend}>
           <Tab
             label="Robot Data"

@@ -29,7 +29,7 @@ import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
 import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
 import { trpc } from "../../utils/Trpc.tsx";
 import { omit } from "../../utils/Utils.ts";
-import { DeviceSetupObj, ScoutLayout, ScoutPage } from "../Scout.tsx";
+import { DeviceSetupObj, ScoutPage, ScoutPageContainer } from "../Scout.tsx";
 import CreateEvent from "./CreateEvent.tsx";
 import DownloadEvent from "./DownloadEvent.tsx";
 
@@ -71,7 +71,7 @@ export default function DeviceSetup({
   const [status, setStatus] = useState("");
 
   return (
-    <ScoutLayout
+    <ScoutPageContainer
       title="Device Setup"
       navButtons={
         <>
@@ -309,7 +309,7 @@ export default function DeviceSetup({
                           .split("\n")
                           .map((x) => x.split(","));
                         console.log(schedule);
- 
+
                         if (
                           schedule.length < 2 ||
                           schedule.some((x, index) =>
@@ -436,6 +436,6 @@ export default function DeviceSetup({
           />
         </Stack>
       </Stack>
-    </ScoutLayout>
+    </ScoutPageContainer>
   );
 }

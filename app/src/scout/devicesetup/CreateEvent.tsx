@@ -26,6 +26,8 @@ import { Th } from "../../components/Table.tsx";
 import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
 import { omit, Overwrite } from "../../utils/Utils.ts";
 
+//TODO: either improve or delete this
+
 type CreateEventProps = {
   createEvent: boolean;
   setCreateEvent: (value: boolean) => void;

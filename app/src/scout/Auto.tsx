@@ -2,48 +2,16 @@ import {
   HumanPlayerEntry,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Button, Divider, Stack } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
 import { Counter } from "./Components.tsx";
-import { ScoutLayout, ScoutPage } from "./Scout.tsx";
 
 type AutoProps = {
-  setPage: (value: ScoutPage) => void;
   match: TeamMatchEntry | HumanPlayerEntry;
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
 };
-export default function Auto({ setPage, match, setMatch }: AutoProps) {
+export default function Auto({ match, setMatch }: AutoProps) {
   return (
-    <ScoutLayout
-      title="Auto"
-      //TODO: uncomment when match is present as a prop
-      // nowScouting={{
-      //   teamNumber: match.teamNumber,
-      //   alliance: match.alliance,
-      //   robotPosition: math.robotNumbers,
-      // }}
-      nowScouting={{
-        teamNumber: 3494,
-        alliance: "Red",
-        robotPosition: 2,
-      }}
-      navButtons={
-        <>
-          <Button
-            onClick={() => {
-              setPage("matchinfo");
-            }}
-            variant="outlined">
-            Back
-          </Button>
-          <Button
-            onClick={() => {
-              setPage("teleop");
-            }}
-            variant="contained">
-            Continue
-          </Button>
-        </>
-      }>
+    <>
       {
         //TODO: (For Iraa) Write Auto Layout
         // main: "#000f5d", // Indiana Flag Blue
@@ -264,7 +232,7 @@ export default function Auto({ setPage, match, setMatch }: AutoProps) {
           <NumberInput label="AMP" />
         </Stack>
       </Stack> */}
-    </ScoutLayout>
+    </>
   );
 }
 

@@ -11,13 +11,14 @@ import { GridBorder } from "../components/GridBorder.tsx";
 import { getFromDBStore, initDB, Stores } from "../utils/Idb.ts";
 import Auto from "./Auto.tsx";
 import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
-import MatchInfo from "./MatchInfo.tsx";
 import Postmatch from "./Postmatch.tsx";
 import SavedMatches from "./SavedMatches.tsx";
+import ScoutLayout from "./ScoutLayout.tsx";
 import { Teleop } from "./Teleop.tsx";
 
 export type ScoutPage =
   | "devicesetup"
+  | "scoutlayout"
   | "matchinfo"
   | "auto"
   | "teleop"
@@ -100,8 +101,8 @@ export default function Scout() {
         setMatch={setMatch}
       />
     ),
-    matchinfo: (
-      <MatchInfo
+    scoutlayout: (
+      <ScoutLayout
         setPage={setPage}
         match={match}
         setMatch={setMatch}
@@ -109,6 +110,7 @@ export default function Scout() {
         deviceSetup={deviceSetup}
       />
     ),
+    matchinfo: <></>,
     auto: (
       <Auto
         setPage={setPage}
@@ -134,22 +136,22 @@ export default function Scout() {
   }[page];
 }
 
-type ScoutLayoutProps = {
+type ScoutPageContainerProps = {
   title: string;
   nowScouting?: {
     teamNumber: number;
     alliance: "Red" | "Blue";
-    robotPosition: number;
+    robotPosition: 1 | 2 | 3 | 4;
   };
   navButtons?: React.ReactNode;
   children?: React.ReactNode;
 };
-export function ScoutLayout({
+export function ScoutPageContainer({
   title,
   nowScouting,
   navButtons,
   children,
-}: ScoutLayoutProps) {
+}: ScoutPageContainerProps) {
   return (
     <GridBorder>
       <Stack
@@ -175,7 +177,9 @@ export function ScoutLayout({
                 " / " +
                 nowScouting.alliance.toUpperCase() +
                 " " +
-                nowScouting.robotPosition
+                (nowScouting.robotPosition === 4 ?
+                  "HUMAN"
+                : nowScouting.robotPosition)
               }
               sx={{
                 backgroundColor:

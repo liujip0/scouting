@@ -5,7 +5,7 @@ import {
 import { Button } from "@mui/material";
 import { putEntry } from "../utils/Idb.ts";
 import { trpc } from "../utils/Trpc.tsx";
-import { ScoutLayout, ScoutPage } from "./Scout.tsx";
+import { ScoutPage, ScoutPageContainer } from "./Scout.tsx";
 
 type PostmatchProps = {
   setPage: (value: ScoutPage) => void;
@@ -54,7 +54,7 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
   });
 
   return (
-    <ScoutLayout
+    <ScoutPageContainer
       title="Postmatch"
       nowScouting={{
         teamNumber: match.teamNumber,
@@ -78,6 +78,6 @@ export default function Postmatch({ setPage, match }: PostmatchProps) {
             Continue
           </Button>
         </>
-      }></ScoutLayout>
+      }></ScoutPageContainer>
   );
 }

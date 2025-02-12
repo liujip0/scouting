@@ -45,7 +45,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/Idb.ts";
 import { trpc } from "../utils/Trpc.tsx";
 import { omit } from "../utils/Utils.ts";
-import { ScoutLayout, ScoutPage } from "./Scout.tsx";
+import { ScoutPage, ScoutPageContainer } from "./Scout.tsx";
 
 type SavedMatchesProps = {
   setPage: (value: ScoutPage) => void;
@@ -128,7 +128,7 @@ export default function SavedMatches({
   const qrRef = useRef<HTMLDivElement>(null);
 
   return (
-    <ScoutLayout
+    <ScoutPageContainer
       title="Saved Matches"
       navButtons={
         <>
@@ -801,6 +801,6 @@ export default function SavedMatches({
           />
         </Stack>
       </Stack>
-    </ScoutLayout>
+    </ScoutPageContainer>
   );
 }
