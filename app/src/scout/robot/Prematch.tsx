@@ -236,6 +236,7 @@ export default function Prematch({
         <Box
           sx={{
             width: 1,
+            position: "relative",
           }}>
           <img
             src={
