@@ -3,6 +3,7 @@ import {
   HumanPlayerEntry,
   Match,
   TeamMatchEntry,
+  TeamMatchEntryNoShowInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
@@ -151,7 +152,27 @@ export default function ScoutLayout({
           <Button
             variant="contained"
             onClick={() => {
-              if (matchStage === "postmatch" || matchStage === "human") {
+              if (matchStage === "postmatch") {
+                if ((match as TeamMatchEntry).noShow) {
+                  putEntries.mutate([
+                    {
+                      ...TeamMatchEntryNoShowInit,
+                      eventKey: match.eventKey,
+                      matchKey: match.matchKey,
+                      teamNumber: match.teamNumber,
+                      alliance: match.alliance,
+                      robotNumber: match.robotNumber as 1 | 2 | 3,
+                      deviceTeamNumber: match.deviceTeamNumber,
+                      deviceId: match.deviceId,
+                      scoutTeamNumber: match.scoutTeamNumber,
+                      scoutName: match.scoutName,
+                      flag: match.flag,
+                    },
+                  ]);
+                } else {
+                  putEntries.mutate([match]);
+                }
+              } else if (matchStage === "human") {
                 putEntries.mutate([match]);
               } else if (matchStage === "prematch") {
                 let error = false;
