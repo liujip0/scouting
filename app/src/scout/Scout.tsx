@@ -5,25 +5,13 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Box, Chip, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { GridBorder } from "../components/GridBorder.tsx";
-import { getFromDBStore, initDB, Stores } from "../utils/Idb.ts";
-import Auto from "./Auto.tsx";
+import { getFromDBStore, initDB, Stores } from "../utils/idb.ts";
 import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
-import Postmatch from "./Postmatch.tsx";
 import SavedMatches from "./SavedMatches.tsx";
 import ScoutLayout from "./ScoutLayout.tsx";
-import { Teleop } from "./Teleop.tsx";
 
-export type ScoutPage =
-  | "devicesetup"
-  | "scoutlayout"
-  | "matchinfo"
-  | "auto"
-  | "teleop"
-  | "postmatch"
-  | "savedmatches";
+export type ScoutPage = "devicesetup" | "scoutlayout" | "savedmatches";
 export type DeviceSetupObj = {
   deviceTeamNumber: number;
   deviceId: string;
@@ -110,21 +98,6 @@ export default function Scout() {
         deviceSetup={deviceSetup}
       />
     ),
-    matchinfo: <></>,
-    auto: (
-      <Auto
-        setPage={setPage}
-        match={match}
-        setMatch={setMatch}
-      />
-    ),
-    teleop: <Teleop setPage={setPage} />,
-    postmatch: (
-      <Postmatch
-        setPage={setPage}
-        match={match}
-      />
-    ),
     savedmatches: (
       <SavedMatches
         setPage={setPage}
@@ -134,82 +107,4 @@ export default function Scout() {
       />
     ),
   }[page];
-}
-
-type ScoutPageContainerProps = {
-  title: string;
-  nowScouting?: {
-    teamNumber: number;
-    alliance: "Red" | "Blue";
-    robotPosition: 1 | 2 | 3 | 4;
-  };
-  navButtons?: React.ReactNode;
-  children?: React.ReactNode;
-};
-export function ScoutPageContainer({
-  title,
-  nowScouting,
-  navButtons,
-  children,
-}: ScoutPageContainerProps) {
-  return (
-    <GridBorder>
-      <Stack
-        sx={{
-          width: 1,
-          height: 1,
-        }}>
-        <Stack
-          sx={{
-            width: 1,
-            padding: 2,
-          }}
-          direction="row">
-          <Typography
-            variant="h2"
-            fontWeight="bold">
-            {title.toUpperCase()}
-          </Typography>
-          {nowScouting && (
-            <Chip
-              label={
-                nowScouting.teamNumber +
-                " / " +
-                nowScouting.alliance.toUpperCase() +
-                " " +
-                (nowScouting.robotPosition === 4 ?
-                  "HUMAN"
-                : nowScouting.robotPosition)
-              }
-              sx={{
-                backgroundColor:
-                  nowScouting.alliance === "Blue" ? "#0000ff" : "#ff0000",
-                color: "white",
-                ml: "auto",
-                fontSize: "large",
-                height: 1,
-              }}
-            />
-          )}
-        </Stack>
-        <Box
-          sx={{
-            width: 1,
-            flex: 1,
-            overflowY: "scroll",
-          }}>
-          {children}
-        </Box>
-        <Stack
-          sx={{
-            padding: 4,
-            justifyContent: "right",
-          }}
-          direction="row"
-          gap={3}>
-          {navButtons}
-        </Stack>
-      </Stack>
-    </GridBorder>
-  );
 }

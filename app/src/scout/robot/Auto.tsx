@@ -3,7 +3,7 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Divider, Stack } from "@mui/material";
-import { Counter } from "./Components.tsx";
+import { Counter } from "../Components.tsx";
 
 type AutoProps = {
   match: TeamMatchEntry | HumanPlayerEntry;

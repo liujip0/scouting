@@ -5,7 +5,7 @@ import {
 import { Box, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { Link, Route, Routes, useResolvedPath } from "react-router-dom";
-import { trpc } from "../../utils/Trpc.tsx";
+import { trpc } from "../../utils/trpc.ts";
 import ExportLayout from "./ExportLayout.tsx";
 
 export default function Export() {

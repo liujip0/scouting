@@ -11,6 +11,7 @@ import {
   TeamMatchEntryInit,
   TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import { omit } from "@isa2025/api/src/utils/utils.ts";
 import {
   Close,
   ContentCopy,
@@ -42,10 +43,10 @@ import {
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/Idb.ts";
-import { trpc } from "../utils/Trpc.tsx";
-import { omit } from "../utils/Utils.ts";
-import { ScoutPage, ScoutPageContainer } from "./Scout.tsx";
+import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/idb.ts";
+import { trpc } from "../utils/trpc.ts";
+import { ScoutPage } from "./Scout.tsx";
+import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
 
 type SavedMatchesProps = {
   setPage: (value: ScoutPage) => void;
@@ -135,7 +136,7 @@ export default function SavedMatches({
           <Button
             variant="outlined"
             onClick={() => {
-              setPage("postmatch");
+              setPage("scoutlayout");
             }}>
             Back
           </Button>
@@ -200,7 +201,7 @@ export default function SavedMatches({
                   teamNumber: 0,
                 });
               }
-              setPage("matchinfo");
+              setPage("scoutlayout");
             }}>
             Next Match
           </Button>

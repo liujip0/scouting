@@ -1,4 +1,5 @@
 import { DBEvent, Match } from "@isa2025/api/src/utils/dbtypes.ts";
+import { omit } from "@isa2025/api/src/utils/utils.ts";
 import {
   Box,
   Button,
@@ -10,9 +11,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
-import { trpc } from "../../utils/Trpc.tsx";
-import { omit } from "../../utils/Utils.ts";
+import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
+import { trpc } from "../../utils/trpc.ts";
 
 type DownloadEventProps = {
   downloadEvent: boolean;
@@ -99,7 +99,7 @@ export default function DownloadEvent({
                 }
 
                 if (!error) {
-                  setFrcStatus('Loading...')
+                  setFrcStatus("Loading...");
                   getFrcEvent.mutate(eventKey);
                 }
               }}>
@@ -117,7 +117,7 @@ export default function DownloadEvent({
                 }
 
                 if (!error) {
-                  setIsaStatus('Loading...')
+                  setIsaStatus("Loading...");
                   getEvent.mutate(eventKey);
                 }
               }}>

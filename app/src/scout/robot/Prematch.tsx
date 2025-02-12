@@ -6,7 +6,7 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
 import { Divider, IconButton, Stack, TextField } from "@mui/material";
-import { DeviceSetupObj } from "./Scout.tsx";
+import { DeviceSetupObj } from "../Scout.tsx";
 
 type PrematchProps = {
   match: TeamMatchEntry | HumanPlayerEntry;
@@ -28,14 +28,13 @@ export default function Prematch({
       sx={{
         width: 1,
         height: 1,
-        pt: 4,
-        pb: 4,
+        pt: 2,
       }}>
       <Stack
         sx={{
           flex: 1,
-          pl: 4,
-          pr: 4,
+          pl: 2,
+          pr: 2,
         }}
         gap={2}>
         <TextField
@@ -62,19 +61,6 @@ export default function Prematch({
           variant="outlined"
           label="Scout Team Number"
         />
-      </Stack>
-      <Divider
-        orientation="vertical"
-        variant="middle"
-        flexItem
-      />
-      <Stack
-        sx={{
-          flex: 1,
-          pl: 4,
-          pr: 4,
-        }}
-        gap={2}>
         <TextField
           value={match.matchKey}
           onChange={(event) => {
@@ -219,6 +205,18 @@ export default function Prematch({
           }}
         />
       </Stack>
+      <Divider
+        orientation="vertical"
+        variant="middle"
+        flexItem
+      />
+      <Stack
+        sx={{
+          flex: 1,
+          pl: 4,
+          pr: 4,
+        }}
+        gap={2}></Stack>
     </Stack>
   );
 }

@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { trpc } from "../../utils/Trpc.tsx";
+import { trpc } from "../../utils/trpc.ts";
 
 type CreateUserProps = {
   createUser: boolean;

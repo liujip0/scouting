@@ -7,6 +7,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import { omit } from "@isa2025/api/src/utils/utils.ts";
 import { Close } from "@mui/icons-material";
 import {
   Box,
@@ -26,11 +27,9 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
-import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
-import { trpc } from "../../utils/Trpc.tsx";
-import { omit } from "../../utils/Utils.ts";
-import { DeviceSetupObj, ScoutPage, ScoutPageContainer } from "../Scout.tsx";
-import CreateEvent from "./CreateEvent.tsx";
+import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
+import { DeviceSetupObj, ScoutPage } from "../Scout.tsx";
+import { ScoutPageContainer } from "../ScoutPageContainer.tsx";
 import DownloadEvent from "./DownloadEvent.tsx";
 
 type DeviceSetupProps = {
@@ -59,12 +58,12 @@ export default function DeviceSetup({
   const [robotNumberError, setRobotNumberError] = useState("");
   const [currentEventError, setCurrentEventError] = useState("");
 
-  const [createEvent, setCreateEvent] = useState(false);
-  const openCreateEvent = () => {
-    setCreateEvent(true);
-  };
+  // const [createEvent, setCreateEvent] = useState(false);
+  // const openCreateEvent = () => {
+  //   setCreateEvent(true);
+  // };
 
-  const putEvents = trpc.events.putEvents.useMutation();
+  // const putEvents = trpc.events.putEvents.useMutation();
 
   const [downloadEvent, setDownloadEvent] = useState(false);
 
@@ -80,7 +79,7 @@ export default function DeviceSetup({
               navigate("/");
             }}
             variant="outlined">
-            Home
+            Exit
           </Button>
           <Button
             onClick={() => {
@@ -175,7 +174,7 @@ export default function DeviceSetup({
                     deviceId: deviceSetup.deviceId,
                   });
                 }
-                setPage("matchinfo");
+                setPage("scoutlayout");
               }
             }}
             variant="contained">
@@ -428,12 +427,12 @@ export default function DeviceSetup({
             events={events}
             setEvents={setEvents}
           />
-          <CreateEvent
+          {/* <CreateEvent
             createEvent={createEvent}
             setCreateEvent={setCreateEvent}
             events={events}
             setEvents={setEvents}
-          />
+          /> */}
         </Stack>
       </Stack>
     </ScoutPageContainer>

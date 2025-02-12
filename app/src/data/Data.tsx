@@ -1,6 +1,6 @@
 import { User } from "@isa2025/api/src/utils/dbtypes.ts";
 import { useEffect, useState } from "react";
-import { initDB } from "../utils/Idb.ts";
+import { initDB } from "../utils/idb.ts";
 import DataLayout from "./DataLayout.tsx";
 import Login from "./Login.tsx";
 

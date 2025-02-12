@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { BorderedTable, Td, Th } from "../../components/Table.tsx";
-import { trpc } from "../../utils/Trpc.tsx";
+import { trpc } from "../../utils/trpc.ts";
 import CreateUser from "./CreateUser.tsx";
 import EditUser from "./EditUser.tsx";
 

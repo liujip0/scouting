@@ -25,8 +25,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { trpc } from "../utils/Trpc.tsx";
-import { VisuallyHiddenInput } from '../components/VisuallyHiddenInput.tsx';
+import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
+import { trpc } from "../utils/trpc.ts";
 
 export default function Upload() {
   const navigate = useNavigate();

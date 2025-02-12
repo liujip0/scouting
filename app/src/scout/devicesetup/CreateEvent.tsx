@@ -23,8 +23,8 @@ import {
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { Th } from "../../components/Table.tsx";
-import { putDBEvent, putDBMatches } from "../../utils/Idb.ts";
-import { omit, Overwrite } from "../../utils/Utils.ts";
+import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
+import { omit, Overwrite } from "../../utils/utils.ts";
 
 //TODO: either improve or delete this
 

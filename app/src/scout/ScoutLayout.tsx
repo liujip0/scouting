@@ -7,15 +7,17 @@ import {
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { putEntry } from "../utils/Idb.ts";
-import { trpc } from "../utils/Trpc.tsx";
-import Auto from "./Auto.tsx";
-import Prematch from "./Prematch.tsx";
-import { DeviceSetupObj, ScoutPage, ScoutPageContainer } from "./Scout.tsx";
-import { Teleop } from "./Teleop.tsx";
+import { putEntry } from "../utils/idb.ts";
+import { trpc } from "../utils/trpc.ts";
+import Human from "./Human.tsx";
+import Auto from "./robot/Auto.tsx";
+import Postmatch from "./robot/Postmatch.tsx";
+import Prematch from "./robot/Prematch.tsx";
+import { Teleop } from "./robot/Teleop.tsx";
+import { DeviceSetupObj, ScoutPage } from "./Scout.tsx";
+import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
 
 export type MatchStage = "prematch" | "auto" | "teleop" | "postmatch" | "human";
-
 type ScoutLayoutProps = {
   setPage: (value: ScoutPage) => void;
   match: TeamMatchEntry | HumanPlayerEntry;
@@ -33,7 +35,7 @@ export default function ScoutLayout({
   const navigate = useNavigate();
 
   const [matchStage, setMatchStage] = useState<MatchStage>(
-    match.robotNumber === 4 ? "prematch" : "human"
+    match.robotNumber === 4 ? "human" : "prematch"
   );
 
   let putEntriesInterval: NodeJS.Timeout;
@@ -81,16 +83,54 @@ export default function ScoutLayout({
 
   return (
     <ScoutPageContainer
-      title="Scout"
+      title={
+        <Box
+          sx={{
+            flex: 1,
+            borderBottom: 1,
+            borderColor: "divider",
+            overflowX: "scroll",
+          }}>
+          {match.robotNumber === 4 ?
+            "Human Player Data"
+          : <Tabs
+              value={matchStage}
+              onChange={(_event, value) => {
+                setMatchStage(value);
+              }}
+              variant="scrollable"
+              scrollButtons
+              allowScrollButtonsMobile>
+              <Tab
+                label="Prematch"
+                value="prematch"
+              />
+              <Tab
+                label="Auto"
+                value="auto"
+              />
+              <Tab
+                label="Teleop"
+                value="teleop"
+              />
+              <Tab
+                label="Postmatch"
+                value="postmatch"
+              />
+            </Tabs>
+          }
+        </Box>
+      }
       nowScouting={{
         teamNumber: match.teamNumber,
         alliance: match.alliance,
         robotPosition: match.robotNumber,
       }}
+      setPage={setPage}
       navButtons={
         <>
           <Button
-            variant="contained"
+            variant="outlined"
             onClick={() => {
               if (matchStage === "prematch" || matchStage === "human") {
                 navigate("/");
@@ -156,41 +196,7 @@ export default function ScoutLayout({
         sx={{
           width: 1,
           height: 1,
-          padding: 2,
         }}>
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: "divider",
-          }}>
-          <Tabs
-            value={matchStage}
-            onChange={(_event, value) => {
-              setMatchStage(value);
-            }}>
-            {match.robotNumber === 4 ?
-              <></>
-            : <>
-                <Tab
-                  label="Prematch"
-                  value="prematch"
-                />
-                <Tab
-                  label="Auto"
-                  value="auto"
-                />
-                <Tab
-                  label="Teleop"
-                  value="teleop"
-                />
-                <Tab
-                  label="Postmatch"
-                  value="postmatch"
-                />
-              </>
-            }
-          </Tabs>
-        </Box>
         <Box
           sx={{
             flex: 1,
@@ -219,8 +225,18 @@ export default function ScoutLayout({
                   setMatch={setMatch}
                 />
               ),
-              postmatch: <></>,
-              human: <></>,
+              postmatch: (
+                <Postmatch
+                  match={match}
+                  setMatch={setMatch}
+                />
+              ),
+              human: (
+                <Human
+                  match={match}
+                  setMatch={setMatch}
+                />
+              ),
             }[matchStage]
           }
         </Box>
