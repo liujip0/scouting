@@ -35,12 +35,14 @@ type CircleToggleProps = {
   value: boolean;
   setValue: (value: boolean) => void;
   label: string;
+  disabled?: boolean;
   sx: SxProps;
 };
 export function CircleToggle({
   value,
   setValue,
   label,
+  disabled,
   sx,
 }: CircleToggleProps) {
   return (
@@ -50,6 +52,7 @@ export function CircleToggle({
       onChange={() => {
         setValue(!value);
       }}
+      disabled={disabled}
       sx={{
         ...sx,
         "&.Mui-selected, &.Mui-selected:hover": {
@@ -63,6 +66,7 @@ export function CircleToggle({
           backgroundColor: "secondary.main",
         },
         padding: 1,
+        borderWidth: 4,
       }}>
       {label}
     </ToggleButton>

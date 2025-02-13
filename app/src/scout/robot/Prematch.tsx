@@ -284,6 +284,7 @@ export default function Prematch({
                 });
               }
             }}
+            disabled={match.noShow}
             sx={
               deviceSetup.fieldOrientation === "barge" ?
                 {
@@ -318,6 +319,7 @@ export default function Prematch({
                 });
               }
             }}
+            disabled={match.noShow}
             sx={
               deviceSetup.fieldOrientation === "barge" ?
                 {
@@ -352,6 +354,7 @@ export default function Prematch({
                 });
               }
             }}
+            disabled={match.noShow}
             sx={
               deviceSetup.fieldOrientation === "barge" ?
                 {

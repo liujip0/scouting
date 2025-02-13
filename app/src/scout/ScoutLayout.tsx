@@ -159,14 +159,17 @@ export default function ScoutLayout({
               <Tab
                 label="Auto"
                 value="auto"
+                disabled={match.noShow}
               />
               <Tab
                 label="Teleop"
                 value="teleop"
+                disabled={match.noShow}
               />
               <Tab
                 label="Postmatch"
                 value="postmatch"
+                disabled={match.noShow}
               />
             </Tabs>
           </Box>
@@ -245,7 +248,25 @@ export default function ScoutLayout({
                   }
 
                   if (!error) {
-                    setMatchStage("auto");
+                    if ((match as TeamMatchEntry).noShow) {
+                      putEntries.mutate([
+                        {
+                          ...TeamMatchEntryNoShowInit,
+                          eventKey: match.eventKey,
+                          matchKey: match.matchKey,
+                          teamNumber: match.teamNumber,
+                          alliance: match.alliance,
+                          robotNumber: match.robotNumber as 1 | 2 | 3,
+                          deviceTeamNumber: match.deviceTeamNumber,
+                          deviceId: match.deviceId,
+                          scoutTeamNumber: match.scoutTeamNumber,
+                          scoutName: match.scoutName,
+                          flag: match.flag,
+                        },
+                      ]);
+                    } else {
+                      setMatchStage("auto");
+                    }
                   }
                   break;
                 }
@@ -310,7 +331,11 @@ export default function ScoutLayout({
                 }
               }
             }}>
-            {matchStage === "postmatch" || matchStage === "human" ?
+            {(
+              matchStage === "postmatch" ||
+              matchStage === "human" ||
+              (matchStage === "prematch" && (match as TeamMatchEntry).noShow)
+            ) ?
               "Submit"
             : "Next"}
           </Button>
