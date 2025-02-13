@@ -330,7 +330,7 @@ export default function ScoutLayout({
             {
               prematch: (
                 <Prematch
-                  match={match}
+                  match={match as TeamMatchEntry}
                   setMatch={setMatch}
                   events={events}
                   deviceSetup={deviceSetup}

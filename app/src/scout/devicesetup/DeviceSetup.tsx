@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StyledToggleButton } from "../../components/ToggleButton.tsx";
+import { StyledToggleButton } from "../../components/StyledToggleButton.tsx";
 import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
 import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
 import { DeviceSetupObj, ScoutPage } from "../Scout.tsx";

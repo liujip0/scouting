@@ -3,6 +3,7 @@ import {
   Button,
   IconButton,
   Stack,
+  SxProps,
   TextField,
   ToggleButton,
   Typography,
@@ -34,14 +35,34 @@ type CircleToggleProps = {
   value: boolean;
   setValue: (value: boolean) => void;
   label: string;
+  sx: SxProps;
 };
-export function CircleToggle({ value, setValue, label }: CircleToggleProps) {
+export function CircleToggle({
+  value,
+  setValue,
+  label,
+  sx,
+}: CircleToggleProps) {
   return (
     <ToggleButton
       value="toggle"
       selected={value}
-      onChange={(_event, newValue) => {
-        setValue(newValue);
+      onChange={() => {
+        setValue(!value);
+      }}
+      sx={{
+        ...sx,
+        "&.Mui-selected, &.Mui-selected:hover": {
+          color: "white",
+          backgroundColor: "primary.main",
+        },
+        color: "primary.main",
+        backgroundColor: "secondary.main",
+        borderColor: "secondary.main",
+        "&:hover": {
+          backgroundColor: "secondary.main",
+        },
+        padding: 1,
       }}>
       {label}
     </ToggleButton>

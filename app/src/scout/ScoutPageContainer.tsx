@@ -53,6 +53,7 @@ export function ScoutPageContainer({
                 width: "max-content",
               }}
               onClick={() => {
+                //TODO: confirmation about not saving data (or fix saving data)
                 if (setPage) {
                   setPage("devicesetup");
                 }

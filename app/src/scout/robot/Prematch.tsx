@@ -1,11 +1,12 @@
 import {
   DBEvent,
-  HumanPlayerEntry,
   Match,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
 import { Box, Divider, IconButton, Stack, TextField } from "@mui/material";
+import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
+import { CircleToggle } from "../Components.tsx";
 import { DeviceSetupObj } from "../Scout.tsx";
 import BlueBarge from "../images/BlueBarge.png";
 import BlueProcessor from "../images/BlueProcessor.png";
@@ -13,8 +14,8 @@ import RedBarge from "../images/RedBarge.png";
 import RedProcessor from "../images/RedProcessor.png";
 
 type PrematchProps = {
-  match: TeamMatchEntry | HumanPlayerEntry;
-  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
+  match: TeamMatchEntry;
+  setMatch: (value: TeamMatchEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
   deviceSetup: DeviceSetupObj;
   matchNumberError: string;
@@ -220,6 +221,18 @@ export default function Prematch({
           error={teamNumberError !== ""}
           helperText={teamNumberError}
         />
+        <Divider />
+        <StyledRedToggleButton
+          value="No Show?"
+          selected={match.noShow}
+          onChange={() => {
+            setMatch({
+              ...match,
+              noShow: !match.noShow,
+            });
+          }}>
+          No Show
+        </StyledRedToggleButton>
       </Stack>
       <Divider
         orientation="vertical"
@@ -251,6 +264,108 @@ export default function Prematch({
             style={{
               width: "100%",
             }}
+          />
+          <CircleToggle
+            label="A"
+            value={match.startingLocationA!}
+            setValue={(value) => {
+              console.log(value);
+              if (value) {
+                setMatch({
+                  ...match,
+                  startingLocationA: value,
+                  startingLocationB: false,
+                  startingLocationC: false,
+                });
+              } else {
+                setMatch({
+                  ...match,
+                  startingLocationA: value,
+                });
+              }
+            }}
+            sx={
+              deviceSetup.fieldOrientation === "barge" ?
+                {
+                  position: "absolute",
+                  left: "14%",
+                  top: "25%",
+                  transform: "translate(-50%, -50%)",
+                }
+              : {
+                  position: "absolute",
+                  right: "calc(10% - 4px)",
+                  top: "calc(12% - 6px)",
+                }
+            }
+          />
+          <CircleToggle
+            label="B"
+            value={match.startingLocationB!}
+            setValue={(value) => {
+              console.log(value);
+              if (value) {
+                setMatch({
+                  ...match,
+                  startingLocationB: value,
+                  startingLocationA: false,
+                  startingLocationC: false,
+                });
+              } else {
+                setMatch({
+                  ...match,
+                  startingLocationB: value,
+                });
+              }
+            }}
+            sx={
+              deviceSetup.fieldOrientation === "barge" ?
+                {
+                  position: "absolute",
+                  left: "14%",
+                  top: "53%",
+                  transform: "translate(-50%, -50%)",
+                }
+              : {
+                  position: "absolute",
+                  right: "calc(10% - 4px)",
+                  top: "calc(40% - 6px)",
+                }
+            }
+          />
+          <CircleToggle
+            label="C"
+            value={match.startingLocationC!}
+            setValue={(value) => {
+              console.log(value);
+              if (value) {
+                setMatch({
+                  ...match,
+                  startingLocationC: value,
+                  startingLocationA: false,
+                  startingLocationB: false,
+                });
+              } else {
+                setMatch({
+                  ...match,
+                  startingLocationC: value,
+                });
+              }
+            }}
+            sx={
+              deviceSetup.fieldOrientation === "barge" ?
+                {
+                  position: "absolute",
+                  left: "14%",
+                  bottom: "5%",
+                  transform: "translate(-50%, -50%)",
+                }
+              : {
+                  position: "absolute",
+                  right: "calc(10% - 4px)",
+                  top: "calc(40% - 6px)",
+                }
+            }
           />
         </Box>
       </Stack>

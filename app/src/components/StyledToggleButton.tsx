@@ -8,3 +8,12 @@ export const StyledToggleButton = styled(ToggleButton)((theme) => ({
   color: theme.theme.palette.primary.main,
   borderColor: theme.theme.palette.primary.main,
 }));
+
+export const StyledRedToggleButton = styled(ToggleButton)((theme) => ({
+  "&.Mui-selected, &.Mui-selected:hover": {
+    color: "white",
+    backgroundColor: theme.theme.palette.error.main,
+  },
+  color: theme.theme.palette.error.main,
+  borderColor: theme.theme.palette.error.main,
+}));
