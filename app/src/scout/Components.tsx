@@ -4,6 +4,7 @@ import {
   IconButton,
   Stack,
   TextField,
+  ToggleButton,
   Typography,
 } from "@mui/material";
 
@@ -26,6 +27,24 @@ export function Counter({ value, setValue }: CounterProps) {
         <Remove />
       </IconButton>
     </Stack>
+  );
+}
+
+type CircleToggleProps = {
+  value: boolean;
+  setValue: (value: boolean) => void;
+  label: string;
+};
+export function CircleToggle({ value, setValue, label }: CircleToggleProps) {
+  return (
+    <ToggleButton
+      value="toggle"
+      selected={value}
+      onChange={(_event, newValue) => {
+        setValue(newValue);
+      }}>
+      {label}
+    </ToggleButton>
   );
 }
 
