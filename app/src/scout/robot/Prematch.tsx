@@ -295,8 +295,9 @@ export default function Prematch({
                 }
               : {
                   position: "absolute",
-                  right: "calc(10% - 4px)",
-                  top: "calc(12% - 6px)",
+                  right: "14%",
+                  bottom: "25%",
+                  transform: "translate(50%, 50%)",
                 }
             }
           />
@@ -330,8 +331,9 @@ export default function Prematch({
                 }
               : {
                   position: "absolute",
-                  right: "calc(10% - 4px)",
-                  top: "calc(40% - 6px)",
+                  right: "14%",
+                  bottom: "53%",
+                  transform: "translate(50%, 50%)",
                 }
             }
           />
@@ -360,13 +362,14 @@ export default function Prematch({
                 {
                   position: "absolute",
                   left: "14%",
-                  bottom: "5%",
-                  transform: "translate(-50%, -50%)",
+                  bottom: "18%",
+                  transform: "translate(-50%, 50%)",
                 }
               : {
                   position: "absolute",
-                  right: "calc(10% - 4px)",
-                  top: "calc(40% - 6px)",
+                  right: "14%",
+                  top: "18%",
+                  transform: "translate(50%, -50%)",
                 }
             }
           />
