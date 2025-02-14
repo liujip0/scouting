@@ -367,25 +367,25 @@ export default function ScoutLayout({
               ),
               auto: (
                 <Auto
-                  match={match}
+                  match={match as TeamMatchEntry}
                   setMatch={setMatch}
                 />
               ),
               teleop: (
                 <Teleop
-                  match={match}
+                  match={match as TeamMatchEntry}
                   setMatch={setMatch}
                 />
               ),
               postmatch: (
                 <Postmatch
-                  match={match}
+                  match={match as TeamMatchEntry}
                   setMatch={setMatch}
                 />
               ),
               human: (
                 <Human
-                  match={match}
+                  match={match as HumanPlayerEntry}
                   setMatch={setMatch}
                   scoutNameError={scoutNameError}
                   scoutTeamNumberError={scoutTeamNumberError}

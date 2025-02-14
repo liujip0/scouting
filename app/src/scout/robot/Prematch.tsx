@@ -269,7 +269,6 @@ export default function Prematch({
             label="A"
             value={match.startingLocationA!}
             setValue={(value) => {
-              console.log(value);
               if (value) {
                 setMatch({
                   ...match,
@@ -305,7 +304,6 @@ export default function Prematch({
             label="B"
             value={match.startingLocationB!}
             setValue={(value) => {
-              console.log(value);
               if (value) {
                 setMatch({
                   ...match,
@@ -341,7 +339,6 @@ export default function Prematch({
             label="C"
             value={match.startingLocationC!}
             setValue={(value) => {
-              console.log(value);
               if (value) {
                 setMatch({
                   ...match,

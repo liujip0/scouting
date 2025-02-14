@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   goodAtWorkingWithAlliance boolean,
   goodAtDriving boolean,
   goodAtAuto boolean,
+  removedAlgaeFromReef boolean,
   comments text,
 
   autoCrossedRSL boolean,
@@ -47,7 +48,6 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   autoCoralLL1 integer, autoCoralLL2 integer, autoCoralLL3 integer, autoCoralLL4 integer,
   autoProcessor integer,
   autoNet integer,
-  autoRemovedAlgaeFromReef boolean,
 
   teleopL1 integer,
   teleopL2 integer,
@@ -55,7 +55,6 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   teleopL4 integer,
   teleopProcessor integer,
   teleopNet integer,
-  teleopRemovedAlgaeFromReef boolean,
   teleopPark boolean,
   teleopAttemptedShallow boolean,
   teleopAttemptedDeep boolean,

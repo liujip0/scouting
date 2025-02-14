@@ -56,6 +56,7 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
   goodAtWorkingWithAlliance: z.boolean().nullable(),
   goodAtDriving: z.boolean().nullable(),
   goodAtAuto: z.boolean().nullable(),
+  removedAlgaeFromReef: z.boolean().nullable(),
   comments: z.string().nullable(),
 
   autoCrossedRSL: z.boolean().nullable(),
@@ -109,7 +110,6 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
   autoCoralLL4: z.number().int().nonnegative().nullable(),
   autoProcessor: z.number().int().nonnegative().nullable(),
   autoNet: z.number().int().nonnegative().nullable(),
-  autoRemovedAlgaeFromReef: z.boolean().nullable(),
 
   teleopL1: z.number().int().nonnegative().nullable(),
   teleopL2: z.number().int().nonnegative().nullable(),
@@ -117,7 +117,6 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
   teleopL4: z.number().int().nonnegative().nullable(),
   teleopProcessor: z.number().int().nonnegative().nullable(),
   teleopNet: z.number().int().nonnegative().nullable(),
-  teleopRemovedAlgaeFromReef: z.boolean().nullable(),
   teleopPark: z.boolean().nullable(),
   teleopAttemptedShallow: z.boolean().nullable(),
   teleopAttemptedDeep: z.boolean().nullable(),
@@ -146,6 +145,7 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   "goodAtWorkingWithAlliance",
   "goodAtDriving",
   "goodAtAuto",
+  "removedAlgaeFromReef",
   "comments",
 
   "autoCrossedRSL",
@@ -199,7 +199,6 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   "autoCoralLL4",
   "autoProcessor",
   "autoNet",
-  "autoRemovedAlgaeFromReef",
 
   "teleopL1",
   "teleopL2",
@@ -207,7 +206,6 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   "teleopL4",
   "teleopProcessor",
   "teleopNet",
-  "teleopRemovedAlgaeFromReef",
   "teleopPark",
   "teleopAttemptedShallow",
   "teleopAttemptedDeep",
@@ -243,6 +241,7 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   goodAtWorkingWithAlliance: false,
   goodAtDriving: false,
   goodAtAuto: false,
+  removedAlgaeFromReef: false,
   comments: "",
 
   autoCrossedRSL: false,
@@ -296,7 +295,6 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   autoCoralLL4: 0,
   autoProcessor: 0,
   autoNet: 0,
-  autoRemovedAlgaeFromReef: false,
 
   teleopL1: 0,
   teleopL2: 0,
@@ -304,7 +302,6 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   teleopL4: 0,
   teleopProcessor: 0,
   teleopNet: 0,
-  teleopRemovedAlgaeFromReef: false,
   teleopPark: false,
   teleopAttemptedShallow: false,
   teleopAttemptedDeep: false,
@@ -340,6 +337,7 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   goodAtWorkingWithAlliance: null,
   goodAtDriving: null,
   goodAtAuto: null,
+  removedAlgaeFromReef: null,
   comments: null,
 
   autoCrossedRSL: null,
@@ -393,7 +391,6 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   autoCoralLL4: null,
   autoProcessor: null,
   autoNet: null,
-  autoRemovedAlgaeFromReef: null,
 
   teleopL1: null,
   teleopL2: null,
@@ -401,7 +398,6 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   teleopL4: null,
   teleopProcessor: null,
   teleopNet: null,
-  teleopRemovedAlgaeFromReef: null,
   teleopPark: null,
   teleopAttemptedShallow: null,
   teleopAttemptedDeep: null,
