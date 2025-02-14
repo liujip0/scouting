@@ -3,6 +3,7 @@ import {
   Match,
   MatchColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import { omit } from "@isa2025/api/src/utils/utils.ts";
 import { Delete, Done } from "@mui/icons-material";
 import {
   Button,
@@ -20,11 +21,11 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
+import { Overwrite } from "@trpc/server/unstable-core-do-not-import";
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { Th } from "../../components/Table.tsx";
 import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
-import { omit, Overwrite } from "../../utils/utils.ts";
 
 //TODO: either improve or delete this
 
