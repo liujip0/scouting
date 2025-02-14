@@ -138,7 +138,7 @@ export default function View({ logoutFunction }: ViewProps) {
                   thickRightBorder={
                     column === "flag" ||
                     column === "comments" ||
-                    column === "autoRemovedAlgaeFromReef"
+                    column === "autoNet"
                   }>
                   {column}
                 </Th>
@@ -204,7 +204,7 @@ export default function View({ logoutFunction }: ViewProps) {
                       thickRightBorder={
                         column === "flag" ||
                         column === "comments" ||
-                        column === "autoRemovedAlgaeFromReef"
+                        column === "autoNet"
                       }>
                       <Typography>
                         {teamMatchEntry[column as TeamMatchEntryColumn]}
