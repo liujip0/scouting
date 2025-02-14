@@ -26,13 +26,16 @@ export default function Auto({ match, setMatch }: AutoProps) {
           flex: 3,
           padding: 2,
         }}>
-        <Box
+        <Stack
           sx={{
             height: 1,
-            width: "max-content",
+            width: "max(20%, max-content)",
+            alignItems: "center",
           }}>
           <Box
             sx={{
+              aspectRatio: "634 / 2547",
+              height: "100%",
               position: "relative",
             }}>
             <img
@@ -44,17 +47,22 @@ export default function Auto({ match, setMatch }: AutoProps) {
               }}
             />
           </Box>
-        </Box>
+        </Stack>
         <Stack
           sx={{
+            width: "80%",
             height: 1,
+            alignItems: "center",
           }}>
           <Box
             sx={{
-              flex: 1,
+              height: "45%",
             }}>
             <Box
               sx={{
+                aspectRatio: "2547 / 2311",
+                maxHeight: "100%",
+                maxWidth: "100%",
                 position: "relative",
               }}>
               <img
@@ -68,10 +76,13 @@ export default function Auto({ match, setMatch }: AutoProps) {
           </Box>
           <Box
             sx={{
-              flex: 1,
+              height: "55%",
             }}>
             <Box
               sx={{
+                aspectRatio: "2547 / 2869",
+                maxHeight: "100%",
+                maxWidth: "100%",
                 position: "relative",
               }}>
               <img

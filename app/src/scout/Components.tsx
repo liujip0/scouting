@@ -16,15 +16,21 @@ type CounterProps = {
 export function Counter({ value, setValue }: CounterProps) {
   //TODO
   return (
-    <Stack direction="row">
+    <Stack
+      direction="row"
+      sx={{
+        alignItems: "center",
+      }}>
       <IconButton>
         <Add />
-        <TextField
-          value={value}
-          onChange={(event) => {
-            setValue(parseInt(event.currentTarget.value));
-          }}
-        />
+      </IconButton>
+      <TextField
+        value={value}
+        onChange={(event) => {
+          setValue(parseInt(event.currentTarget.value));
+        }}
+      />
+      <IconButton>
         <Remove />
       </IconButton>
     </Stack>
