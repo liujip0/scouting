@@ -121,7 +121,7 @@ export default function Postmatch({ match, setMatch }: PostmatchProps) {
                   onChange={(event) => {
                     setMatch({
                       ...match,
-                      goodAtAlgaeNet: event.currentTarget.checked,
+                      goodAtClimb: event.currentTarget.checked,
                     });
                   }}
                 />
