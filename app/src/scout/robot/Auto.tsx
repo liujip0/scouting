@@ -52,7 +52,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
           Removed Algae from Reef
         </StyledToggleButton>
         <StyledToggleButton
-          value="Crossed RSL?"
+          value="Crossed Robot Starting Line?"
           selected={match.autoCrossedRSL!}
           onChange={() =>
             setMatch({
@@ -60,7 +60,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
               autoCrossedRSL: !match.autoCrossedRSL,
             })
           }>
-          Crossed RSL
+          Crossed Robot Starting Line
         </StyledToggleButton>
       </Stack>
     </Stack>
