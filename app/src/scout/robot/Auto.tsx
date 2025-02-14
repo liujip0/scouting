@@ -1,9 +1,12 @@
 import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Divider, Stack } from "@mui/material";
+import { Box, Divider, Stack } from "@mui/material";
 import {
   StyledRedToggleButton,
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
+import Net from "../images/Net.png";
+import Processor from "../images/Processor.png";
+import Reef from "../images/Reef.png";
 
 type AutoProps = {
   match: TeamMatchEntry;
@@ -21,7 +24,25 @@ export default function Auto({ match, setMatch }: AutoProps) {
         direction="row"
         sx={{
           flex: 3,
-        }}></Stack>
+        }}>
+        <Box>
+          <img
+            src={Net}
+            style={{
+              height: "100%",
+              transform: "rotate(90deg)",
+            }}
+          />
+        </Box>
+        <Stack>
+          <Box>
+            <img src={Processor} />
+          </Box>
+          <Box>
+            <img src={Reef} />
+          </Box>
+        </Stack>
+      </Stack>
       <Divider orientation="vertical" />
       <Stack
         sx={{

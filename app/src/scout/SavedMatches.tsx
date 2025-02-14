@@ -562,8 +562,8 @@ export default function SavedMatches({
                 <QRCodeSVG
                   value={qrMatches[qrIndex]}
                   size={Math.min(
-                    (70 * innerWidth) / 100,
-                    (70 * innerHeight) / 100
+                    (60 * innerWidth) / 100,
+                    (60 * innerHeight) / 100
                   )}
                   marginSize={4}
                 />

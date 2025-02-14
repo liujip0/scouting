@@ -46,6 +46,7 @@ export default function Prematch({
           flex: 1,
           pl: 2,
           pr: 2,
+          overflowY: "scroll",
         }}
         gap={2}>
         <TextField
@@ -239,17 +240,21 @@ export default function Prematch({
         variant="middle"
         flexItem
       />
-      <Stack
+      <Box
         sx={{
           flex: 1,
           pl: 2,
           pr: 2,
-        }}
-        gap={2}>
+          height: 1,
+          // display: "grid",
+          // placeItems: "center",
+          // gridTemplate: "100% / 100%",
+        }}>
         <Box
           sx={{
-            width: 1,
             position: "relative",
+            width: "fit-content",
+            height: "fit-content",
           }}>
           <img
             src={
@@ -263,6 +268,7 @@ export default function Prematch({
             }
             style={{
               width: "100%",
+              height: "100%",
             }}
           />
           <CircleToggle
@@ -371,7 +377,7 @@ export default function Prematch({
             }
           />
         </Box>
-      </Stack>
+      </Box>
     </Stack>
   );
 }
