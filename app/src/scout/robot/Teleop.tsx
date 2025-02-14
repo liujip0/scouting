@@ -126,9 +126,10 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   setMatch({
                     ...match,
                     teleopSuccessfulShallow: true,
-                    teleopAttemptedShallow: false,
+                    teleopAttemptedShallow: true,
                     teleopAttemptedDeep: false,
                     teleopSuccessfulDeep: false,
+                    teleopPark: false,
                   });
                 } else {
                   setMatch({
@@ -151,8 +152,9 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                     ...match,
                     teleopSuccessfulDeep: true,
                     teleopAttemptedShallow: false,
-                    teleopAttemptedDeep: false,
+                    teleopAttemptedDeep: true,
                     teleopSuccessfulShallow: false,
+                    teleopPark: false,
                   });
                 } else {
                   setMatch({
@@ -171,12 +173,21 @@ export function Teleop({ match, setMatch }: TeleopProps) {
         <StyledToggleButton
           value="Parked?"
           selected={match.teleopPark!}
-          onChange={() =>
-            setMatch({
-              ...match,
-              teleopPark: !match.teleopPark,
-            })
-          }>
+          onChange={() => {
+            if (!match.teleopPark) {
+              setMatch({
+                ...match,
+                teleopPark: !match.teleopPark,
+                teleopSuccessfulShallow: false,
+                teleopSuccessfulDeep: false,
+              });
+            } else {
+              setMatch({
+                ...match,
+                teleopPark: !match.teleopPark,
+              });
+            }
+          }}>
           Parked
         </StyledToggleButton>
       </Stack>
