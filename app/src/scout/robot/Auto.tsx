@@ -24,22 +24,64 @@ export default function Auto({ match, setMatch }: AutoProps) {
         direction="row"
         sx={{
           flex: 3,
+          padding: 2,
         }}>
-        <Box>
-          <img
-            src={Net}
-            style={{
-              height: "100%",
-              transform: "rotate(90deg)",
-            }}
-          />
-        </Box>
-        <Stack>
-          <Box>
-            <img src={Processor} />
+        <Box
+          sx={{
+            height: 1,
+            width: "max-content",
+          }}>
+          <Box
+            sx={{
+              position: "relative",
+            }}>
+            <img
+              src={Net}
+              style={{
+                height: "100%",
+                width: "100%",
+                transform: "scaleX(-1)",
+              }}
+            />
           </Box>
-          <Box>
-            <img src={Reef} />
+        </Box>
+        <Stack
+          sx={{
+            height: 1,
+          }}>
+          <Box
+            sx={{
+              flex: 1,
+            }}>
+            <Box
+              sx={{
+                position: "relative",
+              }}>
+              <img
+                src={Processor}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+            }}>
+            <Box
+              sx={{
+                position: "relative",
+              }}>
+              <img
+                src={Reef}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
+            </Box>
           </Box>
         </Stack>
       </Stack>

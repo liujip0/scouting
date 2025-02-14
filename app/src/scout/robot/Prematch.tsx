@@ -39,13 +39,11 @@ export default function Prematch({
       sx={{
         width: 1,
         height: 1,
-        pt: 2,
       }}>
       <Stack
         sx={{
           flex: 1,
-          pl: 2,
-          pr: 2,
+          padding: 2,
           overflowY: "scroll",
         }}
         gap={2}>
@@ -243,18 +241,15 @@ export default function Prematch({
       <Box
         sx={{
           flex: 1,
-          pl: 2,
-          pr: 2,
+          padding: 2,
           height: 1,
-          // display: "grid",
-          // placeItems: "center",
-          // gridTemplate: "100% / 100%",
         }}>
         <Box
           sx={{
+            aspectRatio: "1700 / 1650",
+            maxWidth: "100%",
+            maxHeight: "100%",
             position: "relative",
-            width: "fit-content",
-            height: "fit-content",
           }}>
           <img
             src={
