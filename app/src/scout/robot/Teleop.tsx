@@ -26,31 +26,28 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
       <Stack
         direction="row"
         sx={{
-          flex: 3,
+          flex: 2,
           padding: 2,
         }}>
         <Stack
           sx={{
             height: 1,
-            width: "max(20%, max-content)",
+            width: "60%",
             alignItems: "center",
             order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
           }}>
           <Box
             sx={{
-              aspectRatio: "634 / 2547",
-              height: "100%",
+              aspectRatio: "1670 / 2881",
+              height: "65%",
               position: "relative",
+              order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
             }}>
             <img
               src={Net}
               style={{
                 height: "100%",
                 width: "100%",
-                transform:
-                  "scaleX(" +
-                  (deviceSetup.fieldOrientation === "processor" ? 1 : -1) +
-                  ")",
               }}
             />
             <Counter
@@ -65,22 +62,14 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
               sx={{
                 position: "absolute",
                 left: "50%",
-                top: "50%",
+                top: "45%",
                 transform: "translate(-50%, -50%)",
               }}
             />
           </Box>
-        </Stack>
-        <Stack
-          sx={{
-            width: "80%",
-            height: 1,
-            alignItems: "center",
-            order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
-          }}>
           <Box
             sx={{
-              height: "23%",
+              height: "35%",
               order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
             }}>
             <Box
@@ -115,9 +104,17 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
               />
             </Box>
           </Box>
+        </Stack>
+        <Stack
+          sx={{
+            width: "40%",
+            height: 1,
+            alignItems: "center",
+            order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
+          }}>
           <Box
             sx={{
-              height: "77%",
+              height: "100%",
               order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
             }}>
             <Box
@@ -208,8 +205,9 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
       />
       <Stack
         sx={{
-          flex: 1,
+          flex: 2,
           padding: 2,
+          overflowY: "scroll",
         }}
         gap={2}>
         <StyledRedToggleButton
@@ -245,8 +243,14 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
           }>
           Played Defense
         </StyledToggleButton>
-        <Stack>
-          <ToggleButtonGroup>
+        <Stack
+          sx={{
+            width: 1,
+          }}>
+          <ToggleButtonGroup
+            sx={{
+              width: 1,
+            }}>
             <StyledToggleButton
               value="Attempted Shallow Climb?"
               selected={match.teleopAttemptedShallow!}
@@ -270,6 +274,7 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
               sx={{
                 borderBottomLeftRadius: 0,
                 borderBottomWidth: 0,
+                width: 0.5,
               }}>
               Attempted Shallow Climb
             </StyledToggleButton>
@@ -296,11 +301,15 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
               sx={{
                 borderBottomRightRadius: 0,
                 borderBottomWidth: 0,
+                width: 0.5,
               }}>
               Attempted Deep Climb
             </StyledToggleButton>
           </ToggleButtonGroup>
-          <ToggleButtonGroup>
+          <ToggleButtonGroup
+            sx={{
+              width: 1,
+            }}>
             <StyledToggleButton
               value="Successful Shallow Climb?"
               selected={match.teleopSuccessfulShallow!}
@@ -323,6 +332,7 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
               }}
               sx={{
                 borderTopLeftRadius: 0,
+                width: 0.5,
               }}>
               Successful Shallow Climb
             </StyledToggleButton>
@@ -348,6 +358,7 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
               }}
               sx={{
                 borderTopRightRadius: 0,
+                width: 0.5,
               }}>
               Successful Deep Climb
             </StyledToggleButton>
