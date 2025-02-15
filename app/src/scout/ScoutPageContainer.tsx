@@ -1,6 +1,5 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { GridBorder } from "../components/GridBorder.tsx";
-import { ScoutPage } from "./Scout.tsx";
 
 type ScoutPageContainerProps = {
   title: string | React.ReactNode;
@@ -9,14 +8,12 @@ type ScoutPageContainerProps = {
     alliance: "Red" | "Blue";
     robotPosition: 1 | 2 | 3 | 4;
   };
-  setPage?: (value: ScoutPage) => void;
   navButtons?: React.ReactNode;
   children?: React.ReactNode;
 };
 export function ScoutPageContainer({
   title,
   nowScouting,
-  setPage,
   navButtons,
   children,
 }: ScoutPageContainerProps) {
@@ -53,10 +50,7 @@ export function ScoutPageContainer({
                 width: "max-content",
               }}
               onClick={() => {
-                //TODO: confirmation about not saving data (or fix saving data)
-                if (setPage) {
-                  setPage("devicesetup");
-                }
+                //TODO: easter egg :)
               }}>
               {nowScouting.teamNumber +
                 "\u00a0/\u00a0" +

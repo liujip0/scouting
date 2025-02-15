@@ -24,8 +24,8 @@ import {
 import { Overwrite } from "@trpc/server/unstable-core-do-not-import";
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
-import { Th } from "../../components/Table.tsx";
-import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
+import { Th } from "../components/Table.tsx";
+import { putDBEvent, putDBMatches } from "../utils/idb.ts";
 
 //TODO: either improve or delete this
 

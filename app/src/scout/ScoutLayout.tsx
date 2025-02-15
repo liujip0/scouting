@@ -8,6 +8,7 @@ import {
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DeviceSetupObj } from "../devicesetup/DeviceSetup.tsx";
 import { putEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import Human from "./Human.tsx";
@@ -15,7 +16,7 @@ import Auto from "./robot/Auto.tsx";
 import Postmatch from "./robot/Postmatch.tsx";
 import Prematch from "./robot/Prematch.tsx";
 import { Teleop } from "./robot/Teleop.tsx";
-import { DeviceSetupObj, ScoutPage } from "./Scout.tsx";
+import { ScoutPage } from "./Scout.tsx";
 import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
 
 export type MatchStage = "prematch" | "auto" | "teleop" | "postmatch" | "human";
@@ -179,7 +180,6 @@ export default function ScoutLayout({
         alliance: match.alliance,
         robotPosition: match.robotNumber,
       }}
-      setPage={setPage}
       navButtons={
         <>
           <Button

@@ -27,6 +27,11 @@ export default function LandingPage() {
           Scout
         </LinkButton>
         <LinkButton
+          to="/setup"
+          color="secondary">
+          Device Setup
+        </LinkButton>
+        <LinkButton
           to="/data"
           color="secondary">
           View Data

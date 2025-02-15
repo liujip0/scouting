@@ -1,11 +1,8 @@
 import {
   Alliance,
   DBEvent,
-  HumanPlayerEntry,
-  HumanPlayerEntryInit,
   Match,
   TeamMatchEntry,
-  TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { omit } from "@isa2025/api/src/utils/utils.ts";
 import { Close } from "@mui/icons-material";
@@ -27,30 +24,31 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StyledToggleButton } from "../../components/StyledToggleButton.tsx";
-import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
-import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
-import { DeviceSetupObj, ScoutPage } from "../Scout.tsx";
-import { ScoutPageContainer } from "../ScoutPageContainer.tsx";
+import { StyledToggleButton } from "../components/StyledToggleButton.tsx";
+import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
+import { ScoutPageContainer } from "../scout/ScoutPageContainer.tsx";
+import { putDBEvent, putDBMatches } from "../utils/idb.ts";
 import DownloadEvent from "./DownloadEvent.tsx";
 
+export type DeviceSetupObj = {
+  deviceTeamNumber: number;
+  deviceId: string;
+  alliance: TeamMatchEntry["alliance"];
+  robotNumber: number;
+  currentEvent: string;
+  fieldOrientation: "barge" | "processor";
+};
 type DeviceSetupProps = {
   deviceSetup: DeviceSetupObj;
   setDeviceSetup: (value: DeviceSetupObj) => void;
-  setPage: (newValue: ScoutPage) => void;
   events: (DBEvent & { matches: Match[] })[];
   setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
-  match: TeamMatchEntry | HumanPlayerEntry;
-  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
 };
 export default function DeviceSetup({
   deviceSetup,
   setDeviceSetup,
-  setPage,
   events,
   setEvents,
-  match,
-  setMatch,
 }: DeviceSetupProps) {
   const navigate = useNavigate();
 
@@ -132,51 +130,7 @@ export default function DeviceSetup({
               }
 
               if (!error) {
-                if (deviceSetup.robotNumber < 4) {
-                  const newMatch: TeamMatchEntry = {
-                    ...TeamMatchEntryInit,
-                    eventKey: deviceSetup.currentEvent,
-                    alliance: deviceSetup.alliance,
-                    robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
-                    deviceTeamNumber: deviceSetup.deviceTeamNumber,
-                    deviceId: deviceSetup.deviceId,
-                  };
-
-                  const eventMatches = events.find(
-                    (event) => event.eventKey === deviceSetup.currentEvent
-                  )?.matches;
-                  if (
-                    eventMatches?.some((x) => x.matchKey === match.matchKey)
-                  ) {
-                    setMatch({
-                      ...newMatch,
-                      teamNumber: eventMatches.find(
-                        (x) => x.matchKey === match.matchKey
-                      )![
-                        (deviceSetup.alliance.toLowerCase() +
-                          deviceSetup.robotNumber) as
-                          | "red1"
-                          | "red2"
-                          | "red3"
-                          | "blue1"
-                          | "blue2"
-                          | "blue3"
-                      ],
-                    });
-                  } else {
-                    setMatch(newMatch);
-                  }
-                } else {
-                  setMatch({
-                    ...HumanPlayerEntryInit,
-                    eventKey: deviceSetup.currentEvent,
-                    alliance: deviceSetup.alliance,
-                    robotNumber: deviceSetup.robotNumber as 4,
-                    deviceTeamNumber: deviceSetup.deviceTeamNumber,
-                    deviceId: deviceSetup.deviceId,
-                  });
-                }
-                setPage("scoutlayout");
+                navigate("/scout");
               }
             }}
             variant="contained">

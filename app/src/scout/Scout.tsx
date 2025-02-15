@@ -1,97 +1,71 @@
 import {
   DBEvent,
   HumanPlayerEntry,
+  HumanPlayerEntryInit,
   Match,
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { useEffect, useState } from "react";
-import { getFromDBStore, initDB, Stores } from "../utils/idb.ts";
-import DeviceSetup from "./devicesetup/DeviceSetup.tsx";
+import { useState } from "react";
+import { DeviceSetupObj } from "../devicesetup/DeviceSetup.tsx";
 import SavedMatches from "./SavedMatches.tsx";
 import ScoutLayout from "./ScoutLayout.tsx";
 
-export type ScoutPage = "devicesetup" | "scoutlayout" | "savedmatches";
-export type DeviceSetupObj = {
-  deviceTeamNumber: number;
-  deviceId: string;
-  alliance: TeamMatchEntry["alliance"];
-  robotNumber: number;
-  currentEvent: string;
-  fieldOrientation: "barge" | "processor";
+export type ScoutPage = "scoutlayout" | "savedmatches";
+type ScoutProps = {
+  deviceSetup: DeviceSetupObj;
+  events: (DBEvent & { matches: Match[] })[];
 };
-export default function Scout() {
-  const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
-    (): DeviceSetupObj => {
-      if (localStorage.getItem("deviceSetup") !== null) {
-        return JSON.parse(localStorage.getItem("deviceSetup")!);
+export default function Scout({ deviceSetup, events }: ScoutProps) {
+  const [page, setPage] = useState<ScoutPage>("scoutlayout");
+
+  const [match, setMatch] = useState<TeamMatchEntry | HumanPlayerEntry>(() => {
+    if (deviceSetup.robotNumber < 4) {
+      const newMatch: TeamMatchEntry = {
+        ...TeamMatchEntryInit,
+        eventKey: deviceSetup.currentEvent,
+        alliance: deviceSetup.alliance,
+        robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
+        deviceTeamNumber: deviceSetup.deviceTeamNumber,
+        deviceId: deviceSetup.deviceId,
+      };
+
+      const eventMatches = events.find(
+        (event) => event.eventKey === deviceSetup.currentEvent
+      )?.matches;
+      if (
+        eventMatches?.some((x) => x.matchKey === TeamMatchEntryInit.matchKey)
+      ) {
+        return {
+          ...newMatch,
+          teamNumber: eventMatches.find(
+            (x) => x.matchKey === TeamMatchEntryInit.matchKey
+          )![
+            (deviceSetup.alliance.toLowerCase() + deviceSetup.robotNumber) as
+              | "red1"
+              | "red2"
+              | "red3"
+              | "blue1"
+              | "blue2"
+              | "blue3"
+          ],
+        };
+      } else {
+        return newMatch;
       }
-      localStorage.setItem(
-        "deviceSetup",
-        JSON.stringify({
-          deviceTeamNumber: 0,
-          deviceId: "",
-          alliance: "Red",
-          robotNumber: 1,
-          currentEvent: "",
-          fieldOrientation: "processor",
-        } as DeviceSetupObj)
-      );
+    } else {
       return {
-        deviceTeamNumber: 0,
-        deviceId: "",
-        alliance: "Red",
-        robotNumber: 1,
-        currentEvent: "",
-        fieldOrientation: "processor",
+        ...HumanPlayerEntryInit,
+        eventKey: deviceSetup.currentEvent,
+        alliance: deviceSetup.alliance,
+        robotNumber: deviceSetup.robotNumber as 4,
+        deviceTeamNumber: deviceSetup.deviceTeamNumber,
+        deviceId: deviceSetup.deviceId,
       };
     }
-  );
-  const setDeviceSetup = async (value: DeviceSetupObj) => {
-    setDeviceSetupState(value);
-    localStorage.setItem("deviceSetup", JSON.stringify(value));
-  };
-  const [page, setPage] = useState<ScoutPage>("devicesetup");
-
-  const [match, setMatch] = useState<TeamMatchEntry | HumanPlayerEntry>(
-    TeamMatchEntryInit
-  );
-  const [events, setEvents] = useState<(DBEvent & { matches: Match[] })[]>([]);
-  useEffect(() => {
-    (async () => {
-      await initDB();
-
-      const idbEvents: DBEvent[] = await getFromDBStore(Stores.Events);
-      const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
-        (event) => ({
-          ...event,
-          matches: [],
-        })
-      );
-
-      const idbMatches: Match[] = await getFromDBStore(Stores.Matches);
-      idbMatches.forEach((match) => {
-        res
-          .find((event) => event.eventKey === match.eventKey)
-          ?.matches.push(match);
-      });
-
-      setEvents(res);
-    })();
-  }, []);
+  });
 
   return {
-    devicesetup: (
-      <DeviceSetup
-        deviceSetup={deviceSetup}
-        setDeviceSetup={setDeviceSetup}
-        setPage={setPage}
-        events={events}
-        setEvents={setEvents}
-        match={match}
-        setMatch={setMatch}
-      />
-    ),
     scoutlayout: (
       <ScoutLayout
         setPage={setPage}
