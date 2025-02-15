@@ -59,11 +59,14 @@ export const all = async (opts: publicOpts): Promise<Response> => {
       i < TeamMatchEntryColumns.length + HumanPlayerEntryColumns.length;
       i++
     ) {
-      if (include[i] === "1") {
+      if (include[i - TeamMatchEntryColumns.length] === "1") {
         newHumanColumns.push(
-          robotColumns[i] +
-            (renameColumns[robotColumns[i]] !== undefined ?
-              ` AS ${renameColumns[robotColumns[i]]}`
+          humanColumns[i - TeamMatchEntryColumns.length] +
+            ((
+              renameColumns[humanColumns[i - TeamMatchEntryColumns.length]] !==
+              undefined
+            ) ?
+              ` AS ${renameColumns[humanColumns[i - TeamMatchEntryColumns.length]]}`
             : "")
         );
       }
