@@ -369,6 +369,7 @@ export default function ScoutLayout({
                 <Auto
                   match={match as TeamMatchEntry}
                   setMatch={setMatch}
+                  deviceSetup={deviceSetup}
                 />
               ),
               teleop: (

@@ -20,12 +20,14 @@ import { CircleButton, Counter } from "../Components.tsx";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";
 import Reef from "../images/Reef.png";
+import { DeviceSetupObj } from "../Scout.tsx";
 
 type AutoProps = {
   match: TeamMatchEntry;
   setMatch: (value: TeamMatchEntry) => void;
+  deviceSetup: DeviceSetupObj;
 };
-export default function Auto({ match, setMatch }: AutoProps) {
+export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
   const [popperAnchor, setPopperAnchor] = useState<null | HTMLElement>(null);
   const [popperReef, setPopperReef] = useState<
     "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | ""
@@ -49,6 +51,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
             height: 1,
             width: "max(20%, max-content)",
             alignItems: "center",
+            order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
           }}>
           <Box
             sx={{
@@ -61,7 +64,10 @@ export default function Auto({ match, setMatch }: AutoProps) {
               style={{
                 height: "100%",
                 width: "100%",
-                transform: "scaleX(-1)",
+                transform:
+                  "scaleX(" +
+                  (deviceSetup.fieldOrientation === "processor" ? 1 : -1) +
+                  ")",
               }}
             />
             <Counter
@@ -87,10 +93,12 @@ export default function Auto({ match, setMatch }: AutoProps) {
             width: "80%",
             height: 1,
             alignItems: "center",
+            order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
           }}>
           <Box
             sx={{
               height: "45%",
+              order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
             }}>
             <Box
               sx={{
@@ -127,6 +135,7 @@ export default function Auto({ match, setMatch }: AutoProps) {
           <Box
             sx={{
               height: "55%",
+              order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
             }}>
             <Box
               sx={{
@@ -151,12 +160,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("A");
                 }}
-                sx={{
-                  position: "absolute",
-                  left: "8%",
-                  top: "37%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      left: "8%",
+                      top: "37%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      right: "8%",
+                      top: "60%",
+                      transform: "translate(50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="B"
@@ -167,12 +185,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("B");
                 }}
-                sx={{
-                  position: "absolute",
-                  left: "8%",
-                  top: "60%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      left: "8%",
+                      top: "60%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      right: "8%",
+                      top: "37%",
+                      transform: "translate(50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="C"
@@ -183,12 +210,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("C");
                 }}
-                sx={{
-                  position: "absolute",
-                  left: "20%",
-                  top: "80%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      left: "20%",
+                      top: "80%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      right: "20%",
+                      top: "17%",
+                      transform: "translate(50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="D"
@@ -199,12 +235,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("D");
                 }}
-                sx={{
-                  position: "absolute",
-                  left: "38%",
-                  top: "90%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      left: "38%",
+                      top: "90%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      right: "38%",
+                      top: "7%",
+                      transform: "translate(50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="E"
@@ -215,12 +260,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("E");
                 }}
-                sx={{
-                  position: "absolute",
-                  right: "38%",
-                  top: "90%",
-                  transform: "translate(50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      right: "38%",
+                      top: "90%",
+                      transform: "translate(50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "38%",
+                      top: "7%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="F"
@@ -231,12 +285,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("F");
                 }}
-                sx={{
-                  position: "absolute",
-                  right: "20%",
-                  top: "80%",
-                  transform: "translate(50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      right: "20%",
+                      top: "80%",
+                      transform: "translate(50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "20%",
+                      top: "17%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="G"
@@ -247,12 +310,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("G");
                 }}
-                sx={{
-                  position: "absolute",
-                  right: "8%",
-                  top: "60%",
-                  transform: "translate(50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      right: "8%",
+                      top: "60%",
+                      transform: "translate(50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "8%",
+                      top: "37%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="H"
@@ -263,12 +335,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("H");
                 }}
-                sx={{
-                  position: "absolute",
-                  right: "8%",
-                  top: "37%",
-                  transform: "translate(50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      right: "8%",
+                      top: "37%",
+                      transform: "translate(50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "8%",
+                      top: "60%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="I"
@@ -279,12 +360,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("I");
                 }}
-                sx={{
-                  position: "absolute",
-                  right: "20%",
-                  top: "17%",
-                  transform: "translate(50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      right: "20%",
+                      top: "17%",
+                      transform: "translate(50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "20%",
+                      top: "80%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="J"
@@ -295,12 +385,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("J");
                 }}
-                sx={{
-                  position: "absolute",
-                  right: "38%",
-                  top: "7%",
-                  transform: "translate(50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      right: "38%",
+                      top: "7%",
+                      transform: "translate(50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      left: "38%",
+                      top: "90%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="K"
@@ -311,12 +410,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("K");
                 }}
-                sx={{
-                  position: "absolute",
-                  left: "38%",
-                  top: "7%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      left: "38%",
+                      top: "7%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      right: "38%",
+                      top: "90%",
+                      transform: "translate(50%, -50%)",
+                    }
+                }
               />
               <CircleButton
                 label="L"
@@ -327,12 +435,21 @@ export default function Auto({ match, setMatch }: AutoProps) {
                   );
                   setPopperReef("L");
                 }}
-                sx={{
-                  position: "absolute",
-                  left: "20%",
-                  top: "17%",
-                  transform: "translate(-50%, -50%)",
-                }}
+                sx={
+                  deviceSetup.fieldOrientation === "processor" ?
+                    {
+                      position: "absolute",
+                      left: "20%",
+                      top: "17%",
+                      transform: "translate(-50%, -50%)",
+                    }
+                  : {
+                      position: "absolute",
+                      right: "20%",
+                      top: "80%",
+                      transform: "translate(50%, -50%)",
+                    }
+                }
               />
               <Button
                 onClick={() => {
