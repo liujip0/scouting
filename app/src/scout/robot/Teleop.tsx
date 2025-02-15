@@ -1,15 +1,21 @@
 import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
-import { Divider, Stack, ToggleButtonGroup } from "@mui/material";
+import { Box, Divider, Stack, ToggleButtonGroup } from "@mui/material";
 import {
   StyledRedToggleButton,
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
+import { Counter } from "../Components.tsx";
+import Branch from "../images/Branch.png";
+import Net from "../images/Net.png";
+import Processor from "../images/Processor.png";
+import { DeviceSetupObj } from "../Scout.tsx";
 
 type TeleopProps = {
   match: TeamMatchEntry;
   setMatch: (value: TeamMatchEntry) => void;
+  deviceSetup: DeviceSetupObj;
 };
-export function Teleop({ match, setMatch }: TeleopProps) {
+export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
   return (
     <Stack
       direction="row"
@@ -18,9 +24,184 @@ export function Teleop({ match, setMatch }: TeleopProps) {
         height: 1,
       }}>
       <Stack
+        direction="row"
         sx={{
-          flex: 1,
-        }}></Stack>
+          flex: 3,
+          padding: 2,
+        }}>
+        <Stack
+          sx={{
+            height: 1,
+            width: "max(20%, max-content)",
+            alignItems: "center",
+            order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
+          }}>
+          <Box
+            sx={{
+              aspectRatio: "634 / 2547",
+              height: "100%",
+              position: "relative",
+            }}>
+            <img
+              src={Net}
+              style={{
+                height: "100%",
+                width: "100%",
+                transform:
+                  "scaleX(" +
+                  (deviceSetup.fieldOrientation === "processor" ? 1 : -1) +
+                  ")",
+              }}
+            />
+            <Counter
+              value={match.teleopNet!}
+              setValue={(value) => {
+                setMatch({
+                  ...match,
+                  teleopNet: value,
+                });
+              }}
+              label="Algae in Net"
+              sx={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </Box>
+        </Stack>
+        <Stack
+          sx={{
+            width: "80%",
+            height: 1,
+            alignItems: "center",
+            order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
+          }}>
+          <Box
+            sx={{
+              height: "23%",
+              order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
+            }}>
+            <Box
+              sx={{
+                aspectRatio: "2547 / 2311",
+                maxHeight: "100%",
+                maxWidth: "100%",
+                position: "relative",
+              }}>
+              <img
+                src={Processor}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
+              <Counter
+                value={match.teleopProcessor!}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    teleopProcessor: value,
+                  });
+                }}
+                label="Algae in Processor"
+                sx={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "35%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              height: "77%",
+              order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
+            }}>
+            <Box
+              sx={{
+                aspectRatio: "1015 / 3069",
+                maxHeight: "100%",
+                maxWidth: "100%",
+                position: "relative",
+              }}>
+              <img
+                src={Branch}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
+              <Counter
+                value={match.teleopL4!}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    teleopL4: value,
+                  });
+                }}
+                label="L4 Coral"
+                sx={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "10%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+              <Counter
+                value={match.teleopL3!}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    teleopL3: value,
+                  });
+                }}
+                label="L3 Coral"
+                sx={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "35%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+              <Counter
+                value={match.teleopL2!}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    teleopL2: value,
+                  });
+                }}
+                label="L2 Coral"
+                sx={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "55%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+              <Counter
+                value={match.teleopL1!}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    teleopL1: value,
+                  });
+                }}
+                label="L1 Coral"
+                sx={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "80%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </Box>
+          </Box>
+        </Stack>
+      </Stack>
       <Divider
         orientation="vertical"
         flexItem

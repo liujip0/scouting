@@ -140,8 +140,8 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             <Box
               sx={{
                 aspectRatio: "2547 / 2869",
-                // maxHeight: "100%",
-                // maxWidth: "100%",
+                maxHeight: "100%",
+                maxWidth: "100%",
                 position: "relative",
               }}>
               <img
