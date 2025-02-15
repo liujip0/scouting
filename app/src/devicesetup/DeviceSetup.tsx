@@ -56,6 +56,7 @@ export default function DeviceSetup({
   const [deviceIdError, setDeviceIdError] = useState("");
   const [allianceError, setAllianceError] = useState("");
   const [robotNumberError, setRobotNumberError] = useState("");
+  const [fieldOrientationError, setFieldOrientationError] = useState("");
   const [currentEventError, setCurrentEventError] = useState("");
 
   // const [createEvent, setCreateEvent] = useState(false);
@@ -127,6 +128,16 @@ export default function DeviceSetup({
                 error = true;
               } else {
                 setCurrentEventError("");
+              }
+
+              if (
+                deviceSetup.fieldOrientation !== "barge" &&
+                deviceSetup.fieldOrientation !== "processor"
+              ) {
+                setFieldOrientationError("Must be 'barge' or 'processor'");
+                error = true;
+              } else {
+                setFieldOrientationError("");
               }
 
               if (!error) {
@@ -233,26 +244,39 @@ export default function DeviceSetup({
             }
             error={robotNumberError !== ""}
           />
-          <ToggleButtonGroup
-            value={deviceSetup.fieldOrientation}
-            exclusive
-            onChange={(_event, value) => {
-              if (value) {
-                setDeviceSetup({
-                  ...deviceSetup,
-                  fieldOrientation: value,
-                });
-              }
-            }}
-            color="primary"
-            sx={{
-              width: 1,
-            }}>
-            <StyledToggleButton value="barge">Barge Side</StyledToggleButton>
-            <StyledToggleButton value="processor">
-              Processor Side
-            </StyledToggleButton>
-          </ToggleButtonGroup>
+          <Stack>
+            <ToggleButtonGroup
+              value={deviceSetup.fieldOrientation}
+              exclusive
+              onChange={(_event, value) => {
+                if (value) {
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    fieldOrientation: value,
+                  });
+                }
+              }}
+              color="primary"
+              sx={{
+                width: 1,
+                borderWidth: fieldOrientationError !== "" ? 2 : 0,
+                borderColor: "error.main",
+                borderStyle: "solid",
+              }}>
+              <StyledToggleButton value="barge">Barge Side</StyledToggleButton>
+              <StyledToggleButton value="processor">
+                Processor Side
+              </StyledToggleButton>
+            </ToggleButtonGroup>
+            <FormHelperText
+              color="error"
+              sx={{
+                pl: 2,
+                color: "error.main",
+              }}>
+              {fieldOrientationError}
+            </FormHelperText>
+          </Stack>
         </Stack>
         <Divider
           orientation="vertical"

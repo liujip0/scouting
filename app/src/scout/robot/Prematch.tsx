@@ -62,14 +62,13 @@ export default function Prematch({
           helperText={scoutNameError}
         />
         <TextField
-          value={match.scoutTeamNumber}
+          value={isNaN(match.scoutTeamNumber) ? "" : match.scoutTeamNumber}
           onChange={(event) => {
             setMatch({
               ...match,
               scoutTeamNumber: parseInt(event.currentTarget.value),
             });
           }}
-          type="number"
           variant="outlined"
           label="Scout Team Number"
           error={scoutTeamNumberError !== ""}
