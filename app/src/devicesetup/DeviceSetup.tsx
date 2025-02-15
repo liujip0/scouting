@@ -13,13 +13,14 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
   IconButton,
-  MenuItem,
   Radio,
   RadioGroup,
   Snackbar,
   Stack,
   TextField,
+  ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
 import { useState } from "react";
@@ -110,14 +111,13 @@ export default function DeviceSetup({
                 setAllianceError("");
               }
 
-              if (!Number.isInteger(deviceSetup.robotNumber)) {
-                setRobotNumberError("Must be an integer");
-                error = true;
-              } else if (
-                deviceSetup.robotNumber < 1 ||
-                deviceSetup.robotNumber > 4
+              if (
+                deviceSetup.robotNumber !== 1 &&
+                deviceSetup.robotNumber !== 2 &&
+                deviceSetup.robotNumber !== 3 &&
+                deviceSetup.robotNumber !== 4
               ) {
-                setRobotNumberError("Must be between 1 and 4");
+                setRobotNumberError("Must be 1, 2, 3, or 4");
                 error = true;
               } else {
                 setRobotNumberError("");
@@ -183,14 +183,17 @@ export default function DeviceSetup({
           }}
           gap={2}>
           <TextField
-            value={deviceSetup.deviceTeamNumber}
+            value={
+              isNaN(deviceSetup.deviceTeamNumber) ? "" : (
+                deviceSetup.deviceTeamNumber
+              )
+            }
             onChange={(event) => {
               setDeviceSetup({
                 ...deviceSetup,
                 deviceTeamNumber: parseInt(event.currentTarget.value),
               });
             }}
-            type="number"
             label="Device Team Number"
             helperText={deviceTeamNumberError || "What team owns this device?"}
             error={deviceTeamNumberError !== ""}
@@ -209,42 +212,131 @@ export default function DeviceSetup({
             error={deviceIdError !== ""}
           />
           <Divider flexItem />
-          <TextField
-            value={deviceSetup.alliance}
-            onChange={(event) => {
-              setDeviceSetup({
-                ...deviceSetup,
-                alliance: event.target.value as TeamMatchEntry["alliance"],
-              });
-            }}
-            select
-            label="Alliance"
-            helperText={allianceError || "\u200b"}
-            error={allianceError !== ""}>
-            {Alliance.map((perm) => (
-              <MenuItem
-                key={perm}
-                value={perm}>
-                {perm}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            value={deviceSetup.robotNumber}
-            onChange={(event) => {
-              setDeviceSetup({
-                ...deviceSetup,
-                robotNumber: parseInt(event.currentTarget.value),
-              });
-            }}
-            type="number"
-            label="Robot Number"
-            helperText={
-              robotNumberError || "Set this to 4 to scout human players"
-            }
-            error={robotNumberError !== ""}
-          />
-          <Stack>
+          <Stack
+            sx={{
+              width: 1,
+            }}>
+            <FormLabel>Alliance</FormLabel>
+            <ToggleButtonGroup
+              value={deviceSetup.alliance}
+              exclusive
+              onChange={(_event, value) => {
+                if (value) {
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    alliance: value,
+                  });
+                }
+              }}
+              color="primary"
+              sx={{
+                width: 1,
+                borderWidth: allianceError !== "" ? 2 : 0,
+                borderColor: "error.main",
+                borderStyle: "solid",
+              }}>
+              <ToggleButton
+                value="Red"
+                sx={{
+                  flex: 1,
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#ff0000",
+                  },
+                  color: "#ff0000",
+                  borderColor: "#ff0000",
+                }}>
+                Red
+              </ToggleButton>
+              <ToggleButton
+                value="Blue"
+                sx={{
+                  flex: 1,
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#0000ff",
+                  },
+                  color: "#0000ff",
+                  borderColor: "#0000ff",
+                }}>
+                Blue
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <FormHelperText
+              color="error"
+              sx={{
+                pl: 2,
+                color: "error.main",
+              }}>
+              {allianceError}
+            </FormHelperText>
+          </Stack>
+          <Stack
+            sx={{
+              width: 1,
+            }}>
+            <FormLabel>Robot Number</FormLabel>
+            <ToggleButtonGroup
+              value={deviceSetup.robotNumber}
+              exclusive
+              onChange={(_event, value) => {
+                if (value) {
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    robotNumber: value,
+                  });
+                }
+              }}
+              color="primary"
+              sx={{
+                width: 1,
+                borderWidth: robotNumberError !== "" ? 2 : 0,
+                borderColor: "error.main",
+                borderStyle: "solid",
+              }}>
+              <StyledToggleButton
+                value={1}
+                sx={{
+                  flex: 1,
+                }}>
+                1
+              </StyledToggleButton>
+              <StyledToggleButton
+                value={2}
+                sx={{
+                  flex: 1,
+                }}>
+                2
+              </StyledToggleButton>
+              <StyledToggleButton
+                value={3}
+                sx={{
+                  flex: 1,
+                }}>
+                3
+              </StyledToggleButton>
+              <StyledToggleButton
+                value={4}
+                sx={{
+                  flex: 1,
+                }}>
+                4
+              </StyledToggleButton>
+            </ToggleButtonGroup>
+            <FormHelperText
+              color="error"
+              sx={{
+                pl: 2,
+                color: robotNumberError ? "error.main" : "text.secondary",
+              }}>
+              {robotNumberError || "Set this to 4 to scout human players"}
+            </FormHelperText>
+          </Stack>
+          <Stack
+            sx={{
+              width: 1,
+            }}>
+            <FormLabel>Field Orientation</FormLabel>
             <ToggleButtonGroup
               value={deviceSetup.fieldOrientation}
               exclusive
@@ -263,8 +355,18 @@ export default function DeviceSetup({
                 borderColor: "error.main",
                 borderStyle: "solid",
               }}>
-              <StyledToggleButton value="barge">Barge Side</StyledToggleButton>
-              <StyledToggleButton value="processor">
+              <StyledToggleButton
+                value="barge"
+                sx={{
+                  flex: 1,
+                }}>
+                Barge Side
+              </StyledToggleButton>
+              <StyledToggleButton
+                value="processor"
+                sx={{
+                  flex: 1,
+                }}>
                 Processor Side
               </StyledToggleButton>
             </ToggleButtonGroup>
