@@ -55,7 +55,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
           }}>
           <Box
             sx={{
-              aspectRatio: "634 / 2547",
+              aspectRatio: "1670 / 2881",
               height: "100%",
               position: "relative",
             }}>
@@ -64,10 +64,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               style={{
                 height: "100%",
                 width: "100%",
-                transform:
-                  "scaleX(" +
-                  (deviceSetup.fieldOrientation === "processor" ? 1 : -1) +
-                  ")",
               }}
             />
             <Counter
@@ -82,7 +78,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               sx={{
                 position: "absolute",
                 left: "50%",
-                top: "50%",
+                top: "45%",
                 transform: "translate(-50%, -50%)",
               }}
             />
