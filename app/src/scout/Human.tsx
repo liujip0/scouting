@@ -1,13 +1,11 @@
-import {
-  HumanPlayerEntry,
-  TeamMatchEntry,
-} from "@isa2025/api/src/utils/dbtypes.ts";
+import { HumanPlayerEntry } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
 import { Divider, IconButton, Stack, TextField } from "@mui/material";
+import { BigCounter } from "./Components.tsx";
 
 type HumanProps = {
-  match: TeamMatchEntry | HumanPlayerEntry;
-  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
+  match: HumanPlayerEntry;
+  setMatch: (value: HumanPlayerEntry) => void;
   scoutNameError: string;
   scoutTeamNumberError: string;
   teamNumberError: string;
@@ -143,7 +141,41 @@ export default function Human({
           pl: 4,
           pr: 4,
         }}
-        gap={2}></Stack>
+        gap={2}>
+        <BigCounter
+          value={match.humanAttemptedNet}
+          increment={() => {
+            setMatch({
+              ...match,
+              humanAttemptedNet: match.humanAttemptedNet + 1,
+            });
+          }}
+          decrement={() => {
+            setMatch({
+              ...match,
+              humanAttemptedNet: match.humanAttemptedNet - 1,
+            });
+          }}
+          label="Attempted Algae in Net"
+        />
+        <BigCounter
+          value={match.humanSuccessfulNet}
+          increment={() => {
+            setMatch({
+              ...match,
+              humanSuccessfulNet: match.humanSuccessfulNet + 1,
+              humanAttemptedNet: match.humanAttemptedNet + 1,
+            });
+          }}
+          decrement={() => {
+            setMatch({
+              ...match,
+              humanSuccessfulNet: match.humanSuccessfulNet - 1,
+            });
+          }}
+          label="Successful Algae in Net"
+        />
+      </Stack>
     </Stack>
   );
 }

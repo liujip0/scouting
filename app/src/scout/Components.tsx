@@ -79,6 +79,44 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
   );
 }
 
+type BigCounterProps = {
+  value: number;
+  increment: () => void;
+  decrement: () => void;
+  label: string;
+};
+export function BigCounter({
+  value,
+  increment,
+  decrement,
+  label,
+}: BigCounterProps) {
+  return (
+    <Stack direction="row">
+      <Button
+        onClick={() => {
+          if (value > 0) {
+            decrement();
+          }
+        }}
+        variant="contained">
+        <Remove />
+      </Button>
+      <TextField
+        value={value}
+        label={label}
+      />
+      <Button
+        onClick={() => {
+          increment();
+        }}
+        variant="contained">
+        <Add />
+      </Button>
+    </Stack>
+  );
+}
+
 type CircleToggleProps = {
   value: boolean;
   setValue: (value: boolean) => void;

@@ -263,6 +263,7 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
                   setMatch({
                     ...match,
                     teleopAttemptedShallow: false,
+                    teleopSuccessfulShallow: false,
                   });
                 }
               }}
@@ -288,6 +289,7 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
                   setMatch({
                     ...match,
                     teleopAttemptedDeep: false,
+                    teleopSuccessfulDeep: false,
                   });
                 }
               }}
