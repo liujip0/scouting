@@ -1,3 +1,4 @@
+import { MAX_TEAM_NUMBER } from "@isa2025/api/src/utils/constants.ts";
 import {
   Alliance,
   DBEvent,
@@ -92,6 +93,9 @@ export default function DeviceSetup({
                 error = true;
               } else if (deviceSetup.deviceTeamNumber <= 0) {
                 setDeviceTeamNumberError("Must be greater than 0");
+                error = true;
+              } else if (deviceSetup.deviceTeamNumber > MAX_TEAM_NUMBER) {
+                setDeviceTeamNumberError("Team number too high");
                 error = true;
               } else {
                 setDeviceTeamNumberError("");

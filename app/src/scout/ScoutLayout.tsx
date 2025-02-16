@@ -1,3 +1,4 @@
+import { MAX_TEAM_NUMBER } from "@isa2025/api/src/utils/constants.ts";
 import {
   DBEvent,
   HumanPlayerEntry,
@@ -129,14 +130,22 @@ export default function ScoutLayout({
                     setScoutNameError("");
                   }
 
-                  if (!match.scoutTeamNumber || match.scoutTeamNumber < 0) {
+                  if (
+                    !match.scoutTeamNumber ||
+                    match.scoutTeamNumber < 0 ||
+                    match.scoutTeamNumber > MAX_TEAM_NUMBER
+                  ) {
                     error = true;
                     setScoutTeamNumberError("Invalid team number.");
                   } else {
                     setScoutTeamNumberError("");
                   }
 
-                  if (!match.teamNumber || match.teamNumber < 0) {
+                  if (
+                    !match.teamNumber ||
+                    match.teamNumber < 0 ||
+                    match.teamNumber > MAX_TEAM_NUMBER
+                  ) {
                     error = true;
                     setTeamNumberError("Invalid team number.");
                   } else {
@@ -233,14 +242,22 @@ export default function ScoutLayout({
                     setScoutNameError("");
                   }
 
-                  if (!match.scoutTeamNumber || match.scoutTeamNumber < 0) {
+                  if (
+                    !match.scoutTeamNumber ||
+                    match.scoutTeamNumber < 0 ||
+                    match.scoutTeamNumber > MAX_TEAM_NUMBER
+                  ) {
                     error = true;
                     setScoutTeamNumberError("Invalid team number.");
                   } else {
                     setScoutTeamNumberError("");
                   }
 
-                  if (!match.teamNumber || match.teamNumber < 0) {
+                  if (
+                    !match.teamNumber ||
+                    match.teamNumber < 0 ||
+                    match.teamNumber > MAX_TEAM_NUMBER
+                  ) {
                     error = true;
                     setTeamNumberError("Invalid team number.");
                   } else {
@@ -310,14 +327,22 @@ export default function ScoutLayout({
                     setScoutNameError("");
                   }
 
-                  if (!match.scoutTeamNumber || match.scoutTeamNumber < 0) {
+                  if (
+                    !match.scoutTeamNumber ||
+                    match.scoutTeamNumber < 0 ||
+                    match.scoutTeamNumber > MAX_TEAM_NUMBER
+                  ) {
                     error = true;
                     setScoutTeamNumberError("Invalid team number.");
                   } else {
                     setScoutTeamNumberError("");
                   }
 
-                  if (!match.teamNumber || match.teamNumber < 0) {
+                  if (
+                    !match.teamNumber ||
+                    match.teamNumber < 0 ||
+                    match.teamNumber > MAX_TEAM_NUMBER
+                  ) {
                     error = true;
                     setTeamNumberError("Invalid team number.");
                   } else {
