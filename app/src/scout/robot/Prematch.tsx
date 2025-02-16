@@ -6,7 +6,7 @@ import {
 import { Add, Remove } from "@mui/icons-material";
 import { Box, Divider, IconButton, Stack, TextField } from "@mui/material";
 import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
-import { DeviceSetupObj } from "../../devicesetup/DeviceSetup.tsx";
+import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { CircleToggle } from "../Components.tsx";
 import BlueBarge from "../images/BlueBarge.png";
 import BlueProcessor from "../images/BlueProcessor.png";

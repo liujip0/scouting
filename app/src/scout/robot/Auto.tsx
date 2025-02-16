@@ -16,7 +16,7 @@ import {
   StyledRedToggleButton,
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
-import { DeviceSetupObj } from "../../devicesetup/DeviceSetup.tsx";
+import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { CircleButton, Counter } from "../Components.tsx";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";

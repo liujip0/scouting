@@ -1,4 +1,6 @@
+import { MAX_TEAM_NUMBER } from "@isa2025/api/src/utils/constants.ts";
 import {
+  Alliance,
   DBEvent,
   HumanPlayerEntry,
   HumanPlayerEntryInit,
@@ -6,8 +8,9 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { useState } from "react";
-import { DeviceSetupObj } from "../devicesetup/DeviceSetup.tsx";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
 import SavedMatches from "./SavedMatches.tsx";
 import ScoutLayout from "./ScoutLayout.tsx";
 
@@ -17,6 +20,27 @@ type ScoutProps = {
   events: (DBEvent & { matches: Match[] })[];
 };
 export default function Scout({ deviceSetup, events }: ScoutProps) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (
+      (deviceSetup.fieldOrientation !== "processor" &&
+        deviceSetup.fieldOrientation !== "barge") ||
+      !deviceSetup.currentEvent ||
+      !Number.isInteger(deviceSetup.deviceTeamNumber) ||
+      !deviceSetup.deviceTeamNumber ||
+      deviceSetup.deviceTeamNumber < 1 ||
+      deviceSetup.deviceTeamNumber > MAX_TEAM_NUMBER ||
+      !deviceSetup.deviceId ||
+      !Alliance.includes(deviceSetup.alliance) ||
+      (deviceSetup.robotNumber !== 1 &&
+        deviceSetup.robotNumber !== 2 &&
+        deviceSetup.robotNumber !== 3 &&
+        deviceSetup.robotNumber !== 4)
+    ) {
+      navigate("/setup");
+    }
+  }, [deviceSetup, navigate]);
+
   const [page, setPage] = useState<ScoutPage>("scoutlayout");
 
   const [match, setMatch] = useState<TeamMatchEntry | HumanPlayerEntry>(() => {

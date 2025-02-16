@@ -9,7 +9,7 @@ import {
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DeviceSetupObj } from "../devicesetup/DeviceSetup.tsx";
+import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
 import { putEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import Human from "./Human.tsx";
