@@ -4,7 +4,6 @@ import {
   StyledRedToggleButton,
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
-import { DeviceSetupObj } from "../../devicesetup/DeviceSetup.tsx";
 import { Counter } from "../Components.tsx";
 import Branch from "../images/Branch.png";
 import Net from "../images/Net.png";
@@ -13,9 +12,8 @@ import Processor from "../images/Processor.png";
 type TeleopProps = {
   match: TeamMatchEntry;
   setMatch: (value: TeamMatchEntry) => void;
-  deviceSetup: DeviceSetupObj;
 };
-export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
+export function Teleop({ match, setMatch }: TeleopProps) {
   return (
     <Stack
       direction="row"
@@ -31,91 +29,13 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
         }}>
         <Stack
           sx={{
-            height: 1,
-            width: "60%",
-            alignItems: "center",
-            order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
-          }}>
-          <Box
-            sx={{
-              aspectRatio: "1670 / 2881",
-              height: "65%",
-              position: "relative",
-              order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
-            }}>
-            <img
-              src={Net}
-              style={{
-                height: "100%",
-                width: "100%",
-              }}
-            />
-            <Counter
-              value={match.teleopNet!}
-              setValue={(value) => {
-                setMatch({
-                  ...match,
-                  teleopNet: value,
-                });
-              }}
-              label="Algae in Net"
-              sx={{
-                position: "absolute",
-                left: "50%",
-                top: "45%",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
-          </Box>
-          <Box
-            sx={{
-              height: "35%",
-              order: deviceSetup.fieldOrientation === "processor" ? 2 : 1,
-            }}>
-            <Box
-              sx={{
-                aspectRatio: "2547 / 2311",
-                maxHeight: "100%",
-                maxWidth: "100%",
-                position: "relative",
-              }}>
-              <img
-                src={Processor}
-                style={{
-                  height: "100%",
-                  width: "100%",
-                }}
-              />
-              <Counter
-                value={match.teleopProcessor!}
-                setValue={(value) => {
-                  setMatch({
-                    ...match,
-                    teleopProcessor: value,
-                  });
-                }}
-                label="Algae in Processor"
-                sx={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "35%",
-                  transform: "translate(-50%, -50%)",
-                }}
-              />
-            </Box>
-          </Box>
-        </Stack>
-        <Stack
-          sx={{
             width: "40%",
             height: 1,
             alignItems: "center",
-            order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
           }}>
           <Box
             sx={{
               height: "100%",
-              order: deviceSetup.fieldOrientation === "processor" ? 1 : 2,
             }}>
             <Box
               sx={{
@@ -192,6 +112,79 @@ export function Teleop({ match, setMatch, deviceSetup }: TeleopProps) {
                   position: "absolute",
                   left: "50%",
                   top: "80%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </Box>
+          </Box>
+        </Stack>
+        <Stack
+          sx={{
+            height: 1,
+            width: "60%",
+            alignItems: "center",
+          }}>
+          <Box
+            sx={{
+              aspectRatio: "1670 / 2881",
+              height: "65%",
+              position: "relative",
+            }}>
+            <img
+              src={Net}
+              style={{
+                height: "100%",
+                width: "100%",
+              }}
+            />
+            <Counter
+              value={match.teleopNet!}
+              setValue={(value) => {
+                setMatch({
+                  ...match,
+                  teleopNet: value,
+                });
+              }}
+              label="Algae in Net"
+              sx={{
+                position: "absolute",
+                left: "50%",
+                top: "45%",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              height: "35%",
+            }}>
+            <Box
+              sx={{
+                aspectRatio: "2547 / 2311",
+                maxHeight: "100%",
+                maxWidth: "100%",
+                position: "relative",
+              }}>
+              <img
+                src={Processor}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
+              <Counter
+                value={match.teleopProcessor!}
+                setValue={(value) => {
+                  setMatch({
+                    ...match,
+                    teleopProcessor: value,
+                  });
+                }}
+                label="Algae in Processor"
+                sx={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "35%",
                   transform: "translate(-50%, -50%)",
                 }}
               />

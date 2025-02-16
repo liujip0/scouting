@@ -401,7 +401,6 @@ export default function ScoutLayout({
                 <Teleop
                   match={match as TeamMatchEntry}
                   setMatch={setMatch}
-                  deviceSetup={deviceSetup}
                 />
               ),
               postmatch: (
