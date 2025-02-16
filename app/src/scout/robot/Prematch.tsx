@@ -209,7 +209,7 @@ export default function Prematch({
         />
         <TextField
           label="Robot Team Number"
-          value={match.teamNumber}
+          value={isNaN(match.teamNumber) ? "" : match.teamNumber}
           onChange={(event) => {
             setMatch({
               ...match,
