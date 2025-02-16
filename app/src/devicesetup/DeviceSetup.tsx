@@ -320,7 +320,7 @@ export default function DeviceSetup({
                 sx={{
                   flex: 1,
                 }}>
-                4
+                Human
               </StyledToggleButton>
             </ToggleButtonGroup>
             <FormHelperText
@@ -329,7 +329,7 @@ export default function DeviceSetup({
                 pl: 2,
                 color: robotNumberError ? "error.main" : "text.secondary",
               }}>
-              {robotNumberError || "Set this to 4 to scout human players"}
+              {robotNumberError}
             </FormHelperText>
           </Stack>
           <Stack

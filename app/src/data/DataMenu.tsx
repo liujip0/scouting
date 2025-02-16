@@ -27,7 +27,7 @@ export default function DataMenu({ permLevel }: DataMenuProps) {
         }
         {["team", "datamanage", "admin"].includes(permLevel) && (
           <LinkButton
-            to="/data/export/"
+            to="/data/export/robots"
             color="primary">
             Export Data
           </LinkButton>

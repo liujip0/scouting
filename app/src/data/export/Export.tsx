@@ -49,12 +49,12 @@ export default function Export() {
               "/humans"
             }
           />
-          <Tab
+          {/* <Tab
             label="All Data"
             value="/"
             component={Link}
             to={resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/"}
-          />
+          /> */}
         </Tabs>
       </Box>
       <Box
@@ -97,7 +97,7 @@ export default function Export() {
               />
             }
           />
-          <Route
+          {/* <Route
             path="/"
             element={
               <ExportLayout
@@ -113,7 +113,7 @@ export default function Export() {
                 linkBase="/public/all/"
               />
             }
-          />
+          /> */}
         </Routes>
       </Box>
     </Stack>
