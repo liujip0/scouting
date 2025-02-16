@@ -25,11 +25,14 @@ export const createPublicContext = async (
   const ctx: publicCtx = {
     user: null,
   };
-  return await router({
+  const response = await router({
     request: request,
     path: path,
     params: params,
     env: env,
     ctx: ctx,
   });
+  response.headers.append("Access-Control-Allow-Origin", "*");
+  response.headers.append("Access-Control-Allow-Headers", "*");
+  return response;
 };
