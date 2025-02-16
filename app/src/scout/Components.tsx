@@ -43,7 +43,8 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
           alignItems: "center",
         }}>
         <IconButton
-          onClick={() => {
+          onClick={(event) => {
+            event.stopPropagation();
             if (value > 0) {
               setValue(value - 1);
             }
@@ -71,9 +72,13 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
             },
           }}
           disabled
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
         />
         <IconButton
-          onClick={() => {
+          onClick={(event) => {
+            event.stopPropagation();
             setValue(value + 1);
           }}
           sx={buttonSx}>

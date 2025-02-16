@@ -51,6 +51,25 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   width: "100%",
                 }}
               />
+              <Box
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: "0%",
+                  left: "0%",
+                  width: "100%",
+                  height: "30%",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: "primary.main",
+                  backgroundColor: theme.palette.primary.main + "20",
+                })}
+                onClick={() => {
+                  setMatch({
+                    ...match,
+                    teleopL4: match.teleopL4! + 1,
+                  });
+                }}
+              />
               <Counter
                 value={match.teleopL4!}
                 setValue={(value) => {
@@ -65,6 +84,25 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   left: "50%",
                   top: "10%",
                   transform: "translate(-50%, -50%)",
+                }}
+              />
+              <Box
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: "30%",
+                  left: "0%",
+                  width: "100%",
+                  height: "20%",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: "primary.main",
+                  backgroundColor: theme.palette.primary.main + "20",
+                })}
+                onClick={() => {
+                  setMatch({
+                    ...match,
+                    teleopL3: match.teleopL3! + 1,
+                  });
                 }}
               />
               <Counter
@@ -83,6 +121,25 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   transform: "translate(-50%, -50%)",
                 }}
               />
+              <Box
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: "50%",
+                  left: "0%",
+                  width: "100%",
+                  height: "20%",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: "primary.main",
+                  backgroundColor: theme.palette.primary.main + "20",
+                })}
+                onClick={() => {
+                  setMatch({
+                    ...match,
+                    teleopL2: match.teleopL2! + 1,
+                  });
+                }}
+              />
               <Counter
                 value={match.teleopL2!}
                 setValue={(value) => {
@@ -97,6 +154,25 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   left: "50%",
                   top: "55%",
                   transform: "translate(-50%, -50%)",
+                }}
+              />
+              <Box
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: "70%",
+                  left: "0%",
+                  width: "100%",
+                  height: "30%",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: "primary.main",
+                  backgroundColor: theme.palette.primary.main + "20",
+                })}
+                onClick={() => {
+                  setMatch({
+                    ...match,
+                    teleopL1: match.teleopL1! + 1,
+                  });
                 }}
               />
               <Counter
@@ -129,6 +205,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
               aspectRatio: "1670 / 2881",
               height: "65%",
               position: "relative",
+            }}
+            onClick={() => {
+              setMatch({
+                ...match,
+                teleopNet: match.teleopNet! + 1,
+              });
             }}>
             <img
               src={Net}
@@ -164,6 +246,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                 maxHeight: "100%",
                 maxWidth: "100%",
                 position: "relative",
+              }}
+              onClick={() => {
+                setMatch({
+                  ...match,
+                  teleopProcessor: match.teleopProcessor! + 1,
+                });
               }}>
               <img
                 src={Processor}

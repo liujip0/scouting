@@ -517,6 +517,12 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 maxWidth: "100%",
                 maxHeight: "100%",
                 position: "relative",
+              }}
+              onClick={() => {
+                setMatch({
+                  ...match,
+                  autoProcessor: match.autoProcessor! + 1,
+                });
               }}>
               <img
                 src={Processor}
@@ -554,6 +560,12 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 maxWidth: "100%",
                 maxHeight: "100%",
                 position: "relative",
+              }}
+              onClick={() => {
+                setMatch({
+                  ...match,
+                  autoNet: match.autoNet! + 1,
+                });
               }}>
               <img
                 src={Net}
