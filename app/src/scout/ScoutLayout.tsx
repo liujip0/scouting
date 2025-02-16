@@ -86,6 +86,69 @@ export default function ScoutLayout({
   const [scoutNameError, setScoutNameError] = useState("");
   const [scoutTeamNumberError, setScoutTeamNumberError] = useState("");
   const [teamNumberError, setTeamNumberError] = useState("");
+  const [startingPositionError, setStartingPositionError] = useState("");
+
+  const prematchCheck = () => {
+    let error = false;
+
+    if (
+      !events
+        .find((x) => x.eventKey === deviceSetup.currentEvent)
+        ?.matches.some((y) => y.matchKey === match.matchKey)
+    ) {
+      if (
+        matchNumberError !== "Invalid match key. Press Next again to ignore."
+      ) {
+        error = true;
+      }
+      setMatchNumberError("Invalid match key. Press Next again to ignore.");
+    } else {
+      setMatchNumberError("");
+    }
+
+    if (!match.scoutName) {
+      error = true;
+      setScoutNameError("Cannot be empty.");
+    } else {
+      setScoutNameError("");
+    }
+
+    if (
+      !match.scoutTeamNumber ||
+      match.scoutTeamNumber < 0 ||
+      match.scoutTeamNumber > MAX_TEAM_NUMBER
+    ) {
+      error = true;
+      setScoutTeamNumberError("Invalid team number.");
+    } else {
+      setScoutTeamNumberError("");
+    }
+
+    if (
+      !match.teamNumber ||
+      match.teamNumber < 0 ||
+      match.teamNumber > MAX_TEAM_NUMBER
+    ) {
+      error = true;
+      setTeamNumberError("Invalid team number.");
+    } else {
+      setTeamNumberError("");
+    }
+
+    if (
+      !(match as TeamMatchEntry).noShow &&
+      !(match as TeamMatchEntry).startingLocationA &&
+      !(match as TeamMatchEntry).startingLocationB &&
+      !(match as TeamMatchEntry).startingLocationC
+    ) {
+      error = true;
+      setStartingPositionError("Starting position must be selected.");
+    } else {
+      setStartingPositionError("");
+    }
+
+    return error;
+  };
 
   return (
     <ScoutPageContainer
@@ -103,56 +166,7 @@ export default function ScoutLayout({
               value={matchStage}
               onChange={(_event, value) => {
                 if (matchStage === "prematch") {
-                  let error = false;
-
-                  if (
-                    !events
-                      .find((x) => x.eventKey === deviceSetup.currentEvent)
-                      ?.matches.some((y) => y.matchKey === match.matchKey)
-                  ) {
-                    if (
-                      matchNumberError !==
-                      "Invalid match key. Press Next again to ignore."
-                    ) {
-                      error = true;
-                    }
-                    setMatchNumberError(
-                      "Invalid match key. Press Next again to ignore."
-                    );
-                  } else {
-                    setMatchNumberError("");
-                  }
-
-                  if (!match.scoutName) {
-                    error = true;
-                    setScoutNameError("Cannot be empty.");
-                  } else {
-                    setScoutNameError("");
-                  }
-
-                  if (
-                    !match.scoutTeamNumber ||
-                    match.scoutTeamNumber < 0 ||
-                    match.scoutTeamNumber > MAX_TEAM_NUMBER
-                  ) {
-                    error = true;
-                    setScoutTeamNumberError("Invalid team number.");
-                  } else {
-                    setScoutTeamNumberError("");
-                  }
-
-                  if (
-                    !match.teamNumber ||
-                    match.teamNumber < 0 ||
-                    match.teamNumber > MAX_TEAM_NUMBER
-                  ) {
-                    error = true;
-                    setTeamNumberError("Invalid team number.");
-                  } else {
-                    setTeamNumberError("");
-                  }
-
-                  if (!error) {
+                  if (!prematchCheck) {
                     setMatchStage(value);
                   }
                 } else {
@@ -215,56 +229,7 @@ export default function ScoutLayout({
             onClick={() => {
               switch (matchStage) {
                 case "prematch": {
-                  let error = false;
-
-                  if (
-                    !events
-                      .find((x) => x.eventKey === deviceSetup.currentEvent)
-                      ?.matches.some((y) => y.matchKey === match.matchKey)
-                  ) {
-                    if (
-                      matchNumberError !==
-                      "Invalid match key. Press Continue again to ignore."
-                    ) {
-                      error = true;
-                    }
-                    setMatchNumberError(
-                      "Invalid match key. Press Continue again to ignore."
-                    );
-                  } else {
-                    setMatchNumberError("");
-                  }
-
-                  if (!match.scoutName) {
-                    error = true;
-                    setScoutNameError("Cannot be empty.");
-                  } else {
-                    setScoutNameError("");
-                  }
-
-                  if (
-                    !match.scoutTeamNumber ||
-                    match.scoutTeamNumber < 0 ||
-                    match.scoutTeamNumber > MAX_TEAM_NUMBER
-                  ) {
-                    error = true;
-                    setScoutTeamNumberError("Invalid team number.");
-                  } else {
-                    setScoutTeamNumberError("");
-                  }
-
-                  if (
-                    !match.teamNumber ||
-                    match.teamNumber < 0 ||
-                    match.teamNumber > MAX_TEAM_NUMBER
-                  ) {
-                    error = true;
-                    setTeamNumberError("Invalid team number.");
-                  } else {
-                    setTeamNumberError("");
-                  }
-
-                  if (!error) {
+                  if (!prematchCheck()) {
                     if ((match as TeamMatchEntry).noShow) {
                       putEntries.mutate([
                         {
@@ -388,6 +353,7 @@ export default function ScoutLayout({
                   scoutNameError={scoutNameError}
                   scoutTeamNumberError={scoutTeamNumberError}
                   teamNumberError={teamNumberError}
+                  startingPositionError={startingPositionError}
                 />
               ),
               auto: (

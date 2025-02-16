@@ -7,7 +7,7 @@ import { Add, Remove } from "@mui/icons-material";
 import { Box, Divider, IconButton, Stack, TextField } from "@mui/material";
 import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
-import { CircleToggle } from "../Components.tsx";
+import { TransparentToggle } from "../Components.tsx";
 import BlueBarge from "../images/BlueBarge.png";
 import BlueProcessor from "../images/BlueProcessor.png";
 import RedBarge from "../images/RedBarge.png";
@@ -22,6 +22,7 @@ type PrematchProps = {
   scoutNameError: string;
   scoutTeamNumberError: string;
   teamNumberError: string;
+  startingPositionError: string;
 };
 export default function Prematch({
   match,
@@ -32,6 +33,7 @@ export default function Prematch({
   scoutNameError,
   scoutTeamNumberError,
   teamNumberError,
+  startingPositionError,
 }: PrematchProps) {
   return (
     <Stack
@@ -265,7 +267,8 @@ export default function Prematch({
               height: "100%",
             }}
           />
-          <CircleToggle
+          <Box></Box>
+          <TransparentToggle
             label="A"
             value={match.startingLocationA!}
             setValue={(value) => {
@@ -284,23 +287,23 @@ export default function Prematch({
               }
             }}
             disabled={match.noShow}
+            error={startingPositionError !== ""}
             sx={
               deviceSetup.fieldOrientation === "barge" ?
                 {
-                  position: "absolute",
-                  left: "14%",
-                  top: "25%",
-                  transform: "translate(-50%, -50%)",
+                  left: "8%",
+                  top: "13%",
+                  width: "20%",
+                  height: "27%",
                 }
               : {
-                  position: "absolute",
                   right: "14%",
                   bottom: "25%",
                   transform: "translate(50%, 50%)",
                 }
             }
           />
-          <CircleToggle
+          <TransparentToggle
             label="B"
             value={match.startingLocationB!}
             setValue={(value) => {
@@ -319,23 +322,23 @@ export default function Prematch({
               }
             }}
             disabled={match.noShow}
+            error={startingPositionError !== ""}
             sx={
               deviceSetup.fieldOrientation === "barge" ?
                 {
-                  position: "absolute",
-                  left: "14%",
-                  top: "53%",
-                  transform: "translate(-50%, -50%)",
+                  left: "8%",
+                  top: "40%",
+                  width: "20%",
+                  height: "27%",
                 }
               : {
-                  position: "absolute",
                   right: "14%",
                   bottom: "53%",
                   transform: "translate(50%, 50%)",
                 }
             }
           />
-          <CircleToggle
+          <TransparentToggle
             label="C"
             value={match.startingLocationC!}
             setValue={(value) => {
@@ -354,16 +357,16 @@ export default function Prematch({
               }
             }}
             disabled={match.noShow}
+            error={startingPositionError !== ""}
             sx={
               deviceSetup.fieldOrientation === "barge" ?
                 {
-                  position: "absolute",
-                  left: "14%",
-                  bottom: "18%",
-                  transform: "translate(-50%, 50%)",
+                  left: "8%",
+                  top: "67%",
+                  width: "20%",
+                  height: "27%",
                 }
               : {
-                  position: "absolute",
                   right: "14%",
                   top: "18%",
                   transform: "translate(50%, -50%)",
