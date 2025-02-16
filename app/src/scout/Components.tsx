@@ -54,11 +54,15 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
         <TextField
           value={value}
           size="small"
-          sx={{
+          sx={(theme) => ({
             color: "secondary.contrastText",
             backgroundColor: "secondary.main",
             width: "3em",
-          }}
+            "& .MuiInputBase-input.Mui-disabled": {
+              WebkitTextFillColor: theme.palette.text.primary,
+              color: theme.palette.text.primary,
+            },
+          })}
           slotProps={{
             htmlInput: {
               sx: {
@@ -66,6 +70,7 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
               },
             },
           }}
+          disabled
         />
         <IconButton
           onClick={() => {

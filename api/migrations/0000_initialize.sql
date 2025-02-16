@@ -76,9 +76,9 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   scoutName text NOT NULL,
   flag text NOT NULL,
 
-  humanAttemptedNet integer,
-  humanSuccessfulNet integer,
-  comments text,
+  humanAttemptedNet integer NOT NULL,
+  humanSuccessfulNet integer NOT NULL,
+  comments text NOT NULL,
 
   PRIMARY KEY (eventKey, matchKey, teamNumber, deviceTeamNumber, deviceId)
 );

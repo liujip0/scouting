@@ -6,8 +6,8 @@ import {
 import { Add, Remove } from "@mui/icons-material";
 import { Box, Divider, IconButton, Stack, TextField } from "@mui/material";
 import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
+import { DeviceSetupObj } from "../../devicesetup/DeviceSetup.tsx";
 import { CircleToggle } from "../Components.tsx";
-import { DeviceSetupObj } from "../Scout.tsx";
 import BlueBarge from "../images/BlueBarge.png";
 import BlueProcessor from "../images/BlueProcessor.png";
 import RedBarge from "../images/RedBarge.png";
@@ -62,14 +62,13 @@ export default function Prematch({
           helperText={scoutNameError}
         />
         <TextField
-          value={match.scoutTeamNumber}
+          value={isNaN(match.scoutTeamNumber) ? "" : match.scoutTeamNumber}
           onChange={(event) => {
             setMatch({
               ...match,
               scoutTeamNumber: parseInt(event.currentTarget.value),
             });
           }}
-          type="number"
           variant="outlined"
           label="Scout Team Number"
           error={scoutTeamNumberError !== ""}

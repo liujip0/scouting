@@ -16,11 +16,11 @@ import {
   StyledRedToggleButton,
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
+import { DeviceSetupObj } from "../../devicesetup/DeviceSetup.tsx";
 import { CircleButton, Counter } from "../Components.tsx";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";
 import Reef from "../images/Reef.png";
-import { DeviceSetupObj } from "../Scout.tsx";
 
 type AutoProps = {
   match: TeamMatchEntry;

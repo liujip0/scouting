@@ -4,11 +4,11 @@ import {
   StyledRedToggleButton,
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
+import { DeviceSetupObj } from "../../devicesetup/DeviceSetup.tsx";
 import { Counter } from "../Components.tsx";
 import Branch from "../images/Branch.png";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";
-import { DeviceSetupObj } from "../Scout.tsx";
 
 type TeleopProps = {
   match: TeamMatchEntry;

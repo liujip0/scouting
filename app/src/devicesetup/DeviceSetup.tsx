@@ -1,11 +1,8 @@
 import {
   Alliance,
   DBEvent,
-  HumanPlayerEntry,
-  HumanPlayerEntryInit,
   Match,
   TeamMatchEntry,
-  TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { omit } from "@isa2025/api/src/utils/utils.ts";
 import { Close } from "@mui/icons-material";
@@ -16,41 +13,43 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
   IconButton,
-  MenuItem,
   Radio,
   RadioGroup,
   Snackbar,
   Stack,
   TextField,
+  ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StyledToggleButton } from "../../components/StyledToggleButton.tsx";
-import { VisuallyHiddenInput } from "../../components/VisuallyHiddenInput.tsx";
-import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
-import { DeviceSetupObj, ScoutPage } from "../Scout.tsx";
-import { ScoutPageContainer } from "../ScoutPageContainer.tsx";
+import { StyledToggleButton } from "../components/StyledToggleButton.tsx";
+import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
+import { ScoutPageContainer } from "../scout/ScoutPageContainer.tsx";
+import { putDBEvent, putDBMatches } from "../utils/idb.ts";
 import DownloadEvent from "./DownloadEvent.tsx";
 
+export type DeviceSetupObj = {
+  deviceTeamNumber: number;
+  deviceId: string;
+  alliance: TeamMatchEntry["alliance"];
+  robotNumber: number;
+  currentEvent: string;
+  fieldOrientation: "barge" | "processor";
+};
 type DeviceSetupProps = {
   deviceSetup: DeviceSetupObj;
   setDeviceSetup: (value: DeviceSetupObj) => void;
-  setPage: (newValue: ScoutPage) => void;
   events: (DBEvent & { matches: Match[] })[];
   setEvents: (value: (DBEvent & { matches: Match[] })[]) => void;
-  match: TeamMatchEntry | HumanPlayerEntry;
-  setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
 };
 export default function DeviceSetup({
   deviceSetup,
   setDeviceSetup,
-  setPage,
   events,
   setEvents,
-  match,
-  setMatch,
 }: DeviceSetupProps) {
   const navigate = useNavigate();
 
@@ -58,6 +57,7 @@ export default function DeviceSetup({
   const [deviceIdError, setDeviceIdError] = useState("");
   const [allianceError, setAllianceError] = useState("");
   const [robotNumberError, setRobotNumberError] = useState("");
+  const [fieldOrientationError, setFieldOrientationError] = useState("");
   const [currentEventError, setCurrentEventError] = useState("");
 
   // const [createEvent, setCreateEvent] = useState(false);
@@ -111,14 +111,13 @@ export default function DeviceSetup({
                 setAllianceError("");
               }
 
-              if (!Number.isInteger(deviceSetup.robotNumber)) {
-                setRobotNumberError("Must be an integer");
-                error = true;
-              } else if (
-                deviceSetup.robotNumber < 1 ||
-                deviceSetup.robotNumber > 4
+              if (
+                deviceSetup.robotNumber !== 1 &&
+                deviceSetup.robotNumber !== 2 &&
+                deviceSetup.robotNumber !== 3 &&
+                deviceSetup.robotNumber !== 4
               ) {
-                setRobotNumberError("Must be between 1 and 4");
+                setRobotNumberError("Must be 1, 2, 3, or 4");
                 error = true;
               } else {
                 setRobotNumberError("");
@@ -131,52 +130,18 @@ export default function DeviceSetup({
                 setCurrentEventError("");
               }
 
-              if (!error) {
-                if (deviceSetup.robotNumber < 4) {
-                  const newMatch: TeamMatchEntry = {
-                    ...TeamMatchEntryInit,
-                    eventKey: deviceSetup.currentEvent,
-                    alliance: deviceSetup.alliance,
-                    robotNumber: deviceSetup.robotNumber as 1 | 2 | 3,
-                    deviceTeamNumber: deviceSetup.deviceTeamNumber,
-                    deviceId: deviceSetup.deviceId,
-                  };
+              if (
+                deviceSetup.fieldOrientation !== "barge" &&
+                deviceSetup.fieldOrientation !== "processor"
+              ) {
+                setFieldOrientationError("Must be 'barge' or 'processor'");
+                error = true;
+              } else {
+                setFieldOrientationError("");
+              }
 
-                  const eventMatches = events.find(
-                    (event) => event.eventKey === deviceSetup.currentEvent
-                  )?.matches;
-                  if (
-                    eventMatches?.some((x) => x.matchKey === match.matchKey)
-                  ) {
-                    setMatch({
-                      ...newMatch,
-                      teamNumber: eventMatches.find(
-                        (x) => x.matchKey === match.matchKey
-                      )![
-                        (deviceSetup.alliance.toLowerCase() +
-                          deviceSetup.robotNumber) as
-                          | "red1"
-                          | "red2"
-                          | "red3"
-                          | "blue1"
-                          | "blue2"
-                          | "blue3"
-                      ],
-                    });
-                  } else {
-                    setMatch(newMatch);
-                  }
-                } else {
-                  setMatch({
-                    ...HumanPlayerEntryInit,
-                    eventKey: deviceSetup.currentEvent,
-                    alliance: deviceSetup.alliance,
-                    robotNumber: deviceSetup.robotNumber as 4,
-                    deviceTeamNumber: deviceSetup.deviceTeamNumber,
-                    deviceId: deviceSetup.deviceId,
-                  });
-                }
-                setPage("scoutlayout");
+              if (!error) {
+                navigate("/scout");
               }
             }}
             variant="contained">
@@ -218,14 +183,17 @@ export default function DeviceSetup({
           }}
           gap={2}>
           <TextField
-            value={deviceSetup.deviceTeamNumber}
+            value={
+              isNaN(deviceSetup.deviceTeamNumber) ? "" : (
+                deviceSetup.deviceTeamNumber
+              )
+            }
             onChange={(event) => {
               setDeviceSetup({
                 ...deviceSetup,
                 deviceTeamNumber: parseInt(event.currentTarget.value),
               });
             }}
-            type="number"
             label="Device Team Number"
             helperText={deviceTeamNumberError || "What team owns this device?"}
             error={deviceTeamNumberError !== ""}
@@ -244,61 +212,173 @@ export default function DeviceSetup({
             error={deviceIdError !== ""}
           />
           <Divider flexItem />
-          <TextField
-            value={deviceSetup.alliance}
-            onChange={(event) => {
-              setDeviceSetup({
-                ...deviceSetup,
-                alliance: event.target.value as TeamMatchEntry["alliance"],
-              });
-            }}
-            select
-            label="Alliance"
-            helperText={allianceError || "\u200b"}
-            error={allianceError !== ""}>
-            {Alliance.map((perm) => (
-              <MenuItem
-                key={perm}
-                value={perm}>
-                {perm}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            value={deviceSetup.robotNumber}
-            onChange={(event) => {
-              setDeviceSetup({
-                ...deviceSetup,
-                robotNumber: parseInt(event.currentTarget.value),
-              });
-            }}
-            type="number"
-            label="Robot Number"
-            helperText={
-              robotNumberError || "Set this to 4 to scout human players"
-            }
-            error={robotNumberError !== ""}
-          />
-          <ToggleButtonGroup
-            value={deviceSetup.fieldOrientation}
-            exclusive
-            onChange={(_event, value) => {
-              if (value) {
-                setDeviceSetup({
-                  ...deviceSetup,
-                  fieldOrientation: value,
-                });
-              }
-            }}
-            color="primary"
+          <Stack
             sx={{
               width: 1,
             }}>
-            <StyledToggleButton value="barge">Barge Side</StyledToggleButton>
-            <StyledToggleButton value="processor">
-              Processor Side
-            </StyledToggleButton>
-          </ToggleButtonGroup>
+            <FormLabel>Alliance</FormLabel>
+            <ToggleButtonGroup
+              value={deviceSetup.alliance}
+              exclusive
+              onChange={(_event, value) => {
+                if (value) {
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    alliance: value,
+                  });
+                }
+              }}
+              color="primary"
+              sx={{
+                width: 1,
+                borderWidth: allianceError !== "" ? 2 : 0,
+                borderColor: "error.main",
+                borderStyle: "solid",
+              }}>
+              <ToggleButton
+                value="Red"
+                sx={{
+                  flex: 1,
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#ff0000",
+                  },
+                  color: "#ff0000",
+                  borderColor: "#ff0000",
+                }}>
+                Red
+              </ToggleButton>
+              <ToggleButton
+                value="Blue"
+                sx={{
+                  flex: 1,
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: "white",
+                    backgroundColor: "#0000ff",
+                  },
+                  color: "#0000ff",
+                  borderColor: "#0000ff",
+                }}>
+                Blue
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <FormHelperText
+              color="error"
+              sx={{
+                pl: 2,
+                color: "error.main",
+              }}>
+              {allianceError}
+            </FormHelperText>
+          </Stack>
+          <Stack
+            sx={{
+              width: 1,
+            }}>
+            <FormLabel>Robot Number</FormLabel>
+            <ToggleButtonGroup
+              value={deviceSetup.robotNumber}
+              exclusive
+              onChange={(_event, value) => {
+                if (value) {
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    robotNumber: value,
+                  });
+                }
+              }}
+              color="primary"
+              sx={{
+                width: 1,
+                borderWidth: robotNumberError !== "" ? 2 : 0,
+                borderColor: "error.main",
+                borderStyle: "solid",
+              }}>
+              <StyledToggleButton
+                value={1}
+                sx={{
+                  flex: 1,
+                }}>
+                1
+              </StyledToggleButton>
+              <StyledToggleButton
+                value={2}
+                sx={{
+                  flex: 1,
+                }}>
+                2
+              </StyledToggleButton>
+              <StyledToggleButton
+                value={3}
+                sx={{
+                  flex: 1,
+                }}>
+                3
+              </StyledToggleButton>
+              <StyledToggleButton
+                value={4}
+                sx={{
+                  flex: 1,
+                }}>
+                Human
+              </StyledToggleButton>
+            </ToggleButtonGroup>
+            <FormHelperText
+              color="error"
+              sx={{
+                pl: 2,
+                color: robotNumberError ? "error.main" : "text.secondary",
+              }}>
+              {robotNumberError}
+            </FormHelperText>
+          </Stack>
+          <Stack
+            sx={{
+              width: 1,
+            }}>
+            <FormLabel>Field Orientation</FormLabel>
+            <ToggleButtonGroup
+              value={deviceSetup.fieldOrientation}
+              exclusive
+              onChange={(_event, value) => {
+                if (value) {
+                  setDeviceSetup({
+                    ...deviceSetup,
+                    fieldOrientation: value,
+                  });
+                }
+              }}
+              color="primary"
+              sx={{
+                width: 1,
+                borderWidth: fieldOrientationError !== "" ? 2 : 0,
+                borderColor: "error.main",
+                borderStyle: "solid",
+              }}>
+              <StyledToggleButton
+                value="barge"
+                sx={{
+                  flex: 1,
+                }}>
+                Barge Side
+              </StyledToggleButton>
+              <StyledToggleButton
+                value="processor"
+                sx={{
+                  flex: 1,
+                }}>
+                Processor Side
+              </StyledToggleButton>
+            </ToggleButtonGroup>
+            <FormHelperText
+              color="error"
+              sx={{
+                pl: 2,
+                color: "error.main",
+              }}>
+              {fieldOrientationError}
+            </FormHelperText>
+          </Stack>
         </Stack>
         <Divider
           orientation="vertical"

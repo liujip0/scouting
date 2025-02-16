@@ -11,8 +11,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { putDBEvent, putDBMatches } from "../../utils/idb.ts";
-import { trpc } from "../../utils/trpc.ts";
+import { putDBEvent, putDBMatches } from "../utils/idb.ts";
+import { trpc } from "../utils/trpc.ts";
 
 type DownloadEventProps = {
   downloadEvent: boolean;
