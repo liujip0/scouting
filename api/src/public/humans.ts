@@ -37,7 +37,8 @@ export const humans = async (opts: publicOpts): Promise<Response> => {
 
   if (
     opts.params.has("include") &&
-    opts.params.get("include")?.length === HumanPlayerEntryColumns.length
+    opts.params.get("include")?.length &&
+    opts.params.get("include")!.length <= HumanPlayerEntryColumns.length
   ) {
     const newColumns: string[] = [];
     const include = opts.params.get("include")!;
@@ -139,7 +140,7 @@ export const getHumanData = async (
               WHERE (`;
   const bindParams: string[] = [];
 
-  if (events.length > 0) {
+  if (events.length > 0 && !events.every((event) => event === "")) {
     query += events
       .map((value) => {
         bindParams.push(value);
@@ -151,7 +152,7 @@ export const getHumanData = async (
   }
   query += ") AND (";
 
-  if (teams.length > 0) {
+  if (teams.length > 0 && !teams.every((team) => team === "")) {
     query += teams
       .map((value) => {
         bindParams.push(value);
