@@ -204,7 +204,7 @@ export function TransparentToggle({
       sx={(theme) => ({
         ...sx,
         position: "absolute",
-        color: theme.palette.secondary.main,
+        color: !error ? theme.palette.secondary.main : theme.palette.error.main,
         backgroundColor: theme.palette.primary.main + "40",
         borderColor:
           !error ? theme.palette.secondary.main : theme.palette.error.main,

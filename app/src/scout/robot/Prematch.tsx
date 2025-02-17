@@ -4,7 +4,14 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
-import { Box, Divider, IconButton, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Divider,
+  FormHelperText,
+  IconButton,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { TransparentToggle } from "../Components.tsx";
@@ -239,7 +246,7 @@ export default function Prematch({
         variant="middle"
         flexItem
       />
-      <Box
+      <Stack
         sx={{
           flex: 1,
           padding: 2,
@@ -247,137 +254,153 @@ export default function Prematch({
         }}>
         <Box
           sx={{
-            aspectRatio: "1700 / 1650",
-            maxWidth: "100%",
-            maxHeight: "100%",
-            position: "relative",
+            height: startingPositionError ? "calc(100% - 2em)" : "100%",
           }}>
-          <img
-            src={
-              match.alliance === "Red" ?
+          <Box
+            sx={{
+              aspectRatio: "1700 / 1650",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              position: "relative",
+            }}>
+            <img
+              src={
+                match.alliance === "Red" ?
+                  deviceSetup.fieldOrientation === "barge" ?
+                    RedBarge
+                  : RedProcessor
+                : deviceSetup.fieldOrientation === "barge" ?
+                  BlueBarge
+                : BlueProcessor
+              }
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+            <TransparentToggle
+              label="A"
+              value={match.startingLocationA!}
+              setValue={(value) => {
+                if (value) {
+                  setMatch({
+                    ...match,
+                    startingLocationA: value,
+                    startingLocationB: false,
+                    startingLocationC: false,
+                  });
+                } else {
+                  setMatch({
+                    ...match,
+                    startingLocationA: value,
+                  });
+                }
+              }}
+              disabled={match.noShow}
+              error={startingPositionError !== ""}
+              sx={
                 deviceSetup.fieldOrientation === "barge" ?
-                  RedBarge
-                : RedProcessor
-              : deviceSetup.fieldOrientation === "barge" ?
-                BlueBarge
-              : BlueProcessor
-            }
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-          <Box></Box>
-          <TransparentToggle
-            label="A"
-            value={match.startingLocationA!}
-            setValue={(value) => {
-              if (value) {
-                setMatch({
-                  ...match,
-                  startingLocationA: value,
-                  startingLocationB: false,
-                  startingLocationC: false,
-                });
-              } else {
-                setMatch({
-                  ...match,
-                  startingLocationA: value,
-                });
+                  {
+                    left: "8%",
+                    top: "13%",
+                    width: "20%",
+                    height: "27%",
+                  }
+                : {
+                    right: "8%",
+                    top: "59%",
+                    width: "20%",
+                    height: "28%",
+                  }
               }
-            }}
-            disabled={match.noShow}
-            error={startingPositionError !== ""}
-            sx={
-              deviceSetup.fieldOrientation === "barge" ?
-                {
-                  left: "8%",
-                  top: "13%",
-                  width: "20%",
-                  height: "27%",
+            />
+            <TransparentToggle
+              label="B"
+              value={match.startingLocationB!}
+              setValue={(value) => {
+                if (value) {
+                  setMatch({
+                    ...match,
+                    startingLocationB: value,
+                    startingLocationA: false,
+                    startingLocationC: false,
+                  });
+                } else {
+                  setMatch({
+                    ...match,
+                    startingLocationB: value,
+                  });
                 }
-              : {
-                  right: "8%",
-                  top: "59%",
-                  width: "20%",
-                  height: "28%",
-                }
-            }
-          />
-          <TransparentToggle
-            label="B"
-            value={match.startingLocationB!}
-            setValue={(value) => {
-              if (value) {
-                setMatch({
-                  ...match,
-                  startingLocationB: value,
-                  startingLocationA: false,
-                  startingLocationC: false,
-                });
-              } else {
-                setMatch({
-                  ...match,
-                  startingLocationB: value,
-                });
+              }}
+              disabled={match.noShow}
+              error={startingPositionError !== ""}
+              sx={
+                deviceSetup.fieldOrientation === "barge" ?
+                  {
+                    left: "8%",
+                    top: "40%",
+                    width: "20%",
+                    height: "27%",
+                  }
+                : {
+                    right: "8%",
+                    top: "32%",
+                    width: "20%",
+                    height: "27%",
+                  }
               }
-            }}
-            disabled={match.noShow}
-            error={startingPositionError !== ""}
-            sx={
-              deviceSetup.fieldOrientation === "barge" ?
-                {
-                  left: "8%",
-                  top: "40%",
-                  width: "20%",
-                  height: "27%",
+            />
+            <TransparentToggle
+              label="C"
+              value={match.startingLocationC!}
+              setValue={(value) => {
+                if (value) {
+                  setMatch({
+                    ...match,
+                    startingLocationC: value,
+                    startingLocationA: false,
+                    startingLocationB: false,
+                  });
+                } else {
+                  setMatch({
+                    ...match,
+                    startingLocationC: value,
+                  });
                 }
-              : {
-                  right: "8%",
-                  top: "32%",
-                  width: "20%",
-                  height: "27%",
-                }
-            }
-          />
-          <TransparentToggle
-            label="C"
-            value={match.startingLocationC!}
-            setValue={(value) => {
-              if (value) {
-                setMatch({
-                  ...match,
-                  startingLocationC: value,
-                  startingLocationA: false,
-                  startingLocationB: false,
-                });
-              } else {
-                setMatch({
-                  ...match,
-                  startingLocationC: value,
-                });
+              }}
+              disabled={match.noShow}
+              error={startingPositionError !== ""}
+              sx={
+                deviceSetup.fieldOrientation === "barge" ?
+                  {
+                    left: "8%",
+                    top: "67%",
+                    width: "20%",
+                    height: "27%",
+                  }
+                : {
+                    right: "8%",
+                    top: "5%",
+                    width: "20%",
+                    height: "27%",
+                  }
               }
-            }}
-            disabled={match.noShow}
-            error={startingPositionError !== ""}
-            sx={
-              deviceSetup.fieldOrientation === "barge" ?
-                {
-                  left: "8%",
-                  top: "67%",
-                  width: "20%",
-                  height: "27%",
-                }
-              : {
-                  right: "8%",
-                  top: "5%",
-                  width: "20%",
-                  height: "27%",
-                }
-            }
-          />
+            />
+          </Box>
         </Box>
-      </Box>
+        {startingPositionError && (
+          <FormHelperText
+            sx={{
+              height: "2em",
+              border: "1px solid red",
+              pl: 1,
+              color: "error.main",
+              backgroundColor: "white",
+            }}>
+            {startingPositionError}
+          </FormHelperText>
+        )}
+      </Stack>
     </Stack>
   );
 }
