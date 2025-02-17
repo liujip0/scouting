@@ -65,7 +65,8 @@ export const getFrcEvent = loggedPublicProcedure
           }) => {
             const newMatch: Match = {
               eventKey: opts.input,
-              matchKey: "qm" + match.matchNumber,
+              matchLevel: match.tournamentLevel,
+              matchNumber: match.matchNumber,
               red1: 0,
               red2: 0,
               red3: 0,
@@ -98,14 +99,15 @@ export const getFrcEvent = loggedPublicProcedure
         );
         const matchStmt = opts.ctx.env.DB.prepare(
           `REPLACE INTO
-            Matches(eventKey, matchKey, red1, red2, red3, blue1, blue2, blue3)
+            Matches(eventKey, matchLevel, matchNumber, red1, red2, red3, blue1, blue2, blue3)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
         );
         event.matches.forEach((match) => {
           boundStmts.push(
             matchStmt.bind(
               match.eventKey,
-              match.matchKey,
+              match.matchLevel,
+              match.matchNumber,
               match.red1,
               match.red2,
               match.red3,

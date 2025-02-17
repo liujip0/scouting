@@ -1,6 +1,9 @@
-import { HumanPlayerEntry } from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  HumanPlayerEntry,
+  MatchLevel,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
-import { Divider, IconButton, Stack, TextField } from "@mui/material";
+import { Divider, IconButton, MenuItem, Stack, TextField } from "@mui/material";
 import { BigCounter } from "./Components.tsx";
 
 type HumanProps = {
@@ -60,11 +63,26 @@ export default function Human({
           helperText={scoutTeamNumberError}
         />
         <TextField
-          value={match.matchKey}
+          select
+          value={match.matchLevel}
+          label="Match Level"
           onChange={(event) => {
             setMatch({
               ...match,
-              matchKey: event.currentTarget.value,
+              matchLevel: event.target.value as (typeof MatchLevel)[number],
+            });
+          }}>
+          <MenuItem value="None">None</MenuItem>
+          <MenuItem value="Practice">Practice</MenuItem>
+          <MenuItem value="Qualification">Qualification</MenuItem>
+          <MenuItem value="Playoff">Playoff</MenuItem>
+        </TextField>
+        <TextField
+          value={isNaN(match.matchNumber) ? "" : match.matchNumber}
+          onChange={(event) => {
+            setMatch({
+              ...match,
+              matchNumber: parseInt(event.currentTarget.value),
               teamNumber: 0,
             });
           }}
@@ -74,17 +92,10 @@ export default function Human({
               startAdornment: (
                 <IconButton
                   onClick={() => {
-                    let newMatchKey = "";
-
-                    if (/^qm\d+$/.test(match.matchKey)) {
-                      newMatchKey =
-                        "qm" + (parseInt(match.matchKey.substring(2)) - 1);
-                    }
-
-                    if (newMatchKey) {
+                    if (match.matchNumber > 1) {
                       setMatch({
                         ...match,
-                        matchKey: newMatchKey,
+                        matchNumber: match.matchNumber - 1,
                         teamNumber: 0,
                       });
                     }
@@ -95,20 +106,11 @@ export default function Human({
               endAdornment: (
                 <IconButton
                   onClick={() => {
-                    let newMatchKey = "";
-
-                    if (/^qm\d+$/.test(match.matchKey)) {
-                      newMatchKey =
-                        "qm" + (parseInt(match.matchKey.substring(2)) + 1);
-                    }
-
-                    if (newMatchKey) {
-                      setMatch({
-                        ...match,
-                        matchKey: newMatchKey,
-                        teamNumber: 0,
-                      });
-                    }
+                    setMatch({
+                      ...match,
+                      matchNumber: match.matchNumber + 1,
+                      teamNumber: 0,
+                    });
                   }}>
                   <Add />
                 </IconButton>

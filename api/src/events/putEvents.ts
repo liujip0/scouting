@@ -1,27 +1,19 @@
 import { D1PreparedStatement } from "@cloudflare/workers-types";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
-import { DBEvent, Match } from "../utils/dbtypes.ts";
+import {
+  DBEvent,
+  DBEventSchema,
+  Match,
+  MatchSchema,
+} from "../utils/dbtypes.ts";
 import { omit } from "../utils/utils.ts";
 
 export const putEvents = loggedPublicProcedure
   .input(
     z.array(
-      z.object({
-        eventKey: z.string(),
-        eventName: z.string(),
-        matches: z.array(
-          z.object({
-            eventKey: z.string(),
-            matchKey: z.string(),
-            red1: z.number().int().positive(),
-            red2: z.number().int().positive(),
-            red3: z.number().int().positive(),
-            blue1: z.number().int().positive(),
-            blue2: z.number().int().positive(),
-            blue3: z.number().int().positive(),
-          })
-        ),
+      DBEventSchema.extend({
+        matches: z.array(MatchSchema),
       })
     )
   )
@@ -49,14 +41,15 @@ export const putEvents = loggedPublicProcedure
 
     const matchStmt = opts.ctx.env.DB.prepare(
       `REPLACE INTO
-        Matches(eventKey, matchKey, red1, red2, red3, blue1, blue2, blue3)
+        Matches(eventKey, matchLevel, matchNumber, red1, red2, red3, blue1, blue2, blue3)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
     );
     matches.forEach((match) => {
       boundStmts.push(
         matchStmt.bind(
           match.eventKey,
-          match.matchKey,
+          match.matchLevel,
+          match.matchNumber,
           match.red1,
           match.red2,
           match.red3,

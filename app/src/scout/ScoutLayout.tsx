@@ -91,17 +91,25 @@ export default function ScoutLayout({
   const prematchCheck = () => {
     let error = false;
 
-    if (
+    if (!Number.isInteger(match.matchNumber) || match.matchNumber < 1) {
+      error = true;
+      setMatchNumberError("Invalid match number.");
+    } else if (
       !events
         .find((x) => x.eventKey === deviceSetup.currentEvent)
-        ?.matches.some((y) => y.matchKey === match.matchKey)
+        ?.matches.some(
+          (y) =>
+            y.matchNumber === match.matchNumber &&
+            y.matchLevel === match.matchLevel
+        )
     ) {
       if (
-        matchNumberError !== "Invalid match key. Press Next again to ignore."
+        matchNumberError !==
+        "Match not in schedule. Press Next again to ignore."
       ) {
         error = true;
       }
-      setMatchNumberError("Invalid match key. Press Next again to ignore.");
+      setMatchNumberError("Match not in schedule. Press Next again to ignore.");
     } else {
       setMatchNumberError("");
     }
@@ -114,7 +122,7 @@ export default function ScoutLayout({
     }
 
     if (
-      !match.scoutTeamNumber ||
+      !Number.isInteger(match.scoutTeamNumber) ||
       match.scoutTeamNumber < 0 ||
       match.scoutTeamNumber > MAX_TEAM_NUMBER
     ) {
@@ -125,7 +133,7 @@ export default function ScoutLayout({
     }
 
     if (
-      !match.teamNumber ||
+      !Number.isInteger(match.teamNumber) ||
       match.teamNumber < 0 ||
       match.teamNumber > MAX_TEAM_NUMBER
     ) {
@@ -235,7 +243,8 @@ export default function ScoutLayout({
                         {
                           ...TeamMatchEntryNoShowInit,
                           eventKey: match.eventKey,
-                          matchKey: match.matchKey,
+                          matchLevel: match.matchLevel,
+                          matchNumber: match.matchNumber,
                           teamNumber: match.teamNumber,
                           alliance: match.alliance,
                           robotNumber: match.robotNumber as 1 | 2 | 3,
@@ -266,7 +275,8 @@ export default function ScoutLayout({
                       {
                         ...TeamMatchEntryNoShowInit,
                         eventKey: match.eventKey,
-                        matchKey: match.matchKey,
+                        matchLevel: match.matchLevel,
+                        matchNumber: match.matchNumber,
                         teamNumber: match.teamNumber,
                         alliance: match.alliance,
                         robotNumber: match.robotNumber as 1 | 2 | 3,
@@ -284,6 +294,34 @@ export default function ScoutLayout({
                 }
                 case "human": {
                   let error = false;
+
+                  if (
+                    !Number.isInteger(match.matchNumber) ||
+                    match.matchNumber < 1
+                  ) {
+                    error = true;
+                    setMatchNumberError("Invalid match number.");
+                  } else if (
+                    !events
+                      .find((x) => x.eventKey === deviceSetup.currentEvent)
+                      ?.matches.some(
+                        (y) =>
+                          y.matchNumber === match.matchNumber &&
+                          y.matchLevel === match.matchLevel
+                      )
+                  ) {
+                    if (
+                      matchNumberError !==
+                      "Match not in schedule. Press Next again to ignore."
+                    ) {
+                      error = true;
+                    }
+                    setMatchNumberError(
+                      "Match not in schedule. Press Next again to ignore."
+                    );
+                  } else {
+                    setMatchNumberError("");
+                  }
 
                   if (!match.scoutName) {
                     error = true;

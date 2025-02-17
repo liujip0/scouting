@@ -1,6 +1,12 @@
 import { z } from "zod";
 
 export const Alliance = ["Red", "Blue"] as const;
+export const MatchLevel = [
+  "None",
+  "Practice",
+  "Qualification",
+  "Playoff",
+] as const;
 
 export const CommonEntrySchema = z.object({
   eventKey: z.string(),
@@ -465,28 +471,38 @@ export type User = {
 export const UserColumns = ["username", "permLevel", "hashedPassword"] as const;
 export type UserColumn = (typeof UserColumns)[number];
 
-export type DBEvent = {
-  eventKey: string;
-  eventName: string;
-};
-export type Match = {
-  eventKey: string;
-  matchKey: string;
-  red1: number;
-  red2: number;
-  red3: number;
-  blue1: number;
-  blue2: number;
-  blue3: number;
-};
-export const MatchColumns = [
+export const DBEventSchema = z.object({
+  eventKey: z.string(),
+  eventName: z.string(),
+});
+export type DBEvent = z.infer<typeof DBEventSchema>;
+
+export const MatchSchema = z.object({
+  eventKey: z.string(),
+  matchLevel: z.union([
+    z.literal("None"),
+    z.literal("Practice"),
+    z.literal("Qualification"),
+    z.literal("Playoff"),
+  ]),
+  matchNumber: z.number().int().nonnegative(),
+  red1: z.number().int().nonnegative(),
+  red2: z.number().int().nonnegative(),
+  red3: z.number().int().nonnegative(),
+  blue1: z.number().int().nonnegative(),
+  blue2: z.number().int().nonnegative(),
+  blue3: z.number().int().nonnegative(),
+});
+export type Match = z.infer<typeof MatchSchema>;
+export type MatchColumn = keyof Match;
+export const MatchColumns: MatchColumn[] = [
   "eventKey",
-  "matchKey",
+  "matchLevel",
+  "matchNumber",
   "red1",
   "red2",
   "red3",
   "blue1",
   "blue2",
   "blue3",
-] as const;
-export type MatchColumn = (typeof MatchColumns)[number];
+];

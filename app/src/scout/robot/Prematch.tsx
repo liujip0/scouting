@@ -1,6 +1,7 @@
 import {
   DBEvent,
   Match,
+  MatchLevel,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Add, Remove } from "@mui/icons-material";
@@ -9,6 +10,7 @@ import {
   Divider,
   FormHelperText,
   IconButton,
+  MenuItem,
   Stack,
   TextField,
 } from "@mui/material";
@@ -84,21 +86,40 @@ export default function Prematch({
           helperText={scoutTeamNumberError}
         />
         <TextField
-          value={match.matchKey}
+          select
+          value={match.matchLevel}
+          label="Match Level"
+          onChange={(event) => {
+            setMatch({
+              ...match,
+              matchLevel: event.target.value as (typeof MatchLevel)[number],
+            });
+          }}>
+          <MenuItem value="None">None</MenuItem>
+          <MenuItem value="Practice">Practice</MenuItem>
+          <MenuItem value="Qualification">Qualification</MenuItem>
+          <MenuItem value="Playoff">Playoff</MenuItem>
+        </TextField>
+        <TextField
+          value={isNaN(match.matchNumber) ? "" : match.matchNumber}
           onChange={(event) => {
             const eventMatches = events.find(
               (event) => event.eventKey === deviceSetup.currentEvent
             )?.matches;
             if (
               eventMatches?.some(
-                (x) => x.matchKey === event.currentTarget.value
+                (x) =>
+                  x.matchNumber === parseInt(event.currentTarget.value) &&
+                  x.matchLevel === match.matchLevel
               )
             ) {
               setMatch({
                 ...match,
-                matchKey: event.currentTarget.value,
+                matchNumber: parseInt(event.currentTarget.value),
                 teamNumber: eventMatches.find(
-                  (x) => x.matchKey === event.currentTarget.value
+                  (x) =>
+                    x.matchNumber === parseInt(event.currentTarget.value) &&
+                    x.matchLevel === match.matchLevel
                 )![
                   (deviceSetup.alliance.toLowerCase() +
                     deviceSetup.robotNumber) as
@@ -113,7 +134,7 @@ export default function Prematch({
             } else {
               setMatch({
                 ...match,
-                matchKey: event.currentTarget.value,
+                matchNumber: parseInt(event.currentTarget.value),
                 teamNumber: 0,
               });
             }
@@ -126,25 +147,24 @@ export default function Prematch({
               startAdornment: (
                 <IconButton
                   onClick={() => {
-                    let newMatchKey = "";
-
-                    if (/^qm\d+$/.test(match.matchKey)) {
-                      newMatchKey =
-                        "qm" + (parseInt(match.matchKey.substring(2)) - 1);
-                    }
-
-                    if (newMatchKey) {
+                    if (match.matchNumber > 1) {
                       const eventMatches = events.find(
                         (event) => event.eventKey === deviceSetup.currentEvent
                       )?.matches;
                       if (
-                        eventMatches?.some((x) => x.matchKey === newMatchKey)
+                        eventMatches?.some(
+                          (x) =>
+                            x.matchNumber === match.matchNumber - 1 &&
+                            x.matchLevel === match.matchLevel
+                        )
                       ) {
                         setMatch({
                           ...match,
-                          matchKey: newMatchKey,
+                          matchNumber: match.matchNumber - 1,
                           teamNumber: eventMatches.find(
-                            (x) => x.matchKey === newMatchKey
+                            (x) =>
+                              x.matchNumber === match.matchNumber - 1 &&
+                              x.matchLevel === match.matchLevel
                           )![
                             (deviceSetup.alliance.toLowerCase() +
                               deviceSetup.robotNumber) as
@@ -159,7 +179,7 @@ export default function Prematch({
                       } else {
                         setMatch({
                           ...match,
-                          matchKey: newMatchKey,
+                          matchNumber: match.matchNumber - 1,
                           teamNumber: 0,
                         });
                       }
@@ -171,43 +191,40 @@ export default function Prematch({
               endAdornment: (
                 <IconButton
                   onClick={() => {
-                    let newMatchKey = "";
-
-                    if (/^qm\d+$/.test(match.matchKey)) {
-                      newMatchKey =
-                        "qm" + (parseInt(match.matchKey.substring(2)) + 1);
-                    }
-
-                    if (newMatchKey) {
-                      const eventMatches = events.find(
-                        (event) => event.eventKey === deviceSetup.currentEvent
-                      )?.matches;
-                      if (
-                        eventMatches?.some((x) => x.matchKey === newMatchKey)
-                      ) {
-                        setMatch({
-                          ...match,
-                          matchKey: newMatchKey,
-                          teamNumber: eventMatches.find(
-                            (x) => x.matchKey === newMatchKey
-                          )![
-                            (deviceSetup.alliance.toLowerCase() +
-                              deviceSetup.robotNumber) as
-                              | "red1"
-                              | "red2"
-                              | "red3"
-                              | "blue1"
-                              | "blue2"
-                              | "blue3"
-                          ],
-                        });
-                      } else {
-                        setMatch({
-                          ...match,
-                          matchKey: newMatchKey,
-                          teamNumber: 0,
-                        });
-                      }
+                    const eventMatches = events.find(
+                      (event) => event.eventKey === deviceSetup.currentEvent
+                    )?.matches;
+                    if (
+                      eventMatches?.some(
+                        (x) =>
+                          x.matchNumber === match.matchNumber + 1 &&
+                          x.matchLevel === match.matchLevel
+                      )
+                    ) {
+                      setMatch({
+                        ...match,
+                        matchNumber: match.matchNumber + 1,
+                        teamNumber: eventMatches.find(
+                          (x) =>
+                            x.matchNumber === match.matchNumber + 1 &&
+                            x.matchLevel === match.matchLevel
+                        )![
+                          (deviceSetup.alliance.toLowerCase() +
+                            deviceSetup.robotNumber) as
+                            | "red1"
+                            | "red2"
+                            | "red3"
+                            | "blue1"
+                            | "blue2"
+                            | "blue3"
+                        ],
+                      });
+                    } else {
+                      setMatch({
+                        ...match,
+                        matchNumber: match.matchNumber + 1,
+                        teamNumber: 0,
+                      });
                     }
                   }}>
                   <Add />

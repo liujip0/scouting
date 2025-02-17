@@ -14,7 +14,7 @@ export const getEvent = loggedPublicProcedure
 
     if (event) {
       const matches = await opts.ctx.env.DB.prepare(
-        `SELECT eventKey, matchKey, red1, red2, red3, blue1, blue2, blue3
+        `SELECT eventKey, matchLevel, matchNumber, red1, red2, red3, blue1, blue2, blue3
           FROM Matches
           WHERE eventKey = ?;`
       )
