@@ -3,6 +3,7 @@ import {
   Alliance,
   DBEvent,
   Match,
+  MatchLevel,
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { omit } from "@isa2025/api/src/utils/utils.ts";
@@ -419,8 +420,10 @@ export default function DeviceSetup({
 
                         if (
                           schedule.length < 2 ||
-                          schedule.some((x, index) =>
-                            index === 0 ? x.length < 2 : x.length < 7
+                          schedule.some(
+                            (x, index) =>
+                              (index === 0 ? x.length < 2 : x.length < 8) ||
+                              !(MatchLevel as readonly string[]).includes(x[0])
                           )
                         ) {
                           setStatus("Error: Invalid schedule");
@@ -433,13 +436,14 @@ export default function DeviceSetup({
                           matches: schedule.slice(1).map((x) => ({
                             eventKey: schedule[0][0],
                             eventName: schedule[0][1] ?? schedule[0][0],
-                            matchKey: x[0],
-                            red1: parseInt(x[1]),
-                            red2: parseInt(x[2]),
-                            red3: parseInt(x[3]),
-                            blue1: parseInt(x[4]),
-                            blue2: parseInt(x[5]),
-                            blue3: parseInt(x[6]),
+                            matchLevel: x[0] as (typeof MatchLevel)[number],
+                            matchNumber: parseInt(x[1]),
+                            red1: parseInt(x[2]),
+                            red2: parseInt(x[3]),
+                            red3: parseInt(x[4]),
+                            blue1: parseInt(x[5]),
+                            blue2: parseInt(x[6]),
+                            blue3: parseInt(x[7]),
                           })),
                         };
 
