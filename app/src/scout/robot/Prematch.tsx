@@ -297,9 +297,10 @@ export default function Prematch({
                   height: "27%",
                 }
               : {
-                  right: "14%",
-                  bottom: "25%",
-                  transform: "translate(50%, 50%)",
+                  right: "8%",
+                  top: "59%",
+                  width: "20%",
+                  height: "28%",
                 }
             }
           />
@@ -332,9 +333,10 @@ export default function Prematch({
                   height: "27%",
                 }
               : {
-                  right: "14%",
-                  bottom: "53%",
-                  transform: "translate(50%, 50%)",
+                  right: "8%",
+                  top: "32%",
+                  width: "20%",
+                  height: "27%",
                 }
             }
           />
@@ -367,9 +369,10 @@ export default function Prematch({
                   height: "27%",
                 }
               : {
-                  right: "14%",
-                  top: "18%",
-                  transform: "translate(50%, -50%)",
+                  right: "8%",
+                  top: "5%",
+                  width: "20%",
+                  height: "27%",
                 }
             }
           />
