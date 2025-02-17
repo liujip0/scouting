@@ -160,26 +160,27 @@ export default function View({ logoutFunction }: ViewProps) {
                 }
               }
               if (match) {
-                const trimmedMatch = match.replace(/ /g, "");
-                if (/^\d+$/.test(trimmedMatch)) {
-                  if (teamMatchEntry.matchKey !== "qm" + trimmedMatch) {
-                    return;
-                  }
-                } else if (
-                  trimmedMatch === "qm" ||
-                  trimmedMatch === "qf" ||
-                  trimmedMatch === "sf" ||
-                  trimmedMatch === "f" ||
-                  /^(?:qf|sf|f)\d*m?$/.test(trimmedMatch)
-                ) {
-                  if (!teamMatchEntry.matchKey.startsWith(trimmedMatch)) {
-                    return;
-                  }
-                } else {
-                  if (teamMatchEntry.matchKey !== trimmedMatch) {
-                    return;
-                  }
-                }
+                //TODO: fix for new match key format
+                // const trimmedMatch = match.replace(/ /g, "");
+                // if (/^\d+$/.test(trimmedMatch)) {
+                //   if (teamMatchEntry.matchKey !== "qm" + trimmedMatch) {
+                //     return;
+                //   }
+                // } else if (
+                //   trimmedMatch === "qm" ||
+                //   trimmedMatch === "qf" ||
+                //   trimmedMatch === "sf" ||
+                //   trimmedMatch === "f" ||
+                //   /^(?:qf|sf|f)\d*m?$/.test(trimmedMatch)
+                // ) {
+                //   if (!teamMatchEntry.matchKey.startsWith(trimmedMatch)) {
+                //     return;
+                //   }
+                // } else {
+                //   if (teamMatchEntry.matchKey !== trimmedMatch) {
+                //     return;
+                //   }
+                // }
               }
               if (teams) {
                 let correctTeam = false;
