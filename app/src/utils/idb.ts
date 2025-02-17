@@ -28,14 +28,15 @@ export const initDB = async (): Promise<boolean> => {
       }
       if (!db.objectStoreNames.contains(Stores.Matches)) {
         db.createObjectStore(Stores.Matches, {
-          keyPath: ["eventKey", "matchKey"],
+          keyPath: ["eventKey", "matchLevel", "matchNumber"],
         });
       }
       if (!db.objectStoreNames.contains(Stores.TeamMatchEntry)) {
         db.createObjectStore(Stores.TeamMatchEntry, {
           keyPath: [
             "eventKey",
-            "matchKey",
+            "matchLevel",
+            "matchNumber",
             "teamNumber",
             "deviceTeamNumber",
             "deviceId",
@@ -46,7 +47,8 @@ export const initDB = async (): Promise<boolean> => {
         db.createObjectStore(Stores.HumanPlayerEntry, {
           keyPath: [
             "eventKey",
-            "matchKey",
+            "matchLevel",
+            "matchNumber",
             "teamNumber",
             "deviceTeamNumber",
             "deviceId",
@@ -101,7 +103,8 @@ export const deleteEntry = async (match: HumanPlayerEntry | TeamMatchEntry) => {
   if (match.robotNumber < 4) {
     db.delete(Stores.TeamMatchEntry, [
       match.eventKey,
-      match.matchKey,
+      match.matchLevel,
+      match.matchNumber,
       match.alliance,
       match.robotNumber,
       match.deviceTeamNumber,
@@ -110,7 +113,8 @@ export const deleteEntry = async (match: HumanPlayerEntry | TeamMatchEntry) => {
   } else {
     db.delete(Stores.HumanPlayerEntry, [
       match.eventKey,
-      match.matchKey,
+      match.matchLevel,
+      match.matchNumber,
       match.alliance,
       match.robotNumber,
       match.deviceTeamNumber,

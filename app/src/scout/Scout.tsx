@@ -58,12 +58,18 @@ export default function Scout({ deviceSetup, events }: ScoutProps) {
         (event) => event.eventKey === deviceSetup.currentEvent
       )?.matches;
       if (
-        eventMatches?.some((x) => x.matchKey === TeamMatchEntryInit.matchKey)
+        eventMatches?.some(
+          (x) =>
+            x.matchLevel === TeamMatchEntryInit.matchLevel &&
+            x.matchNumber === TeamMatchEntryInit.matchNumber
+        )
       ) {
         return {
           ...newMatch,
           teamNumber: eventMatches.find(
-            (x) => x.matchKey === TeamMatchEntryInit.matchKey
+            (x) =>
+              x.matchLevel === TeamMatchEntryInit.matchLevel &&
+              x.matchNumber === TeamMatchEntryInit.matchNumber
           )![
             (deviceSetup.alliance.toLowerCase() + deviceSetup.robotNumber) as
               | "red1"

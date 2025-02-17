@@ -11,7 +11,11 @@ import {
   TeamMatchEntryInit,
   TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import { omit } from "@isa2025/api/src/utils/utils.ts";
+import {
+  generateFileName,
+  matchLevelAbbrev,
+  omit,
+} from "@isa2025/api/src/utils/utils.ts";
 import {
   Close,
   ContentCopy,
@@ -150,51 +154,45 @@ export default function SavedMatches({
           <Button
             variant="contained"
             onClick={() => {
-              let newMatchKey = "";
-
-              if (/^qm\d+$/.test(match.matchKey)) {
-                newMatchKey =
-                  "qm" + (parseInt(match.matchKey.substring(2)) + 1);
-              }
-
               const newMatch: TeamMatchEntry | HumanPlayerEntry = {
                 ...(match.robotNumber < 4 ?
                   TeamMatchEntryInit
                 : HumanPlayerEntryInit),
                 eventKey: match.eventKey,
+                matchLevel: match.matchLevel,
+                matchNumber: match.matchNumber + 1,
                 alliance: match.alliance,
                 robotNumber: match.robotNumber,
                 scoutName: match.scoutName,
                 scoutTeamNumber: match.scoutTeamNumber,
               } as TeamMatchEntry | HumanPlayerEntry;
 
-              if (newMatchKey) {
-                const eventMatches = events.find(
-                  (event) => event.eventKey === match.eventKey
-                )?.matches;
-                if (eventMatches?.some((x) => x.matchKey === newMatchKey)) {
-                  setMatch({
-                    ...newMatch,
-                    matchKey: newMatchKey,
-                    teamNumber: eventMatches.find(
-                      (x) => x.matchKey === newMatchKey
-                    )![
-                      (match.alliance.toLowerCase() + match.robotNumber) as
-                        | "red1"
-                        | "red2"
-                        | "red3"
-                        | "blue1"
-                        | "blue2"
-                        | "blue3"
-                    ],
-                  });
-                } else {
-                  setMatch({
-                    ...newMatch,
-                    matchKey: newMatchKey,
-                    teamNumber: 0,
-                  });
-                }
+              const eventMatches = events.find(
+                (event) => event.eventKey === match.eventKey
+              )?.matches;
+              if (
+                eventMatches?.some(
+                  (x) =>
+                    x.matchLevel === match.matchLevel &&
+                    x.matchNumber === match.matchNumber + 1
+                )
+              ) {
+                setMatch({
+                  ...newMatch,
+                  teamNumber: eventMatches.find(
+                    (x) =>
+                      x.matchLevel === match.matchLevel &&
+                      x.matchNumber === match.matchNumber + 1
+                  )![
+                    (match.alliance.toLowerCase() + match.robotNumber) as
+                      | "red1"
+                      | "red2"
+                      | "red3"
+                      | "blue1"
+                      | "blue2"
+                      | "blue3"
+                  ],
+                });
               } else {
                 setMatch({
                   ...newMatch,
@@ -279,7 +277,8 @@ export default function SavedMatches({
                           key={
                             x.eventKey +
                             "_" +
-                            x.matchKey +
+                            x.matchLevel +
+                            x.matchNumber +
                             "_" +
                             x.alliance +
                             "_" +
@@ -295,7 +294,8 @@ export default function SavedMatches({
                           <Typography>
                             {x.eventKey +
                               "_" +
-                              x.matchKey +
+                              matchLevelAbbrev(x.matchLevel) +
+                              x.matchNumber +
                               " " +
                               x.alliance +
                               " " +
@@ -351,7 +351,8 @@ export default function SavedMatches({
                     matches.map((x) =>
                       (
                         x.eventKey === matchData.eventKey &&
-                        x.matchKey === matchData.matchKey &&
+                        x.matchLevel === matchData.matchLevel &&
+                        x.matchNumber === matchData.matchNumber &&
                         x.alliance === matchData.alliance &&
                         x.robotNumber === matchData.robotNumber
                       ) ?
@@ -378,7 +379,8 @@ export default function SavedMatches({
                               matches.map((x) =>
                                 (
                                   x.eventKey === matchData.eventKey &&
-                                  x.matchKey === matchData.matchKey &&
+                                  x.matchLevel === matchData.matchLevel &&
+                                  x.matchNumber === matchData.matchNumber &&
                                   x.alliance === matchData.alliance &&
                                   x.robotNumber === matchData.robotNumber
                                 ) ?
@@ -390,7 +392,10 @@ export default function SavedMatches({
                               )
                             );
                           }}>
-                          {matchData.eventKey + "_" + matchData.matchKey}
+                          {matchData.eventKey +
+                            "_" +
+                            matchLevelAbbrev(matchData.matchLevel) +
+                            matchData.matchNumber}
                         </Typography>
                         <Stack direction="row">
                           <Typography
@@ -400,7 +405,8 @@ export default function SavedMatches({
                                 matches.map((x) =>
                                   (
                                     x.eventKey === matchData.eventKey &&
-                                    x.matchKey === matchData.matchKey &&
+                                    x.matchLevel === matchData.matchLevel &&
+                                    x.matchNumber === matchData.matchNumber &&
                                     x.alliance === matchData.alliance &&
                                     x.robotNumber === matchData.robotNumber
                                   ) ?
@@ -452,19 +458,7 @@ export default function SavedMatches({
                     (x) =>
                       new File(
                         [JSON.stringify(x)],
-                        "ISA_" +
-                          x.eventKey +
-                          "_" +
-                          x.matchKey +
-                          "_" +
-                          x.alliance +
-                          "_" +
-                          x.robotNumber +
-                          "_" +
-                          x.deviceTeamNumber +
-                          "_" +
-                          x.deviceId +
-                          ".txt",
+                        generateFileName(x) + ".txt",
                         { type: "text/plain" }
                       )
                   ),
@@ -685,7 +679,7 @@ export default function SavedMatches({
               try {
                 const downloadInterval = setInterval(() => {
                   const x = data.pop();
-                  console.log(x?.matchKey);
+                  console.log(x && x.matchLevel + x.matchNumber);
                   if (!x) {
                     clearInterval(downloadInterval);
                     return;
@@ -700,22 +694,7 @@ export default function SavedMatches({
                       })
                     )
                   );
-                  a.setAttribute(
-                    "download",
-                    "ISA_" +
-                      x.eventKey +
-                      "_" +
-                      x.matchKey +
-                      "_" +
-                      x.alliance +
-                      "_" +
-                      x.robotNumber +
-                      "_" +
-                      x.deviceTeamNumber +
-                      "_" +
-                      x.deviceId +
-                      ".txt"
-                  );
+                  a.setAttribute("download", generateFileName(x) + ".txt");
                   a.setAttribute("target", "_blank");
                   a.click();
 

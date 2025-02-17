@@ -63,7 +63,8 @@ export default function CreateEvent({
     >
   >({
     eventKey: "",
-    matchKey: "",
+    matchLevel: "Qualification",
+    matchNumber: 0,
     red1: "",
     red2: "",
     red3: "",
@@ -73,7 +74,8 @@ export default function CreateEvent({
   });
   const setNewEventMatch = (match: Match) => {
     const newMatches = newEvent.matches.filter(
-      (x) => x.matchKey !== match.matchKey
+      (x) =>
+        x.matchLevel !== match.matchLevel || x.matchNumber !== match.matchNumber
     );
     newMatches.push(match);
     setNewEvent({
@@ -141,7 +143,7 @@ export default function CreateEvent({
               </TableHead>
               <TableBody>
                 {newEvent.matches.map((match) => (
-                  <TableRow key={match.matchKey}>
+                  <TableRow key={match.matchLevel + match.matchNumber}>
                     {MatchColumns.map((column) =>
                       column !== "eventKey" ?
                         <TableCell
@@ -164,7 +166,9 @@ export default function CreateEvent({
                             setNewEvent({
                               ...newEvent,
                               matches: newEvent.matches.filter(
-                                (x) => x.matchKey !== match.matchKey
+                                (x) =>
+                                  x.matchLevel !== match.matchLevel ||
+                                  x.matchNumber !== match.matchNumber
                               ),
                             });
                           }}
@@ -225,7 +229,8 @@ export default function CreateEvent({
                           });
                           setNewMatch({
                             eventKey: newEvent.eventKey,
-                            matchKey: "",
+                            matchLevel: "Qualification",
+                            matchNumber: 0,
                             red1: "",
                             red2: "",
                             red3: "",
