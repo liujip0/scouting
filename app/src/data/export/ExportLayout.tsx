@@ -1,6 +1,6 @@
 import {
-  HumanPlayerEntryColumn,
-  TeamMatchEntryColumn,
+  HumanPlayerEntryColumns,
+  TeamMatchEntryColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -17,7 +17,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -39,8 +39,10 @@ type ExportLayoutProps = {
   showAuthorization: boolean;
   setShowAuthorization: (value: boolean) => void;
   publicApiToken: string | undefined;
-  robotColumnsInit: TeamMatchEntryColumn[];
-  humanColumnsInit: HumanPlayerEntryColumn[];
+  robotColumnsState: boolean[];
+  setRobotColumnsState: (value: boolean[]) => void;
+  humanColumnsState: boolean[];
+  setHumanColumnsState: (value: boolean[]) => void;
   linkBase: string;
 };
 export default function ExportLayout({
@@ -51,21 +53,12 @@ export default function ExportLayout({
   showAuthorization,
   setShowAuthorization,
   publicApiToken,
-  robotColumnsInit,
-  humanColumnsInit,
+  robotColumnsState,
+  setRobotColumnsState,
+  humanColumnsState,
+  setHumanColumnsState,
   linkBase,
 }: ExportLayoutProps) {
-  const [robotColumns, setRobotColumns] = useState<boolean[]>(
-    new Array(robotColumnsInit.length).fill(true)
-  );
-  const [humanColumns, setHumanColumns] = useState<boolean[]>(
-    new Array(humanColumnsInit.length).fill(true)
-  );
-  useEffect(() => {
-    setRobotColumns(new Array(robotColumnsInit.length).fill(true));
-    setHumanColumns(new Array(humanColumnsInit.length).fill(true));
-  }, [robotColumnsInit, humanColumnsInit]);
-
   const [fileType, setFileType] = useState<"json" | "csv" | "xlsx">("json");
 
   const getApiLink = () => {
@@ -74,11 +67,11 @@ export default function ExportLayout({
       linkBase +
       fileType +
       "?include=" +
-      (robotColumnsInit.length > 0 ?
-        robotColumns.map((value) => (value ? 1 : 0)).join("")
+      (robotColumnsState.length > 0 ?
+        robotColumnsState.map((value) => (value ? "1" : "0")).join("")
       : "") +
-      (humanColumnsInit.length > 0 ?
-        humanColumns.map((value) => (value ? 1 : 0)).join("")
+      (humanColumnsState.length > 0 ?
+        humanColumnsState.map((value) => (value ? "1" : "0")).join("")
       : "") +
       (linkIncludesToken ? "&token=" + publicApiToken : "")
     );
@@ -98,7 +91,7 @@ export default function ExportLayout({
           padding: 1,
           height: 1,
         }}>
-        {robotColumnsInit.length > 0 && (
+        {robotColumnsState.length > 0 && (
           <>
             <Typography
               variant="body1"
@@ -114,13 +107,13 @@ export default function ExportLayout({
                 height: 1,
                 overflowY: "scroll",
               }}>
-              {robotColumnsInit.map((column, columnIndex) => (
+              {TeamMatchEntryColumns.map((column, columnIndex) => (
                 <FormControlLabel
                   key={column}
-                  checked={robotColumns[columnIndex]}
+                  checked={robotColumnsState[columnIndex]}
                   onChange={(_event, checked) => {
-                    setRobotColumns(
-                      robotColumns.map((value, valueIndex) =>
+                    setRobotColumnsState(
+                      robotColumnsState.map((value, valueIndex) =>
                         valueIndex === columnIndex ? checked : value
                       )
                     );
@@ -142,7 +135,7 @@ export default function ExportLayout({
             </Stack>
           </>
         )}
-        {humanColumnsInit.length > 0 && (
+        {humanColumnsState.length > 0 && (
           <>
             <Typography
               variant="body1"
@@ -159,13 +152,13 @@ export default function ExportLayout({
                 height: 1,
                 overflowY: "scroll",
               }}>
-              {humanColumnsInit.map((column, columnIndex) => (
+              {HumanPlayerEntryColumns.map((column, columnIndex) => (
                 <FormControlLabel
                   key={column}
-                  checked={humanColumns[columnIndex]}
+                  checked={humanColumnsState[columnIndex]}
                   onChange={(_event, checked) => {
-                    setHumanColumns(
-                      humanColumns.map((value, valueIndex) =>
+                    setHumanColumnsState(
+                      humanColumnsState.map((value, valueIndex) =>
                         valueIndex === columnIndex ? checked : value
                       )
                     );
@@ -200,7 +193,7 @@ export default function ExportLayout({
           }}>
           <StyledToggleButton value="json">JSON</StyledToggleButton>
           <StyledToggleButton value="csv">CSV</StyledToggleButton>
-          <StyledToggleButton value="xlsx">XLSX</StyledToggleButton>
+          {/* <StyledToggleButton value="xlsx">XLSX</StyledToggleButton> */}
         </ToggleButtonGroup>
         <Divider
           sx={{

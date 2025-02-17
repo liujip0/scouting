@@ -18,6 +18,13 @@ export default function Export() {
 
   const publicApiToken = trpc.users.publicApiToken.useQuery();
 
+  const [robotColumns, setRobotColumns] = useState<boolean[]>(
+    new Array(TeamMatchEntryColumns.length).fill(true)
+  );
+  const [humanColumns, setHumanColumns] = useState<boolean[]>(
+    new Array(HumanPlayerEntryColumns.length).fill(true)
+  );
+
   return (
     <Stack
       sx={{
@@ -74,8 +81,10 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
-                robotColumnsInit={TeamMatchEntryColumns}
-                humanColumnsInit={[]}
+                robotColumnsState={robotColumns}
+                setRobotColumnsState={setRobotColumns}
+                humanColumnsState={[]}
+                setHumanColumnsState={setHumanColumns}
                 linkBase="/public/robots/"
               />
             }
@@ -91,8 +100,10 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
-                robotColumnsInit={[]}
-                humanColumnsInit={HumanPlayerEntryColumns}
+                robotColumnsState={[]}
+                setRobotColumnsState={setRobotColumns}
+                humanColumnsState={humanColumns}
+                setHumanColumnsState={setHumanColumns}
                 linkBase="/public/humans/"
               />
             }
@@ -108,8 +119,10 @@ export default function Export() {
                 showAuthorization={showAuthorization}
                 setShowAuthorization={setShowAuthorization}
                 publicApiToken={publicApiToken.data}
-                robotColumnsInit={TeamMatchEntryColumns}
-                humanColumnsInit={HumanPlayerEntryColumns}
+                robotColumnsState={robotColumns}
+                setRobotColumnsState={setRobotColumns}
+                humanColumnsState={humanColumns}
+                setHumanColumnsState={setHumanColumns}
                 linkBase="/public/all/"
               />
             }
