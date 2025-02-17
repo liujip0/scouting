@@ -3,7 +3,8 @@ DROP TABLE IF EXISTS HumanPlayerEntry;
 
 CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   eventKey text NOT NULL,
-  matchKey text NOT NULL,
+  matchLevel text CHECK(matchLevel IN ('None', 'Practice', 'Qualification', 'Playoff')) NOT NULL,
+  matchNumber integer NOT NULL,
   teamNumber integer NOT NULL,
   alliance text CHECK(alliance IN ('Red', 'Blue')) NOT NULL,
   robotNumber integer CHECK(robotNumber IN (1, 2, 3)) NOT NULL,
@@ -61,12 +62,13 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   teleopSuccessfulShallow boolean,
   teleopSuccessfulDeep boolean,
 
-  PRIMARY KEY (eventKey, matchKey, teamNumber, deviceTeamNumber, deviceId)
+  PRIMARY KEY (eventKey, matchLevel, matchNumber, teamNumber, deviceTeamNumber, deviceId)
 );
 
 CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   eventKey text NOT NULL,
-  matchKey text NOT NULL,
+  matchLevel text CHECK(matchLevel IN ('None', 'Practice', 'Qualification', 'Playoff')) NOT NULL,
+  matchNumber integer NOT NULL,
   teamNumber integer NOT NULL,
   alliance text CHECK(alliance IN ('Red', 'Blue')) NOT NULL,
   robotNumber integer CHECK(robotNumber IN (4)) NOT NULL,
@@ -80,16 +82,16 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   humanSuccessfulNet integer NOT NULL,
   comments text NOT NULL,
 
-  PRIMARY KEY (eventKey, matchKey, teamNumber, deviceTeamNumber, deviceId)
+  PRIMARY KEY (eventKey, matchLevel, matchNumber, teamNumber, deviceTeamNumber, deviceId)
 );
 
 
 DROP TABLE IF EXISTS Users;
 
 CREATE TABLE IF NOT EXISTS Users(
-  username text UNIQUE PRIMARY KEY,
+  username text UNIQUE PRIMARY KEY NOT NULL,
   permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team',
-  hashedPassword text
+  hashedPassword text NOT NULL
 );
 
 
@@ -97,19 +99,20 @@ DROP TABLE IF EXISTS Matches;
 DROP TABLE IF EXISTS Events;
 
 CREATE TABLE IF NOT EXISTS Events(
-  eventKey text PRIMARY KEY,
-  eventName text
+  eventKey text PRIMARY KEY NOT NULL,
+  eventName text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Matches(
-  eventKey text,
-  matchKey text,
-  red1 integer,
-  red2 integer,
-  red3 integer,
-  blue1 integer,
-  blue2 integer,
-  blue3 integer,
-  PRIMARY KEY (eventKey, matchKey),
+  eventKey text NOT NULL,
+  matchLevel text CHECK(matchLevel IN ('None', 'Practice', 'Qualification', 'Playoff')) NOT NULL,
+  matchNumber integer NOT NULL,
+  red1 integer NOT NULL,
+  red2 integer NOT NULL,
+  red3 integer NOT NULL,
+  blue1 integer NOT NULL,
+  blue2 integer NOT NULL,
+  blue3 integer NOT NULL,
+  PRIMARY KEY (eventKey, matchLevel, matchNumber),
   FOREIGN KEY(eventKey) REFERENCES Events(eventKey)
 );

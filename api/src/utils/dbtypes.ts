@@ -4,7 +4,13 @@ export const Alliance = ["Red", "Blue"] as const;
 
 export const CommonEntrySchema = z.object({
   eventKey: z.string(),
-  matchKey: z.string(),
+  matchLevel: z.union([
+    z.literal("None"),
+    z.literal("Practice"),
+    z.literal("Qualification"),
+    z.literal("Playoff"),
+  ]),
+  matchNumber: z.number().int().nonnegative(),
   teamNumber: z.number().int().nonnegative(),
   alliance: z.union([z.literal("Red"), z.literal("Blue")]),
   robotNumber: z.union([
@@ -23,7 +29,8 @@ export type CommonEntry = z.infer<typeof CommonEntrySchema>;
 export type CommonEntryColumn = keyof CommonEntry;
 export const CommonEntryColumns: CommonEntryColumn[] = [
   "eventKey",
-  "matchKey",
+  "matchLevel",
+  "matchNumber",
   "teamNumber",
   "alliance",
   "robotNumber",
@@ -214,7 +221,8 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
 ] as TeamMatchEntryColumn[];
 export const TeamMatchEntryInit: TeamMatchEntry = {
   eventKey: "",
-  matchKey: "qm1",
+  matchLevel: "Qualification",
+  matchNumber: 1,
   teamNumber: 0,
   alliance: "Red",
   robotNumber: 1,
@@ -310,7 +318,8 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
 };
 export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   eventKey: "",
-  matchKey: "qm1",
+  matchLevel: "Qualification",
+  matchNumber: 1,
   teamNumber: 0,
   alliance: "Red",
   robotNumber: 1,
@@ -425,7 +434,8 @@ export const HumanPlayerEntryColumns: HumanPlayerEntryColumn[] = [
 ] as HumanPlayerEntryColumn[];
 export const HumanPlayerEntryInit: HumanPlayerEntry = {
   eventKey: "",
-  matchKey: "qm1",
+  matchLevel: "Qualification",
+  matchNumber: 1,
   teamNumber: 0,
   alliance: "Red",
   robotNumber: 4,
