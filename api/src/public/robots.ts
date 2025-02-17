@@ -84,11 +84,17 @@ export const robots = async (opts: publicOpts): Promise<Response> => {
             results.results
               .map((row) =>
                 columns
-                  .map((column) =>
-                    column.includes(" AS ") ?
-                      row[column.split(" AS ")[0] as TeamMatchEntryColumn]
-                    : row[column as TeamMatchEntryColumn]
-                  )
+                  .map((column) => {
+                    const value =
+                      column.includes(" AS ") ?
+                        row[column.split(" AS ")[0] as TeamMatchEntryColumn]
+                      : row[column as TeamMatchEntryColumn];
+                    if (typeof value === "string") {
+                      return '"' + value.replace(/\n/g, " ") + '"';
+                    } else {
+                      return value;
+                    }
+                  })
                   .join(",")
               )
               .join("\n"),

@@ -84,11 +84,17 @@ export const humans = async (opts: publicOpts): Promise<Response> => {
             results.results
               .map((row) =>
                 columns
-                  .map((column) =>
-                    column.includes(" AS ") ?
-                      row[column.split(" AS ")[0] as HumanPlayerEntryColumn]
-                    : row[column as HumanPlayerEntryColumn]
-                  )
+                  .map((column) => {
+                    const value =
+                      column.includes(" AS ") ?
+                        row[column.split(" AS ")[0] as HumanPlayerEntryColumn]
+                      : row[column as HumanPlayerEntryColumn];
+                    if (typeof value === "string") {
+                      return '"' + value.replace(/\n/g, " ") + '"';
+                    } else {
+                      return value;
+                    }
+                  })
                   .join(",")
               )
               .join("\n"),
