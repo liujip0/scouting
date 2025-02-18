@@ -100,7 +100,7 @@ export const getFrcEvent = loggedPublicProcedure
         const matchStmt = opts.ctx.env.DB.prepare(
           `REPLACE INTO
             Matches(eventKey, matchLevel, matchNumber, red1, red2, red3, blue1, blue2, blue3)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?);`
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`
         );
         event.matches.forEach((match) => {
           boundStmts.push(
