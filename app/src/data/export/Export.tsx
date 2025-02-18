@@ -13,6 +13,9 @@ export default function Export() {
   const [linkIncludesToken, setLinkIncludesToken] = useState(false);
   const [showAuthorization, setShowAuthorization] = useState(false);
 
+  const [events, setEvents] = useState("");
+  const [teams, setTeams] = useState("");
+
   const resolvedPath = useResolvedPath("");
   const pathend = resolvedPath.pathname.split("/").pop();
 
@@ -86,6 +89,10 @@ export default function Export() {
                 humanColumnsState={[]}
                 setHumanColumnsState={setHumanColumns}
                 linkBase="/public/robots/"
+                events={events}
+                setEvents={setEvents}
+                teams={teams}
+                setTeams={setTeams}
               />
             }
           />
@@ -105,6 +112,10 @@ export default function Export() {
                 humanColumnsState={humanColumns}
                 setHumanColumnsState={setHumanColumns}
                 linkBase="/public/humans/"
+                events={events}
+                setEvents={setEvents}
+                teams={teams}
+                setTeams={setTeams}
               />
             }
           />
@@ -124,6 +135,10 @@ export default function Export() {
                 humanColumnsState={humanColumns}
                 setHumanColumnsState={setHumanColumns}
                 linkBase="/public/all/"
+                events={events}
+                setEvents={setEvents}
+                teams={teams}
+                setTeams={setTeams}
               />
             }
           /> */}

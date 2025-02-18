@@ -44,6 +44,10 @@ type ExportLayoutProps = {
   humanColumnsState: boolean[];
   setHumanColumnsState: (value: boolean[]) => void;
   linkBase: string;
+  events: string;
+  setEvents: (value: string) => void;
+  teams: string;
+  setTeams: (value: string) => void;
 };
 export default function ExportLayout({
   showPublicApiToken,
@@ -58,6 +62,10 @@ export default function ExportLayout({
   humanColumnsState,
   setHumanColumnsState,
   linkBase,
+  events,
+  setEvents,
+  teams,
+  setTeams,
 }: ExportLayoutProps) {
   const [fileType, setFileType] = useState<"json" | "csv" | "xlsx">("json");
 
@@ -72,6 +80,19 @@ export default function ExportLayout({
       : "") +
       (humanColumnsState.length > 0 ?
         humanColumnsState.map((value) => (value ? "1" : "0")).join("")
+      : "") +
+      (events ?
+        events
+          .split(",")
+          .map((event) => "&event=" + event.trim())
+          .join("")
+      : "") +
+      (teams ?
+        teams
+          .split(",")
+          .filter((team) => !isNaN(parseInt(team.trim())))
+          .map((team) => "&team=" + team.trim())
+          .join("")
       : "") +
       (linkIncludesToken ? "&token=" + publicApiToken : "")
     );
@@ -106,6 +127,7 @@ export default function ExportLayout({
                 flex: 1,
                 height: 1,
                 overflowY: "scroll",
+                mb: 2,
               }}>
               {TeamMatchEntryColumns.map((column, columnIndex) => (
                 <FormControlLabel
@@ -142,7 +164,6 @@ export default function ExportLayout({
               fontWeight="bold"
               sx={{
                 textWrap: "wrap",
-                mt: 2,
               }}>
               Select columns to include in human data
             </Typography>
@@ -179,6 +200,26 @@ export default function ExportLayout({
           overflowY: "scroll",
         }}
         gap={1}>
+        <TextField
+          value={events}
+          onChange={(event) => {
+            setEvents(event.currentTarget.value);
+          }}
+          label="Events (comma-separated)"
+        />
+        <TextField
+          value={teams}
+          onChange={(event) => {
+            setTeams(event.currentTarget.value);
+          }}
+          label="Teams (comma-separated)"
+        />
+        <Divider
+          sx={{
+            mt: 2,
+            mb: 2,
+          }}
+        />
         <ToggleButtonGroup
           value={fileType}
           exclusive
