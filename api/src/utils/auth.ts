@@ -7,4 +7,4 @@ export function randomString(length: number): string {
   return res;
 }
 
-export const saltRounds = 10;
+export const SALT_ROUNDS = 10;

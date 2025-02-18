@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { loggedPublicProcedure } from "../trpc.ts";
-import { saltRounds } from "../utils/auth.ts";
+import { SALT_ROUNDS } from "../utils/auth.ts";
 import { User } from "../utils/dbtypes.ts";
 
 export const login = loggedPublicProcedure
@@ -53,7 +53,7 @@ export const login = loggedPublicProcedure
       if (opts.input.username === opts.ctx.env.ADMIN_ACCOUNT_USERNAME) {
         const hashedPassword = await bcrypt.hash(
           opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
-          saltRounds
+          SALT_ROUNDS
         );
         const passwordMatch = await bcrypt.compare(
           opts.input.password,
@@ -66,7 +66,10 @@ export const login = loggedPublicProcedure
             .bind(
               opts.input.username,
               "admin",
-              await bcrypt.hash(opts.ctx.env.ADMIN_ACCOUNT_PASSWORD, saltRounds)
+              await bcrypt.hash(
+                opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
+                SALT_ROUNDS
+              )
             )
             .run();
           if (!adminCreationResult.success) {

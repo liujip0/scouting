@@ -36,6 +36,7 @@ export default function EditUser({
     },
   });
   const [editUserUsernameError, setEditUserUsernameError] = useState("");
+  const [editUserPassword, setEditUserPassword] = useState("");
 
   return (
     <Dialog
@@ -55,7 +56,7 @@ export default function EditUser({
             onChange={(event) => {
               setEditUserUsername(event.currentTarget.value);
             }}
-            label="username"
+            label="Username"
             helperText={editUserUsernameError}
             error={editUserUsernameError !== ""}
           />
@@ -65,7 +66,7 @@ export default function EditUser({
               setEditUserPermLevel(event.target.value as User["permLevel"]);
             }}
             select
-            label="permLevel">
+            label="Permission Level">
             {UserPermLevel.map((perm) => (
               <MenuItem
                 key={perm}
@@ -74,6 +75,13 @@ export default function EditUser({
               </MenuItem>
             ))}
           </TextField>
+          <TextField
+            value={editUserPassword}
+            onChange={(event) => {
+              setEditUserPassword(event.currentTarget.value);
+            }}
+            label="Password"
+          />
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -99,6 +107,7 @@ export default function EditUser({
                 oldUsername: editUserOldUsername!,
                 newUsername: editUserUsername!,
                 permLevel: editUserPermLevel!,
+                password: editUserPassword ? editUserPassword : undefined,
               });
               closeEditUser();
             }

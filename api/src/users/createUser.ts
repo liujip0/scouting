@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { authedLoggedProcedure } from "../trpc.ts";
-import { saltRounds } from "../utils/auth.ts";
+import { SALT_ROUNDS } from "../utils/auth.ts";
 import { UserPermLevel } from "../utils/dbtypes.ts";
 
 export const createUser = authedLoggedProcedure
@@ -21,7 +21,7 @@ export const createUser = authedLoggedProcedure
       });
     }
 
-    const hashedPassword = await bcrypt.hash(opts.input.password, saltRounds);
+    const hashedPassword = await bcrypt.hash(opts.input.password, SALT_ROUNDS);
 
     const result = await opts.ctx.env.DB.prepare(
       "INSERT INTO Users (username, permLevel, hashedPassword) VALUES (?, ?, ?)"

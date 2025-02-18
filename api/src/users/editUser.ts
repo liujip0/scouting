@@ -1,6 +1,8 @@
 import { TRPCError } from "@trpc/server";
+import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { authedLoggedProcedure } from "../trpc.ts";
+import { SALT_ROUNDS } from "../utils/auth.ts";
 import { UserPermLevel } from "../utils/dbtypes.ts";
 
 export const editUser = authedLoggedProcedure
@@ -9,6 +11,7 @@ export const editUser = authedLoggedProcedure
       oldUsername: z.string(),
       newUsername: z.string().optional(),
       permLevel: z.enum(UserPermLevel),
+      password: z.string().optional(),
     })
   )
   .mutation(async (opts) => {
@@ -39,6 +42,10 @@ export const editUser = authedLoggedProcedure
     if (opts.input.permLevel) {
       changes.push("permLevel = ?");
       params.push(opts.input.permLevel);
+    }
+    if (opts.input.password) {
+      changes.push("hashedPassword = ?");
+      params.push(await bcrypt.hash(opts.input.password, SALT_ROUNDS));
     }
     query += changes.join(", ");
     query += " WHERE username = ? LIMIT 1";
