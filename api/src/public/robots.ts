@@ -4,6 +4,7 @@ import {
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
 } from "../utils/dbtypes.ts";
+import { dateFileName } from "../utils/utils.ts";
 import { publicOpts } from "./context.ts";
 
 export const robots = async (opts: publicOpts): Promise<Response> => {
@@ -103,6 +104,7 @@ export const robots = async (opts: publicOpts): Promise<Response> => {
             statusText: "OK",
             headers: {
               "Content-Type": "text/csv",
+              "Content-Disposition": `attachment; filename="${dateFileName()}.csv"`,
             },
           }
         );

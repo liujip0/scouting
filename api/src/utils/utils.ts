@@ -20,7 +20,7 @@ export function matchLevelAbbrev(matchLevel: (typeof MatchLevel)[number]) {
   }
 }
 
-export function generateFileName(match: TeamMatchEntry | HumanPlayerEntry) {
+export function matchFileName(match: TeamMatchEntry | HumanPlayerEntry) {
   return (
     "ISA_" +
     match.eventKey +
@@ -35,5 +35,23 @@ export function generateFileName(match: TeamMatchEntry | HumanPlayerEntry) {
     match.deviceTeamNumber +
     "_" +
     match.deviceId
+  );
+}
+
+export function dateFileName() {
+  const date = new Date();
+  return (
+    "ISA_" +
+    date.getFullYear().toString().padStart(4, "0") +
+    "." +
+    (date.getMonth() + 1).toString().padStart(2, "0") +
+    "." +
+    date.getDate().toString().padStart(2, "0") +
+    "_" +
+    date.getHours().toString().padStart(2, "0") +
+    "." +
+    date.getMinutes().toString().padStart(2, "0") +
+    "." +
+    date.getSeconds().toString().padStart(2, "0")
   );
 }

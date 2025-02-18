@@ -2,6 +2,7 @@ import {
   HumanPlayerEntryColumns,
   TeamMatchEntryColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import { dateFileName } from "@isa2025/api/src/utils/utils.ts";
 import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -373,8 +374,6 @@ export default function ExportLayout({
             ).text();
             console.log(res);
 
-            const date = new Date();
-
             const a = document.createElement("a");
             a.setAttribute(
               "href",
@@ -384,23 +383,7 @@ export default function ExportLayout({
                 })
               )
             );
-            a.setAttribute(
-              "download",
-              "ISA_" +
-                date.getFullYear().toString().padStart(4, "0") +
-                "." +
-                (date.getMonth() + 1).toString().padStart(2, "0") +
-                "." +
-                date.getDate().toString().padStart(2, "0") +
-                "_" +
-                date.getHours().toString().padStart(2, "0") +
-                "." +
-                date.getMinutes().toString().padStart(2, "0") +
-                "." +
-                date.getSeconds().toString().padStart(2, "0") +
-                "." +
-                fileType
-            );
+            a.setAttribute("download", dateFileName() + "." + fileType);
             a.setAttribute("target", "_blank");
             a.click();
           }}>
@@ -418,8 +401,6 @@ export default function ExportLayout({
             ).text();
             console.log(res);
 
-            const date = new Date();
-
             const a = document.createElement("a");
             a.setAttribute(
               "href",
@@ -429,22 +410,7 @@ export default function ExportLayout({
                 })
               )
             );
-            a.setAttribute(
-              "download",
-              "ISA_" +
-                date.getFullYear().toString().padStart(4, "0") +
-                "." +
-                (date.getMonth() + 1).toString().padStart(2, "0") +
-                "." +
-                date.getDate().toString().padStart(2, "0") +
-                "_" +
-                date.getHours().toString().padStart(2, "0") +
-                "." +
-                date.getMinutes().toString().padStart(2, "0") +
-                "." +
-                date.getSeconds().toString().padStart(2, "0") +
-                ".txt"
-            );
+            a.setAttribute("download", dateFileName() + ".txt");
             a.setAttribute("target", "_blank");
             a.click();
           }}>

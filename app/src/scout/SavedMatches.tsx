@@ -12,7 +12,7 @@ import {
   TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import {
-  generateFileName,
+  matchFileName,
   matchLevelAbbrev,
   omit,
 } from "@isa2025/api/src/utils/utils.ts";
@@ -456,11 +456,9 @@ export default function SavedMatches({
                   text: JSON.stringify(data),
                   files: data.map(
                     (x) =>
-                      new File(
-                        [JSON.stringify(x)],
-                        generateFileName(x) + ".txt",
-                        { type: "text/plain" }
-                      )
+                      new File([JSON.stringify(x)], matchFileName(x) + ".txt", {
+                        type: "text/plain",
+                      })
                   ),
                 });
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -694,7 +692,7 @@ export default function SavedMatches({
                       })
                     )
                   );
-                  a.setAttribute("download", generateFileName(x) + ".txt");
+                  a.setAttribute("download", matchFileName(x) + ".txt");
                   a.setAttribute("target", "_blank");
                   a.click();
 
