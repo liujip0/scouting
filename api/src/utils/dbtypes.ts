@@ -463,19 +463,32 @@ export const UserPermLevel = [
   "datamanage",
   "admin",
 ] as const;
-export type User = {
-  username: string;
-  permLevel: (typeof UserPermLevel)[number];
-  hashedPassword: string;
-};
-export const UserColumns = ["username", "permLevel", "hashedPassword"] as const;
-export type UserColumn = (typeof UserColumns)[number];
+export const UserSchema = z.object({
+  username: z.string(),
+  permLevel: z.union([
+    z.literal("none"),
+    z.literal("demo"),
+    z.literal("team"),
+    z.literal("datamanage"),
+    z.literal("admin"),
+  ]),
+  hashedPassword: z.string(),
+});
+export type User = z.infer<typeof UserSchema>;
+export type UserColumn = keyof User;
+export const UserColumns: UserColumn[] = [
+  "username",
+  "permLevel",
+  "hashedPassword",
+];
 
 export const DBEventSchema = z.object({
   eventKey: z.string(),
   eventName: z.string(),
 });
 export type DBEvent = z.infer<typeof DBEventSchema>;
+export type DBEventColumn = keyof DBEvent;
+export const DBEventColumns: DBEventColumn[] = ["eventKey", "eventName"];
 
 export const MatchSchema = z.object({
   eventKey: z.string(),

@@ -19,7 +19,7 @@ export const putEntries = loggedPublicProcedure
           ${TeamMatchEntryColumns.join(", ")}
         )
       VALUES
-        (${"?, ".repeat(TeamMatchEntryColumns.length - 1)}?);`
+        (${new Array(TeamMatchEntryColumns.length).fill("?").join(",")});`
     );
     const humanPlayerEntryStmt = opts.ctx.env.DB.prepare(
       `REPLACE INTO
@@ -27,7 +27,7 @@ export const putEntries = loggedPublicProcedure
           ${HumanPlayerEntryColumns.join(", ")}
         )
       VALUES
-        (${"?, ".repeat(HumanPlayerEntryColumns.length - 1)}?);`
+        (${new Array(HumanPlayerEntryColumns.length).fill("?").join(",")});`
     );
 
     for (let match of opts.input) {
