@@ -14,6 +14,5 @@ export const createContext = async ({
     env,
     resHeaders: responseHeaders,
   };
-  s;
 };
 export type Context = Awaited<ReturnType<typeof createContext>>;
