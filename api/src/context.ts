@@ -7,12 +7,13 @@ export const createContext = async ({
   resHeaders,
 }: FetchCreateContextFnOptions & { env: Env }) => {
   const responseHeaders = resHeaders;
-  responseHeaders.set("Access-Control-Allow-Origin", "*");
-  responseHeaders.set("Access-Control-Allow-Headers", "*");
+  responseHeaders.append("Access-Control-Allow-Origin", "*");
+  responseHeaders.append("Access-Control-Allow-Headers", "*");
   return {
     req,
     env,
-    responseHeaders,
+    resHeaders: responseHeaders,
   };
+  s;
 };
 export type Context = Awaited<ReturnType<typeof createContext>>;
