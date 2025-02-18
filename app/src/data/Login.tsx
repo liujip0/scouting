@@ -37,6 +37,9 @@ export default function Login({ setToken }: LoginProps) {
   const login = trpc.auth.login.useMutation({
     onSuccess(data) {
       if (data?.token) {
+        if (data.permLevel === "team") {
+          navigate("/data/export/robots");
+        }
         setToken(
           data.token,
           data.expiresAt,
