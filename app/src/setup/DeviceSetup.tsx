@@ -24,6 +24,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -509,6 +510,9 @@ export default function DeviceSetup({
             sx={{
               flex: 1,
               padding: 2,
+              borderColor: "error.main",
+              borderStyle: "solid",
+              borderWidth: currentEventError !== "" ? 2 : 0,
             }}>
             <FormControl error={currentEventError !== ""}>
               <RadioGroup
@@ -530,7 +534,9 @@ export default function DeviceSetup({
                     />
                   ))}
               </RadioGroup>
-              <FormHelperText>{currentEventError}</FormHelperText>
+              <FormHelperText>
+                <Typography fontSize="body2">{currentEventError}</Typography>
+              </FormHelperText>
             </FormControl>
           </Box>
           <DownloadEvent
