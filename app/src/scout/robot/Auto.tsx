@@ -1,7 +1,4 @@
-import {
-  TeamMatchEntry,
-  TeamMatchEntryColumn,
-} from "@isa2025/api/src/utils/dbtypes.ts";
+import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
 import {
   Box,
   Button,
@@ -388,12 +385,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L4"]:
-                          (match[
-                            ("autoCoral" +
-                              popperReef +
-                              "L4") as TeamMatchEntryColumn
-                          ] as number) + 1,
+                        ["autoCoral" + popperReef + "L4"]: true,
                       });
                       setPopperAnchor(null);
                       setPopperReef("");
@@ -406,12 +398,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L3"]:
-                          (match[
-                            ("autoCoral" +
-                              popperReef +
-                              "L3") as TeamMatchEntryColumn
-                          ] as number) + 1,
+                        ["autoCoral" + popperReef + "L3"]: true,
                       });
                       setPopperAnchor(null);
                       setPopperReef("");
@@ -424,12 +411,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L2"]:
-                          (match[
-                            ("autoCoral" +
-                              popperReef +
-                              "L2") as TeamMatchEntryColumn
-                          ] as number) + 1,
+                        ["autoCoral" + popperReef + "L2"]: true,
                       });
                       setPopperAnchor(null);
                       setPopperReef("");
@@ -442,12 +424,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L1"]:
-                          (match[
-                            ("autoCoral" +
-                              popperReef +
-                              "L1") as TeamMatchEntryColumn
-                          ] as number) + 1,
+                        ["autoCoral" + popperReef + "L1"]: true,
                       });
                       setPopperAnchor(null);
                       setPopperReef("");
