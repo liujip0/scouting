@@ -227,22 +227,26 @@ type CircleButtonProps = {
   label: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   sx: SxProps;
+  color?: "primary" | "secondary";
 };
-export function CircleButton({ label, onClick, sx }: CircleButtonProps) {
+export function CircleButton({
+  label,
+  onClick,
+  sx,
+  color = "secondary",
+}: CircleButtonProps) {
   return (
     <Button
       onClick={onClick}
       sx={{
         ...sx,
-        "&.Mui-selected, &.Mui-selected:hover": {
-          color: "white",
-          backgroundColor: "primary.main",
-        },
-        color: "primary.main",
-        backgroundColor: "secondary.main",
+        color: color === "primary" ? "white" : "primary.main",
+        backgroundColor:
+          color === "primary" ? "primary.main" : "secondary.main",
         borderColor: "secondary.main",
         "&:hover": {
-          backgroundColor: "secondary.main",
+          backgroundColor:
+            color === "primary" ? "primary.main" : "secondary.main",
         },
         padding: 0.5,
         minWidth: 0,
