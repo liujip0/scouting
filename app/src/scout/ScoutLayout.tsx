@@ -174,7 +174,7 @@ export default function ScoutLayout({
               value={matchStage}
               onChange={(_event, value) => {
                 if (matchStage === "prematch") {
-                  if (!prematchCheck) {
+                  if (!prematchCheck()) {
                     setMatchStage(value);
                   }
                 } else {
