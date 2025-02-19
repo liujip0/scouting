@@ -6,16 +6,14 @@ import {
   SxProps,
   TextField,
   ToggleButton,
-  Typography,
 } from "@mui/material";
 
 type CounterProps = {
   value: number;
   setValue: (value: number) => void;
-  label: string;
   sx?: SxProps;
 };
-export function Counter({ value, setValue, label, sx }: CounterProps) {
+export function Counter({ value, setValue, sx }: CounterProps) {
   const buttonSx: SxProps = {
     color: "primary.contrastText",
     backgroundColor: "primary.main",
@@ -29,14 +27,6 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
 
   return (
     <Stack sx={sx}>
-      <Typography
-        fontSize="caption"
-        sx={{
-          //TODO
-          display: "none",
-        }}>
-        {label}
-      </Typography>
       <Stack
         direction="row"
         sx={{
@@ -76,14 +66,14 @@ export function Counter({ value, setValue, label, sx }: CounterProps) {
             event.stopPropagation();
           }}
         />
-        <IconButton
+        {/* <IconButton
           onClick={(event) => {
             event.stopPropagation();
             setValue(value + 1);
           }}
           sx={buttonSx}>
           <Add />
-        </IconButton>
+        </IconButton> */}
       </Stack>
     </Stack>
   );
