@@ -158,6 +158,8 @@ export default function SavedMatches({
                 ...(match.robotNumber < 4 ?
                   TeamMatchEntryInit
                 : HumanPlayerEntryInit),
+                deviceTeamNumber: match.deviceTeamNumber,
+                deviceId: match.deviceId,
                 eventKey: match.eventKey,
                 matchLevel: match.matchLevel,
                 matchNumber: match.matchNumber + 1,
