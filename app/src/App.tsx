@@ -1,5 +1,6 @@
 import { DBEvent, Match } from "@isa2025/api/src/utils/dbtypes.ts";
-import { useEffect, useState } from "react";
+import EventEmitter from "eventemitter3";
+import { useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Data from "./data/Data.tsx";
 import LandingPage from "./LandingPage.tsx";
@@ -9,6 +10,8 @@ import Upload from "./upload/Upload.tsx";
 import { getFromDBStore, initDB, Stores } from "./utils/idb.ts";
 
 export default function App() {
+  const eventEmitter = useMemo(() => new EventEmitter(), []);
+
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
     (): DeviceSetupObj => {
       if (localStorage.getItem("deviceSetup") !== null) {
@@ -61,8 +64,9 @@ export default function App() {
       });
 
       setEvents(res);
+      eventEmitter.emit("idb-finished", res);
     })();
-  }, []);
+  }, [eventEmitter]);
 
   return (
     <BrowserRouter>
@@ -81,6 +85,7 @@ export default function App() {
             <Scout
               deviceSetup={deviceSetup}
               events={events}
+              eventEmitter={eventEmitter}
             />
           }
         />
