@@ -36,7 +36,7 @@ export const exportData = authedLoggedProcedure.query(async (opts) => {
   ) {
     return {
       TeamMatchEntry: teamMatchEntries.results.map((entry) => {
-        const newEntry: TeamMatchEntry = TeamMatchEntryInit;
+        const newEntry: TeamMatchEntry = { ...TeamMatchEntryInit };
         TeamMatchEntryColumns.forEach((column) => {
           if (typeof TeamMatchEntryInit[column] === "boolean") {
             newEntry[column] = (entry[column] === 1) as never;
@@ -47,7 +47,7 @@ export const exportData = authedLoggedProcedure.query(async (opts) => {
         return newEntry;
       }),
       HumanPlayerEntry: humanPlayerEntries.results.map((entry) => {
-        const newEntry: HumanPlayerEntry = HumanPlayerEntryInit;
+        const newEntry: HumanPlayerEntry = { ...HumanPlayerEntryInit };
         HumanPlayerEntryColumns.forEach((column) => {
           if (typeof HumanPlayerEntryInit[column] === "boolean") {
             newEntry[column] = (entry[column] === 1) as never;
