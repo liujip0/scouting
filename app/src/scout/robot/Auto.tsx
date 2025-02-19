@@ -1,7 +1,9 @@
-import { TeamMatchEntry } from "@isa2025/api/src/utils/dbtypes.ts";
+import {
+  TeamMatchEntry,
+  TeamMatchEntryColumn,
+} from "@isa2025/api/src/utils/dbtypes.ts";
 import {
   Box,
-  Button,
   ButtonGroup,
   ClickAwayListener,
   Divider,
@@ -25,7 +27,6 @@ type AutoProps = {
   deviceSetup: DeviceSetupObj;
 };
 export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
-  const [popperAnchor, setPopperAnchor] = useState<null | HTMLElement>(null);
   const [popperReef, setPopperReef] = useState<
     "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | ""
   >("");
@@ -59,11 +60,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }}
           />
           <CircleButton
+            color={popperReef === "A" ? "primary" : "secondary"}
             label="A"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "A" ? null : event.currentTarget);
-              setPopperReef("A");
+              setPopperReef(popperReef === "A" ? "" : "A");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -82,11 +83,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "B" ? "primary" : "secondary"}
             label="B"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "B" ? null : event.currentTarget);
-              setPopperReef("B");
+              setPopperReef(popperReef === "B" ? "" : "B");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -105,11 +106,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "C" ? "primary" : "secondary"}
             label="C"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "C" ? null : event.currentTarget);
-              setPopperReef("C");
+              setPopperReef(popperReef === "C" ? "" : "C");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -128,11 +129,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "D" ? "primary" : "secondary"}
             label="D"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "D" ? null : event.currentTarget);
-              setPopperReef("D");
+              setPopperReef(popperReef === "D" ? "" : "D");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -151,11 +152,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "E" ? "primary" : "secondary"}
             label="E"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "E" ? null : event.currentTarget);
-              setPopperReef("E");
+              setPopperReef(popperReef === "E" ? "" : "E");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -174,11 +175,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "F" ? "primary" : "secondary"}
             label="F"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "F" ? null : event.currentTarget);
-              setPopperReef("F");
+              setPopperReef(popperReef === "F" ? "" : "F");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -197,11 +198,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "G" ? "primary" : "secondary"}
             label="G"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "G" ? null : event.currentTarget);
-              setPopperReef("G");
+              setPopperReef(popperReef === "G" ? "" : "G");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -220,11 +221,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "H" ? "primary" : "secondary"}
             label="H"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "H" ? null : event.currentTarget);
-              setPopperReef("H");
+              setPopperReef(popperReef === "H" ? "" : "H");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -243,11 +244,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "I" ? "primary" : "secondary"}
             label="I"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "I" ? null : event.currentTarget);
-              setPopperReef("I");
+              setPopperReef(popperReef === "I" ? "" : "I");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -266,11 +267,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "J" ? "primary" : "secondary"}
             label="J"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "J" ? null : event.currentTarget);
-              setPopperReef("J");
+              setPopperReef(popperReef === "J" ? "" : "J");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -289,11 +290,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "K" ? "primary" : "secondary"}
             label="K"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "K" ? null : event.currentTarget);
-              setPopperReef("K");
+              setPopperReef(popperReef === "K" ? "" : "K");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -312,11 +313,11 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             }
           />
           <CircleButton
+            color={popperReef === "L" ? "primary" : "secondary"}
             label="L"
             onClick={(event) => {
               event.stopPropagation();
-              setPopperAnchor(popperReef === "L" ? null : event.currentTarget);
-              setPopperReef("L");
+              setPopperReef(popperReef === "L" ? "" : "L");
             }}
             sx={
               deviceSetup.fieldOrientation === "processor" ?
@@ -334,25 +335,23 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <Button
-            onClick={() => {
-              //TODO
-            }}
-            sx={{
-              position: "absolute",
-              display: "none",
-            }}>
-            Undo
-          </Button>
           <ClickAwayListener
             onClickAway={() => {
-              setPopperAnchor(null);
               setPopperReef("");
             }}>
             <Popper
-              open={popperAnchor !== null}
-              anchorEl={popperAnchor}
-              placement="left"
+              open={popperReef !== ""}
+              slotProps={{
+                root: {
+                  style: {
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                  },
+                },
+              }}
+              disablePortal
               modifiers={[
                 {
                   name: "flip",
@@ -380,58 +379,94 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 sx={{
                   backgroundColor: "background.paper",
                 }}>
-                <Button
+                <StyledToggleButton
+                  value="L4"
+                  selected={
+                    match[
+                      ("autoCoral" + popperReef + "L4") as TeamMatchEntryColumn
+                    ] as boolean
+                  }
                   onClick={() => {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L4"]: true,
+                        ["autoCoral" + popperReef + "L4"]: !(match[
+                          ("autoCoral" +
+                            popperReef +
+                            "L4") as TeamMatchEntryColumn
+                        ] as boolean),
                       });
-                      setPopperAnchor(null);
                       setPopperReef("");
                     }
                   }}>
                   L4
-                </Button>
-                <Button
+                </StyledToggleButton>
+                <StyledToggleButton
+                  value="L3"
+                  selected={
+                    match[
+                      ("autoCoral" + popperReef + "L3") as TeamMatchEntryColumn
+                    ] as boolean
+                  }
                   onClick={() => {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L3"]: true,
+                        ["autoCoral" + popperReef + "L3"]: !(match[
+                          ("autoCoral" +
+                            popperReef +
+                            "L3") as TeamMatchEntryColumn
+                        ] as boolean),
                       });
-                      setPopperAnchor(null);
                       setPopperReef("");
                     }
                   }}>
                   L3
-                </Button>
-                <Button
+                </StyledToggleButton>
+                <StyledToggleButton
+                  value="L2"
+                  selected={
+                    match[
+                      ("autoCoral" + popperReef + "L2") as TeamMatchEntryColumn
+                    ] as boolean
+                  }
                   onClick={() => {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L2"]: true,
+                        ["autoCoral" + popperReef + "L2"]: !(match[
+                          ("autoCoral" +
+                            popperReef +
+                            "L2") as TeamMatchEntryColumn
+                        ] as boolean),
                       });
-                      setPopperAnchor(null);
                       setPopperReef("");
                     }
                   }}>
                   L2
-                </Button>
-                <Button
+                </StyledToggleButton>
+                <StyledToggleButton
+                  value="L1"
+                  selected={
+                    match[
+                      ("autoCoral" + popperReef + "L1") as TeamMatchEntryColumn
+                    ] as boolean
+                  }
                   onClick={() => {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L1"]: true,
+                        ["autoCoral" + popperReef + "L1"]: !(match[
+                          ("autoCoral" +
+                            popperReef +
+                            "L1") as TeamMatchEntryColumn
+                        ] as boolean),
                       });
-                      setPopperAnchor(null);
                       setPopperReef("");
                     }
                   }}>
                   L1
-                </Button>
+                </StyledToggleButton>
               </ButtonGroup>
             </Popper>
           </ClickAwayListener>
