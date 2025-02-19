@@ -66,6 +66,9 @@ export const humans = async (opts: publicOpts): Promise<Response> => {
   if (results.success) {
     switch (opts.path[1]) {
       case "json": {
+        const queryCount = await opts.env.KV.get(
+          opts.ctx.user.username + "_human_json_queries"
+        );
         return new Response(JSON.stringify(results.results), {
           status: 200,
           statusText: "OK",

@@ -1,3 +1,4 @@
+import { MAX_TEAM_NUMBER } from "@isa2025/api/src/utils/constants.ts";
 import { User, UserPermLevel } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -27,10 +28,13 @@ export default function CreateUser({
   const [createUserUsername, setCreateUserUsername] = useState("");
   const [createUserUsernameError, setCreateUserUsernameError] = useState("");
   const [createUserPassword, setCreateUserPassword] = useState("");
-  const [createUserShowPassowrd, setCreateUserShowPassword] = useState(false);
+  const [createUserShowPassword, setCreateUserShowPassword] = useState(false);
   const [createUserPasswordError, setCreateUserPasswordError] = useState("");
   const [createUserPermLevel, setCreateUserPermLevel] =
     useState<User["permLevel"]>("team");
+  const [createUserTeamNumber, setCreateUserTeamNumber] = useState<number>(0);
+  const [createUserTeamNumberError, setCreateUserTeamNumberError] =
+    useState("");
   const createUser = trpc.users.createUser.useMutation({
     onSuccess() {
       refreshUsers();
@@ -67,15 +71,15 @@ export default function CreateUser({
             label="Password"
             helperText={createUserPasswordError}
             error={createUserPasswordError !== ""}
-            type={createUserShowPassowrd ? "text" : "password"}
+            type={createUserShowPassword ? "text" : "password"}
             slotProps={{
               input: {
                 endAdornment: (
                   <IconButton
                     onClick={() => {
-                      setCreateUserShowPassword(!createUserShowPassowrd);
+                      setCreateUserShowPassword(!createUserShowPassword);
                     }}>
-                    {createUserShowPassowrd ?
+                    {createUserShowPassword ?
                       <VisibilityOff />
                     : <Visibility />}
                   </IconButton>
@@ -89,7 +93,7 @@ export default function CreateUser({
               setCreateUserPermLevel(event.target.value as User["permLevel"]);
             }}
             select
-            label="permLevel">
+            label="Permission Level">
             {UserPermLevel.map((perm) => (
               <MenuItem
                 key={perm}
@@ -98,6 +102,15 @@ export default function CreateUser({
               </MenuItem>
             ))}
           </TextField>
+          <TextField
+            value={isNaN(createUserTeamNumber) ? "" : createUserTeamNumber}
+            onChange={(event) => {
+              setCreateUserTeamNumber(parseInt(event.currentTarget.value));
+            }}
+            label="Team Number"
+            helperText={createUserTeamNumberError}
+            error={createUserTeamNumberError !== ""}
+          />
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -125,11 +138,23 @@ export default function CreateUser({
               setCreateUserPasswordError("");
             }
 
+            if (
+              isNaN(createUserTeamNumber) ||
+              createUserTeamNumber < 0 ||
+              createUserTeamNumber > MAX_TEAM_NUMBER
+            ) {
+              setCreateUserTeamNumberError("Invalid team number");
+              error = true;
+            } else {
+              setCreateUserTeamNumberError("");
+            }
+
             if (!error) {
               createUser.mutate({
                 username: createUserUsername,
                 password: createUserPassword,
                 permLevel: createUserPermLevel,
+                teamNumber: createUserTeamNumber,
               });
               setCreateUser(false);
             }

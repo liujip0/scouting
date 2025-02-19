@@ -91,6 +91,7 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE IF NOT EXISTS Users(
   username text UNIQUE PRIMARY KEY NOT NULL,
   permLevel text CHECK(permLevel IN ('none', 'demo', 'team', 'datamanage', 'admin')) DEFAULT 'team',
+  teamNumber integer NOT NULL,
   hashedPassword text NOT NULL
 );
 

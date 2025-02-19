@@ -1,5 +1,13 @@
 import { TRPCError } from "@trpc/server";
 import { authedLoggedProcedure } from "../trpc.ts";
+import {
+  HumanPlayerEntry,
+  HumanPlayerEntryColumns,
+  HumanPlayerEntryInit,
+  TeamMatchEntry,
+  TeamMatchEntryColumns,
+  TeamMatchEntryInit,
+} from "../utils/dbtypes.ts";
 
 export const exportData = authedLoggedProcedure.query(async (opts) => {
   if (opts.ctx.user.permLevel !== "admin") {
@@ -27,8 +35,28 @@ export const exportData = authedLoggedProcedure.query(async (opts) => {
     matches.success
   ) {
     return {
-      TeamMatchEntry: teamMatchEntries.results,
-      HumanPlayerEntry: humanPlayerEntries.results,
+      TeamMatchEntry: teamMatchEntries.results.map((entry) => {
+        const newEntry: TeamMatchEntry = TeamMatchEntryInit;
+        TeamMatchEntryColumns.forEach((column) => {
+          if (typeof TeamMatchEntryInit[column] === "boolean") {
+            newEntry[column] = (entry[column] === 1) as never;
+          } else {
+            newEntry[column] = entry[column] as never;
+          }
+        });
+        return newEntry;
+      }),
+      HumanPlayerEntry: humanPlayerEntries.results.map((entry) => {
+        const newEntry: HumanPlayerEntry = HumanPlayerEntryInit;
+        HumanPlayerEntryColumns.forEach((column) => {
+          if (typeof HumanPlayerEntryInit[column] === "boolean") {
+            newEntry[column] = (entry[column] === 1) as never;
+          } else {
+            newEntry[column] = entry[column] as never;
+          }
+        });
+        return newEntry;
+      }),
       Users: users.results,
       Events: events.results,
       Matches: matches.results,

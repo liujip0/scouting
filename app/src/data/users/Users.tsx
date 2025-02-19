@@ -51,11 +51,17 @@ export default function Users({ logoutFunction }: UsersProps) {
   const [editUserPermLevel, setEditUserPermLevel] = useState<
     User["permLevel"] | undefined
   >(undefined);
+  const [editUserTeamNumber, setEditUserTeamNumber] = useState<
+    number | undefined
+  >(undefined);
   const openEditUser = (username: string) => {
     setEditUserUsername(username);
     setEditUserOldUsername(username);
     setEditUserPermLevel(
       users.data?.find((user) => user.username === username)?.permLevel
+    );
+    setEditUserTeamNumber(
+      users.data?.find((user) => user.username === username)?.teamNumber
     );
   };
   const closeEditUser = () => {
@@ -215,6 +221,8 @@ export default function Users({ logoutFunction }: UsersProps) {
         editUserOldUsername={editUserOldUsername}
         editUserPermLevel={editUserPermLevel}
         setEditUserPermLevel={setEditUserPermLevel}
+        editUserTeamNumber={editUserTeamNumber}
+        setEditUserTeamNumber={setEditUserTeamNumber}
         closeEditUser={closeEditUser}
         refreshUsers={() => {
           users.refetch();
