@@ -12,6 +12,7 @@ export const editUser = authedLoggedProcedure
       newUsername: z.string().optional(),
       permLevel: z.enum(UserPermLevel),
       password: z.string().optional(),
+      teamNumber: z.number().int().nonnegative(),
     })
   )
   .mutation(async (opts) => {
@@ -22,16 +23,6 @@ export const editUser = authedLoggedProcedure
       });
     }
 
-    if (
-      opts.input.newUsername === undefined &&
-      opts.input.permLevel === undefined
-    ) {
-      throw new TRPCError({
-        code: "BAD_REQUEST",
-        message: "No changes requested.",
-      });
-    }
-
     let query = "UPDATE Users SET ";
     const changes: string[] = [];
     const params: string[] = [];
@@ -39,14 +30,14 @@ export const editUser = authedLoggedProcedure
       changes.push("username = ?");
       params.push(opts.input.newUsername);
     }
-    if (opts.input.permLevel) {
-      changes.push("permLevel = ?");
-      params.push(opts.input.permLevel);
-    }
+    changes.push("permLevel = ?");
+    params.push(opts.input.permLevel);
     if (opts.input.password) {
       changes.push("hashedPassword = ?");
       params.push(await bcrypt.hash(opts.input.password, SALT_ROUNDS));
     }
+    changes.push("teamNumber = ?");
+    params.push(opts.input.teamNumber.toString());
     query += changes.join(", ");
     query += " WHERE username = ? LIMIT 1";
 

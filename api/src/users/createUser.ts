@@ -11,6 +11,7 @@ export const createUser = authedLoggedProcedure
       username: z.string(),
       permLevel: z.enum(UserPermLevel),
       password: z.string(),
+      teamNumber: z.number().int().nonnegative(),
     })
   )
   .mutation(async (opts) => {
@@ -24,9 +25,14 @@ export const createUser = authedLoggedProcedure
     const hashedPassword = await bcrypt.hash(opts.input.password, SALT_ROUNDS);
 
     const result = await opts.ctx.env.DB.prepare(
-      "INSERT INTO Users (username, permLevel, hashedPassword) VALUES (?, ?, ?)"
+      "INSERT INTO Users (username, permLevel, hashedPassword, teamNumber) VALUES (?, ?, ?, ?)"
     )
-      .bind(opts.input.username, opts.input.permLevel, hashedPassword)
+      .bind(
+        opts.input.username,
+        opts.input.permLevel,
+        hashedPassword,
+        opts.input.teamNumber
+      )
       .run();
 
     if (result.success) {
