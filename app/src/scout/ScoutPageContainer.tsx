@@ -70,15 +70,17 @@ export function ScoutPageContainer({
           }}>
           {children}
         </Box>
-        <Stack
-          sx={{
-            padding: 4,
-            justifyContent: "right",
-          }}
-          direction="row"
-          gap={3}>
-          {navButtons}
-        </Stack>
+        {navButtons && (
+          <Stack
+            sx={{
+              padding: 4,
+              justifyContent: "right",
+            }}
+            direction="row"
+            gap={3}>
+            {navButtons}
+          </Stack>
+        )}
       </Stack>
     </GridBorder>
   );
