@@ -103,15 +103,15 @@ export default function Prematch({
               width: "5em",
             }}>
             <MenuItem value="None">n</MenuItem>
-            <MenuItem value="Practice">pr</MenuItem>
+            <MenuItem value="Practice">p</MenuItem>
             <MenuItem value="Qualification">q</MenuItem>
-            <MenuItem value="Playoff">p</MenuItem>
+            <MenuItem value="Playoff">t</MenuItem>
           </TextField>
           <TextField
             value={isNaN(match.matchNumber) ? "" : match.matchNumber}
             onChange={(event) => {
               const eventMatches = events.find(
-                (event) => event.eventKey === deviceSetup.currentEvent
+                (event) => event.eventKey === match.eventKey
               )?.matches;
               if (
                 eventMatches?.some(

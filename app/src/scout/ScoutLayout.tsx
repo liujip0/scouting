@@ -381,6 +381,7 @@ export default function ScoutLayout({
                 <Human
                   match={match as HumanPlayerEntry}
                   setMatch={setMatch}
+                  events={events}
                   scoutNameError={scoutNameError}
                   scoutTeamNumberError={scoutTeamNumberError}
                   teamNumberError={teamNumberError}
