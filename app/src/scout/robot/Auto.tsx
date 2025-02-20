@@ -62,6 +62,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
           width: "50%",
           padding: 2,
           alignItems: "center",
+          justifyContent: "center",
         }}>
         <Box
           sx={{
@@ -87,16 +88,18 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "A" Location
                   position: "absolute",
                   left: "8%",
-                  top: "37%",
+                  top: "40%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
+                  //Processor-Side "G" Location
                   position: "absolute",
                   right: "8%",
-                  top: "60%",
-                  transform: "translate(50%, -50%)",
+                  bottom: "40%",
+                  transform: "translate(50%, 50%)",
                 }
             }
           />
@@ -110,15 +113,17 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "B" Location
                   position: "absolute",
                   left: "8%",
-                  top: "60%",
-                  transform: "translate(-50%, -50%)",
+                  bottom: "40%",
+                  transform: "translate(-50%, 50%)",
                 }
               : {
+                  //Processor-Side "H" Location
                   position: "absolute",
                   right: "8%",
-                  top: "37%",
+                  top: "40%",
                   transform: "translate(50%, -50%)",
                 }
             }
@@ -133,15 +138,17 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "C" Location
                   position: "absolute",
-                  left: "20%",
-                  top: "80%",
-                  transform: "translate(-50%, -50%)",
+                  left: "21%",
+                  bottom: "20%",
+                  transform: "translate(-50%, 50%)",
                 }
               : {
+                  //Processor-Side "I" Location
                   position: "absolute",
-                  right: "20%",
-                  top: "17%",
+                  right: "21%",
+                  top: "20%",
                   transform: "translate(50%, -50%)",
                 }
             }
@@ -156,15 +163,17 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "D" Location
                   position: "absolute",
-                  left: "38%",
-                  top: "90%",
-                  transform: "translate(-50%, -50%)",
+                  left: "35%",
+                  bottom: "12%",
+                  transform: "translate(-50%, 50%)",
                 }
               : {
+                  //Processor-Side "J" Location
                   position: "absolute",
-                  right: "38%",
-                  top: "7%",
+                  right: "35%",
+                  top: "12%",
                   transform: "translate(50%, -50%)",
                 }
             }
@@ -179,15 +188,17 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "E" Location
                   position: "absolute",
-                  right: "38%",
-                  top: "90%",
-                  transform: "translate(50%, -50%)",
+                  right: "35%",
+                  bottom: "12%",
+                  transform: "translate(50%, 50%)",
                 }
               : {
+                  //Processor-Side "K" Location
                   position: "absolute",
-                  left: "38%",
-                  top: "7%",
+                  left: "35%",
+                  top: "12%",
                   transform: "translate(-50%, -50%)",
                 }
             }
@@ -202,15 +213,17 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "F" Location
                   position: "absolute",
-                  right: "20%",
-                  top: "80%",
-                  transform: "translate(50%, -50%)",
+                  right: "21%",
+                  bottom: "20%",
+                  transform: "translate(50%, 50%)",
                 }
               : {
+                  //Processor-Side "L" Location
                   position: "absolute",
-                  left: "20%",
-                  top: "17%",
+                  left: "21%",
+                  top: "20%",
                   transform: "translate(-50%, -50%)",
                 }
             }
@@ -225,15 +238,17 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "G" Location
                   position: "absolute",
                   right: "8%",
-                  top: "60%",
-                  transform: "translate(50%, -50%)",
+                  bottom: "40%",
+                  transform: "translate(50%, 50%)",
                 }
               : {
+                  //Processor-Side "A" Location
                   position: "absolute",
                   left: "8%",
-                  top: "37%",
+                  top: "40%",
                   transform: "translate(-50%, -50%)",
                 }
             }
@@ -248,16 +263,18 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "H" Location
                   position: "absolute",
                   right: "8%",
-                  top: "37%",
+                  top: "40%",
                   transform: "translate(50%, -50%)",
                 }
               : {
+                  //Processor-Side "B" Location
                   position: "absolute",
                   left: "8%",
-                  top: "60%",
-                  transform: "translate(-50%, -50%)",
+                  bottom: "40%",
+                  transform: "translate(-50%, 50%)",
                 }
             }
           />
@@ -271,16 +288,18 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "I" Location
                   position: "absolute",
-                  right: "20%",
-                  top: "17%",
+                  right: "21%",
+                  top: "20%",
                   transform: "translate(50%, -50%)",
                 }
               : {
+                  //Processor-Side "C" Location
                   position: "absolute",
-                  left: "20%",
-                  top: "80%",
-                  transform: "translate(-50%, -50%)",
+                  left: "21%",
+                  bottom: "20%",
+                  transform: "translate(-50%, 50%)",
                 }
             }
           />
@@ -294,16 +313,18 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "J" Location
                   position: "absolute",
-                  right: "38%",
-                  top: "7%",
+                  right: "35%",
+                  top: "12%",
                   transform: "translate(50%, -50%)",
                 }
               : {
+                  //Processor-Side "D" Location
                   position: "absolute",
-                  left: "38%",
-                  top: "90%",
-                  transform: "translate(-50%, -50%)",
+                  left: "35%",
+                  bottom: "12%",
+                  transform: "translate(-50%, 50%)",
                 }
             }
           />
@@ -317,16 +338,18 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "K" Location
                   position: "absolute",
-                  left: "38%",
-                  top: "7%",
+                  left: "35%",
+                  top: "12%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
+                  //Processor-Side "E" Location
                   position: "absolute",
-                  right: "38%",
-                  top: "90%",
-                  transform: "translate(50%, -50%)",
+                  right: "35%",
+                  bottom: "12%",
+                  transform: "translate(50%, 50%)",
                 }
             }
           />
@@ -340,16 +363,18 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={
               deviceSetup.fieldOrientation === "processor" ?
                 {
+                  //Processor-Side "L" Location
                   position: "absolute",
-                  left: "20%",
-                  top: "17%",
+                  left: "21%",
+                  top: "20%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
+                  //Processor-Side "F" Location
                   position: "absolute",
-                  right: "20%",
-                  top: "80%",
-                  transform: "translate(50%, -50%)",
+                  right: "21%",
+                  bottom: "20%",
+                  transform: "translate(50%, 50%)",
                 }
             }
           />

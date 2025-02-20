@@ -238,7 +238,7 @@ export function CircleButton({
           backgroundColor:
             color === "primary" ? "primary.main" : "secondary.main",
         },
-        padding: 0.5,
+        padding: 1,
         minWidth: 0,
         minHeight: 0,
         borderWidth: 4,
