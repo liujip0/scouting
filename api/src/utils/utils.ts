@@ -12,7 +12,7 @@ export function matchLevelAbbrev(matchLevel: (typeof MatchLevel)[number]) {
     case "None":
       return "n";
     case "Practice":
-      return "p";
+      return "pr";
     case "Qualification":
       return "q";
     case "Playoff":
