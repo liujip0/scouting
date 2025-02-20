@@ -10,7 +10,7 @@ import {
   Popper,
   Stack,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   StyledRedToggleButton,
   StyledToggleButton,
@@ -30,6 +30,24 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
   const [popperReef, setPopperReef] = useState<
     "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | ""
   >("");
+
+  const toggleButtonRefs = [
+    useRef<HTMLButtonElement>(null),
+    useRef<HTMLButtonElement>(null),
+    useRef<HTMLButtonElement>(null),
+  ];
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    if (toggleButtonRefs.every((ref) => ref.current !== null)) {
+      setHeight(
+        toggleButtonRefs.reduce(
+          (acc, ref) => acc + ref.current!.getBoundingClientRect().height,
+          0
+        ) + 48
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Stack
@@ -488,7 +506,8 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               ...match,
               died: !match.died,
             })
-          }>
+          }
+          ref={toggleButtonRefs[0]}>
           Robot Died
         </StyledRedToggleButton>
         <StyledToggleButton
@@ -499,7 +518,8 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               ...match,
               removedAlgaeFromReef: !match.removedAlgaeFromReef,
             })
-          }>
+          }
+          ref={toggleButtonRefs[1]}>
           Removed Algae from Reef
         </StyledToggleButton>
         <StyledToggleButton
@@ -510,13 +530,15 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               ...match,
               autoCrossedRSL: !match.autoCrossedRSL,
             })
-          }>
+          }
+          ref={toggleButtonRefs[2]}>
           Crossed Robot Starting Line
         </StyledToggleButton>
         <Stack
           direction="row"
           sx={{
             flex: 1,
+            height: `calc(100% - ${height}px)`,
           }}>
           <Stack
             sx={{

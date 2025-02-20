@@ -7,6 +7,7 @@ export const StyledToggleButton = styled(ToggleButton)((theme) => ({
   },
   color: theme.theme.palette.primary.main,
   borderColor: theme.theme.palette.primary.main,
+  padding: 1,
 }));
 
 export const StyledRedToggleButton = styled(ToggleButton)((theme) => ({
@@ -16,4 +17,5 @@ export const StyledRedToggleButton = styled(ToggleButton)((theme) => ({
   },
   color: theme.theme.palette.error.main,
   borderColor: theme.theme.palette.error.main,
+  padding: 1,
 }));
