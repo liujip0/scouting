@@ -62,62 +62,69 @@ export default function Human({
           error={scoutTeamNumberError !== ""}
           helperText={scoutTeamNumberError}
         />
-        <TextField
-          select
-          value={match.matchLevel}
-          label="Match Level"
-          onChange={(event) => {
-            setMatch({
-              ...match,
-              matchLevel: event.target.value as (typeof MatchLevel)[number],
-            });
-          }}>
-          <MenuItem value="None">None</MenuItem>
-          <MenuItem value="Practice">Practice</MenuItem>
-          <MenuItem value="Qualification">Qualification</MenuItem>
-          <MenuItem value="Playoff">Playoff</MenuItem>
-        </TextField>
-        <TextField
-          value={isNaN(match.matchNumber) ? "" : match.matchNumber}
-          onChange={(event) => {
-            setMatch({
-              ...match,
-              matchNumber: parseInt(event.currentTarget.value),
-              teamNumber: 0,
-            });
-          }}
-          label="Match Number"
-          slotProps={{
-            input: {
-              startAdornment: (
-                <IconButton
-                  onClick={() => {
-                    if (match.matchNumber > 1) {
+        <Stack
+          direction="row"
+          gap={1}>
+          <TextField
+            select
+            value={match.matchLevel}
+            label="Level"
+            onChange={(event) => {
+              setMatch({
+                ...match,
+                matchLevel: event.target.value as (typeof MatchLevel)[number],
+              });
+            }}
+            sx={{
+              width: "5em",
+            }}>
+            <MenuItem value="None">n</MenuItem>
+            <MenuItem value="Practice">pr</MenuItem>
+            <MenuItem value="Qualification">q</MenuItem>
+            <MenuItem value="Playoff">p</MenuItem>
+          </TextField>
+          <TextField
+            value={isNaN(match.matchNumber) ? "" : match.matchNumber}
+            onChange={(event) => {
+              setMatch({
+                ...match,
+                matchNumber: parseInt(event.currentTarget.value),
+                teamNumber: 0,
+              });
+            }}
+            label="Match Number"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <IconButton
+                    onClick={() => {
+                      if (match.matchNumber > 1) {
+                        setMatch({
+                          ...match,
+                          matchNumber: match.matchNumber - 1,
+                          teamNumber: 0,
+                        });
+                      }
+                    }}>
+                    <Remove />
+                  </IconButton>
+                ),
+                endAdornment: (
+                  <IconButton
+                    onClick={() => {
                       setMatch({
                         ...match,
-                        matchNumber: match.matchNumber - 1,
+                        matchNumber: match.matchNumber + 1,
                         teamNumber: 0,
                       });
-                    }
-                  }}>
-                  <Remove />
-                </IconButton>
-              ),
-              endAdornment: (
-                <IconButton
-                  onClick={() => {
-                    setMatch({
-                      ...match,
-                      matchNumber: match.matchNumber + 1,
-                      teamNumber: 0,
-                    });
-                  }}>
-                  <Add />
-                </IconButton>
-              ),
-            },
-          }}
-        />
+                    }}>
+                    <Add />
+                  </IconButton>
+                ),
+              },
+            }}
+          />
+        </Stack>
         <TextField
           label="Robot Team Number"
           value={isNaN(match.teamNumber) ? "" : match.teamNumber}
