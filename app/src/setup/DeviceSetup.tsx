@@ -427,7 +427,10 @@ export default function DeviceSetup({
                           schedule.some(
                             (x, index) =>
                               (index === 0 ? x.length < 2 : x.length < 8) ||
-                              !(MatchLevel as readonly string[]).includes(x[0])
+                              (index !== 0 &&
+                                !(MatchLevel as readonly string[]).includes(
+                                  x[0]
+                                ))
                           )
                         ) {
                           setStatus("Error: Invalid schedule");
