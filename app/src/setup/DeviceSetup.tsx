@@ -534,7 +534,7 @@ export default function DeviceSetup({
                     />
                   ))}
               </RadioGroup>
-              <FormHelperText>
+              <FormHelperText component="div">
                 <Typography fontSize="body2">{currentEventError}</Typography>
               </FormHelperText>
             </FormControl>

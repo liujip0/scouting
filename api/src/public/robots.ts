@@ -66,6 +66,13 @@ export const robots = async (opts: publicOpts): Promise<Response> => {
   if (results.success) {
     switch (opts.path[1]) {
       case "json": {
+        const queryCount = await opts.env.KV.get(
+          opts.ctx.user.teamNumber + "-robot-json-queries"
+        );
+        await opts.env.KV.put(
+          opts.ctx.user.teamNumber + "-robot-json-queries",
+          queryCount === null ? "1" : (parseInt(queryCount) + 1).toString()
+        );
         return new Response(JSON.stringify(results.results), {
           status: 200,
           statusText: "OK",
@@ -75,6 +82,13 @@ export const robots = async (opts: publicOpts): Promise<Response> => {
         });
       }
       case "csv": {
+        const queryCount = await opts.env.KV.get(
+          opts.ctx.user.teamNumber + "-robot-csv-queries"
+        );
+        await opts.env.KV.put(
+          opts.ctx.user.teamNumber + "-robot-csv-queries",
+          queryCount === null ? "1" : (parseInt(queryCount) + 1).toString()
+        );
         return new Response(
           columns
             .map((column) =>

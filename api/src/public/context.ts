@@ -5,6 +5,7 @@ export interface publicCtx {
   user: {
     username: string;
     permLevel: User["permLevel"];
+    teamNumber: number;
   } | null;
 }
 export interface publicOpts {

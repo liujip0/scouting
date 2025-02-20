@@ -79,7 +79,7 @@ export const authedPublicEndpoint = async (
     }
 
     const user = await opts.env.DB.prepare(
-      "SELECT username, permLevel FROM Users WHERE username = ? LIMIT 1"
+      "SELECT username, permLevel, teamNumber FROM Users WHERE username = ? LIMIT 1"
     )
       .bind(tokenPayload.user.username)
       .run<User>();
@@ -121,7 +121,11 @@ export const authedPublicEndpoint = async (
       env: opts.env,
       ctx: {
         ...opts.ctx,
-        user: tokenPayload.user,
+        user: {
+          username: user.results[0].username,
+          permLevel: user.results[0].permLevel,
+          teamNumber: user.results[0].teamNumber,
+        },
       },
     });
   }

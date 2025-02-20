@@ -8,6 +8,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
+import EventEmitter from "eventemitter3";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
@@ -18,8 +19,13 @@ export type ScoutPage = "scoutlayout" | "savedmatches";
 type ScoutProps = {
   deviceSetup: DeviceSetupObj;
   events: (DBEvent & { matches: Match[] })[];
+  eventEmitter: EventEmitter;
 };
-export default function Scout({ deviceSetup, events }: ScoutProps) {
+export default function Scout({
+  deviceSetup,
+  events,
+  eventEmitter,
+}: ScoutProps) {
   const navigate = useNavigate();
   useEffect(() => {
     if (
@@ -94,6 +100,38 @@ export default function Scout({ deviceSetup, events }: ScoutProps) {
       };
     }
   });
+  eventEmitter.on(
+    "idb-finished",
+    (eventsFromIdb: (DBEvent & { matches: Match[] })[]) => {
+      const eventMatches = eventsFromIdb.find(
+        (event) => event.eventKey === match.eventKey
+      )?.matches;
+      if (
+        eventMatches?.some(
+          (x) =>
+            x.matchLevel === match.matchLevel &&
+            x.matchNumber === match.matchNumber
+        )
+      ) {
+        setMatch({
+          ...match,
+          teamNumber: eventMatches.find(
+            (x) =>
+              x.matchLevel === match.matchLevel &&
+              x.matchNumber === match.matchNumber
+          )![
+            (match.alliance.toLowerCase() + match.robotNumber) as
+              | "red1"
+              | "red2"
+              | "red3"
+              | "blue1"
+              | "blue2"
+              | "blue3"
+          ],
+        });
+      }
+    }
+  );
 
   return {
     scoutlayout: (

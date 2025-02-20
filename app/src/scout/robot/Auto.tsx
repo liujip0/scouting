@@ -522,6 +522,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={{
               width: "65%",
               alignItems: "center",
+              padding: 1,
             }}>
             <Box
               sx={{
@@ -551,12 +552,10 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                     autoProcessor: value,
                   });
                 }}
-                label="Algae in Processor"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "35%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "0%",
                 }}
               />
             </Box>
@@ -565,6 +564,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             sx={{
               width: "35%",
               alignItems: "center",
+              padding: 1,
             }}>
             <Box
               sx={{
@@ -594,12 +594,10 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                     autoNet: value,
                   });
                 }}
-                label="Algae in Net"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "45%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "0%",
                 }}
               />
             </Box>

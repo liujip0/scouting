@@ -472,6 +472,7 @@ export const UserSchema = z.object({
     z.literal("datamanage"),
     z.literal("admin"),
   ]),
+  teamNumber: z.number().int().nonnegative(),
   hashedPassword: z.string(),
 });
 export type User = z.infer<typeof UserSchema>;
@@ -479,6 +480,7 @@ export type UserColumn = keyof User;
 export const UserColumns: UserColumn[] = [
   "username",
   "permLevel",
+  "teamNumber",
   "hashedPassword",
 ];
 

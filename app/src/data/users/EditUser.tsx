@@ -1,3 +1,4 @@
+import { MAX_TEAM_NUMBER } from "@isa2025/api/src/utils/constants.ts";
 import { User, UserPermLevel } from "@isa2025/api/src/utils/dbtypes.ts";
 import {
   Button,
@@ -18,6 +19,8 @@ type EditUserProps = {
   editUserOldUsername: string | null;
   editUserPermLevel: User["permLevel"] | undefined;
   setEditUserPermLevel: (value: User["permLevel"] | undefined) => void;
+  editUserTeamNumber: number | undefined;
+  setEditUserTeamNumber: (value: number | undefined) => void;
   closeEditUser: () => void;
   refreshUsers: () => void;
 };
@@ -27,6 +30,8 @@ export default function EditUser({
   editUserOldUsername,
   editUserPermLevel,
   setEditUserPermLevel,
+  editUserTeamNumber,
+  setEditUserTeamNumber,
   closeEditUser,
   refreshUsers,
 }: EditUserProps) {
@@ -37,6 +42,7 @@ export default function EditUser({
   });
   const [editUserUsernameError, setEditUserUsernameError] = useState("");
   const [editUserPassword, setEditUserPassword] = useState("");
+  const [editUserTeamNumberError, setEditUserTeamNumberError] = useState("");
 
   return (
     <Dialog
@@ -76,6 +82,19 @@ export default function EditUser({
             ))}
           </TextField>
           <TextField
+            value={
+              editUserTeamNumber === undefined || isNaN(editUserTeamNumber) ?
+                ""
+              : editUserTeamNumber
+            }
+            onChange={(event) => {
+              setEditUserTeamNumber(parseInt(event.currentTarget.value));
+            }}
+            label="Team Number"
+            helperText={editUserTeamNumberError}
+            error={editUserTeamNumberError !== ""}
+          />
+          <TextField
             value={editUserPassword}
             onChange={(event) => {
               setEditUserPassword(event.currentTarget.value);
@@ -102,12 +121,25 @@ export default function EditUser({
               setEditUserUsernameError("");
             }
 
+            if (
+              editUserTeamNumber === undefined ||
+              isNaN(editUserTeamNumber) ||
+              editUserTeamNumber < 0 ||
+              editUserTeamNumber > MAX_TEAM_NUMBER
+            ) {
+              setEditUserTeamNumberError("Invalid team number");
+              error = true;
+            } else {
+              setEditUserTeamNumberError("");
+            }
+
             if (!error) {
               editUser.mutate({
                 oldUsername: editUserOldUsername!,
                 newUsername: editUserUsername!,
                 permLevel: editUserPermLevel!,
                 password: editUserPassword ? editUserPassword : undefined,
+                teamNumber: editUserTeamNumber!,
               });
               closeEditUser();
             }

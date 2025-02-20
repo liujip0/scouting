@@ -36,6 +36,7 @@ export function Teleop({ match, setMatch }: TeleopProps) {
           <Box
             sx={{
               height: "100%",
+              padding: 1,
             }}>
             <Box
               sx={{
@@ -78,12 +79,10 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                     teleopL4: value,
                   });
                 }}
-                label="L4 Coral"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "10%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "70%",
                 }}
               />
               <Box
@@ -113,12 +112,10 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                     teleopL3: value,
                   });
                 }}
-                label="L3 Coral"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "35%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "50%",
                 }}
               />
               <Box
@@ -148,12 +145,10 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                     teleopL2: value,
                   });
                 }}
-                label="L2 Coral"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "55%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "30%",
                 }}
               />
               <Box
@@ -183,12 +178,10 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                     teleopL1: value,
                   });
                 }}
-                label="L1 Coral"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "80%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "0%",
                 }}
               />
             </Box>
@@ -199,12 +192,14 @@ export function Teleop({ match, setMatch }: TeleopProps) {
             height: 1,
             width: "60%",
             alignItems: "center",
+            padding: 1,
           }}>
           <Box
             sx={{
               aspectRatio: "1670 / 2881",
               height: "65%",
               position: "relative",
+              padding: 1,
             }}
             onClick={() => {
               setMatch({
@@ -227,18 +222,17 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   teleopNet: value,
                 });
               }}
-              label="Algae in Net"
               sx={{
                 position: "absolute",
-                left: "50%",
-                top: "45%",
-                transform: "translate(-50%, -50%)",
+                left: "0%",
+                bottom: "0%",
               }}
             />
           </Box>
           <Box
             sx={{
               height: "35%",
+              padding: 1,
             }}>
             <Box
               sx={{
@@ -268,12 +262,10 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                     teleopProcessor: value,
                   });
                 }}
-                label="Algae in Processor"
                 sx={{
                   position: "absolute",
-                  left: "50%",
-                  top: "35%",
-                  transform: "translate(-50%, -50%)",
+                  left: "0%",
+                  bottom: "0%",
                 }}
               />
             </Box>

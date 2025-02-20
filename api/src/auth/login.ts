@@ -61,7 +61,7 @@ export const login = loggedPublicProcedure
         );
         if (passwordMatch) {
           const adminCreationResult = await opts.ctx.env.DB.prepare(
-            "INSERT INTO Users (username, permLevel, hashedPassword) VALUES (?, ?, ?)"
+            "INSERT INTO Users (username, permLevel, hashedPassword, teamNumber) VALUES (?, ?, ?, ?)"
           )
             .bind(
               opts.input.username,
@@ -69,7 +69,8 @@ export const login = loggedPublicProcedure
               await bcrypt.hash(
                 opts.ctx.env.ADMIN_ACCOUNT_PASSWORD,
                 SALT_ROUNDS
-              )
+              ),
+              0
             )
             .run();
           if (!adminCreationResult.success) {
