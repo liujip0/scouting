@@ -579,10 +579,12 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 position: "relative",
               }}
               onClick={() => {
-                setMatch({
-                  ...match,
-                  autoProcessor: match.autoProcessor! + 1,
-                });
+                if (match.autoProcessor! < 10) {
+                  setMatch({
+                    ...match,
+                    autoProcessor: match.autoProcessor! + 1,
+                  });
+                }
               }}>
               <img
                 src={Processor}
@@ -621,10 +623,12 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 position: "relative",
               }}
               onClick={() => {
-                setMatch({
-                  ...match,
-                  autoNet: match.autoNet! + 1,
-                });
+                if (match.autoNet! < 10) {
+                  setMatch({
+                    ...match,
+                    autoNet: match.autoNet! + 1,
+                  });
+                }
               }}>
               <img
                 src={Net}
