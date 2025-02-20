@@ -84,15 +84,21 @@ type BigCounterProps = {
   increment: () => void;
   decrement: () => void;
   label: string;
+  max?: number;
 };
 export function BigCounter({
   value,
   increment,
   decrement,
   label,
+  max,
 }: BigCounterProps) {
   return (
-    <Stack direction="row">
+    <Stack
+      direction="row"
+      sx={{
+        width: 1,
+      }}>
       <Button
         onClick={() => {
           if (value > 0) {
@@ -108,7 +114,9 @@ export function BigCounter({
       />
       <Button
         onClick={() => {
-          increment();
+          if (max === undefined || value < max) {
+            increment();
+          }
         }}
         variant="contained">
         <Add />

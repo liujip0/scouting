@@ -175,6 +175,7 @@ export default function Human({
             });
           }}
           label="Successful Algae in Net"
+          max={18}
         />
       </Stack>
     </Stack>
