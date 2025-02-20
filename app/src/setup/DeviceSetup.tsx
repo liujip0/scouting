@@ -83,7 +83,10 @@ export default function DeviceSetup({
             onClick={() => {
               navigate("/");
             }}
-            variant="outlined">
+            variant="outlined"
+            sx={{
+              mr: "auto",
+            }}>
             Exit
           </Button>
           <Button

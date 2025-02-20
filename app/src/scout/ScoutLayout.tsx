@@ -217,6 +217,9 @@ export default function ScoutLayout({
             variant="outlined"
             onClick={() => {
               navigate("/");
+            }}
+            sx={{
+              mr: "auto",
             }}>
             Exit
           </Button>
@@ -253,6 +256,9 @@ export default function ScoutLayout({
               variant="outlined"
               onClick={() => {
                 navigate("/");
+              }}
+              sx={{
+                mr: "auto",
               }}>
               Exit
             </Button>
