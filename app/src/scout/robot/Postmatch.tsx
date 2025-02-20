@@ -25,7 +25,8 @@ export default function Postmatch({ match, setMatch }: PostmatchProps) {
       <Stack
         sx={{
           flex: 1,
-          padding: 4,
+          padding: 2,
+          pl: 4,
         }}>
         <FormControl>
           <FormLabel>
