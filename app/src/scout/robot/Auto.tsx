@@ -16,7 +16,7 @@ import {
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
-import { CircleButton, Counter } from "../Components.tsx";
+import { CircleButton, Counter, SmallCounter } from "../Components.tsx";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";
 import Reef from "../images/Reef.png";
@@ -463,28 +463,22 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                   }}>
                   L2
                 </StyledToggleButton>
-                <StyledToggleButton
-                  value="L1"
-                  selected={
+                <SmallCounter
+                  value={
                     match[
                       ("autoCoral" + popperReef + "L1") as TeamMatchEntryColumn
-                    ] as boolean
+                    ] as number
                   }
-                  onClick={() => {
+                  setValue={(value) => {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L1"]: !(match[
-                          ("autoCoral" +
-                            popperReef +
-                            "L1") as TeamMatchEntryColumn
-                        ] as boolean),
+                        ["autoCoral" + popperReef + "L1"]: value,
                       });
                       setPopperReef("");
                     }
-                  }}>
-                  L1
-                </StyledToggleButton>
+                  }}
+                />
               </ButtonGroup>
             </Popper>
           </ClickAwayListener>
