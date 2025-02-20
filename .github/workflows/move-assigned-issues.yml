@@ -20,4 +20,4 @@ jobs:
         with:
           project: ISA 2025 App Planning
           column: In Progress
-          repo-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
