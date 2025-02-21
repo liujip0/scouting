@@ -16,7 +16,7 @@ export function matchLevelAbbrev(matchLevel: (typeof MatchLevel)[number]) {
     case "Qualification":
       return "q";
     case "Playoff":
-      return "p";
+      return "t";
   }
 }
 
