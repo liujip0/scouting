@@ -82,9 +82,10 @@ export function Counter({ value, setValue, sx }: CounterProps) {
 type SmallCounterProps = {
   value: number;
   setValue: (value: number) => void;
+  max?: number;
   sx?: SxProps;
 };
-export function SmallCounter({ value, setValue, sx }: SmallCounterProps) {
+export function SmallCounter({ value, setValue, max, sx }: SmallCounterProps) {
   const buttonSx: SxProps = {
     color: "primary.contrastText",
     backgroundColor: "primary.main",
@@ -140,7 +141,10 @@ export function SmallCounter({ value, setValue, sx }: SmallCounterProps) {
         <IconButton
           onClick={(event) => {
             event.stopPropagation();
-            setValue(value + 1);
+            if (max === undefined || value < max) {
+              console.log(max);
+              setValue(value + 1);
+            }
           }}
           sx={buttonSx}>
           <Add />

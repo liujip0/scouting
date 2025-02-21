@@ -503,6 +503,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                       setPopperReef("");
                     }
                   }}
+                  max={3}
                 />
               </ButtonGroup>
             </Popper>
