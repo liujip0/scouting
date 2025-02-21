@@ -16,7 +16,7 @@ import {
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
-import { CircleButton, Counter, SmallCounter } from "../Components.tsx";
+import { AutoL1Counter, AutoLevelButton, Counter } from "../Components.tsx";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";
 import Reef from "../images/Reef.png";
@@ -78,7 +78,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               width: "100%",
             }}
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "A" ? "primary" : "secondary"}
             label="A"
             onClick={(event) => {
@@ -103,7 +103,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "B" ? "primary" : "secondary"}
             label="B"
             onClick={(event) => {
@@ -128,7 +128,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "C" ? "primary" : "secondary"}
             label="C"
             onClick={(event) => {
@@ -153,7 +153,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "D" ? "primary" : "secondary"}
             label="D"
             onClick={(event) => {
@@ -178,7 +178,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "E" ? "primary" : "secondary"}
             label="E"
             onClick={(event) => {
@@ -203,7 +203,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "F" ? "primary" : "secondary"}
             label="F"
             onClick={(event) => {
@@ -228,7 +228,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "G" ? "primary" : "secondary"}
             label="G"
             onClick={(event) => {
@@ -253,7 +253,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "H" ? "primary" : "secondary"}
             label="H"
             onClick={(event) => {
@@ -278,7 +278,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "I" ? "primary" : "secondary"}
             label="I"
             onClick={(event) => {
@@ -303,7 +303,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "J" ? "primary" : "secondary"}
             label="J"
             onClick={(event) => {
@@ -328,7 +328,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "K" ? "primary" : "secondary"}
             label="K"
             onClick={(event) => {
@@ -353,7 +353,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <CircleButton
+          <AutoLevelButton
             color={popperReef === "L" ? "primary" : "secondary"}
             label="L"
             onClick={(event) => {
@@ -488,7 +488,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                   }}>
                   L2
                 </StyledToggleButton>
-                <SmallCounter
+                <AutoL1Counter
                   value={
                     match[
                       ("autoCoral" + popperReef + "L1") as TeamMatchEntryColumn
