@@ -65,10 +65,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   backgroundColor: theme.palette.primary.main + "20",
                 })}
                 onClick={() => {
-                  setMatch({
-                    ...match,
-                    teleopL4: match.teleopL4! + 1,
-                  });
+                  if (match.teleopL4! < 12) {
+                    setMatch({
+                      ...match,
+                      teleopL4: match.teleopL4! + 1,
+                    });
+                  }
                 }}
               />
               <Counter
@@ -98,10 +100,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   backgroundColor: theme.palette.primary.main + "20",
                 })}
                 onClick={() => {
-                  setMatch({
-                    ...match,
-                    teleopL3: match.teleopL3! + 1,
-                  });
+                  if (match.teleopL3! < 12) {
+                    setMatch({
+                      ...match,
+                      teleopL3: match.teleopL3! + 1,
+                    });
+                  }
                 }}
               />
               <Counter
@@ -131,10 +135,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   backgroundColor: theme.palette.primary.main + "20",
                 })}
                 onClick={() => {
-                  setMatch({
-                    ...match,
-                    teleopL2: match.teleopL2! + 1,
-                  });
+                  if (match.teleopL2! < 12) {
+                    setMatch({
+                      ...match,
+                      teleopL2: match.teleopL2! + 1,
+                    });
+                  }
                 }}
               />
               <Counter
@@ -164,10 +170,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                   backgroundColor: theme.palette.primary.main + "20",
                 })}
                 onClick={() => {
-                  setMatch({
-                    ...match,
-                    teleopL1: match.teleopL1! + 1,
-                  });
+                  if (match.teleopL1! < 12) {
+                    setMatch({
+                      ...match,
+                      teleopL1: match.teleopL1! + 1,
+                    });
+                  }
                 }}
               />
               <Counter
@@ -202,10 +210,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
               padding: 1,
             }}
             onClick={() => {
-              setMatch({
-                ...match,
-                teleopNet: match.teleopNet! + 1,
-              });
+              if (match.teleopNet! < 18) {
+                setMatch({
+                  ...match,
+                  teleopNet: match.teleopNet! + 1,
+                });
+              }
             }}>
             <img
               src={Net}
@@ -242,10 +252,12 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                 position: "relative",
               }}
               onClick={() => {
-                setMatch({
-                  ...match,
-                  teleopProcessor: match.teleopProcessor! + 1,
-                });
+                if (match.teleopProcessor! < 18) {
+                  setMatch({
+                    ...match,
+                    teleopProcessor: match.teleopProcessor! + 1,
+                  });
+                }
               }}>
               <img
                 src={Processor}

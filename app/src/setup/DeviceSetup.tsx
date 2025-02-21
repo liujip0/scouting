@@ -307,6 +307,7 @@ export default function DeviceSetup({
                 value={1}
                 sx={{
                   flex: 1,
+                  padding: 2,
                 }}>
                 1
               </StyledToggleButton>
@@ -314,6 +315,7 @@ export default function DeviceSetup({
                 value={2}
                 sx={{
                   flex: 1,
+                  padding: 2,
                 }}>
                 2
               </StyledToggleButton>
@@ -321,6 +323,7 @@ export default function DeviceSetup({
                 value={3}
                 sx={{
                   flex: 1,
+                  padding: 2,
                 }}>
                 3
               </StyledToggleButton>
@@ -328,6 +331,7 @@ export default function DeviceSetup({
                 value={4}
                 sx={{
                   flex: 1,
+                  padding: 2,
                 }}>
                 Human
               </StyledToggleButton>
