@@ -120,12 +120,12 @@ export function AutoL1Counter({
           <Remove />
         </IconButton>
         <TextField
-          value={value}
+          value={"L1 - " + value}
           size="small"
           sx={(theme) => ({
             color: "secondary.contrastText",
             backgroundColor: "secondary.main",
-            width: "3em",
+            width: "4em",
             "& .MuiInputBase-input.Mui-disabled": {
               WebkitTextFillColor: theme.palette.text.primary,
               color: theme.palette.text.primary,
