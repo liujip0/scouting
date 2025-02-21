@@ -79,13 +79,18 @@ export function Counter({ value, setValue, sx }: CounterProps) {
   );
 }
 
-type SmallCounterProps = {
+type AutoL1CounterProps = {
   value: number;
   setValue: (value: number) => void;
   max?: number;
   sx?: SxProps;
 };
-export function SmallCounter({ value, setValue, max, sx }: SmallCounterProps) {
+export function AutoL1Counter({
+  value,
+  setValue,
+  max,
+  sx,
+}: AutoL1CounterProps) {
   const buttonSx: SxProps = {
     color: "primary.contrastText",
     backgroundColor: "primary.main",
@@ -115,12 +120,12 @@ export function SmallCounter({ value, setValue, max, sx }: SmallCounterProps) {
           <Remove />
         </IconButton>
         <TextField
-          value={value}
+          value={"L1 - " + value}
           size="small"
           sx={(theme) => ({
             color: "secondary.contrastText",
             backgroundColor: "secondary.main",
-            width: "3em",
+            width: "4em",
             "& .MuiInputBase-input.Mui-disabled": {
               WebkitTextFillColor: theme.palette.text.primary,
               color: theme.palette.text.primary,
@@ -200,48 +205,6 @@ export function BigCounter({
   );
 }
 
-type CircleToggleProps = {
-  value: boolean;
-  setValue: (value: boolean) => void;
-  label: string;
-  disabled?: boolean;
-  sx: SxProps;
-};
-export function CircleToggle({
-  value,
-  setValue,
-  label,
-  disabled,
-  sx,
-}: CircleToggleProps) {
-  return (
-    <ToggleButton
-      value="toggle"
-      selected={value}
-      onChange={() => {
-        setValue(!value);
-      }}
-      disabled={disabled}
-      sx={{
-        ...sx,
-        "&.Mui-selected, &.Mui-selected:hover": {
-          color: "white",
-          backgroundColor: "primary.main",
-        },
-        color: "primary.main",
-        backgroundColor: "secondary.main",
-        borderColor: "secondary.main",
-        "&:hover": {
-          backgroundColor: "secondary.main",
-        },
-        padding: 1,
-        borderWidth: 4,
-      }}>
-      {label}
-    </ToggleButton>
-  );
-}
-
 type TransparentToggleProps = {
   value: boolean;
   setValue: (value: boolean) => void;
@@ -296,18 +259,18 @@ export function TransparentToggle({
   );
 }
 
-type CircleButtonProps = {
+type AutoLevelButtonProps = {
   label: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   sx: SxProps;
   color?: "primary" | "secondary";
 };
-export function CircleButton({
+export function AutoLevelButton({
   label,
   onClick,
   sx,
   color = "secondary",
-}: CircleButtonProps) {
+}: AutoLevelButtonProps) {
   return (
     <Button
       onClick={onClick}
