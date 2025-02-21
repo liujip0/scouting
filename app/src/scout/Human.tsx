@@ -290,15 +290,23 @@ export default function Human({
             });
           }}
           label="Attempted Algae in Net"
+          max={18}
         />
         <BigCounter
           value={match.humanSuccessfulNet}
           increment={() => {
-            setMatch({
-              ...match,
-              humanSuccessfulNet: match.humanSuccessfulNet + 1,
-              humanAttemptedNet: match.humanAttemptedNet + 1,
-            });
+            if (match.humanAttemptedNet < 18) {
+              setMatch({
+                ...match,
+                humanSuccessfulNet: match.humanSuccessfulNet + 1,
+                humanAttemptedNet: match.humanAttemptedNet + 1,
+              });
+            } else {
+              setMatch({
+                ...match,
+                humanSuccessfulNet: match.humanSuccessfulNet + 1,
+              });
+            }
           }}
           decrement={() => {
             setMatch({
@@ -307,6 +315,7 @@ export default function Human({
             });
           }}
           label="Successful Algae in Net"
+          max={18}
         />
       </Stack>
     </Stack>
