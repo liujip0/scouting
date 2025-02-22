@@ -224,7 +224,7 @@ export default function ScoutLayout({
               }}>
               Exit
             </Button>
-            {match.robotNumber < 4 && (match as TeamMatchEntry).noShow && (
+            {(match as TeamMatchEntry).noShow && (
               <Button
                 variant="contained"
                 onClick={() => {
