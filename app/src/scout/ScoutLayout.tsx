@@ -213,16 +213,46 @@ export default function ScoutLayout({
       }}
       navButtons={
         matchStage === "prematch" ?
-          <Button
-            variant="outlined"
-            onClick={() => {
-              navigate("/");
-            }}
-            sx={{
-              mr: "auto",
-            }}>
-            Exit
-          </Button>
+          <>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                navigate("/");
+              }}
+              sx={{
+                mr: "auto",
+              }}>
+              Exit
+            </Button>
+            {match.robotNumber < 4 && (match as TeamMatchEntry).noShow && (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  if ((match as TeamMatchEntry).noShow) {
+                    putEntries.mutate([
+                      {
+                        ...TeamMatchEntryNoShowInit,
+                        eventKey: match.eventKey,
+                        matchLevel: match.matchLevel,
+                        matchNumber: match.matchNumber,
+                        teamNumber: match.teamNumber,
+                        alliance: match.alliance,
+                        robotNumber: match.robotNumber as 1 | 2 | 3,
+                        deviceTeamNumber: match.deviceTeamNumber,
+                        deviceId: match.deviceId,
+                        scoutTeamNumber: match.scoutTeamNumber,
+                        scoutName: match.scoutName,
+                        flag: match.flag,
+                      },
+                    ]);
+                  } else {
+                    putEntries.mutate([match]);
+                  }
+                }}>
+                Submit
+              </Button>
+            )}
+          </>
         : matchStage === "postmatch" ?
           <Button
             variant="contained"
