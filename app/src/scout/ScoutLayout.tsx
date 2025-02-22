@@ -123,7 +123,7 @@ export default function ScoutLayout({
 
     if (
       !Number.isInteger(match.scoutTeamNumber) ||
-      match.scoutTeamNumber < 0 ||
+      match.scoutTeamNumber < 1 ||
       match.scoutTeamNumber > MAX_TEAM_NUMBER
     ) {
       error = true;
@@ -134,7 +134,7 @@ export default function ScoutLayout({
 
     if (
       !Number.isInteger(match.teamNumber) ||
-      match.teamNumber < 0 ||
+      match.teamNumber < 1 ||
       match.teamNumber > MAX_TEAM_NUMBER
     ) {
       error = true;
@@ -304,7 +304,7 @@ export default function ScoutLayout({
 
                 if (
                   !match.scoutTeamNumber ||
-                  match.scoutTeamNumber < 0 ||
+                  match.scoutTeamNumber < 1 ||
                   match.scoutTeamNumber > MAX_TEAM_NUMBER
                 ) {
                   error = true;
@@ -315,7 +315,7 @@ export default function ScoutLayout({
 
                 if (
                   !match.teamNumber ||
-                  match.teamNumber < 0 ||
+                  match.teamNumber < 1 ||
                   match.teamNumber > MAX_TEAM_NUMBER
                 ) {
                   error = true;
