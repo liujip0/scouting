@@ -1,4 +1,5 @@
-import { Close, ContentCopy, Send } from "@mui/icons-material";
+import { dateFileName } from "@isa2025/api/src/utils/utils.ts";
+import { Close, Download, Send } from "@mui/icons-material";
 import { IconButton, Snackbar, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { trpc } from "../utils/trpc.ts";
@@ -23,12 +24,21 @@ export default function Util() {
               <IconButton
                 onClick={() => {
                   if (exportData.data) {
-                    navigator.clipboard.writeText(
-                      JSON.stringify(exportData.data)
+                    const a = document.createElement("a");
+                    a.setAttribute(
+                      "href",
+                      URL.createObjectURL(
+                        new Blob([JSON.stringify(exportData.data)], {
+                          type: "application/json",
+                        })
+                      )
                     );
+                    a.setAttribute("download", dateFileName() + ".json");
+                    a.setAttribute("target", "_blank");
+                    a.click();
                   }
                 }}>
-                <ContentCopy />
+                <Download />
               </IconButton>
             ),
           },
