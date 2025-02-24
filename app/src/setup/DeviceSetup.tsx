@@ -464,7 +464,7 @@ export default function DeviceSetup({
                           ),
                           newEvent,
                         ]);
-                        putDBEvent(omit("matches", newEvent) as DBEvent);
+                        putDBEvent(omit(["matches"], newEvent) as DBEvent);
                         putDBMatches(newEvent.matches);
                       }
                     }

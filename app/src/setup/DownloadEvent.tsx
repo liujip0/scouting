@@ -38,7 +38,7 @@ export default function DownloadEvent({
 
       setEvents([...events.filter((x) => x.eventKey !== data.eventKey), data]);
 
-      putDBEvent(omit("matches", data) as DBEvent);
+      putDBEvent(omit(["matches"], data) as DBEvent);
       putDBMatches(data.matches);
     },
     onError(err) {
@@ -51,7 +51,7 @@ export default function DownloadEvent({
 
       setEvents([...events.filter((x) => x.eventKey !== data.eventKey), data]);
 
-      putDBEvent(omit("matches", data) as DBEvent);
+      putDBEvent(omit(["matches"], data) as DBEvent);
       putDBMatches(data.matches);
     },
     onError(err) {

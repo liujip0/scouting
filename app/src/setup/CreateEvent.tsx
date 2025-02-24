@@ -258,7 +258,7 @@ export default function CreateEvent({
               ...events.filter((event) => event.eventKey !== newEvent.eventKey),
               newEvent,
             ]);
-            putDBEvent(omit("matches", newEvent) as DBEvent);
+            putDBEvent(omit(["matches"], newEvent) as DBEvent);
             putDBMatches(newEvent.matches);
             closeCreateEvent();
           }}>

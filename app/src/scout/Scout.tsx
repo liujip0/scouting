@@ -133,6 +133,8 @@ export default function Scout({
     }
   );
 
+  const [putEntriesPending, setPutEntriesPending] = useState(false);
+
   return {
     scoutlayout: (
       <ScoutLayout
@@ -141,6 +143,8 @@ export default function Scout({
         setMatch={setMatch}
         events={events}
         deviceSetup={deviceSetup}
+        putEntriesPending={putEntriesPending}
+        setPutEntriesPending={setPutEntriesPending}
       />
     ),
     savedmatches: (

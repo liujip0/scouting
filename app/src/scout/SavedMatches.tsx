@@ -18,6 +18,7 @@ import {
 } from "@isa2025/api/src/utils/utils.ts";
 import {
   Close,
+  CloudSync,
   ContentCopy,
   Download,
   QrCode,
@@ -47,10 +48,24 @@ import {
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteEntry, getFromDBStore, putEntry, Stores } from "../utils/idb.ts";
+import {
+  deleteEntry,
+  getDBHumanPlayerEntries,
+  getDBTeamMatchEntries,
+  putDBEntry,
+} from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import { ScoutPage } from "./Scout.tsx";
 import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
+
+export type ExportMatchEntry = (TeamMatchEntry | HumanPlayerEntry) & {
+  autoUpload: boolean;
+  quickshare: boolean;
+  clipboard: boolean;
+  qr: boolean;
+  download: boolean;
+  upload: boolean;
+};
 
 type SavedMatchesProps = {
   setPage: (value: ScoutPage) => void;
@@ -67,59 +82,70 @@ export default function SavedMatches({
   const navigate = useNavigate();
 
   const [matches, setMatches] = useState<
-    (
-      | (TeamMatchEntry & {
-          exported: boolean;
-          selected: boolean;
-        })
-      | (HumanPlayerEntry & {
-          exported: boolean;
-          selected: boolean;
-        })
-    )[]
+    (ExportMatchEntry & {
+      selected: boolean;
+    })[]
   >([]);
   useEffect(() => {
-    getFromDBStore(Stores.TeamMatchEntry).then((robotMatches) => {
-      getFromDBStore(Stores.HumanPlayerEntry).then((humanMatches) => {
+    getDBTeamMatchEntries().then((robotMatches) => {
+      getDBHumanPlayerEntries().then((humanMatches) => {
         setMatches([
           ...robotMatches.map((x) => ({
             ...x,
-            selected: x.exported ? false : true,
+            selected:
+              (
+                !x.autoUpload &&
+                !x.quickshare &&
+                !x.clipboard &&
+                !x.qr &&
+                !x.download &&
+                !x.upload
+              ) ?
+                true
+              : false,
           })),
           ...humanMatches.map((x) => ({
             ...x,
-            selected: x.exported ? false : true,
+            selected:
+              (
+                !x.autoUpload &&
+                !x.quickshare &&
+                !x.clipboard &&
+                !x.qr &&
+                !x.download &&
+                !x.upload
+              ) ?
+                true
+              : false,
           })),
         ]);
       });
     });
   }, []);
 
-  const [quickshareFailed, setQuickshareFailed] = useState("");
-  const [confirmDeleteMatch, setConfirmDeleteMatch] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState("");
-  const putEntries = trpc.data.putEntries.useMutation({
-    onSuccess() {
-      setUploadStatus("Success");
-    },
-    onError(error) {
-      setUploadStatus("Error: " + error.message);
-    },
-  });
-
-  const markExportedEntries = () => {
+  const markExportedEntries = (
+    method:
+      | "autoUpload"
+      | "quickshare"
+      | "clipboard"
+      | "qr"
+      | "download"
+      | "upload"
+  ) => {
     setMatches(
-      matches.map((x) => {
+      matches.map((x): ExportMatchEntry & { selected: boolean } => {
         if (x.selected) {
-          putEntry({
-            ...omit("selected", x as unknown as Record<string, unknown>),
-            exported: true,
-          } as
-            | (TeamMatchEntry & { exported: boolean })
-            | (HumanPlayerEntry & { exported: boolean }));
+          putDBEntry({
+            ...omit(["selected"], x as unknown as Record<string, unknown>),
+            [method]: true,
+          } as ExportMatchEntry);
+          console.log({
+            ...omit(["selected"], x as unknown as Record<string, unknown>),
+            [method]: true,
+          } as ExportMatchEntry);
           return {
             ...x,
-            exported: true,
+            [method]: true,
           };
         } else {
           return x;
@@ -127,6 +153,19 @@ export default function SavedMatches({
       })
     );
   };
+
+  const [quickshareFailed, setQuickshareFailed] = useState("");
+  const [confirmDeleteMatch, setConfirmDeleteMatch] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const putEntries = trpc.data.putEntries.useMutation({
+    onSuccess() {
+      setUploadStatus("Success");
+      markExportedEntries("upload");
+    },
+    onError(error) {
+      setUploadStatus("Error: " + error.message);
+    },
+  });
 
   const [qrMatches, setQrMatches] = useState<string[]>([]);
   const [qrIndex, setQrIndex] = useState(0);
@@ -154,6 +193,7 @@ export default function SavedMatches({
           <Button
             variant="contained"
             onClick={() => {
+              console.log(getDBTeamMatchEntries());
               const newMatch: TeamMatchEntry | HumanPlayerEntry = {
                 ...(match.robotNumber < 4 ?
                   TeamMatchEntryInit
@@ -227,6 +267,7 @@ export default function SavedMatches({
             gap={2}>
             <Button
               onClick={() => {
+                console.log(getDBTeamMatchEntries());
                 if (matches.every((x) => x.selected)) {
                   setMatches(
                     matches.map((x) => ({
@@ -369,65 +410,103 @@ export default function SavedMatches({
                 <FormControlLabel
                   checked={matchData.selected}
                   control={<Checkbox />}
+                  slotProps={{
+                    typography: {
+                      width: 1,
+                    },
+                  }}
+                  sx={{
+                    width: 1,
+                  }}
                   label={
                     <Stack
                       direction="row"
-                      gap={2}>
-                      <Stack>
+                      gap={2}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setMatches(
+                          matches.map((x) =>
+                            (
+                              x.eventKey === matchData.eventKey &&
+                              x.matchLevel === matchData.matchLevel &&
+                              x.matchNumber === matchData.matchNumber &&
+                              x.alliance === matchData.alliance &&
+                              x.robotNumber === matchData.robotNumber
+                            ) ?
+                              {
+                                ...matchData,
+                                selected: !x.selected,
+                              }
+                            : x
+                          )
+                        );
+                      }}>
+                      <Stack
+                        sx={{
+                          flex: 1,
+                        }}>
                         <Typography
-                          onClick={(event) => {
-                            event.preventDefault();
-                            setMatches(
-                              matches.map((x) =>
-                                (
-                                  x.eventKey === matchData.eventKey &&
-                                  x.matchLevel === matchData.matchLevel &&
-                                  x.matchNumber === matchData.matchNumber &&
-                                  x.alliance === matchData.alliance &&
-                                  x.robotNumber === matchData.robotNumber
-                                ) ?
-                                  {
-                                    ...matchData,
-                                    selected: !x.selected,
-                                  }
-                                : x
-                              )
-                            );
+                          sx={{
+                            fontWeight:
+                              (
+                                !matchData.autoUpload &&
+                                !matchData.quickshare &&
+                                !matchData.clipboard &&
+                                !matchData.qr &&
+                                !matchData.download &&
+                                !matchData.upload
+                              ) ?
+                                "bold"
+                              : "normal",
                           }}>
                           {matchData.eventKey +
                             "_" +
                             matchLevelAbbrev(matchData.matchLevel) +
                             matchData.matchNumber}
                         </Typography>
-                        <Stack direction="row">
+                        <Stack
+                          direction="row"
+                          gap={2}>
                           <Typography
-                            onClick={(event) => {
-                              event.preventDefault();
-                              setMatches(
-                                matches.map((x) =>
-                                  (
-                                    x.eventKey === matchData.eventKey &&
-                                    x.matchLevel === matchData.matchLevel &&
-                                    x.matchNumber === matchData.matchNumber &&
-                                    x.alliance === matchData.alliance &&
-                                    x.robotNumber === matchData.robotNumber
-                                  ) ?
-                                    {
-                                      ...matchData,
-                                      selected: !x.selected,
-                                    }
-                                  : x
-                                )
-                              );
+                            sx={{
+                              fontWeight:
+                                (
+                                  !matchData.autoUpload &&
+                                  !matchData.quickshare &&
+                                  !matchData.clipboard &&
+                                  !matchData.qr &&
+                                  !matchData.download &&
+                                  !matchData.upload
+                                ) ?
+                                  "bold"
+                                : "normal",
                             }}>
                             {"\n" +
                               matchData.alliance +
                               "\u00a0" +
                               matchData.robotNumber}
                           </Typography>
-                          {!matchData.exported && <Star />}
+                          <Stack
+                            direction="row"
+                            sx={{
+                              alignItems: "center",
+                              overflowX: "scroll",
+                            }}>
+                            {matchData.autoUpload && <CloudSync />}
+                            {matchData.quickshare && <SendToMobile />}
+                            {matchData.clipboard && <ContentCopy />}
+                            {matchData.qr && <QrCode />}
+                            {matchData.download && <Download />}
+                            {matchData.upload && <Upload />}
+                          </Stack>
                         </Stack>
                       </Stack>
+                      {!matchData.autoUpload &&
+                        !matchData.quickshare &&
+                        !matchData.clipboard &&
+                        !matchData.qr &&
+                        !matchData.download &&
+                        !matchData.upload && <Star />}
                     </Stack>
                   }
                 />
@@ -448,7 +527,18 @@ export default function SavedMatches({
               const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
                 .filter((x) => x.selected)
                 .map((x) =>
-                  omit("selected", x as unknown as Record<string, unknown>)
+                  omit(
+                    [
+                      "autoUpload",
+                      "quickshare",
+                      "clipboard",
+                      "qr",
+                      "download",
+                      "upload",
+                      "selected",
+                    ],
+                    x as unknown as Record<string, unknown>
+                  )
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
               let exception = false;
@@ -470,7 +560,7 @@ export default function SavedMatches({
                 setQuickshareFailed(error.toString() as string);
               }
               if (!exception) {
-                markExportedEntries();
+                markExportedEntries("quickshare");
               }
             }}
             startIcon={<SendToMobile />}>
@@ -503,7 +593,18 @@ export default function SavedMatches({
               const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
                 .filter((x) => x.selected)
                 .map((x) =>
-                  omit("selected", x as unknown as Record<string, unknown>)
+                  omit(
+                    [
+                      "autoUpload",
+                      "quickshare",
+                      "clipboard",
+                      "qr",
+                      "download",
+                      "upload",
+                      "selected",
+                    ],
+                    x as unknown as Record<string, unknown>
+                  )
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
               let exception = false;
@@ -514,7 +615,7 @@ export default function SavedMatches({
               }
 
               if (!exception) {
-                markExportedEntries();
+                markExportedEntries("clipboard");
               }
             }}
             startIcon={<ContentCopy />}>
@@ -587,7 +688,7 @@ export default function SavedMatches({
                       flex: 1,
                     }}
                     onClick={() => {
-                      markExportedEntries();
+                      markExportedEntries("qr");
                       setQrMatches([]);
                     }}>
                     Done
@@ -634,7 +735,7 @@ export default function SavedMatches({
                       flex: 1,
                     }}
                     onClick={() => {
-                      markExportedEntries();
+                      markExportedEntries("qr");
                       setQrMatches([]);
                     }}>
                     Done
@@ -672,7 +773,18 @@ export default function SavedMatches({
               const data: (TeamMatchEntry | HumanPlayerEntry)[] = matches
                 .filter((x) => x.selected)
                 .map((x) =>
-                  omit("selected", x as unknown as Record<string, unknown>)
+                  omit(
+                    [
+                      "autoUpload",
+                      "quickshare",
+                      "clipboard",
+                      "qr",
+                      "download",
+                      "upload",
+                      "selected",
+                    ],
+                    x as unknown as Record<string, unknown>
+                  )
                 ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[];
 
               let exception = false;
@@ -702,7 +814,7 @@ export default function SavedMatches({
                     clearInterval(downloadInterval);
 
                     if (!exception) {
-                      markExportedEntries();
+                      markExportedEntries("download");
                     }
                   }
                 }, 300);
@@ -722,8 +834,16 @@ export default function SavedMatches({
                   .filter((x) => x.selected)
                   .map((x) =>
                     omit(
-                      "exported",
-                      omit("selected", x as unknown as Record<string, unknown>)
+                      [
+                        "autoUpload",
+                        "quickshare",
+                        "clipboard",
+                        "qr",
+                        "download",
+                        "upload",
+                        "selected",
+                      ],
+                      x as unknown as Record<string, unknown>
                     )
                   ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[]
               );
@@ -735,11 +855,16 @@ export default function SavedMatches({
                       .filter((x) => x.selected)
                       .map((x) =>
                         omit(
-                          "exported",
-                          omit(
+                          [
+                            "autoUpload",
+                            "quickshare",
+                            "clipboard",
+                            "qr",
+                            "download",
+                            "upload",
                             "selected",
-                            x as unknown as Record<string, unknown>
-                          )
+                          ],
+                          x as unknown as Record<string, unknown>
                         )
                       ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[]
                   )[0]
@@ -750,8 +875,16 @@ export default function SavedMatches({
                   .filter((x) => x.selected)
                   .map((x) =>
                     omit(
-                      "exported",
-                      omit("selected", x as unknown as Record<string, unknown>)
+                      [
+                        "autoUpload",
+                        "quickshare",
+                        "clipboard",
+                        "qr",
+                        "download",
+                        "upload",
+                        "selected",
+                      ],
+                      x as unknown as Record<string, unknown>
                     )
                   ) as (TeamMatchEntry | HumanPlayerEntry)[]
               );
