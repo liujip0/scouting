@@ -6,10 +6,10 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { dateFileName } from "@isa2025/api/src/utils/utils.ts";
 import {
-  Abc,
   ContentCopy,
   Contrast,
   Error,
+  FormatQuote,
   ListAlt,
   Numbers,
   Visibility,
@@ -205,7 +205,7 @@ export default function ExportLayout({
                               : <Tooltip
                                   title={<Typography>string</Typography>}
                                   arrow>
-                                  <Abc />
+                                  <FormatQuote />
                                 </Tooltip>,
                             number: (
                               <Tooltip
@@ -325,7 +325,7 @@ export default function ExportLayout({
                             : <Tooltip
                                 title={<Typography>string</Typography>}
                                 arrow>
-                                <Abc />
+                                <FormatQuote />
                               </Tooltip>,
                           number: (
                             <Tooltip
