@@ -10,10 +10,9 @@ import {
   Contrast,
   Error,
   FormatQuote,
-  ListAlt,
   Numbers,
   Visibility,
-  VisibilityOff,
+  VisibilityOff
 } from "@mui/icons-material";
 import {
   Button,
@@ -539,7 +538,7 @@ function DataTypeIcon({ dataType }: DataTypeIconProps) {
         <Tooltip
           title={<Typography>{dataType}</Typography>}
           arrow>
-          <ListAlt />
+          <FormatQuote />
         </Tooltip>
       );
     }
