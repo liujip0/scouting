@@ -27,6 +27,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -174,17 +175,80 @@ export default function ExportLayout({
                         </Typography>
                         {
                           {
-                            boolean: <Contrast />,
+                            boolean: (
+                              <Tooltip
+                                title={<Typography>boolean</Typography>}
+                                arrow>
+                                <Contrast />
+                              </Tooltip>
+                            ),
                             string:
-                              column === "alliance" ? <ListAlt />
-                              : column === "matchLevel" ? <ListAlt />
-                              : <Abc />,
-                            number: <Numbers />,
-                            bigint: <Numbers />,
-                            symbol: <Error />,
-                            function: <Error />,
-                            object: <Error />,
-                            undefined: <Error />,
+                              column === "alliance" ?
+                                <Tooltip
+                                  title={
+                                    <Typography>"Red" | "Blue"</Typography>
+                                  }
+                                  arrow>
+                                  <ListAlt />
+                                </Tooltip>
+                              : column === "matchLevel" ?
+                                <Tooltip
+                                  title={
+                                    <Typography>
+                                      "None" | "Practice" | "Qualification" |
+                                      "Playoff"
+                                    </Typography>
+                                  }
+                                  arrow>
+                                  <ListAlt />
+                                </Tooltip>
+                              : <Tooltip
+                                  title={<Typography>string</Typography>}
+                                  arrow>
+                                  <Abc />
+                                </Tooltip>,
+                            number: (
+                              <Tooltip
+                                title={<Typography>integer</Typography>}
+                                arrow>
+                                <Numbers />
+                              </Tooltip>
+                            ),
+                            bigint: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            symbol: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            function: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            object: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            undefined: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
                           }[typeof TeamMatchEntryInit[column]]
                         }
                       </Stack>
@@ -233,17 +297,78 @@ export default function ExportLayout({
                       <Typography>{column}</Typography>
                       {
                         {
-                          boolean: <Contrast />,
+                          boolean: (
+                            <Tooltip
+                              title={<Typography>boolean</Typography>}
+                              arrow>
+                              <Contrast />
+                            </Tooltip>
+                          ),
                           string:
-                            column === "alliance" ? <ListAlt />
-                            : column === "matchLevel" ? <ListAlt />
-                            : <Abc />,
-                          number: <Numbers />,
-                          bigint: <Numbers />,
-                          symbol: <Error />,
-                          function: <Error />,
-                          object: <Error />,
-                          undefined: <Error />,
+                            column === "alliance" ?
+                              <Tooltip
+                                title={<Typography>"Red" | "Blue"</Typography>}
+                                arrow>
+                                <ListAlt />
+                              </Tooltip>
+                            : column === "matchLevel" ?
+                              <Tooltip
+                                title={
+                                  <Typography>
+                                    "None" | "Practice" | "Qualification" |
+                                    "Playoff"
+                                  </Typography>
+                                }
+                                arrow>
+                                <ListAlt />
+                              </Tooltip>
+                            : <Tooltip
+                                title={<Typography>string</Typography>}
+                                arrow>
+                                <Abc />
+                              </Tooltip>,
+                          number: (
+                            <Tooltip
+                              title={<Typography>integer</Typography>}
+                              arrow>
+                              <Numbers />
+                            </Tooltip>
+                          ),
+                          bigint: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          symbol: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          function: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          object: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          undefined: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
                         }[typeof HumanPlayerEntryInit[column]]
                       }
                     </Stack>
