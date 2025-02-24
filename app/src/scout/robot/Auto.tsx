@@ -16,7 +16,7 @@ import {
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
-import { AutoL1Counter, AutoLevelButton, Counter } from "../Components.tsx";
+import { AutoL1Counter, AutoReefButton, Counter } from "../Components.tsx";
 import Net from "../images/Net.png";
 import Processor from "../images/Processor.png";
 import Reef from "../images/Reef.png";
@@ -78,9 +78,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               width: "100%",
             }}
           />
-          <AutoLevelButton
-            color={popperReef === "A" ? "primary" : "secondary"}
-            label="A"
+          <AutoReefButton
+            selected={popperReef === "A"}
+            coralStates={{
+              L4: match.autoCoralAL4!,
+              L3: match.autoCoralAL3!,
+              L2: match.autoCoralAL2!,
+              L1: match.autoCoralABL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "A" ? "" : "A");
@@ -103,9 +108,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "B" ? "primary" : "secondary"}
-            label="B"
+          <AutoReefButton
+            selected={popperReef === "B"}
+            coralStates={{
+              L4: match.autoCoralBL4!,
+              L3: match.autoCoralBL3!,
+              L2: match.autoCoralBL2!,
+              L1: match.autoCoralABL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "B" ? "" : "B");
@@ -128,9 +138,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "C" ? "primary" : "secondary"}
-            label="C"
+          <AutoReefButton
+            selected={popperReef === "C"}
+            coralStates={{
+              L4: match.autoCoralCL4!,
+              L3: match.autoCoralCL3!,
+              L2: match.autoCoralCL2!,
+              L1: match.autoCoralCDL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "C" ? "" : "C");
@@ -140,22 +155,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "C" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   bottom: "20%",
                   transform: "translate(-50%, 50%)",
                 }
               : {
                   //Processor-Side "I" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   top: "20%",
                   transform: "translate(50%, -50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "D" ? "primary" : "secondary"}
-            label="D"
+          <AutoReefButton
+            selected={popperReef === "D"}
+            coralStates={{
+              L4: match.autoCoralDL4!,
+              L3: match.autoCoralDL3!,
+              L2: match.autoCoralDL2!,
+              L1: match.autoCoralCDL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "D" ? "" : "D");
@@ -165,22 +185,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "D" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   bottom: "12%",
                   transform: "translate(-50%, 50%)",
                 }
               : {
                   //Processor-Side "J" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   top: "12%",
                   transform: "translate(50%, -50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "E" ? "primary" : "secondary"}
-            label="E"
+          <AutoReefButton
+            selected={popperReef === "E"}
+            coralStates={{
+              L4: match.autoCoralEL4!,
+              L3: match.autoCoralEL3!,
+              L2: match.autoCoralEL2!,
+              L1: match.autoCoralEFL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "E" ? "" : "E");
@@ -190,22 +215,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "E" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   bottom: "12%",
                   transform: "translate(50%, 50%)",
                 }
               : {
                   //Processor-Side "K" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   top: "12%",
                   transform: "translate(-50%, -50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "F" ? "primary" : "secondary"}
-            label="F"
+          <AutoReefButton
+            selected={popperReef === "F"}
+            coralStates={{
+              L4: match.autoCoralFL4!,
+              L3: match.autoCoralFL3!,
+              L2: match.autoCoralFL2!,
+              L1: match.autoCoralEFL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "F" ? "" : "F");
@@ -215,22 +245,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "F" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   bottom: "20%",
                   transform: "translate(50%, 50%)",
                 }
               : {
                   //Processor-Side "L" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   top: "20%",
                   transform: "translate(-50%, -50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "G" ? "primary" : "secondary"}
-            label="G"
+          <AutoReefButton
+            selected={popperReef === "G"}
+            coralStates={{
+              L4: match.autoCoralGL4!,
+              L3: match.autoCoralGL3!,
+              L2: match.autoCoralGL2!,
+              L1: match.autoCoralGHL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "G" ? "" : "G");
@@ -253,9 +288,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "H" ? "primary" : "secondary"}
-            label="H"
+          <AutoReefButton
+            selected={popperReef === "H"}
+            coralStates={{
+              L4: match.autoCoralHL4!,
+              L3: match.autoCoralHL3!,
+              L2: match.autoCoralHL2!,
+              L1: match.autoCoralGHL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "H" ? "" : "H");
@@ -278,9 +318,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "I" ? "primary" : "secondary"}
-            label="I"
+          <AutoReefButton
+            selected={popperReef === "I"}
+            coralStates={{
+              L4: match.autoCoralIL4!,
+              L3: match.autoCoralIL3!,
+              L2: match.autoCoralIL2!,
+              L1: match.autoCoralIJL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "I" ? "" : "I");
@@ -290,22 +335,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "I" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   top: "20%",
                   transform: "translate(50%, -50%)",
                 }
               : {
                   //Processor-Side "C" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   bottom: "20%",
                   transform: "translate(-50%, 50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "J" ? "primary" : "secondary"}
-            label="J"
+          <AutoReefButton
+            selected={popperReef === "J"}
+            coralStates={{
+              L4: match.autoCoralJL4!,
+              L3: match.autoCoralJL3!,
+              L2: match.autoCoralJL2!,
+              L1: match.autoCoralIJL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "J" ? "" : "J");
@@ -315,22 +365,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "J" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   top: "12%",
                   transform: "translate(50%, -50%)",
                 }
               : {
                   //Processor-Side "D" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   bottom: "12%",
                   transform: "translate(-50%, 50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "K" ? "primary" : "secondary"}
-            label="K"
+          <AutoReefButton
+            selected={popperReef === "K"}
+            coralStates={{
+              L4: match.autoCoralKL4!,
+              L3: match.autoCoralKL3!,
+              L2: match.autoCoralKL2!,
+              L1: match.autoCoralKLL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "K" ? "" : "K");
@@ -340,22 +395,27 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "K" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   top: "12%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
                   //Processor-Side "E" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   bottom: "12%",
                   transform: "translate(50%, 50%)",
                 }
             }
           />
-          <AutoLevelButton
-            color={popperReef === "L" ? "primary" : "secondary"}
-            label="L"
+          <AutoReefButton
+            selected={popperReef === "L"}
+            coralStates={{
+              L4: match.autoCoralLL4!,
+              L3: match.autoCoralLL3!,
+              L2: match.autoCoralLL2!,
+              L1: match.autoCoralKLL1!,
+            }}
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "L" ? "" : "L");
@@ -365,14 +425,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "L" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   top: "20%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
                   //Processor-Side "F" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   bottom: "20%",
                   transform: "translate(50%, 50%)",
                 }
@@ -490,20 +550,52 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 </StyledToggleButton>
                 <AutoL1Counter
                   value={
-                    match[
-                      ("autoCoral" + popperReef + "L1") as TeamMatchEntryColumn
-                    ] as number
+                    popperReef !== "" ?
+                      (match[
+                        ("autoCoral" +
+                          {
+                            A: "AB",
+                            B: "AB",
+                            C: "CD",
+                            D: "CD",
+                            E: "EF",
+                            F: "EF",
+                            G: "GH",
+                            H: "GH",
+                            I: "IJ",
+                            J: "IJ",
+                            K: "KL",
+                            L: "KL",
+                          }[popperReef] +
+                          "L1") as TeamMatchEntryColumn
+                      ] as number)
+                    : 0
                   }
                   setValue={(value) => {
                     if (popperReef) {
                       setMatch({
                         ...match,
-                        ["autoCoral" + popperReef + "L1"]: value,
+                        ["autoCoral" +
+                        {
+                          A: "AB",
+                          B: "AB",
+                          C: "CD",
+                          D: "CD",
+                          E: "EF",
+                          F: "EF",
+                          G: "GH",
+                          H: "GH",
+                          I: "IJ",
+                          J: "IJ",
+                          K: "KL",
+                          L: "KL",
+                        }[popperReef] +
+                        "L1"]: value,
                       });
                       setPopperReef("");
                     }
                   }}
-                  max={3}
+                  max={6}
                 />
               </ButtonGroup>
             </Popper>

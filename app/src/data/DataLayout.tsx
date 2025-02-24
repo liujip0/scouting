@@ -60,6 +60,9 @@ export default function DataLayout({ setToken, permLevel }: DataLayoutProps) {
               borderWidth: "2px",
               mr: 2,
             }}
+            onClick={() => {
+              navigate("/");
+            }}
           />
           <Typography
             variant="h2"
@@ -72,6 +75,9 @@ export default function DataLayout({ setToken, permLevel }: DataLayoutProps) {
                 lg: "1.6rem",
                 xl: "1.6rem",
               },
+            }}
+            onClick={() => {
+              navigate("/");
             }}>
             Indiana Scouting Alliance
           </Typography>
