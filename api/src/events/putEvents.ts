@@ -22,7 +22,7 @@ export const putEvents = loggedPublicProcedure
     const matches: Match[] = [];
 
     opts.input.forEach((event) => {
-      events.push(omit("matches", event) as DBEvent);
+      events.push(omit(["matches"], event) as DBEvent);
       event.matches.forEach((match) => {
         matches.push(match);
       });

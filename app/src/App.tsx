@@ -7,7 +7,7 @@ import LandingPage from "./LandingPage.tsx";
 import Scout from "./scout/Scout.tsx";
 import DeviceSetup, { DeviceSetupObj } from "./setup/DeviceSetup.tsx";
 import Upload from "./upload/Upload.tsx";
-import { getFromDBStore, initDB, Stores } from "./utils/idb.ts";
+import { getDBEvents, getDBMatches, initDB } from "./utils/idb.ts";
 
 export default function App() {
   const eventEmitter = useMemo(() => new EventEmitter(), []);
@@ -48,7 +48,7 @@ export default function App() {
     (async () => {
       await initDB();
 
-      const idbEvents: DBEvent[] = await getFromDBStore(Stores.Events);
+      const idbEvents: DBEvent[] = await getDBEvents();
       const res: (DBEvent & { matches: Match[] })[] = idbEvents.map(
         (event) => ({
           ...event,
@@ -56,7 +56,7 @@ export default function App() {
         })
       );
 
-      const idbMatches: Match[] = await getFromDBStore(Stores.Matches);
+      const idbMatches: Match[] = await getDBMatches();
       idbMatches.forEach((match) => {
         res
           .find((event) => event.eventKey === match.eventKey)

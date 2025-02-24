@@ -10,13 +10,14 @@ import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
-import { putEntry } from "../utils/idb.ts";
+import { getDBTeamMatchEntries, putDBEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import Human from "./Human.tsx";
 import Auto from "./robot/Auto.tsx";
 import Postmatch from "./robot/Postmatch.tsx";
 import Prematch from "./robot/Prematch.tsx";
 import { Teleop } from "./robot/Teleop.tsx";
+import { ExportMatchEntry } from "./SavedMatches.tsx";
 import { ScoutPage } from "./Scout.tsx";
 import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
 
@@ -27,6 +28,8 @@ type ScoutLayoutProps = {
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
   deviceSetup: DeviceSetupObj;
+  putEntriesPending: boolean;
+  setPutEntriesPending: (value: boolean) => void;
 };
 export default function ScoutLayout({
   setPage,
@@ -34,6 +37,8 @@ export default function ScoutLayout({
   setMatch,
   events,
   deviceSetup,
+  putEntriesPending,
+  setPutEntriesPending,
 }: ScoutLayoutProps) {
   const navigate = useNavigate();
 
@@ -41,43 +46,54 @@ export default function ScoutLayout({
     match.robotNumber === 4 ? "human" : "prematch"
   );
 
-  let putEntriesInterval: NodeJS.Timeout;
-  let putEntriesPending = false;
+  let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
     onMutate() {
-      putEntriesPending = true;
-      putEntriesInterval = setTimeout(async () => {
+      setPutEntriesPending(true);
+      putEntriesTimeout = setTimeout(async () => {
         if (putEntriesPending) {
           putEntries.reset();
-          await putEntry({
+          await putDBEntry({
             ...match,
-            exported: false,
-          } as
-            | (TeamMatchEntry & { exported: boolean })
-            | (HumanPlayerEntry & { exported: boolean }));
+            autoUpload: false,
+            quickshare: false,
+            clipboard: false,
+            qr: false,
+            download: false,
+            upload: false,
+          } as ExportMatchEntry);
           setPage("savedmatches");
         }
       }, 3000);
     },
     async onSuccess() {
-      clearTimeout(putEntriesInterval);
-      await putEntry({
+      clearTimeout(putEntriesTimeout);
+      await putDBEntry({
         ...match,
-        exported: true,
-      } as
-        | (TeamMatchEntry & { exported: boolean })
-        | (HumanPlayerEntry & { exported: boolean }));
+        autoUpload: true,
+        quickshare: false,
+        clipboard: false,
+        qr: false,
+        download: false,
+        upload: false,
+      } as ExportMatchEntry);
+      setPutEntriesPending(false);
+      console.log(getDBTeamMatchEntries());
       setPage("savedmatches");
     },
     async onError(error) {
-      clearTimeout(putEntriesInterval);
+      clearTimeout(putEntriesTimeout);
       console.error(error);
-      await putEntry({
+      await putDBEntry({
         ...match,
-        exported: false,
-      } as
-        | (TeamMatchEntry & { exported: boolean })
-        | (HumanPlayerEntry & { exported: boolean }));
+        autoUpload: false,
+        quickshare: false,
+        clipboard: false,
+        qr: false,
+        download: false,
+        upload: false,
+      } as ExportMatchEntry);
+      setPutEntriesPending(false);
       setPage("savedmatches");
     },
   });

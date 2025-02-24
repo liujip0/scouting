@@ -2,8 +2,11 @@ import { HumanPlayerEntry, MatchLevel, TeamMatchEntry } from "./dbtypes.ts";
 
 export type Overwrite<T, NewT> = Omit<T, keyof NewT> & NewT;
 
-export function omit(key: string, obj: Record<string, unknown>) {
-  const { [key]: omit, ...newObj } = obj;
+export function omit(keys: string[], obj: Record<string, unknown>) {
+  const newObj = { ...obj };
+  keys.forEach((key) => {
+    delete newObj[key];
+  });
   return newObj;
 }
 
