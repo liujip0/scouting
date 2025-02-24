@@ -22,10 +22,38 @@ export default function Export() {
   const publicApiToken = trpc.users.publicApiToken.useQuery();
 
   const [robotColumns, setRobotColumns] = useState<boolean[]>(
-    new Array(TeamMatchEntryColumns.length).fill(true)
+    new Array(TeamMatchEntryColumns.length)
+      .fill(false)
+      .map(
+        (_, i) =>
+          ![
+            "deviceTeamNumber",
+            "deviceId",
+            "scoutName",
+            "scoutTeamNumber",
+            "eventKey",
+            "matchLevel",
+            "alliance",
+            "robotNumber",
+          ].includes(TeamMatchEntryColumns[i])
+      )
   );
   const [humanColumns, setHumanColumns] = useState<boolean[]>(
-    new Array(HumanPlayerEntryColumns.length).fill(true)
+    new Array(HumanPlayerEntryColumns.length)
+      .fill(false)
+      .map(
+        (_, i) =>
+          ![
+            "deviceTeamNumber",
+            "deviceId",
+            "scoutName",
+            "scoutTeamNumber",
+            "eventKey",
+            "matchLevel",
+            "alliance",
+            "robotNumber",
+          ].includes(HumanPlayerEntryColumns[i])
+      )
   );
 
   return (
