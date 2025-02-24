@@ -86,7 +86,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralAL2!,
               L1: match.autoCoralABL1!,
             }}
-            label="A"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "A" ? "" : "A");
@@ -117,7 +116,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralBL2!,
               L1: match.autoCoralABL1!,
             }}
-            label="B"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "B" ? "" : "B");
@@ -148,7 +146,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralCL2!,
               L1: match.autoCoralCDL1!,
             }}
-            label="C"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "C" ? "" : "C");
@@ -158,14 +155,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "C" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   bottom: "20%",
                   transform: "translate(-50%, 50%)",
                 }
               : {
                   //Processor-Side "I" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   top: "20%",
                   transform: "translate(50%, -50%)",
                 }
@@ -179,7 +176,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralDL2!,
               L1: match.autoCoralCDL1!,
             }}
-            label="D"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "D" ? "" : "D");
@@ -189,14 +185,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "D" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   bottom: "12%",
                   transform: "translate(-50%, 50%)",
                 }
               : {
                   //Processor-Side "J" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   top: "12%",
                   transform: "translate(50%, -50%)",
                 }
@@ -210,7 +206,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralEL2!,
               L1: match.autoCoralEFL1!,
             }}
-            label="E"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "E" ? "" : "E");
@@ -220,14 +215,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "E" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   bottom: "12%",
                   transform: "translate(50%, 50%)",
                 }
               : {
                   //Processor-Side "K" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   top: "12%",
                   transform: "translate(-50%, -50%)",
                 }
@@ -241,7 +236,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralFL2!,
               L1: match.autoCoralEFL1!,
             }}
-            label="F"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "F" ? "" : "F");
@@ -251,14 +245,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "F" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   bottom: "20%",
                   transform: "translate(50%, 50%)",
                 }
               : {
                   //Processor-Side "L" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   top: "20%",
                   transform: "translate(-50%, -50%)",
                 }
@@ -272,7 +266,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralGL2!,
               L1: match.autoCoralGHL1!,
             }}
-            label="G"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "G" ? "" : "G");
@@ -303,7 +296,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralHL2!,
               L1: match.autoCoralGHL1!,
             }}
-            label="H"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "H" ? "" : "H");
@@ -334,7 +326,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralIL2!,
               L1: match.autoCoralIJL1!,
             }}
-            label="I"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "I" ? "" : "I");
@@ -344,14 +335,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "I" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   top: "20%",
                   transform: "translate(50%, -50%)",
                 }
               : {
                   //Processor-Side "C" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   bottom: "20%",
                   transform: "translate(-50%, 50%)",
                 }
@@ -365,7 +356,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralJL2!,
               L1: match.autoCoralIJL1!,
             }}
-            label="J"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "J" ? "" : "J");
@@ -375,14 +365,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "J" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   top: "12%",
                   transform: "translate(50%, -50%)",
                 }
               : {
                   //Processor-Side "D" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   bottom: "12%",
                   transform: "translate(-50%, 50%)",
                 }
@@ -396,7 +386,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralKL2!,
               L1: match.autoCoralKLL1!,
             }}
-            label="K"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "K" ? "" : "K");
@@ -406,14 +395,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "K" Location
                   position: "absolute",
-                  left: "35%",
+                  left: "38%",
                   top: "12%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
                   //Processor-Side "E" Location
                   position: "absolute",
-                  right: "35%",
+                  right: "38%",
                   bottom: "12%",
                   transform: "translate(50%, 50%)",
                 }
@@ -427,7 +416,6 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
               L2: match.autoCoralLL2!,
               L1: match.autoCoralKLL1!,
             }}
-            label="L"
             onClick={(event) => {
               event.stopPropagation();
               setPopperReef(popperReef === "L" ? "" : "L");
@@ -437,14 +425,14 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 {
                   //Processor-Side "L" Location
                   position: "absolute",
-                  left: "21%",
+                  left: "18%",
                   top: "20%",
                   transform: "translate(-50%, -50%)",
                 }
               : {
                   //Processor-Side "F" Location
                   position: "absolute",
-                  right: "21%",
+                  right: "18%",
                   bottom: "20%",
                   transform: "translate(50%, 50%)",
                 }

@@ -305,9 +305,13 @@ export function AutoReefButton({
                       ${coralStates.L1 >= 5 ? theme.palette.primary.main : theme.palette.secondary.main} 66.7% 83.3%,
                       ${coralStates.L1 >= 6 ? theme.palette.primary.main : theme.palette.secondary.main} 83.3%
                     )`,
+        border: selected ? "8px solid " + theme.palette.primary.main : "none",
         width: "2em",
         height: "4em",
-        border: selected ? "8px solid " + theme.palette.primary.main : "none",
+        [theme.breakpoints.down("md")]: {
+          width: "1em",
+          height: "2em",
+        },
       })}></Button>
   );
 }
