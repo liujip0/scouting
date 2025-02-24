@@ -1,9 +1,20 @@
 import {
   HumanPlayerEntryColumns,
+  HumanPlayerEntryInit,
   TeamMatchEntryColumns,
+  TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { dateFileName } from "@isa2025/api/src/utils/utils.ts";
-import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Abc,
+  ContentCopy,
+  Contrast,
+  Error,
+  ListAlt,
+  Numbers,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Button,
   Checkbox,
@@ -16,6 +27,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -130,31 +142,120 @@ export default function ExportLayout({
                 overflowY: "scroll",
                 mb: 2,
               }}>
-              {TeamMatchEntryColumns.map((column, columnIndex) => (
-                <FormControlLabel
-                  key={column}
-                  checked={robotColumnsState[columnIndex]}
-                  onChange={(_event, checked) => {
-                    setRobotColumnsState(
-                      robotColumnsState.map((value, valueIndex) =>
-                        valueIndex === columnIndex ? checked : value
-                      )
-                    );
-                  }}
-                  control={<Checkbox />}
-                  label={
-                    column.startsWith("auto") ?
-                      column.replace("auto", "auto\u200b")
-                    : column.startsWith("teleop") ?
-                      column.replace("teleop", "teleop\u200b")
-                    : column.startsWith("endgame") ?
-                      column.replace("endgame", "endgame\u200b")
-                    : column.startsWith("postmatch") ?
-                      column.replace("postmatch", "postmatch\u200b")
-                    : column
-                  }
-                />
-              ))}
+              {TeamMatchEntryColumns.map((column, columnIndex) => {
+                return (
+                  <FormControlLabel
+                    key={column}
+                    checked={robotColumnsState[columnIndex]}
+                    onChange={(_event, checked) => {
+                      setRobotColumnsState(
+                        robotColumnsState.map((value, valueIndex) =>
+                          valueIndex === columnIndex ? checked : value
+                        )
+                      );
+                    }}
+                    control={<Checkbox />}
+                    label={
+                      <Stack
+                        direction="row"
+                        sx={{
+                          alignItems: "center",
+                        }}
+                        gap={1}>
+                        <Typography>
+                          {column.startsWith("auto") ?
+                            column.replace("auto", "auto\u200b")
+                          : column.startsWith("teleop") ?
+                            column.replace("teleop", "teleop\u200b")
+                          : column.startsWith("endgame") ?
+                            column.replace("endgame", "endgame\u200b")
+                          : column.startsWith("postmatch") ?
+                            column.replace("postmatch", "postmatch\u200b")
+                          : column}
+                        </Typography>
+                        {
+                          {
+                            boolean: (
+                              <Tooltip
+                                title={<Typography>boolean</Typography>}
+                                arrow>
+                                <Contrast />
+                              </Tooltip>
+                            ),
+                            string:
+                              column === "alliance" ?
+                                <Tooltip
+                                  title={
+                                    <Typography>"Red" | "Blue"</Typography>
+                                  }
+                                  arrow>
+                                  <ListAlt />
+                                </Tooltip>
+                              : column === "matchLevel" ?
+                                <Tooltip
+                                  title={
+                                    <Typography>
+                                      "None" | "Practice" | "Qualification" |
+                                      "Playoff"
+                                    </Typography>
+                                  }
+                                  arrow>
+                                  <ListAlt />
+                                </Tooltip>
+                              : <Tooltip
+                                  title={<Typography>string</Typography>}
+                                  arrow>
+                                  <Abc />
+                                </Tooltip>,
+                            number: (
+                              <Tooltip
+                                title={<Typography>integer</Typography>}
+                                arrow>
+                                <Numbers />
+                              </Tooltip>
+                            ),
+                            bigint: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            symbol: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            function: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            object: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                            undefined: (
+                              <Tooltip
+                                title={<Typography>invalid type</Typography>}
+                                arrow>
+                                <Error />
+                              </Tooltip>
+                            ),
+                          }[typeof TeamMatchEntryInit[column]]
+                        }
+                      </Stack>
+                    }
+                  />
+                );
+              })}
             </Stack>
           </>
         )}
@@ -186,7 +287,92 @@ export default function ExportLayout({
                     );
                   }}
                   control={<Checkbox />}
-                  label={column}
+                  label={
+                    <Stack
+                      direction="row"
+                      sx={{
+                        alignItems: "center",
+                      }}
+                      gap={1}>
+                      <Typography>{column}</Typography>
+                      {
+                        {
+                          boolean: (
+                            <Tooltip
+                              title={<Typography>boolean</Typography>}
+                              arrow>
+                              <Contrast />
+                            </Tooltip>
+                          ),
+                          string:
+                            column === "alliance" ?
+                              <Tooltip
+                                title={<Typography>"Red" | "Blue"</Typography>}
+                                arrow>
+                                <ListAlt />
+                              </Tooltip>
+                            : column === "matchLevel" ?
+                              <Tooltip
+                                title={
+                                  <Typography>
+                                    "None" | "Practice" | "Qualification" |
+                                    "Playoff"
+                                  </Typography>
+                                }
+                                arrow>
+                                <ListAlt />
+                              </Tooltip>
+                            : <Tooltip
+                                title={<Typography>string</Typography>}
+                                arrow>
+                                <Abc />
+                              </Tooltip>,
+                          number: (
+                            <Tooltip
+                              title={<Typography>integer</Typography>}
+                              arrow>
+                              <Numbers />
+                            </Tooltip>
+                          ),
+                          bigint: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          symbol: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          function: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          object: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                          undefined: (
+                            <Tooltip
+                              title={<Typography>invalid type</Typography>}
+                              arrow>
+                              <Error />
+                            </Tooltip>
+                          ),
+                        }[typeof HumanPlayerEntryInit[column]]
+                      }
+                    </Stack>
+                  }
                 />
               ))}
             </Stack>
