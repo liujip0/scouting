@@ -1,9 +1,20 @@
 import {
   HumanPlayerEntryColumns,
+  HumanPlayerEntryInit,
   TeamMatchEntryColumns,
+  TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { dateFileName } from "@isa2025/api/src/utils/utils.ts";
-import { ContentCopy, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Abc,
+  ContentCopy,
+  Contrast,
+  Error,
+  ListAlt,
+  Numbers,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Button,
   Checkbox,
@@ -130,31 +141,57 @@ export default function ExportLayout({
                 overflowY: "scroll",
                 mb: 2,
               }}>
-              {TeamMatchEntryColumns.map((column, columnIndex) => (
-                <FormControlLabel
-                  key={column}
-                  checked={robotColumnsState[columnIndex]}
-                  onChange={(_event, checked) => {
-                    setRobotColumnsState(
-                      robotColumnsState.map((value, valueIndex) =>
-                        valueIndex === columnIndex ? checked : value
-                      )
-                    );
-                  }}
-                  control={<Checkbox />}
-                  label={
-                    column.startsWith("auto") ?
-                      column.replace("auto", "auto\u200b")
-                    : column.startsWith("teleop") ?
-                      column.replace("teleop", "teleop\u200b")
-                    : column.startsWith("endgame") ?
-                      column.replace("endgame", "endgame\u200b")
-                    : column.startsWith("postmatch") ?
-                      column.replace("postmatch", "postmatch\u200b")
-                    : column
-                  }
-                />
-              ))}
+              {TeamMatchEntryColumns.map((column, columnIndex) => {
+                return (
+                  <FormControlLabel
+                    key={column}
+                    checked={robotColumnsState[columnIndex]}
+                    onChange={(_event, checked) => {
+                      setRobotColumnsState(
+                        robotColumnsState.map((value, valueIndex) =>
+                          valueIndex === columnIndex ? checked : value
+                        )
+                      );
+                    }}
+                    control={<Checkbox />}
+                    label={
+                      <Stack
+                        direction="row"
+                        sx={{
+                          alignItems: "center",
+                        }}
+                        gap={1}>
+                        <Typography>
+                          {column.startsWith("auto") ?
+                            column.replace("auto", "auto\u200b")
+                          : column.startsWith("teleop") ?
+                            column.replace("teleop", "teleop\u200b")
+                          : column.startsWith("endgame") ?
+                            column.replace("endgame", "endgame\u200b")
+                          : column.startsWith("postmatch") ?
+                            column.replace("postmatch", "postmatch\u200b")
+                          : column}
+                        </Typography>
+                        {
+                          {
+                            boolean: <Contrast />,
+                            string:
+                              column === "alliance" ? <ListAlt />
+                              : column === "matchLevel" ? <ListAlt />
+                              : <Abc />,
+                            number: <Numbers />,
+                            bigint: <Numbers />,
+                            symbol: <Error />,
+                            function: <Error />,
+                            object: <Error />,
+                            undefined: <Error />,
+                          }[typeof TeamMatchEntryInit[column]]
+                        }
+                      </Stack>
+                    }
+                  />
+                );
+              })}
             </Stack>
           </>
         )}
@@ -186,7 +223,31 @@ export default function ExportLayout({
                     );
                   }}
                   control={<Checkbox />}
-                  label={column}
+                  label={
+                    <Stack
+                      direction="row"
+                      sx={{
+                        alignItems: "center",
+                      }}
+                      gap={1}>
+                      <Typography>{column}</Typography>
+                      {
+                        {
+                          boolean: <Contrast />,
+                          string:
+                            column === "alliance" ? <ListAlt />
+                            : column === "matchLevel" ? <ListAlt />
+                            : <Abc />,
+                          number: <Numbers />,
+                          bigint: <Numbers />,
+                          symbol: <Error />,
+                          function: <Error />,
+                          object: <Error />,
+                          undefined: <Error />,
+                        }[typeof HumanPlayerEntryInit[column]]
+                      }
+                    </Stack>
+                  }
                 />
               ))}
             </Stack>
