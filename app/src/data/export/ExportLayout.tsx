@@ -12,7 +12,7 @@ import {
   FormatQuote,
   Numbers,
   Visibility,
-  VisibilityOff
+  VisibilityOff,
 } from "@mui/icons-material";
 import {
   Button,
@@ -530,6 +530,16 @@ function DataTypeIcon({ dataType }: DataTypeIconProps) {
           title={<Typography>invalid type (contact dev)</Typography>}
           arrow>
           <Error />
+        </Tooltip>
+      );
+    }
+    case "1 | 2 | 3":
+    case "4": {
+      return (
+        <Tooltip
+          title={<Typography>{dataType}</Typography>}
+          arrow>
+          <Numbers />
         </Tooltip>
       );
     }
