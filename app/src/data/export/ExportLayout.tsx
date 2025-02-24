@@ -175,80 +175,22 @@ export default function ExportLayout({
                         </Typography>
                         {
                           {
-                            boolean: (
-                              <Tooltip
-                                title={<Typography>boolean</Typography>}
-                                arrow>
-                                <Contrast />
-                              </Tooltip>
-                            ),
+                            boolean: <DataTypeIcon dataType="boolean" />,
                             string:
                               column === "alliance" ?
-                                <Tooltip
-                                  title={
-                                    <Typography>"Red" | "Blue"</Typography>
-                                  }
-                                  arrow>
-                                  <ListAlt />
-                                </Tooltip>
+                                <DataTypeIcon dataType='"Red" | "Blue"' />
                               : column === "matchLevel" ?
-                                <Tooltip
-                                  title={
-                                    <Typography>
-                                      "None" | "Practice" | "Qualification" |
-                                      "Playoff"
-                                    </Typography>
-                                  }
-                                  arrow>
-                                  <ListAlt />
-                                </Tooltip>
-                              : <Tooltip
-                                  title={<Typography>string</Typography>}
-                                  arrow>
-                                  <FormatQuote />
-                                </Tooltip>,
-                            number: (
-                              <Tooltip
-                                title={<Typography>integer</Typography>}
-                                arrow>
-                                <Numbers />
-                              </Tooltip>
-                            ),
-                            bigint: (
-                              <Tooltip
-                                title={<Typography>invalid type</Typography>}
-                                arrow>
-                                <Error />
-                              </Tooltip>
-                            ),
-                            symbol: (
-                              <Tooltip
-                                title={<Typography>invalid type</Typography>}
-                                arrow>
-                                <Error />
-                              </Tooltip>
-                            ),
-                            function: (
-                              <Tooltip
-                                title={<Typography>invalid type</Typography>}
-                                arrow>
-                                <Error />
-                              </Tooltip>
-                            ),
-                            object: (
-                              <Tooltip
-                                title={<Typography>invalid type</Typography>}
-                                arrow>
-                                <Error />
-                              </Tooltip>
-                            ),
-                            undefined: (
-                              <Tooltip
-                                title={<Typography>invalid type</Typography>}
-                                arrow>
-                                <Error />
-                              </Tooltip>
-                            ),
+                                <DataTypeIcon dataType='"None" | "Practice" | "Qualification" | "Playoff"' />
+                              : <DataTypeIcon dataType="string" />,
+                            number:
+                              column === "robotNumber" ?
+                                <DataTypeIcon dataType="1 | 2 | 3" />
+                              : <DataTypeIcon dataType="integer" />,
+                            bigint: <DataTypeIcon dataType="error" />,
+                            symbol: <DataTypeIcon dataType="error" />,
+                            function: <DataTypeIcon dataType="error" />,
+                            object: <DataTypeIcon dataType="error" />,
+                            undefined: <DataTypeIcon dataType="error" />,
                           }[typeof TeamMatchEntryInit[column]]
                         }
                       </Stack>
@@ -297,78 +239,22 @@ export default function ExportLayout({
                       <Typography>{column}</Typography>
                       {
                         {
-                          boolean: (
-                            <Tooltip
-                              title={<Typography>boolean</Typography>}
-                              arrow>
-                              <Contrast />
-                            </Tooltip>
-                          ),
+                          boolean: <DataTypeIcon dataType="boolean" />,
                           string:
                             column === "alliance" ?
-                              <Tooltip
-                                title={<Typography>"Red" | "Blue"</Typography>}
-                                arrow>
-                                <ListAlt />
-                              </Tooltip>
+                              <DataTypeIcon dataType='"Red" | "Blue"' />
                             : column === "matchLevel" ?
-                              <Tooltip
-                                title={
-                                  <Typography>
-                                    "None" | "Practice" | "Qualification" |
-                                    "Playoff"
-                                  </Typography>
-                                }
-                                arrow>
-                                <ListAlt />
-                              </Tooltip>
-                            : <Tooltip
-                                title={<Typography>string</Typography>}
-                                arrow>
-                                <FormatQuote />
-                              </Tooltip>,
-                          number: (
-                            <Tooltip
-                              title={<Typography>integer</Typography>}
-                              arrow>
-                              <Numbers />
-                            </Tooltip>
-                          ),
-                          bigint: (
-                            <Tooltip
-                              title={<Typography>invalid type</Typography>}
-                              arrow>
-                              <Error />
-                            </Tooltip>
-                          ),
-                          symbol: (
-                            <Tooltip
-                              title={<Typography>invalid type</Typography>}
-                              arrow>
-                              <Error />
-                            </Tooltip>
-                          ),
-                          function: (
-                            <Tooltip
-                              title={<Typography>invalid type</Typography>}
-                              arrow>
-                              <Error />
-                            </Tooltip>
-                          ),
-                          object: (
-                            <Tooltip
-                              title={<Typography>invalid type</Typography>}
-                              arrow>
-                              <Error />
-                            </Tooltip>
-                          ),
-                          undefined: (
-                            <Tooltip
-                              title={<Typography>invalid type</Typography>}
-                              arrow>
-                              <Error />
-                            </Tooltip>
-                          ),
+                              <DataTypeIcon dataType='"None" | "Practice" | "Qualification" | "Playoff"' />
+                            : <DataTypeIcon dataType="string" />,
+                          number:
+                            column === "robotNumber" ?
+                              <DataTypeIcon dataType="4" />
+                            : <DataTypeIcon dataType="integer" />,
+                          bigint: <DataTypeIcon dataType="error" />,
+                          symbol: <DataTypeIcon dataType="error" />,
+                          function: <DataTypeIcon dataType="error" />,
+                          object: <DataTypeIcon dataType="error" />,
+                          undefined: <DataTypeIcon dataType="error" />,
                         }[typeof HumanPlayerEntryInit[column]]
                       }
                     </Stack>
@@ -605,4 +491,57 @@ export default function ExportLayout({
       </Stack>
     </Stack>
   );
+}
+
+type DataTypeIconProps = {
+  dataType: string;
+};
+function DataTypeIcon({ dataType }: DataTypeIconProps) {
+  switch (dataType) {
+    case "string": {
+      return (
+        <Tooltip
+          title={<Typography>string</Typography>}
+          arrow>
+          <FormatQuote />
+        </Tooltip>
+      );
+    }
+    case "integer": {
+      return (
+        <Tooltip
+          title={<Typography>integer</Typography>}
+          arrow>
+          <Numbers />
+        </Tooltip>
+      );
+    }
+    case "boolean": {
+      return (
+        <Tooltip
+          title={<Typography>boolean (0 | 1)</Typography>}
+          arrow>
+          <Contrast />
+        </Tooltip>
+      );
+    }
+    case "error": {
+      return (
+        <Tooltip
+          title={<Typography>invalid type (contact dev)</Typography>}
+          arrow>
+          <Error />
+        </Tooltip>
+      );
+    }
+    default: {
+      return (
+        <Tooltip
+          title={<Typography>{dataType}</Typography>}
+          arrow>
+          <ListAlt />
+        </Tooltip>
+      );
+    }
+  }
 }
