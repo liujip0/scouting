@@ -259,37 +259,74 @@ export function TransparentToggle({
   );
 }
 
-type AutoLevelButtonProps = {
+type AutoReefButtonProps = {
   label: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  sx: SxProps;
-  color?: "primary" | "secondary";
+  sx: {
+    position: string;
+    left?: string;
+    top?: string;
+    right?: string;
+    bottom?: string;
+    transform: string;
+  };
+  coralStates: {
+    L4: boolean;
+    L3: boolean;
+    L2: boolean;
+    L1: number;
+  };
+  selected?: boolean;
 };
-export function AutoLevelButton({
+export function AutoReefButton({
   label,
   onClick,
   sx,
-  color = "secondary",
-}: AutoLevelButtonProps) {
+  coralStates,
+  selected = false,
+}: AutoReefButtonProps) {
   return (
     <Button
       onClick={onClick}
-      sx={{
+      sx={(theme) => ({
         ...sx,
-        color: color === "primary" ? "white" : "primary.main",
-        backgroundColor:
-          color === "primary" ? "primary.main" : "secondary.main",
+        color: selected ? "white" : "primary.main",
+        // backgroundColor: selected ? "primary.main" : "secondary.main",
+        background: `linear-gradient(
+                      to bottom,
+                      ${coralStates.L4 ? theme.palette.primary.main : theme.palette.secondary.main} 25%,
+                      ${coralStates.L3 ? theme.palette.primary.main : theme.palette.secondary.main} 25% 50%,
+                      ${coralStates.L2 ? theme.palette.primary.main : theme.palette.secondary.main} 50% 75%,
+                      #00000000 75%
+                    ),
+                    linear-gradient(
+                      to right,
+                      ${coralStates.L1 >= 1 ? theme.palette.primary.main : theme.palette.secondary.main} 16.7%,
+                      ${coralStates.L1 >= 2 ? theme.palette.primary.main : theme.palette.secondary.main} 16.7% 33.3%,
+                      ${coralStates.L1 >= 3 ? theme.palette.primary.main : theme.palette.secondary.main} 33.3% 50%,
+                      ${coralStates.L1 >= 4 ? theme.palette.primary.main : theme.palette.secondary.main} 50% 66.7%,
+                      ${coralStates.L1 >= 5 ? theme.palette.primary.main : theme.palette.secondary.main} 66.7% 83.3%,
+                      ${coralStates.L1 >= 6 ? theme.palette.primary.main : theme.palette.secondary.main} 83.3%
+                    )`,
         borderColor: "secondary.main",
-        "&:hover": {
-          backgroundColor:
-            color === "primary" ? "primary.main" : "secondary.main",
-        },
-        padding: 1,
-        minWidth: 0,
-        minHeight: 0,
+        // textShadow: `-${textBorderWidthPx}px 0px ${
+        //   selected ? theme.palette.primary.main : theme.palette.secondary.main
+        // },
+        //   0px ${textBorderWidthPx}px ${
+        //     selected ? theme.palette.primary.main : theme.palette.secondary.main
+        //   },
+        //   ${textBorderWidthPx}px 0px ${
+        //     selected ? theme.palette.primary.main : theme.palette.secondary.main
+        //   },
+        //   0px -${textBorderWidthPx}px ${
+        //     selected ? theme.palette.primary.main : theme.palette.secondary.main
+        //   }`,
+        // "&:hover": {
+        //   backgroundColor: selected ? "primary.main" : "secondary.main",
+        // },
+        width: "2em",
+        height: "4em",
         borderWidth: 4,
-      }}>
-      {label}
-    </Button>
+      })}></Button>
   );
 }
