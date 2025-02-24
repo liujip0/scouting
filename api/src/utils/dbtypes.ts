@@ -52,6 +52,11 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
 }).extend({
   robotNumber: z.union([z.literal(1), z.literal(2), z.literal(3)]),
 
+  tbaAutoLine: z.boolean().nullable(),
+  tbaEndgamePark: z.boolean().nullable(),
+  tbaEndgameShallow: z.boolean().nullable(),
+  tbaEndgameDeep: z.boolean().nullable(),
+
   noShow: z.boolean(),
   startingLocationA: z.boolean().nullable(),
   startingLocationB: z.boolean().nullable(),
@@ -155,6 +160,11 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   "removedAlgaeFromReef",
   "comments",
 
+  "tbaAutoLine",
+  "tbaEndgamePark",
+  "tbaEndgameShallow",
+  "tbaEndgameDeep",
+
   "autoCrossedRSL",
   "autoCoralABL1",
   "autoCoralAL2",
@@ -225,6 +235,11 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   scoutTeamNumber: 0,
   scoutName: "",
   flag: "",
+
+  tbaAutoLine: null,
+  tbaEndgamePark: null,
+  tbaEndgameShallow: null,
+  tbaEndgameDeep: null,
 
   noShow: false,
   startingLocationA: false,
@@ -317,6 +332,11 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   scoutName: "",
   flag: "",
 
+  tbaAutoLine: null,
+  tbaEndgamePark: null,
+  tbaEndgameShallow: null,
+  tbaEndgameDeep: null,
+
   noShow: true,
   startingLocationA: null,
   startingLocationB: null,
@@ -401,6 +421,8 @@ export const HumanPlayerEntrySchema = CommonEntrySchema.omit({
 }).extend({
   robotNumber: z.literal(4),
 
+  tbaMaxAlgaeAttempts: z.number().int().nonnegative().nullable(),
+
   humanAttemptedNet: z.number().int().nonnegative(),
   humanSuccessfulNet: z.number().int().nonnegative(),
   comments: z.string(),
@@ -409,6 +431,8 @@ export type HumanPlayerEntry = z.infer<typeof HumanPlayerEntrySchema>;
 export type HumanPlayerEntryColumn = keyof HumanPlayerEntry;
 export const HumanPlayerEntryColumns: HumanPlayerEntryColumn[] = [
   ...CommonEntryColumns,
+
+  "tbaMaxAlgaeAttempts",
 
   "humanAttemptedNet",
   "humanSuccessfulNet",
@@ -426,6 +450,8 @@ export const HumanPlayerEntryInit: HumanPlayerEntry = {
   scoutTeamNumber: 0,
   scoutName: "",
   flag: "",
+
+  tbaMaxAlgaeAttempts: null,
 
   humanAttemptedNet: 0,
   humanSuccessfulNet: 0,

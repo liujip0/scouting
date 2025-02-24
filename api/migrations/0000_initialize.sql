@@ -14,6 +14,11 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   scoutName text NOT NULL,
   flag text NOT NULL,
 
+  tbaAutoLine boolean,
+  tbaEndgamePark boolean,
+  tbaEndgameShallow boolean,
+  tbaEndgameDeep boolean,
+
   noShow boolean NOT NULL,
   startingLocationA boolean,
   startingLocationB boolean,
@@ -83,6 +88,8 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   scoutTeamNumber integer NOT NULL,
   scoutName text NOT NULL,
   flag text NOT NULL,
+
+  tbaMaxAlgaeAttempts integer,
 
   humanAttemptedNet integer NOT NULL,
   humanSuccessfulNet integer NOT NULL,
