@@ -260,7 +260,6 @@ export function TransparentToggle({
 }
 
 type AutoReefButtonProps = {
-  label: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   sx: {
     position: string;
@@ -279,7 +278,6 @@ type AutoReefButtonProps = {
   selected?: boolean;
 };
 export function AutoReefButton({
-  label,
   onClick,
   sx,
   coralStates,
@@ -291,7 +289,6 @@ export function AutoReefButton({
       sx={(theme) => ({
         ...sx,
         color: selected ? "white" : "primary.main",
-        // backgroundColor: selected ? "primary.main" : "secondary.main",
         background: `linear-gradient(
                       to bottom,
                       ${coralStates.L4 ? theme.palette.primary.main : theme.palette.secondary.main} 25%,
@@ -308,25 +305,9 @@ export function AutoReefButton({
                       ${coralStates.L1 >= 5 ? theme.palette.primary.main : theme.palette.secondary.main} 66.7% 83.3%,
                       ${coralStates.L1 >= 6 ? theme.palette.primary.main : theme.palette.secondary.main} 83.3%
                     )`,
-        borderColor: "secondary.main",
-        // textShadow: `-${textBorderWidthPx}px 0px ${
-        //   selected ? theme.palette.primary.main : theme.palette.secondary.main
-        // },
-        //   0px ${textBorderWidthPx}px ${
-        //     selected ? theme.palette.primary.main : theme.palette.secondary.main
-        //   },
-        //   ${textBorderWidthPx}px 0px ${
-        //     selected ? theme.palette.primary.main : theme.palette.secondary.main
-        //   },
-        //   0px -${textBorderWidthPx}px ${
-        //     selected ? theme.palette.primary.main : theme.palette.secondary.main
-        //   }`,
-        // "&:hover": {
-        //   backgroundColor: selected ? "primary.main" : "secondary.main",
-        // },
         width: "2em",
         height: "4em",
-        borderWidth: 4,
+        border: selected ? "8px solid " + theme.palette.primary.main : "none",
       })}></Button>
   );
 }
