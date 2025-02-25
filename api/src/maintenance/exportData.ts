@@ -38,7 +38,9 @@ export const exportData = authedLoggedProcedure.query(async (opts) => {
       TeamMatchEntry: teamMatchEntries.results.map((entry) => {
         const newEntry: TeamMatchEntry = { ...TeamMatchEntryInit };
         TeamMatchEntryColumns.forEach((column) => {
-          if (typeof TeamMatchEntryInit[column] === "boolean") {
+          if (entry[column] === null) {
+            newEntry[column] = entry[column] as never;
+          } else if (typeof TeamMatchEntryInit[column] === "boolean") {
             newEntry[column] = (entry[column] === 1) as never;
           } else {
             newEntry[column] = entry[column] as never;
@@ -49,7 +51,9 @@ export const exportData = authedLoggedProcedure.query(async (opts) => {
       HumanPlayerEntry: humanPlayerEntries.results.map((entry) => {
         const newEntry: HumanPlayerEntry = { ...HumanPlayerEntryInit };
         HumanPlayerEntryColumns.forEach((column) => {
-          if (typeof HumanPlayerEntryInit[column] === "boolean") {
+          if (entry[column] === null) {
+            newEntry[column] = entry[column] as never;
+          } else if (typeof HumanPlayerEntryInit[column] === "boolean") {
             newEntry[column] = (entry[column] === 1) as never;
           } else {
             newEntry[column] = entry[column] as never;
