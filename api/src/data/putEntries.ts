@@ -11,6 +11,7 @@ import {
 export const putEntries = loggedPublicProcedure
   .input(z.array(z.union([TeamMatchEntrySchema, HumanPlayerEntrySchema])))
   .mutation(async (opts) => {
+    console.log(opts.input);
     const boundStmts: D1PreparedStatement[] = [];
 
     const teamMatchEntryStmt = opts.ctx.env.DB.prepare(

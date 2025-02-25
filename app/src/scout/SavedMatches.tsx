@@ -55,7 +55,6 @@ import {
   putDBEntry,
 } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
-import { ScoutPage } from "./Scout.tsx";
 import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
 
 export type ExportMatchEntry = (TeamMatchEntry | HumanPlayerEntry) & {
@@ -68,13 +67,11 @@ export type ExportMatchEntry = (TeamMatchEntry | HumanPlayerEntry) & {
 };
 
 type SavedMatchesProps = {
-  setPage: (value: ScoutPage) => void;
   match: TeamMatchEntry | HumanPlayerEntry;
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
 };
 export default function SavedMatches({
-  setPage,
   match,
   setMatch,
   events,
@@ -179,7 +176,7 @@ export default function SavedMatches({
           <Button
             variant="outlined"
             onClick={() => {
-              setPage("scoutlayout");
+              navigate("/scout");
             }}>
             Back
           </Button>
@@ -241,7 +238,7 @@ export default function SavedMatches({
                   teamNumber: 0,
                 });
               }
-              setPage("scoutlayout");
+              navigate("/scout");
             }}>
             Next Match
           </Button>
@@ -625,7 +622,6 @@ export default function SavedMatches({
           <Button
             variant="outlined"
             onClick={() => {
-              //TODO: make this work
               setQrMatches(
                 matches
                   .filter((x) => x.selected)
@@ -644,6 +640,24 @@ export default function SavedMatches({
                   )
               );
               setQrIndex(0);
+              console.log(
+                matches
+                  .filter((x) => x.selected)
+                  .map((x) =>
+                    x.robotNumber === 4 ?
+                      JSON.stringify(
+                        HumanPlayerEntryColumns.map(
+                          (column) => x[column as HumanPlayerEntryColumn]
+                        )
+                      ) + "`"
+                    : JSON.stringify(
+                        TeamMatchEntryColumns.map(
+                          (column) => x[column as TeamMatchEntryColumn]
+                        )
+                      ) + "`"
+                  )
+                  .join("")
+              );
             }}
             startIcon={<QrCode />}>
             Share via QR Code

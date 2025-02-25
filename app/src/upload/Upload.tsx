@@ -116,7 +116,16 @@ export default function Upload() {
       <Dialog open={qrUpload}>
         <DialogTitle>Scan QR Codes</DialogTitle>
         <DialogContent>
-          <TextField multiline />
+          <TextField
+            multiline
+            value={qrData}
+            onChange={(event) => {
+              setQrData(event.currentTarget.value);
+            }}
+            helperText={
+              "1.Connect the QR code scanner\u00a0\u00a02.Focus the textbox\u00a0\u00a03.Scan QR codes"
+            }
+          />
         </DialogContent>
         <DialogActions>
           <Button
@@ -127,8 +136,9 @@ export default function Upload() {
           </Button>
           <Button
             onClick={() => {
-              const matchArrs: string[] = qrData.split("`");
-              matchArrs.pop();
+              const matchArrs: string[] = qrData
+                .split("`")
+                .filter((x) => x.trim() !== "");
               const matches: (TeamMatchEntry | HumanPlayerEntry)[] =
                 matchArrs.map((match) => {
                   const matchArr = JSON.parse(match);

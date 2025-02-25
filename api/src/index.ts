@@ -44,6 +44,9 @@ export default {
       );
     }
 
+    if (url.pathname.startsWith("/webhooks")) {
+    }
+
     return fetchRequestHandler({
       endpoint: "/api",
       req: request,

@@ -2,11 +2,7 @@ import { Env } from "../index.ts";
 import { User } from "../utils/dbtypes.ts";
 
 export interface publicCtx {
-  user: {
-    username: string;
-    permLevel: User["permLevel"];
-    teamNumber: number;
-  } | null;
+  user: Omit<User, "hashedPassword"> | null;
 }
 export interface publicOpts {
   request: Request;

@@ -10,12 +10,11 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import EventEmitter from "eventemitter3";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
 import SavedMatches from "./SavedMatches.tsx";
 import ScoutLayout from "./ScoutLayout.tsx";
 
-export type ScoutPage = "scoutlayout" | "savedmatches";
 type ScoutProps = {
   deviceSetup: DeviceSetupObj;
   events: (DBEvent & { matches: Match[] })[];
@@ -46,8 +45,6 @@ export default function Scout({
       navigate("/setup");
     }
   }, [deviceSetup, navigate]);
-
-  const [page, setPage] = useState<ScoutPage>("scoutlayout");
 
   const [match, setMatch] = useState<TeamMatchEntry | HumanPlayerEntry>(() => {
     if (deviceSetup.robotNumber < 4) {
@@ -135,25 +132,25 @@ export default function Scout({
 
   const [putEntriesPending, setPutEntriesPending] = useState(false);
 
-  return {
-    scoutlayout: (
-      <ScoutLayout
-        setPage={setPage}
-        match={match}
-        setMatch={setMatch}
-        events={events}
-        deviceSetup={deviceSetup}
-        putEntriesPending={putEntriesPending}
-        setPutEntriesPending={setPutEntriesPending}
-      />
-    ),
-    savedmatches: (
-      <SavedMatches
-        setPage={setPage}
-        match={match}
-        setMatch={setMatch}
-        events={events}
-      />
-    ),
-  }[page];
+  return (
+    <Routes>
+      <Route path="/">
+        <ScoutLayout
+          match={match}
+          setMatch={setMatch}
+          events={events}
+          deviceSetup={deviceSetup}
+          putEntriesPending={putEntriesPending}
+          setPutEntriesPending={setPutEntriesPending}
+        />
+      </Route>
+      <Route path="/savedmatches">
+        <SavedMatches
+          match={match}
+          setMatch={setMatch}
+          events={events}
+        />
+      </Route>
+    </Routes>
+  );
 }
