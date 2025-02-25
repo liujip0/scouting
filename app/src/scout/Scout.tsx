@@ -134,23 +134,28 @@ export default function Scout({
 
   return (
     <Routes>
-      <Route path="/">
-        <ScoutLayout
-          match={match}
-          setMatch={setMatch}
-          events={events}
-          deviceSetup={deviceSetup}
-          putEntriesPending={putEntriesPending}
-          setPutEntriesPending={setPutEntriesPending}
-        />
-      </Route>
-      <Route path="/savedmatches">
-        <SavedMatches
-          match={match}
-          setMatch={setMatch}
-          events={events}
-        />
-      </Route>
+      <Route
+        path="/"
+        element={
+          <ScoutLayout
+            match={match}
+            setMatch={setMatch}
+            events={events}
+            deviceSetup={deviceSetup}
+            putEntriesPending={putEntriesPending}
+            setPutEntriesPending={setPutEntriesPending}
+          />
+        }></Route>
+      <Route
+        path="savedmatches"
+        element={
+          <SavedMatches
+            match={match}
+            setMatch={setMatch}
+            events={events}
+          />
+        }
+      />
     </Routes>
   );
 }
