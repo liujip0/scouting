@@ -1,9 +1,10 @@
 import {
-  CommonEntryColumns,
   HumanPlayerEntry,
   HumanPlayerEntryColumn,
+  HumanPlayerEntryColumns,
   TeamMatchEntry,
   TeamMatchEntryColumn,
+  TeamMatchEntryColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import {
   CameraAlt,
@@ -148,9 +149,16 @@ export default function Upload() {
                       unknown
                     >
                   > = {};
-                  CommonEntryColumns.forEach((column, columnIndex) => {
-                    parsedMatch[column] = matchArr[columnIndex];
-                  });
+                  if (parsedMatch.robotNumber === 4) {
+                    HumanPlayerEntryColumns.forEach((column, columnIndex) => {
+                      parsedMatch[column] = matchArr[columnIndex];
+                    });
+                  } else {
+                    TeamMatchEntryColumns.forEach((column, columnIndex) => {
+                      parsedMatch[column] = matchArr[columnIndex];
+                    });
+                  }
+                  console.log(parsedMatch);
                   return parsedMatch as TeamMatchEntry | HumanPlayerEntry;
                 });
               putEntries.mutate(matches);

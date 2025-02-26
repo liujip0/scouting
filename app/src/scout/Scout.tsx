@@ -145,7 +145,8 @@ export default function Scout({
             putEntriesPending={putEntriesPending}
             setPutEntriesPending={setPutEntriesPending}
           />
-        }></Route>
+        }
+      />
       <Route
         path="savedmatches"
         element={
