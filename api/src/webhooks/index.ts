@@ -1,8 +1,10 @@
 import { WebhooksOpts } from "./context.ts";
+import { tba } from "./tba.ts";
 
 export const webhooksRouter = async (opts: WebhooksOpts): Promise<Response> => {
   switch (opts.path[0]) {
     case "tba": {
+      return await tba(opts);
     }
     default: {
       return new Response(

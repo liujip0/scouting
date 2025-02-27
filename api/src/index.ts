@@ -7,6 +7,8 @@ import { createContext } from "./context.ts";
 import { createPublicContext } from "./public/context.ts";
 import { publicRouter } from "./public/index.ts";
 import { appRouter } from "./router.ts";
+import { createWebhooksContext } from "./webhooks/context.ts";
+import { webhooksRouter } from "./webhooks/index.ts";
 
 export interface Env {
   DB: D1Database;
@@ -45,6 +47,12 @@ export default {
     }
 
     if (url.pathname.startsWith("/webhooks")) {
+      return await createWebhooksContext(
+        request,
+        url.pathname.split("/").filter((x) => x !== "" && x !== "webhooks"),
+        env,
+        webhooksRouter
+      );
     }
 
     return fetchRequestHandler({
