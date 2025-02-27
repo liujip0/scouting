@@ -29,8 +29,8 @@ type TbaRequest =
   | {
       message_type: "match_score";
       message_data: {
-        eventKey: string;
         match: {
+          eventKey: string;
           comp_level: "qm" | "ef" | "qf" | "sf" | "f";
           match_number: number;
           score_breakdown: {
@@ -83,7 +83,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
         console.log(
           body.message_data.match.score_breakdown.red.autoLineRobot1,
           body.message_data.match.score_breakdown.red.endGameRobot1,
-          body.message_data.eventKey,
+          body.message_data.match.eventKey,
           body.message_data.match.comp_level,
           body.message_data.match.match_number
         );
@@ -97,7 +97,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
               "ShallowCage",
             body.message_data.match.score_breakdown.red.endGameRobot1 ===
               "DeepCage",
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -120,7 +120,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
               "ShallowCage",
             body.message_data.match.score_breakdown.red.endGameRobot2 ===
               "DeepCage",
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -143,7 +143,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
               "ShallowCage",
             body.message_data.match.score_breakdown.red.endGameRobot3 ===
               "DeepCage",
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -166,7 +166,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
               "ShallowCage",
             body.message_data.match.score_breakdown.blue.endGameRobot1 ===
               "DeepCage",
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -189,7 +189,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
               "ShallowCage",
             body.message_data.match.score_breakdown.blue.endGameRobot2 ===
               "DeepCage",
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -212,7 +212,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
               "ShallowCage",
             body.message_data.match.score_breakdown.blue.endGameRobot3 ===
               "DeepCage",
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -228,7 +228,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
         boundStmts.push(
           updateHumanPlayerEntry.bind(
             body.message_data.match.score_breakdown.blue.wallAlgaeCount,
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
@@ -243,7 +243,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
         boundStmts.push(
           updateHumanPlayerEntry.bind(
             body.message_data.match.score_breakdown.red.wallAlgaeCount,
-            body.message_data.eventKey,
+            body.message_data.match.eventKey,
             {
               qm: "Qualification",
               ef: "Playoff",
