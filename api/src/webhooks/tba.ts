@@ -9,6 +9,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
         "tba-verification-key",
         body.message_data.verification_key
       );
+      console.log(body.message_data.verification_key);
       return new Response("Verification token received.");
     }
     case "ping": {
