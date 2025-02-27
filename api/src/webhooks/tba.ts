@@ -1,8 +1,47 @@
 import { D1PreparedStatement } from "@cloudflare/workers-types";
 import { WebhooksOpts } from "./context.ts";
 
+type TbaBool = "Yes" | "No";
+type TbaEndGame = "None" | "Parked" | "ShallowCage" | "DeepCage";
+type TbaAllianceScore = {
+  autoLineRobot1: TbaBool;
+  autoLineRobot2: TbaBool;
+  autoLineRobot3: TbaBool;
+  endGameRobot1: TbaEndGame;
+  endGameRobot2: TbaEndGame;
+  endGameRobot3: TbaEndGame;
+  wallAlgaeCount: number;
+};
+type TbaRequest =
+  | {
+      message_type: "verification";
+      message_data: {
+        verification_key: string;
+      };
+    }
+  | {
+      message_type: "ping";
+      message_data: {
+        title: string;
+        desc: string;
+      };
+    }
+  | {
+      message_type: "match_score";
+      message_data: {
+        eventKey: string;
+        match: {
+          comp_level: "qm" | "ef" | "qf" | "sf" | "f";
+          match_number: number;
+          score_breakdown: {
+            red: TbaAllianceScore;
+            blue: TbaAllianceScore;
+          };
+        };
+      };
+    };
 export const tba = async (opts: WebhooksOpts): Promise<Response> => {
-  const body = JSON.parse(await opts.request.text());
+  const body: TbaRequest = JSON.parse(await opts.request.text());
   switch (body.message_type) {
     case "verification": {
       opts.env.KV.put(
@@ -17,8 +56,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       return new Response("Ping successful.");
     }
     case "match_score": {
-      if (body.message_data.match.score_breakdown) {
-        console.log(body.message_data.match);
+      if (body.message_data.match.score_breakdown.red.autoLineRobot1) {
         const updateTeamMatchEntry = opts.env.DB.prepare(
           `UPDATE TeamMatchEntry
             SET tbaAutoLine = ?,
@@ -42,6 +80,13 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
         );
         const boundStmts: D1PreparedStatement[] = [];
 
+        console.log(
+          body.message_data.match.score_breakdown.red.autoLineRobot1,
+          body.message_data.match.score_breakdown.red.endGameRobot1,
+          body.message_data.eventKey,
+          body.message_data.match.comp_level,
+          body.message_data.match.match_number
+        );
         boundStmts.push(
           updateTeamMatchEntry.bind(
             body.message_data.match.score_breakdown.red.autoLineRobot1 ===
@@ -219,7 +264,14 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
     }
     default: {
       return new Response(
-        `The server is unable to handle the message type: ${body.message_type}`,
+        `The server is unable to handle the message type: ${
+          (
+            body as {
+              message_type: string;
+              message_data: unknown;
+            }
+          ).message_type
+        }`,
         {
           status: 501,
           statusText: "Not Implemented",
