@@ -18,12 +18,10 @@ import Postmatch from "./robot/Postmatch.tsx";
 import Prematch from "./robot/Prematch.tsx";
 import { Teleop } from "./robot/Teleop.tsx";
 import { ExportMatchEntry } from "./SavedMatches.tsx";
-import { ScoutPage } from "./Scout.tsx";
 import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
 
 export type MatchStage = "prematch" | "auto" | "teleop" | "postmatch" | "human";
 type ScoutLayoutProps = {
-  setPage: (value: ScoutPage) => void;
   match: TeamMatchEntry | HumanPlayerEntry;
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
@@ -32,7 +30,6 @@ type ScoutLayoutProps = {
   setPutEntriesPending: (value: boolean) => void;
 };
 export default function ScoutLayout({
-  setPage,
   match,
   setMatch,
   events,
@@ -62,7 +59,7 @@ export default function ScoutLayout({
             download: false,
             upload: false,
           } as ExportMatchEntry);
-          setPage("savedmatches");
+          navigate("/scout/savedmatches");
         }
       }, 3000);
     },
@@ -79,7 +76,7 @@ export default function ScoutLayout({
       } as ExportMatchEntry);
       setPutEntriesPending(false);
       console.log(getDBTeamMatchEntries());
-      setPage("savedmatches");
+      navigate("/scout/savedmatches");
     },
     async onError(error) {
       clearTimeout(putEntriesTimeout);
@@ -94,7 +91,7 @@ export default function ScoutLayout({
         upload: false,
       } as ExportMatchEntry);
       setPutEntriesPending(false);
-      setPage("savedmatches");
+      navigate("/scout/savedmatches");
     },
   });
 

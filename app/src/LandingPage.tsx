@@ -27,6 +27,11 @@ export default function LandingPage() {
           Scout
         </LinkButton>
         <LinkButton
+          to="/scout/savedmatches"
+          color="secondary">
+          Saved Matches
+        </LinkButton>
+        <LinkButton
           to="/setup"
           color="secondary">
           Device Setup

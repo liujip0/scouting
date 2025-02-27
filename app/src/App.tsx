@@ -80,7 +80,7 @@ export default function App() {
           element={<Data />}
         />
         <Route
-          path="/scout"
+          path="/scout/*"
           element={
             <Scout
               deviceSetup={deviceSetup}

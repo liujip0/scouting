@@ -188,7 +188,17 @@ export default function ExportLayout({
                             bigint: <DataTypeIcon dataType="error" />,
                             symbol: <DataTypeIcon dataType="error" />,
                             function: <DataTypeIcon dataType="error" />,
-                            object: <DataTypeIcon dataType="error" />,
+                            object:
+                              (
+                                [
+                                  "tbaAutoLine",
+                                  "tbaEndgamePark",
+                                  "tbaEndgameShallow",
+                                  "tbaEndgameDeep",
+                                ].includes(column)
+                              ) ?
+                                <DataTypeIcon dataType="boolean" />
+                              : <DataTypeIcon dataType="error" />,
                             undefined: <DataTypeIcon dataType="error" />,
                           }[typeof TeamMatchEntryInit[column]]
                         }
@@ -252,7 +262,10 @@ export default function ExportLayout({
                           bigint: <DataTypeIcon dataType="error" />,
                           symbol: <DataTypeIcon dataType="error" />,
                           function: <DataTypeIcon dataType="error" />,
-                          object: <DataTypeIcon dataType="error" />,
+                          object:
+                            ["tbaMaxAlgaeAttempts"].includes(column) ?
+                              <DataTypeIcon dataType="integer" />
+                            : <DataTypeIcon dataType="error" />,
                           undefined: <DataTypeIcon dataType="error" />,
                         }[typeof HumanPlayerEntryInit[column]]
                       }
