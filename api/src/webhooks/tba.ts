@@ -13,6 +13,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       return new Response("Verification token received.");
     }
     case "ping": {
+      console.log("TBA Ping");
       return new Response("Ping successful.");
     }
     case "match_score": {
