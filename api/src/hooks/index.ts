@@ -2,7 +2,6 @@ import { WebhooksOpts } from "./context.ts";
 import { tba } from "./tba.ts";
 
 export const hooksRouter = async (opts: WebhooksOpts): Promise<Response> => {
-  opts.env.KV.put("test", "true");
   switch (opts.path[0]) {
     case "tba": {
       return await tba(opts);

@@ -42,6 +42,7 @@ type TbaRequest =
     };
 export const tba = async (opts: WebhooksOpts): Promise<Response> => {
   const body: TbaRequest = JSON.parse(await opts.request.text());
+  opts.env.KV.put("test", body.toString());
   switch (body.message_type) {
     case "verification": {
       opts.env.KV.put(
