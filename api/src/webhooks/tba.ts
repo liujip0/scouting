@@ -80,7 +80,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
         );
         const boundStmts: D1PreparedStatement[] = [];
 
-        console.log(body.message_data.match.eventKey);
+        console.log(body.message_data.match);
         boundStmts.push(
           updateTeamMatchEntry.bind(
             body.message_data.match.score_breakdown.red.autoLineRobot1 ===
