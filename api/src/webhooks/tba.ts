@@ -18,6 +18,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
     }
     case "match_score": {
       if (body.message_data.match.score_breakdown) {
+        console.log(body.message_data.match.score_breakdown);
         const updateTeamMatchEntry = opts.env.DB.prepare(
           `UPDATE TeamMatchEntry
             SET tbaAutoLine = ?,
