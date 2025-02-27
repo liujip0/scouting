@@ -42,11 +42,9 @@ type TbaRequest =
     };
 export const tba = async (opts: WebhooksOpts): Promise<Response> => {
   const body: TbaRequest = await opts.request.json();
-  console.log(body.message_type);
-  await opts.env.KV.put("test", "hello");
   switch (body.message_type) {
     case "verification": {
-      opts.env.KV.put(
+      await opts.env.KV.put(
         "tba-verification-key",
         body.message_data.verification_key
       );
@@ -250,7 +248,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
             "Blue"
           )
         );
-        opts.env.DB.batch(boundStmts);
+        await opts.env.DB.batch(boundStmts);
         return new Response("Score breakdown received.");
       } else {
         //TODO: use another status code?
@@ -258,6 +256,14 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       }
     }
     default: {
+      console.log(
+        (
+          body as {
+            message_type: string;
+            message_data: unknown;
+          }
+        ).message_type
+      );
       return new Response(
         `The server is unable to handle the message type: ${
           (
@@ -274,5 +280,4 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       );
     }
   }
-  console.log(body.message_type);
 };
