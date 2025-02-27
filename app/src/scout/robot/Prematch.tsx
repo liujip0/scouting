@@ -88,7 +88,10 @@ export default function Prematch({
 
         <Stack
           direction="row"
-          gap={1}>
+          gap={1}
+          sx={{
+            width: 1,
+          }}>
           <TextField
             select
             value={match.matchLevel}
@@ -238,6 +241,9 @@ export default function Prematch({
                   </IconButton>
                 ),
               },
+            }}
+            sx={{
+              flex: 1,
             }}
           />
         </Stack>
