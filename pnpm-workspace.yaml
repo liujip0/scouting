@@ -1,3 +1,7 @@
 packages:
-  - "app"
-  - "api"
+  - app
+  - api
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
