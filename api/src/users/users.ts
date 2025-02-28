@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { authedLoggedProcedure } from "../trpc.ts";
-import { User } from "../utils/dbtypes.ts";
+import { User, UserColumns } from "../utils/dbtypes.ts";
 
 export const users = authedLoggedProcedure.query(async (opts) => {
   if (opts.ctx.user.permLevel !== "admin") {
@@ -11,7 +11,7 @@ export const users = authedLoggedProcedure.query(async (opts) => {
   }
 
   const results = await opts.ctx.env.DB.prepare(
-    "SELECT username, permLevel FROM Users"
+    `SELECT ${UserColumns.filter((column) => column !== "hashedPassword").join(", ")} FROM Users`
   ).all<User>();
 
   if (results.success) {
