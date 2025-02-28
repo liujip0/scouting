@@ -39,6 +39,12 @@ type TbaRequest =
           };
         };
       };
+    }
+  | {
+      message_type: "schedule_updated";
+      message_data: {
+        event_key: string;
+      };
     };
 export const tba = async (opts: WebhooksOpts): Promise<Response> => {
   const body: TbaRequest = await opts.request.json();
