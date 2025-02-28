@@ -20,6 +20,7 @@ export interface Env {
   JWT_PRIVATE_KEY: string;
 
   FIRST_API_TOKEN: string;
+  TBA_API_TOKEN: string;
 }
 
 export default {
