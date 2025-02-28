@@ -56,3 +56,5 @@ JWT_PRIVATE_KEY="xc03o1xblf4rga87xss3ebztlc8f5r9l"
 ```zsh
 pnpm dev
 ```
+
+The frontend will be on `localhost:5173` and the backend will be on `localhost:8787`.
