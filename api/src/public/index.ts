@@ -4,6 +4,7 @@ import { all } from "./all.ts";
 import { publicOpts } from "./context.ts";
 import { humans } from "./humans.ts";
 import { robots } from "./robots.ts";
+import { schedule } from "./schedule.ts";
 
 export const publicRouter = async (opts: publicOpts): Promise<Response> => {
   switch (opts.path[0]) {
@@ -15,6 +16,9 @@ export const publicRouter = async (opts: publicOpts): Promise<Response> => {
     }
     case "all": {
       return await authedPublicEndpoint(opts, all);
+    }
+    case "schedule": {
+      return await publicPublicEndpoint(opts, schedule);
     }
     default: {
       return new Response(
@@ -142,4 +146,24 @@ export const authedPublicEndpoint = async (
       },
     }
   );
+};
+
+export const publicPublicEndpoint = async (
+  opts: publicOpts,
+  endpoint: (opts: publicOpts) => Promise<Response>
+): Promise<Response> => {
+  return await endpoint({
+    request: opts.request,
+    path: opts.path,
+    params: opts.params,
+    env: opts.env,
+    ctx: {
+      ...opts.ctx,
+      user: {
+        username: "",
+        permLevel: "none",
+        teamNumber: 0,
+      },
+    },
+  });
 };

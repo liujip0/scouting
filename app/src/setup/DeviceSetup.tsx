@@ -7,7 +7,7 @@ import {
   TeamMatchEntry,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { omit } from "@isa2025/api/src/utils/utils.ts";
-import { Close } from "@mui/icons-material";
+import { Close, OpenInNew } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -32,7 +32,9 @@ import { StyledToggleButton } from "../components/StyledToggleButton.tsx";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
 import { ScoutPageContainer } from "../scout/ScoutPageContainer.tsx";
 import { putDBEvent, putDBMatches } from "../utils/idb.ts";
+import { trpc } from "../utils/trpc.ts";
 import DownloadEvent from "./DownloadEvent.tsx";
+import ExportEvent from "./ExportEvent.tsx";
 
 export type DeviceSetupObj = {
   deviceTeamNumber: number;
@@ -71,8 +73,18 @@ export default function DeviceSetup({
   // const putEvents = trpc.events.putEvents.useMutation();
 
   const [downloadEvent, setDownloadEvent] = useState(false);
+  const [exportEvent, setExportEvent] = useState(false);
 
   const [status, setStatus] = useState("");
+
+  const putEvents = trpc.events.putEvents.useMutation({
+    onSuccess() {
+      setStatus("Upload success");
+    },
+    onError() {
+      setStatus("Upload error (see console)");
+    },
+  });
 
   return (
     <ScoutPageContainer
@@ -411,6 +423,7 @@ export default function DeviceSetup({
               variant="outlined"
               sx={{
                 textAlign: "center",
+                flex: 1,
               }}>
               Upload Schedule
               <VisuallyHiddenInput
@@ -466,6 +479,7 @@ export default function DeviceSetup({
                         ]);
                         putDBEvent(omit(["matches"], newEvent) as DBEvent);
                         putDBMatches(newEvent.matches);
+                        putEvents.mutate([newEvent]);
                       }
                     }
                   } catch (error) {
@@ -480,42 +494,24 @@ export default function DeviceSetup({
               variant="outlined"
               onClick={() => {
                 setDownloadEvent(true);
+              }}
+              sx={{
+                textAlign: "center",
+                flex: 1,
               }}>
               Download Schedule
             </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setExportEvent(true);
+              }}>
+              <OpenInNew />
+            </Button>
           </Stack>
-          {/* <Stack
-            direction="row"
-            gap={2}
-            sx={{
-              width: 1,
-            }}>
-            <Button
-              onClick={() => {
-                setDownloadEvent(true);
-              }}
-              variant="outlined"
-              sx={{
-                flex: 1,
-              }}>
-              Download Event
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                flex: 1,
-              }}
-              onClick={openCreateEvent}>
-              Create Event
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                putEvents.mutate(events);
-              }}>
-              <CloudUpload />
-            </Button>
-          </Stack> */}
+          {
+            //TODO: Create/edit event GUI
+          }
           <Box
             sx={{
               flex: 1,
@@ -554,6 +550,11 @@ export default function DeviceSetup({
             setDownloadEvent={setDownloadEvent}
             events={events}
             setEvents={setEvents}
+          />
+          <ExportEvent
+            exportEvent={exportEvent}
+            setExportEvent={setExportEvent}
+            events={events}
           />
           {/* <CreateEvent
             createEvent={createEvent}

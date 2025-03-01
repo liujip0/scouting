@@ -43,7 +43,19 @@ type TbaSimpleMatch = {
   };
   event_key: string;
 };
-export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
+export const updateScheduleFromTba = async (
+  eventKey: string,
+  env: Env
+): Promise<
+  | {
+      status: 200;
+      data: DBEvent & { matches: Match[] };
+    }
+  | {
+      status: 401 | 404 | 500;
+      error: string;
+    }
+> => {
   const etag = await env.KV.get("tba-etag");
   const eventRes = await fetch(
     "https://www.thebluealliance.com/api/v3/event/" +
@@ -154,7 +166,7 @@ export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
         case 200: {
           return {
             status: 200,
-            data: dbSchedule.data,
+            data: dbSchedule.data!,
           };
         }
         case 404: {
@@ -175,7 +187,7 @@ export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
     default: {
       console.log(eventRes.statusText);
       return {
-        status: eventRes.status,
+        status: eventRes.status as 401 | 404 | 500,
         error: eventRes.statusText,
       };
     }
