@@ -45,6 +45,7 @@ type TbaRequest =
       message_type: "schedule_updated";
       message_data: {
         event_key: string;
+        event_name: string;
       };
     };
 export const tba = async (opts: WebhooksOpts): Promise<Response> => {
