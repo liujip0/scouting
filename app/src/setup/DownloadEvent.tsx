@@ -116,6 +116,9 @@ export default function DownloadEvent({
             }}>
             <Button
               variant="outlined"
+              sx={{
+                flex: 1,
+              }}
               onClick={() => {
                 if (!checkEventKey()) {
                   setFrcStatus("Loading...");
