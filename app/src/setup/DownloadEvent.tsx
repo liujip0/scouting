@@ -129,6 +129,9 @@ export default function DownloadEvent({
             </Button>
             <Button
               variant="outlined"
+              sx={{
+                flex: 1,
+              }}
               onClick={() => {
                 if (!checkEventKey()) {
                   setIsaStatus("Loading...");
@@ -139,6 +142,9 @@ export default function DownloadEvent({
             </Button>
             <Button
               variant="outlined"
+              sx={{
+                flex: 1,
+              }}
               onClick={() => {
                 if (!checkEventKey()) {
                   setTbaStatus("Loading...");
