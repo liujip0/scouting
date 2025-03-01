@@ -62,26 +62,28 @@ export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
           },
     }
   );
-  const eventInfoRes = await fetch(
-    "https://www.thebluealliance.com/api/v3/event/" + eventKey + "/simple",
-    {
-      method: "GET",
-      headers:
-        etag ?
-          {
-            "X-TBA-Auth-Key": env.TBA_API_TOKEN,
-            "If-None-Match": etag,
-          }
-        : {
-            "X-TBA-Auth-Key": env.TBA_API_TOKEN,
-          },
-    }
-  );
 
   switch (eventRes.status) {
     case 200: {
+      const eventInfoRes = await fetch(
+        "https://www.thebluealliance.com/api/v3/event/" + eventKey + "/simple",
+        {
+          method: "GET",
+          headers:
+            etag ?
+              {
+                "X-TBA-Auth-Key": env.TBA_API_TOKEN,
+                "If-None-Match": etag,
+              }
+            : {
+                "X-TBA-Auth-Key": env.TBA_API_TOKEN,
+              },
+        }
+      );
+      console.log(eventInfoRes.status);
+
       const event: DBEvent & { matches: Match[] } = {
-        eventKey: "",
+        eventKey: eventKey,
         eventName:
           eventInfoRes.status === 200 ? (await eventInfoRes.json()).name : "",
         matches: [],
@@ -93,17 +95,13 @@ export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
       const eventBody: TbaSimpleMatch[] = await eventRes.json();
 
       const boundStmts: D1PreparedStatement[] = [];
-      eventBody.forEach((match, matchIndex) => {
-        if (matchIndex === 0) {
-          event.eventKey = match.event_key;
-          boundStmts.push(
-            env.DB.prepare(
-              "REPLACE INTO Events(eventKey, eventName) VALUES(?, ?);"
-            ).bind(match.event_key, "")
-            //TODO: get event name
-          );
-        }
+      boundStmts.push(
+        env.DB.prepare(
+          "REPLACE INTO Events(eventKey, eventName) VALUES(?, ?);"
+        ).bind(event.eventKey, event.eventName)
+      );
 
+      eventBody.forEach((match) => {
         event.matches.push({
           eventKey: match.event_key,
           matchLevel: {
@@ -121,27 +119,24 @@ export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
           blue2: parseInt(match.alliances.blue.team_keys[1].replace("frc", "")),
           blue3: parseInt(match.alliances.blue.team_keys[2].replace("frc", "")),
         });
+      });
+
+      event.matches.forEach((match) => {
         boundStmts.push(
           env.DB.prepare(
             `REPLACE INTO
             Matches(eventKey, matchLevel, matchNumber, red1, red2, red3, blue1, blue2, blue3)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`
           ).bind(
-            match.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[match.comp_level],
-            match.match_number,
-            parseInt(match.alliances.red.team_keys[0].replace("frc", "")),
-            parseInt(match.alliances.red.team_keys[1].replace("frc", "")),
-            parseInt(match.alliances.red.team_keys[2].replace("frc", "")),
-            parseInt(match.alliances.blue.team_keys[0].replace("frc", "")),
-            parseInt(match.alliances.blue.team_keys[1].replace("frc", "")),
-            parseInt(match.alliances.blue.team_keys[2].replace("frc", ""))
+            match.eventKey,
+            match.matchLevel,
+            match.matchNumber,
+            match.red1,
+            match.red2,
+            match.red3,
+            match.blue1,
+            match.blue2,
+            match.blue3
           )
         );
       });
