@@ -63,11 +63,7 @@ export const schedule = async (opts: publicOpts): Promise<Response> => {
       }
       case "csv": {
         let csvContents =
-          '"' +
-          scheduleData.eventKey +
-          '","' +
-          scheduleData.eventName +
-          '",,,,,,\n';
+          "Match Level,Match Number,Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue 3\n";
         scheduleData.matches.forEach((match) => {
           csvContents +=
             match.matchLevel +
