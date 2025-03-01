@@ -33,7 +33,19 @@ export const getEvent = loggedPublicProcedure
     }
   });
 
-export const getScheduleFromDB = async (eventKey: string, env: Env) => {
+export const getScheduleFromDB = async (
+  eventKey: string,
+  env: Env
+): Promise<
+  | {
+      status: 200;
+      data: DBEvent & { matches: Match[] };
+    }
+  | {
+      status: 401 | 404 | 500;
+      error: string;
+    }
+> => {
   const event = await env.DB.prepare(
     "SELECT eventKey, eventName from Events WHERE eventKey = ? LIMIT 1;"
   )

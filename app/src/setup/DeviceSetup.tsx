@@ -32,6 +32,7 @@ import { StyledToggleButton } from "../components/StyledToggleButton.tsx";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
 import { ScoutPageContainer } from "../scout/ScoutPageContainer.tsx";
 import { putDBEvent, putDBMatches } from "../utils/idb.ts";
+import { trpc } from "../utils/trpc.ts";
 import DownloadEvent from "./DownloadEvent.tsx";
 import ExportEvent from "./ExportEvent.tsx";
 
@@ -75,6 +76,15 @@ export default function DeviceSetup({
   const [exportEvent, setExportEvent] = useState(false);
 
   const [status, setStatus] = useState("");
+
+  const putEvents = trpc.events.putEvents.useMutation({
+    onSuccess() {
+      setStatus("Upload success");
+    },
+    onError() {
+      setStatus("Upload error (see console)");
+    },
+  });
 
   return (
     <ScoutPageContainer
@@ -469,6 +479,7 @@ export default function DeviceSetup({
                         ]);
                         putDBEvent(omit(["matches"], newEvent) as DBEvent);
                         putDBMatches(newEvent.matches);
+                        putEvents.mutate([newEvent]);
                       }
                     }
                   } catch (error) {
