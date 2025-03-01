@@ -29,8 +29,22 @@ export default function DownloadEvent({
   const [eventKey, setEventKey] = useState("");
   const [eventKeyError, setEventKeyError] = useState("");
 
-  const [FrcStatus, setFrcStatus] = useState("");
+  const [frcStatus, setFrcStatus] = useState("");
   const [isaStatus, setIsaStatus] = useState("");
+  const [tbaStatus, setTbaStatus] = useState("");
+
+  const checkEventKey = () => {
+    let error = false;
+
+    if (eventKey === "") {
+      setEventKeyError("Cannot be empty");
+      error = true;
+    } else {
+      setEventKeyError("");
+    }
+
+    return error;
+  };
 
   const getEvent = trpc.events.getEvent.useMutation({
     onSuccess(data) {
@@ -56,6 +70,19 @@ export default function DownloadEvent({
     },
     onError(err) {
       setFrcStatus(err.message);
+    },
+  });
+  const getTbaEvent = trpc.events.getTbaEvent.useMutation({
+    onSuccess(data) {
+      setTbaStatus("Success");
+
+      setEvents([...events.filter((x) => x.eventKey !== data.eventKey), data]);
+
+      putDBEvent(omit(["matches"], data) as DBEvent);
+      putDBMatches(data.matches);
+    },
+    onError(err) {
+      setTbaStatus(err.message);
     },
   });
 
@@ -89,45 +116,50 @@ export default function DownloadEvent({
             }}>
             <Button
               variant="outlined"
+              sx={{
+                flex: 1,
+              }}
               onClick={() => {
-                let error = false;
-                if (eventKey === "") {
-                  setEventKeyError("Cannot be empty");
-                  error = true;
-                } else {
-                  setEventKeyError("");
-                }
-
-                if (!error) {
+                if (!checkEventKey()) {
                   setFrcStatus("Loading...");
                   getFrcEvent.mutate(eventKey);
                 }
               }}>
-              FRC Events
+              FRC
             </Button>
             <Button
               variant="outlined"
-              onClick={async () => {
-                let error = false;
-                if (eventKey === "") {
-                  setEventKeyError("Cannot be empty");
-                  error = true;
-                } else {
-                  setEventKeyError("");
-                }
-
-                if (!error) {
+              sx={{
+                flex: 1,
+              }}
+              onClick={() => {
+                if (!checkEventKey()) {
                   setIsaStatus("Loading...");
                   getEvent.mutate(eventKey);
                 }
               }}>
-              ISA Server
+              ISA
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                flex: 1,
+              }}
+              onClick={() => {
+                if (!checkEventKey()) {
+                  setTbaStatus("Loading...");
+                  getTbaEvent.mutate(eventKey);
+                }
+              }}>
+              TBA
             </Button>
           </Stack>
           <Box>
-            {FrcStatus ? "FRC Events: " + FrcStatus : ""}
+            {frcStatus ? "FRC API: " + frcStatus : ""}
             <br />
             {isaStatus ? "ISA Server: " + isaStatus : ""}
+            <br />
+            {tbaStatus ? "TBA API: " + tbaStatus : ""}
           </Box>
         </Stack>
       </DialogContent>
