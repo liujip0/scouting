@@ -1,4 +1,5 @@
 import { D1PreparedStatement } from "@cloudflare/workers-types";
+import { updateScheduleFromTba } from "../events/getTbaEvent.ts";
 import { WebhooksOpts } from "./context.ts";
 
 type TbaBool = "Yes" | "No";
@@ -259,6 +260,20 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       } else {
         //TODO: use another status code?
         return new Response("No score breakdown.");
+      }
+    }
+    case "schedule_updated": {
+      const scheduleRes = await updateScheduleFromTba(
+        body.message_data.event_key,
+        opts.env
+      );
+      if (scheduleRes.status === 200) {
+        return new Response("Schedule updated.");
+      } else {
+        return new Response("Error updating schedule.", {
+          status: scheduleRes.status,
+          statusText: scheduleRes.error,
+        });
       }
     }
     default: {
