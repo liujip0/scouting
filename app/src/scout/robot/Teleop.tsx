@@ -5,9 +5,6 @@ import {
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
 import { Counter } from "../Components.tsx";
-import Branch from "../images/Branch.png?inline";
-import Net from "../images/Net.png?inline";
-import Processor from "../images/Processor.png?inline";
 
 type TeleopProps = {
   match: TeamMatchEntry;
@@ -46,7 +43,7 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                 position: "relative",
               }}>
               <img
-                src={Branch}
+                src={"/Branch.png"}
                 style={{
                   height: "100%",
                   width: "100%",
@@ -218,7 +215,7 @@ export function Teleop({ match, setMatch }: TeleopProps) {
               }
             }}>
             <img
-              src={Net}
+              src={"/Net.png"}
               style={{
                 height: "100%",
                 width: "100%",
@@ -260,7 +257,7 @@ export function Teleop({ match, setMatch }: TeleopProps) {
                 }
               }}>
               <img
-                src={Processor}
+                src={"/Processor.png"}
                 style={{
                   height: "100%",
                   width: "100%",

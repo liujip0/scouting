@@ -17,9 +17,6 @@ import {
 } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { AutoL1Counter, AutoReefButton, Counter } from "../Components.tsx";
-import Net from "../images/Net.png?inline";
-import Processor from "../images/Processor.png?inline";
-import Reef from "../images/Reef.png?inline";
 
 type AutoProps = {
   match: TeamMatchEntry;
@@ -72,7 +69,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
             position: "relative",
           }}>
           <img
-            src={Reef}
+            src={"/Reef.png"}
             style={{
               height: "100%",
               width: "100%",
@@ -674,7 +671,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
               }}>
               <img
-                src={Processor}
+                src={"/Processor.png"}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -718,7 +715,7 @@ export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
                 }
               }}>
               <img
-                src={Net}
+                src={"/Net.png"}
                 style={{
                   width: "100%",
                   height: "100%",
