@@ -5,9 +5,9 @@ import {
   StyledToggleButton,
 } from "../../components/StyledToggleButton.tsx";
 import { Counter } from "../Components.tsx";
-import Branch from "../images/Branch.png";
-import Net from "../images/Net.png";
-import Processor from "../images/Processor.png";
+import Branch from "../images/Branch.png?inline";
+import Net from "../images/Net.png?inline";
+import Processor from "../images/Processor.png?inline";
 
 type TeleopProps = {
   match: TeamMatchEntry;

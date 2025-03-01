@@ -17,10 +17,10 @@ import {
 import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { TransparentToggle } from "../Components.tsx";
-import BlueBarge from "../images/BlueBarge.png";
-import BlueProcessor from "../images/BlueProcessor.png";
-import RedBarge from "../images/RedBarge.png";
-import RedProcessor from "../images/RedProcessor.png";
+import BlueBarge from "../images/BlueBarge.png?inline";
+import BlueProcessor from "../images/BlueProcessor.png?inline";
+import RedBarge from "../images/RedBarge.png?inline";
+import RedProcessor from "../images/RedProcessor.png?inline";
 
 type PrematchProps = {
   match: TeamMatchEntry;

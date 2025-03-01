@@ -17,9 +17,9 @@ import {
 } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { AutoL1Counter, AutoReefButton, Counter } from "../Components.tsx";
-import Net from "../images/Net.png";
-import Processor from "../images/Processor.png";
-import Reef from "../images/Reef.png";
+import Net from "../images/Net.png?inline";
+import Processor from "../images/Processor.png?inline";
+import Reef from "../images/Reef.png?inline";
 
 type AutoProps = {
   match: TeamMatchEntry;
