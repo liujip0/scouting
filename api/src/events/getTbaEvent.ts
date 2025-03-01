@@ -62,12 +62,28 @@ export const updateScheduleFromTba = async (eventKey: string, env: Env) => {
           },
     }
   );
+  const eventInfoRes = await fetch(
+    "https://www.thebluealliance.com/api/v3/event/" + eventKey + "/simple",
+    {
+      method: "GET",
+      headers:
+        etag ?
+          {
+            "X-TBA-Auth-Key": env.TBA_API_TOKEN,
+            "If-None-Match": etag,
+          }
+        : {
+            "X-TBA-Auth-Key": env.TBA_API_TOKEN,
+          },
+    }
+  );
 
   switch (eventRes.status) {
     case 200: {
       const event: DBEvent & { matches: Match[] } = {
         eventKey: "",
-        eventName: "",
+        eventName:
+          eventInfoRes.status === 200 ? (await eventInfoRes.json()).name : "",
         matches: [],
       };
 
