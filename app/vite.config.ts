@@ -19,6 +19,10 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
+      includeAssets: ["**/*"],
+      workbox: {
+        globPatterns: ["**/*"],
+      },
     }),
   ],
 });
