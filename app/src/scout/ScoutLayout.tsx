@@ -415,7 +415,7 @@ export default function ScoutLayout({
                       eventKey: match.eventKey,
                       matchLevel: match.matchLevel,
                       matchNumber: match.matchNumber,
-                      teamNumber: match.teamNumber!,
+                      teamNumber: null,
                       alliance: match.alliance,
                       robotNumber: 4,
                       deviceTeamNumber: match.deviceTeamNumber,
@@ -430,7 +430,7 @@ export default function ScoutLayout({
                         eventKey: match.eventKey,
                         matchLevel: match.matchLevel,
                         matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
+                        teamNumber: null,
                         alliance: match.alliance,
                         robotNumber: 4,
                         deviceTeamNumber: match.deviceTeamNumber,
@@ -499,6 +499,7 @@ export default function ScoutLayout({
                   match={match as HumanPlayerEntry}
                   setMatch={setMatch}
                   events={events}
+                  matchNumberError={matchNumberError}
                   scoutNameError={scoutNameError}
                   scoutTeamNumberError={scoutTeamNumberError}
                   teamNumberError={teamNumberError}
