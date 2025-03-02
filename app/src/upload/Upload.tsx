@@ -184,12 +184,7 @@ export default function Upload() {
         Scan QR with Camera
       </Button>
 
-      <Button
-        onClick={() => {
-          setStatus("test");
-        }}>
-        Test Button
-      </Button>
+      <Button onClick={() => {}}>&nbsp;</Button>
 
       <Button
         onClick={() => {
