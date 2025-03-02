@@ -2,6 +2,7 @@ import { MAX_TEAM_NUMBER } from "@isa2025/api/src/utils/constants.ts";
 import {
   DBEvent,
   HumanPlayerEntry,
+  HumanPlayerEntryNoShowInit,
   Match,
   TeamMatchEntry,
   TeamMatchEntryNoShowInit,
@@ -10,7 +11,7 @@ import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
-import { getDBTeamMatchEntries, putDBEntry } from "../utils/idb.ts";
+import { getDBHumanPlayerEntries, putDBEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import Human from "./Human.tsx";
 import Auto from "./robot/Auto.tsx";
@@ -76,7 +77,7 @@ export default function ScoutLayout({
         upload: false,
       } as ExportMatchEntry);
       setPutEntriesPending(false);
-      console.log(getDBTeamMatchEntries());
+      console.log(getDBHumanPlayerEntries());
       navigate("/scout/savedmatches");
     },
     async onError(error) {
@@ -148,8 +149,8 @@ export default function ScoutLayout({
 
     if (
       !Number.isInteger(match.teamNumber) ||
-      match.teamNumber < 1 ||
-      match.teamNumber > MAX_TEAM_NUMBER
+      match.teamNumber! < 1 ||
+      match.teamNumber! > MAX_TEAM_NUMBER
     ) {
       error = true;
       setTeamNumberError("Invalid team number.");
@@ -221,7 +222,7 @@ export default function ScoutLayout({
           </Box>
       }
       nowScouting={{
-        teamNumber: match.teamNumber,
+        teamNumber: match.teamNumber || 0,
         alliance: match.alliance,
         robotPosition: match.robotNumber,
       }}
@@ -243,13 +244,27 @@ export default function ScoutLayout({
                 variant="contained"
                 onClick={() => {
                   if ((match as TeamMatchEntry).noShow) {
+                    setMatch({
+                      ...TeamMatchEntryNoShowInit,
+                      eventKey: match.eventKey,
+                      matchLevel: match.matchLevel,
+                      matchNumber: match.matchNumber,
+                      teamNumber: match.teamNumber!,
+                      alliance: match.alliance,
+                      robotNumber: match.robotNumber as 1 | 2 | 3,
+                      deviceTeamNumber: match.deviceTeamNumber,
+                      deviceId: match.deviceId,
+                      scoutTeamNumber: match.scoutTeamNumber,
+                      scoutName: match.scoutName,
+                      flag: match.flag,
+                    });
                     putEntries.mutate([
                       {
                         ...TeamMatchEntryNoShowInit,
                         eventKey: match.eventKey,
                         matchLevel: match.matchLevel,
                         matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber,
+                        teamNumber: match.teamNumber!,
                         alliance: match.alliance,
                         robotNumber: match.robotNumber as 1 | 2 | 3,
                         deviceTeamNumber: match.deviceTeamNumber,
@@ -272,13 +287,27 @@ export default function ScoutLayout({
             variant="contained"
             onClick={() => {
               if ((match as TeamMatchEntry).noShow) {
+                setMatch({
+                  ...TeamMatchEntryNoShowInit,
+                  eventKey: match.eventKey,
+                  matchLevel: match.matchLevel,
+                  matchNumber: match.matchNumber,
+                  teamNumber: match.teamNumber!,
+                  alliance: match.alliance,
+                  robotNumber: match.robotNumber as 1 | 2 | 3,
+                  deviceTeamNumber: match.deviceTeamNumber,
+                  deviceId: match.deviceId,
+                  scoutTeamNumber: match.scoutTeamNumber,
+                  scoutName: match.scoutName,
+                  flag: match.flag,
+                });
                 putEntries.mutate([
                   {
                     ...TeamMatchEntryNoShowInit,
                     eventKey: match.eventKey,
                     matchLevel: match.matchLevel,
                     matchNumber: match.matchNumber,
-                    teamNumber: match.teamNumber,
+                    teamNumber: match.teamNumber!,
                     alliance: match.alliance,
                     robotNumber: match.robotNumber as 1 | 2 | 3,
                     deviceTeamNumber: match.deviceTeamNumber,
@@ -358,18 +387,62 @@ export default function ScoutLayout({
                 }
 
                 if (
-                  !match.teamNumber ||
-                  match.teamNumber < 1 ||
+                  match.teamNumber === null ||
+                  isNaN(match.teamNumber) ||
+                  match.teamNumber < 0 ||
                   match.teamNumber > MAX_TEAM_NUMBER
                 ) {
                   error = true;
                   setTeamNumberError("Invalid team number.");
+                } else if (match.teamNumber === 0) {
+                  if (
+                    teamNumberError !==
+                    "Team number 0 indicates human player did not show up. Press Submit again to confirm."
+                  ) {
+                    error = true;
+                  }
+                  setTeamNumberError(
+                    "Team number 0 indicates human player did not show up. Press Submit again to confirm."
+                  );
                 } else {
                   setTeamNumberError("");
                 }
 
                 if (!error) {
-                  putEntries.mutate([match]);
+                  if (match.teamNumber === 0) {
+                    setMatch({
+                      ...HumanPlayerEntryNoShowInit,
+                      eventKey: match.eventKey,
+                      matchLevel: match.matchLevel,
+                      matchNumber: match.matchNumber,
+                      teamNumber: match.teamNumber!,
+                      alliance: match.alliance,
+                      robotNumber: 4,
+                      deviceTeamNumber: match.deviceTeamNumber,
+                      deviceId: match.deviceId,
+                      scoutTeamNumber: match.scoutTeamNumber,
+                      scoutName: match.scoutName,
+                      flag: match.flag,
+                    });
+                    putEntries.mutate([
+                      {
+                        ...HumanPlayerEntryNoShowInit,
+                        eventKey: match.eventKey,
+                        matchLevel: match.matchLevel,
+                        matchNumber: match.matchNumber,
+                        teamNumber: match.teamNumber!,
+                        alliance: match.alliance,
+                        robotNumber: 4,
+                        deviceTeamNumber: match.deviceTeamNumber,
+                        deviceId: match.deviceId,
+                        scoutTeamNumber: match.scoutTeamNumber,
+                        scoutName: match.scoutName,
+                        flag: match.flag,
+                      },
+                    ]);
+                  } else {
+                    putEntries.mutate([match]);
+                  }
                 }
               }}>
               Submit

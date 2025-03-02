@@ -8,7 +8,7 @@ import {
 import { DBSchema, openDB } from "idb";
 import { ExportMatchEntry } from "../scout/SavedMatches.tsx";
 
-const version = 2;
+const version = 3;
 const dbname = "isa2025-idb";
 
 export enum Stores {
@@ -118,7 +118,14 @@ export const getDBTeamMatchEntries = async () => {
 export const getDBHumanPlayerEntries = async () => {
   const db = await openDB<ISAIDBSchema>(dbname, version);
   const res = await db.getAll(Stores.HumanPlayerEntry);
-  return res;
+  return res.map((entry) =>
+    entry.teamNumber === 0 ?
+      {
+        ...entry,
+        teamNumber: null,
+      }
+    : entry
+  );
 };
 
 export const putDBEvent = async (event: DBEvent) => {
@@ -140,7 +147,10 @@ export const putDBEntry = async (match: ExportMatchEntry) => {
   if (match.robotNumber !== 4) {
     await db.put(Stores.TeamMatchEntry, match);
   } else {
-    await db.put(Stores.HumanPlayerEntry, match);
+    await db.put(Stores.HumanPlayerEntry, {
+      ...match,
+      teamNumber: match.teamNumber || 0,
+    });
   }
 };
 
@@ -162,7 +172,7 @@ export const deleteEntry = async (
       match.eventKey,
       match.matchLevel,
       match.matchNumber,
-      match.teamNumber,
+      match.teamNumber || 0,
       match.deviceTeamNumber,
       match.deviceId,
     ]);

@@ -231,7 +231,7 @@ export default function Human({
               </StyledToggleButton>
             </ToggleButtonGroup>
             <TextField
-              value={isNaN(match.teamNumber) ? "" : match.teamNumber}
+              value={isNaN(match.teamNumber!) ? "" : match.teamNumber}
               onChange={(event) => {
                 setMatch({
                   ...match,
@@ -251,7 +251,7 @@ export default function Human({
           </Stack>
         : <TextField
             label="Human Player Team Number"
-            value={isNaN(match.teamNumber) ? "" : match.teamNumber}
+            value={isNaN(match.teamNumber!) ? "" : match.teamNumber}
             onChange={(event) => {
               setMatch({
                 ...match,
@@ -276,46 +276,48 @@ export default function Human({
         }}
         gap={2}>
         <BigCounter
-          value={match.humanAttemptedNet}
+          value={match.humanAttemptedNet!}
           increment={() => {
             setMatch({
               ...match,
-              humanAttemptedNet: match.humanAttemptedNet + 1,
+              humanAttemptedNet: match.humanAttemptedNet! + 1,
             });
           }}
           decrement={() => {
             setMatch({
               ...match,
-              humanAttemptedNet: match.humanAttemptedNet - 1,
+              humanAttemptedNet: match.humanAttemptedNet! - 1,
             });
           }}
           label="Attempted Algae in Net"
           max={18}
+          disabled={!!match.teamNumber}
         />
         <BigCounter
-          value={match.humanSuccessfulNet}
+          value={match.humanSuccessfulNet!}
           increment={() => {
-            if (match.humanAttemptedNet < 18) {
+            if (match.humanAttemptedNet! < 18) {
               setMatch({
                 ...match,
-                humanSuccessfulNet: match.humanSuccessfulNet + 1,
-                humanAttemptedNet: match.humanAttemptedNet + 1,
+                humanSuccessfulNet: match.humanSuccessfulNet! + 1,
+                humanAttemptedNet: match.humanAttemptedNet! + 1,
               });
             } else {
               setMatch({
                 ...match,
-                humanSuccessfulNet: match.humanSuccessfulNet + 1,
+                humanSuccessfulNet: match.humanSuccessfulNet! + 1,
               });
             }
           }}
           decrement={() => {
             setMatch({
               ...match,
-              humanSuccessfulNet: match.humanSuccessfulNet - 1,
+              humanSuccessfulNet: match.humanSuccessfulNet! - 1,
             });
           }}
           label="Successful Algae in Net"
           max={18}
+          disabled={!!match.teamNumber}
         />
       </Stack>
     </Stack>

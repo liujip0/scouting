@@ -165,6 +165,7 @@ type BigCounterProps = {
   decrement: () => void;
   label: string;
   max?: number;
+  disabled?: boolean;
 };
 export function BigCounter({
   value,
@@ -172,6 +173,7 @@ export function BigCounter({
   decrement,
   label,
   max,
+  disabled = false,
 }: BigCounterProps) {
   return (
     <Stack
@@ -185,12 +187,14 @@ export function BigCounter({
             decrement();
           }
         }}
-        variant="contained">
+        variant="contained"
+        disabled={disabled}>
         <Remove />
       </Button>
       <TextField
         value={value}
         label={label}
+        disabled={disabled}
       />
       <Button
         onClick={() => {
@@ -198,7 +202,8 @@ export function BigCounter({
             increment();
           }
         }}
-        variant="contained">
+        variant="contained"
+        disabled={disabled}>
         <Add />
       </Button>
     </Stack>

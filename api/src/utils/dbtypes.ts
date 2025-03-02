@@ -418,14 +418,16 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
 
 export const HumanPlayerEntrySchema = CommonEntrySchema.omit({
   robotNumber: true,
+  teamNumber: true,
 }).extend({
   robotNumber: z.literal(4),
+  teamNumber: z.number().int().nonnegative().nullable(),
 
   tbaMaxAlgaeAttempts: z.number().int().nonnegative().nullable(),
 
-  humanAttemptedNet: z.number().int().nonnegative(),
-  humanSuccessfulNet: z.number().int().nonnegative(),
-  comments: z.string(),
+  humanAttemptedNet: z.number().int().nonnegative().nullable(),
+  humanSuccessfulNet: z.number().int().nonnegative().nullable(),
+  comments: z.string().nullable(),
 });
 export type HumanPlayerEntry = z.infer<typeof HumanPlayerEntrySchema>;
 export type HumanPlayerEntryColumn = keyof HumanPlayerEntry;
@@ -456,6 +458,25 @@ export const HumanPlayerEntryInit: HumanPlayerEntry = {
   humanAttemptedNet: 0,
   humanSuccessfulNet: 0,
   comments: "",
+};
+export const HumanPlayerEntryNoShowInit: HumanPlayerEntry = {
+  eventKey: "",
+  matchLevel: "Qualification",
+  matchNumber: 1,
+  teamNumber: 0,
+  alliance: "Red",
+  robotNumber: 4,
+  deviceTeamNumber: 0,
+  deviceId: "",
+  scoutTeamNumber: 0,
+  scoutName: "",
+  flag: "",
+
+  tbaMaxAlgaeAttempts: null,
+
+  humanAttemptedNet: null,
+  humanSuccessfulNet: null,
+  comments: null,
 };
 
 export const UserPermLevel = [

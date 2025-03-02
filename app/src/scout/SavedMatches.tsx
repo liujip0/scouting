@@ -192,7 +192,7 @@ export default function SavedMatches({
             onClick={() => {
               console.log(getDBTeamMatchEntries());
               const newMatch: TeamMatchEntry | HumanPlayerEntry = {
-                ...(match.robotNumber < 4 ?
+                ...(match.robotNumber !== 4 ?
                   TeamMatchEntryInit
                 : HumanPlayerEntryInit),
                 deviceTeamNumber: match.deviceTeamNumber,
@@ -214,7 +214,8 @@ export default function SavedMatches({
                   (x) =>
                     x.matchLevel === match.matchLevel &&
                     x.matchNumber === match.matchNumber + 1
-                )
+                ) &&
+                match.robotNumber !== 4
               ) {
                 setMatch({
                   ...newMatch,
@@ -481,7 +482,9 @@ export default function SavedMatches({
                             {"\n" +
                               matchData.alliance +
                               "\u00a0" +
-                              matchData.robotNumber}
+                              (matchData.robotNumber === 4 ?
+                                "HUMAN"
+                              : matchData.robotNumber)}
                           </Typography>
                           <Stack
                             direction="row"
