@@ -1,7 +1,8 @@
 import { dateFileName } from "@isa2025/api/src/utils/utils.ts";
-import { Close, Download, Send } from "@mui/icons-material";
-import { IconButton, Snackbar, Stack, TextField } from "@mui/material";
+import { Close, Download, FileUpload, Send } from "@mui/icons-material";
+import { Button, IconButton, Snackbar, Stack, TextField } from "@mui/material";
 import { useState } from "react";
+import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
 import { trpc } from "../utils/trpc.ts";
 
 export default function Util() {
@@ -78,6 +79,23 @@ export default function Util() {
         label="Stringified Import Data"
         variant="outlined"
       />
+      <Button
+        component="label"
+        startIcon={<FileUpload />}>
+        Upload JSON File
+        <VisuallyHiddenInput
+          type="file"
+          accept="application/json"
+          onChange={async (event) => {
+            if (event.currentTarget.files) {
+              const data = JSON.parse(
+                await event.currentTarget.files[0].text()
+              );
+              importData.mutate(data);
+            }
+          }}
+        />
+      </Button>
       <Snackbar
         open={importDataStatus !== ""}
         autoHideDuration={3000}

@@ -29,6 +29,8 @@ import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
 import { trpc } from "../utils/trpc.ts";
 
+export const QRCODE_UPLOAD_DELIMITER = "**";
+
 export default function Upload() {
   const navigate = useNavigate();
 
@@ -138,7 +140,7 @@ export default function Upload() {
           <Button
             onClick={() => {
               const matchArrs: string[] = qrData
-                .split("`")
+                .split(QRCODE_UPLOAD_DELIMITER)
                 .filter((x) => x.trim() !== "");
               const matches: (TeamMatchEntry | HumanPlayerEntry)[] =
                 matchArrs.map((match) => {
