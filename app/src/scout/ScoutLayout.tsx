@@ -46,6 +46,7 @@ export default function ScoutLayout({
   let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
     onMutate() {
+      clearTimeout(putEntriesTimeout);
       setPutEntriesPending(true);
       putEntriesTimeout = setTimeout(async () => {
         if (putEntriesPending) {

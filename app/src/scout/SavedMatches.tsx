@@ -9,7 +9,6 @@ import {
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
   TeamMatchEntryInit,
-  TeamMatchEntrySchema,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import {
   matchFileName,
@@ -48,6 +47,7 @@ import {
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { QRCODE_UPLOAD_DELIMITER } from "../upload/Upload.tsx";
 import {
   deleteEntry,
   getDBHumanPlayerEntries,
@@ -625,36 +625,38 @@ export default function SavedMatches({
               setQrMatches(
                 matches
                   .filter((x) => x.selected)
-                  .map((x) =>
-                    x.robotNumber === 4 ?
-                      JSON.stringify(
-                        HumanPlayerEntryColumns.map(
-                          (column) => x[column as HumanPlayerEntryColumn]
+                  .map(
+                    (x) =>
+                      (x.robotNumber === 4 ?
+                        JSON.stringify(
+                          HumanPlayerEntryColumns.map(
+                            (column) => x[column as HumanPlayerEntryColumn]
+                          )
                         )
-                      ) + "`"
-                    : JSON.stringify(
-                        TeamMatchEntryColumns.map(
-                          (column) => x[column as TeamMatchEntryColumn]
-                        )
-                      ) + "`"
+                      : JSON.stringify(
+                          TeamMatchEntryColumns.map(
+                            (column) => x[column as TeamMatchEntryColumn]
+                          )
+                        )) + QRCODE_UPLOAD_DELIMITER
                   )
               );
               setQrIndex(0);
               console.log(
                 matches
                   .filter((x) => x.selected)
-                  .map((x) =>
-                    x.robotNumber === 4 ?
-                      JSON.stringify(
-                        HumanPlayerEntryColumns.map(
-                          (column) => x[column as HumanPlayerEntryColumn]
+                  .map(
+                    (x) =>
+                      (x.robotNumber === 4 ?
+                        JSON.stringify(
+                          HumanPlayerEntryColumns.map(
+                            (column) => x[column as HumanPlayerEntryColumn]
+                          )
                         )
-                      ) + "`"
-                    : JSON.stringify(
-                        TeamMatchEntryColumns.map(
-                          (column) => x[column as TeamMatchEntryColumn]
-                        )
-                      ) + "`"
+                      : JSON.stringify(
+                          TeamMatchEntryColumns.map(
+                            (column) => x[column as TeamMatchEntryColumn]
+                          )
+                        )) + QRCODE_UPLOAD_DELIMITER
                   )
                   .join("")
               );
@@ -860,29 +862,6 @@ export default function SavedMatches({
                       x as unknown as Record<string, unknown>
                     )
                   ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[]
-              );
-
-              console.log(
-                TeamMatchEntrySchema.parse(
-                  (
-                    matches
-                      .filter((x) => x.selected)
-                      .map((x) =>
-                        omit(
-                          [
-                            "autoUpload",
-                            "quickshare",
-                            "clipboard",
-                            "qr",
-                            "download",
-                            "upload",
-                            "selected",
-                          ],
-                          x as unknown as Record<string, unknown>
-                        )
-                      ) as unknown as (TeamMatchEntry | HumanPlayerEntry)[]
-                  )[0]
-                )
               );
               putEntries.mutate(
                 matches
