@@ -1,4 +1,5 @@
 import {
+  CommonEntryColumns,
   HumanPlayerEntry,
   HumanPlayerEntryColumn,
   HumanPlayerEntryColumns,
@@ -151,6 +152,9 @@ export default function Upload() {
                       unknown
                     >
                   > = {};
+                  CommonEntryColumns.forEach((column, columnIndex) => {
+                    parsedMatch[column] = matchArr[columnIndex];
+                  });
                   if (parsedMatch.robotNumber === 4) {
                     HumanPlayerEntryColumns.forEach((column, columnIndex) => {
                       parsedMatch[column] = matchArr[columnIndex];
