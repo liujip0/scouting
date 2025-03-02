@@ -18,6 +18,17 @@
     8787
   ],
 
+  "portsAttributes": {
+    "5173": {
+      "label": "Frontend",
+      "onAutoForward": "openBrowserOnce"
+    },
+    "8787": {
+      "label": "Backend",
+      "onAutoForward": "notify"
+    }
+  },
+
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "pnpm install",
   // "postCreateCommand": "pnpm add pnpm",
