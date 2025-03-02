@@ -47,6 +47,7 @@ ADMIN_ACCOUNT_USERNAME="admin"
 ADMIN_ACCOUNT_PASSWORD="adminpassword"
 
 FIRST_API_TOKEN=<Direct message @liujip0 on Discord>
+TBA_API_TOKEN=<Direct message @liujip0 on Discord>
 
 JWT_PRIVATE_KEY="xc03o1xblf4rga87xss3ebztlc8f5r9l"
 ```

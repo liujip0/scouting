@@ -17,10 +17,6 @@ import {
 import { StyledRedToggleButton } from "../../components/StyledToggleButton.tsx";
 import { DeviceSetupObj } from "../../setup/DeviceSetup.tsx";
 import { TransparentToggle } from "../Components.tsx";
-import BlueBarge from "../images/BlueBarge.png";
-import BlueProcessor from "../images/BlueProcessor.png";
-import RedBarge from "../images/RedBarge.png";
-import RedProcessor from "../images/RedProcessor.png";
 
 type PrematchProps = {
   match: TeamMatchEntry;
@@ -298,11 +294,11 @@ export default function Prematch({
               src={
                 match.alliance === "Red" ?
                   deviceSetup.fieldOrientation === "barge" ?
-                    RedBarge
-                  : RedProcessor
+                    "/RedBarge.png"
+                  : "/RedProcessor.png"
                 : deviceSetup.fieldOrientation === "barge" ?
-                  BlueBarge
-                : BlueProcessor
+                  "/BlueBarge.png"
+                : "/BlueProcessor.png"
               }
               style={{
                 width: "100%",

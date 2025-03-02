@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
   eventKey text NOT NULL,
   matchLevel text CHECK(matchLevel IN ('None', 'Practice', 'Qualification', 'Playoff')) NOT NULL,
   matchNumber integer NOT NULL,
-  teamNumber integer NOT NULL,
+  teamNumber integer,
   alliance text CHECK(alliance IN ('Red', 'Blue')) NOT NULL,
   robotNumber integer CHECK(robotNumber IN (4)) NOT NULL,
   deviceTeamNumber integer NOT NULL,
@@ -91,9 +91,9 @@ CREATE TABLE IF NOT EXISTS HumanPlayerEntry(
 
   tbaMaxAlgaeAttempts integer,
 
-  humanAttemptedNet integer NOT NULL,
-  humanSuccessfulNet integer NOT NULL,
-  comments text NOT NULL,
+  humanAttemptedNet integer,
+  humanSuccessfulNet integer,
+  comments text,
 
   PRIMARY KEY (eventKey, matchLevel, matchNumber, teamNumber, deviceTeamNumber, deviceId)
 );
