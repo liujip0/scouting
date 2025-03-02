@@ -52,7 +52,27 @@ TBA_API_TOKEN=<Direct message @liujip0 on Discord>
 JWT_PRIVATE_KEY="xc03o1xblf4rga87xss3ebztlc8f5r9l"
 ```
 
-### 5. Run local development server
+### 5. Initialize local database
+
+Change to `api/` folder
+
+```zsh
+cd api
+```
+
+Initialize local database
+
+```zsh
+npx wrangler d1 execute isa2025-db --file=./migrations/0000_initialize.sql
+```
+
+Return to original folder
+
+```zsh
+cd ..
+```
+
+### 6. Run local development server
 
 ```zsh
 pnpm dev
