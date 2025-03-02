@@ -291,7 +291,7 @@ export default function Human({
           }}
           label="Attempted Algae in Net"
           max={18}
-          disabled={!!match.teamNumber}
+          disabled={!match.teamNumber}
         />
         <BigCounter
           value={match.humanSuccessfulNet!}
@@ -317,7 +317,7 @@ export default function Human({
           }}
           label="Successful Algae in Net"
           max={18}
-          disabled={!!match.teamNumber}
+          disabled={!match.teamNumber}
         />
       </Stack>
     </Stack>
