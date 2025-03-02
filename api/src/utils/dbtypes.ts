@@ -463,7 +463,7 @@ export const HumanPlayerEntryNoShowInit: HumanPlayerEntry = {
   eventKey: "",
   matchLevel: "Qualification",
   matchNumber: 1,
-  teamNumber: 0,
+  teamNumber: null,
   alliance: "Red",
   robotNumber: 4,
   deviceTeamNumber: 0,
