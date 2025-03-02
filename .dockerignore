@@ -1,2 +1,5 @@
 .pnpm-store
 node_modules
+app/node_modules
+api/node_modules
+api/.wrangler
