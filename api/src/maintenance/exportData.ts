@@ -40,7 +40,15 @@ export const exportData = authedLoggedProcedure.query(async (opts) => {
         TeamMatchEntryColumns.forEach((column) => {
           if (entry[column] === null) {
             newEntry[column] = entry[column] as never;
-          } else if (typeof TeamMatchEntryInit[column] === "boolean") {
+          } else if (
+            typeof TeamMatchEntryInit[column] === "boolean" ||
+            [
+              "tbaAutoLine",
+              "tbaEndgamePark",
+              "tbaEndgameShallow",
+              "tbaEndgameDeep",
+            ].includes(column)
+          ) {
             newEntry[column] = (entry[column] === 1) as never;
           } else {
             newEntry[column] = entry[column] as never;
