@@ -15,6 +15,10 @@ function ReloadPrompt() {
     onRegisterError(error) {
       console.log("SW registration error", error);
     },
+    onNeedRefresh() {
+      console.log("SW needs to be refreshed");
+      setNeedRefresh(true);
+    },
   });
 
   const close = () => {
