@@ -30,7 +30,6 @@ type DataLayoutProps = {
 export default function DataLayout({ setToken, permLevel }: DataLayoutProps) {
   const topBarHeightRem = 4;
 
-  console.log("test");
   const navigate = useNavigate();
   const logoutFunction = () => {
     setToken("", 0, "none");
