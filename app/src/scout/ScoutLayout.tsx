@@ -389,21 +389,11 @@ export default function ScoutLayout({
                 if (
                   match.teamNumber === null ||
                   isNaN(match.teamNumber) ||
-                  match.teamNumber < 0 ||
+                  match.teamNumber <= 0 ||
                   match.teamNumber > MAX_TEAM_NUMBER
                 ) {
                   error = true;
                   setTeamNumberError("Invalid team number.");
-                } else if (match.teamNumber === 0) {
-                  if (
-                    teamNumberError !==
-                    "Team number 0 indicates human player did not show up. Press Submit again to confirm."
-                  ) {
-                    error = true;
-                  }
-                  setTeamNumberError(
-                    "Team number 0 indicates human player did not show up. Press Submit again to confirm."
-                  );
                 } else {
                   setTeamNumberError("");
                 }

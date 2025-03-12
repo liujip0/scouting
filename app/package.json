@@ -1,7 +1,7 @@
 {
   "name": "@isa2025/app",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b",
   "scripts": {
@@ -13,11 +13,11 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@fontsource/roboto": "^5.1.1",
-    "@mui/icons-material": "^6.4.6",
+    "@fontsource/roboto": "^5.2.5",
+    "@mui/icons-material": "^6.4.7",
     "@mui/lab": "6.0.0-beta.15",
-    "@mui/material": "^6.4.6",
-    "@tanstack/react-query": "^5.66.9",
+    "@mui/material": "^6.4.7",
+    "@tanstack/react-query": "^5.67.3",
     "@trpc/client": "11.0.0-rc.608",
     "@trpc/react-query": "11.0.0-rc.608",
     "@trpc/server": "11.0.0-rc.608",
@@ -26,27 +26,27 @@
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.2.0"
+    "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
+    "@eslint/js": "^9.22.0",
     "@isa2025/api": "workspace:*",
-    "@types/node": "^22.13.5",
+    "@types/node": "^22.13.10",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
-    "@typescript-eslint/eslint-plugin": "^8.25.0",
-    "@typescript-eslint/parser": "^8.25.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-import": "^1.13.8",
-    "eslint": "^9.21.0",
-    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "typescript": "~5.6.3",
-    "typescript-eslint": "^8.25.0",
+    "typescript-eslint": "^8.26.1",
     "vite": "^5.4.14",
     "vite-plugin-pwa": "^0.20.5",
     "workbox-window": "^7.3.0",
-    "wrangler": "^3.111.0"
+    "wrangler": "^3.114.1"
   }
 }
