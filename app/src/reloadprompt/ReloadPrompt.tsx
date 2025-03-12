@@ -10,6 +10,7 @@ function ReloadPrompt() {
   } = useRegisterSW({
     onRegistered(r) {
       console.log("SW Registered: " + r);
+      setOfflineReady(true);
     },
     onRegisterError(error) {
       console.log("SW registration error", error);
