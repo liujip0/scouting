@@ -325,6 +325,9 @@ export default function Human({
           max={18}
           disabled={!match.teamNumber}
         />
+        {
+          //TODO: if adding comments for human players: .replace(/"/g, "'")
+        }
       </Stack>
     </Stack>
   );
