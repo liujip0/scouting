@@ -11,6 +11,9 @@ function ReloadPrompt() {
     onRegistered(r) {
       console.log("SW Registered: " + r);
       setOfflineReady(true);
+      setTimeout(() => {
+        setOfflineReady(false);
+      }, 2000);
     },
     onRegisterError(error) {
       console.log("SW registration error", error);

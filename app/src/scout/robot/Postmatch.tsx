@@ -205,7 +205,7 @@ export default function Postmatch({ match, setMatch }: PostmatchProps) {
           onChange={(event) => {
             setMatch({
               ...match,
-              comments: event.currentTarget.value,
+              comments: event.currentTarget.value.replace(/"/g, "'"),
             });
           }}
           multiline

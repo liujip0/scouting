@@ -5,10 +5,12 @@ export const createContext = async ({
   req,
   env,
   resHeaders,
-}: FetchCreateContextFnOptions & { env: Env }) => {
+}: FetchCreateContextFnOptions & {
+  env: Env;
+}) => {
   const responseHeaders = resHeaders;
-  responseHeaders.append("Access-Control-Allow-Origin", "*");
-  responseHeaders.append("Access-Control-Allow-Headers", "*");
+  responseHeaders.set("Access-Control-Allow-Origin", "*");
+  responseHeaders.set("Access-Control-Allow-Headers", "*");
   return {
     req,
     env,
