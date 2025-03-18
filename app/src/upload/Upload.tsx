@@ -28,6 +28,8 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
+import { ExportMatchEntry } from "../scout/SavedMatches.tsx";
+import { putDBEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 
 export const QRCODE_UPLOAD_DELIMITER = "`";
@@ -37,12 +39,40 @@ export default function Upload() {
 
   const [status, setStatus] = useState("");
 
+  const [entries, setEntries] = useState<(TeamMatchEntry | HumanPlayerEntry)[]>(
+    []
+  );
   const putEntries = trpc.data.putEntries.useMutation({
+    onMutate(data) {
+      setEntries(data);
+    },
     onSuccess() {
       setStatus("Success");
+      entries.forEach(async (entry) => {
+        await putDBEntry({
+          ...entry,
+          autoUpload: false,
+          quickshare: false,
+          clipboard: false,
+          qr: false,
+          download: false,
+          upload: true,
+        } as ExportMatchEntry);
+      });
     },
     onError(error) {
       setStatus("Error: " + error.message);
+      entries.forEach(async (entry) => {
+        await putDBEntry({
+          ...entry,
+          autoUpload: false,
+          quickshare: false,
+          clipboard: false,
+          qr: false,
+          download: false,
+          upload: false,
+        } as ExportMatchEntry);
+      });
     },
   });
 
