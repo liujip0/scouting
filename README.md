@@ -42,7 +42,7 @@ VITE_SERVER_URL="http://localhost:8787"
 
 Create a file called `.dev.vars` in `api/`
 
-```vars
+```env
 ADMIN_ACCOUNT_USERNAME="admin"
 ADMIN_ACCOUNT_PASSWORD="adminpassword"
 
