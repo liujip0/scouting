@@ -67,13 +67,25 @@ export const humans = async (opts: publicOpts): Promise<Response> => {
     switch (opts.path[1]) {
       case "json": {
         try {
-          const queryCount = await opts.env.KV.get(
-            opts.ctx.user.teamNumber + "-human-json-queries"
-          );
-          await opts.env.KV.put(
-            opts.ctx.user.teamNumber + "-human-json-queries",
-            queryCount === null ? "1" : (parseInt(queryCount) + 1).toString()
-          );
+          const queryCounts = (
+            await opts.env.KV.get(opts.ctx.user.teamNumber + "-queries")
+          )?.split(",");
+          if (queryCounts) {
+            await opts.env.KV.put(
+              opts.ctx.user.teamNumber + "-queries",
+              [
+                queryCounts[0],
+                queryCounts[1],
+                queryCounts[2],
+                parseInt(queryCounts[3]) + 1,
+              ].join(",")
+            );
+          } else {
+            await opts.env.KV.put(
+              opts.ctx.user.teamNumber + "-queries",
+              "0,0,0,1"
+            );
+          }
         } catch {}
         return new Response(JSON.stringify(results.results), {
           status: 200,
@@ -85,13 +97,25 @@ export const humans = async (opts: publicOpts): Promise<Response> => {
       }
       case "csv": {
         try {
-          const queryCount = await opts.env.KV.get(
-            opts.ctx.user.teamNumber + "-human-csv-queries"
-          );
-          await opts.env.KV.put(
-            opts.ctx.user.teamNumber + "-human-csv-queries",
-            queryCount === null ? "1" : (parseInt(queryCount) + 1).toString()
-          );
+          const queryCounts = (
+            await opts.env.KV.get(opts.ctx.user.teamNumber + "-queries")
+          )?.split(",");
+          if (queryCounts) {
+            await opts.env.KV.put(
+              opts.ctx.user.teamNumber + "-queries",
+              [
+                queryCounts[0],
+                queryCounts[1],
+                parseInt(queryCounts[2]) + 1,
+                queryCounts[3],
+              ].join(",")
+            );
+          } else {
+            await opts.env.KV.put(
+              opts.ctx.user.teamNumber + "-queries",
+              "0,0,1,0"
+            );
+          }
         } catch {}
         return new Response(
           columns
