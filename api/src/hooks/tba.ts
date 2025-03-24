@@ -64,30 +64,30 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       return new Response("Ping successful.");
     }
     case "match_score": {
-      if (body.message_data.match.score_breakdown.red.autoLineRobot1) {
-        const updateTeamMatchEntry = opts.env.DB.prepare(
-          `UPDATE TeamMatchEntry
-            SET tbaAutoLine = ?,
-              tbaEndgamePark = ?,
-              tbaEndgameShallow = ?,
-              tbaEndgameDeep = ?
-            WHERE eventKey = ?
-              AND matchLevel = ?
-              AND matchNumber = ?
-              AND alliance = ?
-              AND robotNumber = ?;`
-        );
-        const updateHumanPlayerEntry = opts.env.DB.prepare(
-          `UPDATE HumanPlayerEntry
-            SET tbaMaxAlgaeAttempts = ?
-            WHERE eventKey = ?
-              AND matchLevel = ?
-              AND matchNumber = ?
-              AND alliance = ?
-              AND robotNumber = 4;`
-        );
-        const boundStmts: D1PreparedStatement[] = [];
+      const updateTeamMatchEntry = opts.env.DB.prepare(
+        `UPDATE TeamMatchEntry
+          SET tbaAutoLine = ?,
+            tbaEndgamePark = ?,
+            tbaEndgameShallow = ?,
+            tbaEndgameDeep = ?
+          WHERE eventKey = ?
+            AND matchLevel = ?
+            AND matchNumber = ?
+            AND alliance = ?
+            AND robotNumber = ?;`
+      );
+      const updateHumanPlayerEntry = opts.env.DB.prepare(
+        `UPDATE HumanPlayerEntry
+          SET tbaMaxAlgaeAttempts = ?
+          WHERE eventKey = ?
+            AND matchLevel = ?
+            AND matchNumber = ?
+            AND alliance = ?
+            AND robotNumber = 4;`
+      );
+      const boundStmts: D1PreparedStatement[] = [];
 
+      if (body.message_data.match.score_breakdown.red) {
         boundStmts.push(
           updateTeamMatchEntry.bind(
             body.message_data.match.score_breakdown.red.autoLineRobot1 ===
@@ -157,6 +157,23 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
             3
           )
         );
+        boundStmts.push(
+          updateHumanPlayerEntry.bind(
+            body.message_data.match.score_breakdown.red.wallAlgaeCount,
+            body.message_data.match.event_key,
+            {
+              qm: "Qualification",
+              ef: "Playoff",
+              qf: "Playoff",
+              sf: "Playoff",
+              f: "Playoff",
+            }[body.message_data.match.comp_level],
+            body.message_data.match.match_number,
+            "Blue"
+          )
+        );
+      }
+      if (body.message_data.match.score_breakdown.blue) {
         boundStmts.push(
           updateTeamMatchEntry.bind(
             body.message_data.match.score_breakdown.blue.autoLineRobot1 ===
@@ -241,26 +258,24 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
             "Red"
           )
         );
-        boundStmts.push(
-          updateHumanPlayerEntry.bind(
-            body.message_data.match.score_breakdown.red.wallAlgaeCount,
-            body.message_data.match.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[body.message_data.match.comp_level],
-            body.message_data.match.match_number,
-            "Blue"
-          )
-        );
+      }
+
+      if (boundStmts.length > 0) {
         await opts.env.DB.batch(boundStmts);
         return new Response("Score breakdown received.");
       } else {
-        //TODO: use another status code?
-        return new Response("No score breakdown.");
+        return new Response(
+          "No score breakdown on: " +
+            (body.message_data.match.score_breakdown.red ?
+              body.message_data.match.score_breakdown.blue ?
+                "Red, Blue"
+              : "Red"
+            : body.message_data.match.score_breakdown.blue ? "Blue"
+            : ""),
+          {
+            status: 422,
+          }
+        );
       }
     }
     case "schedule_updated": {
