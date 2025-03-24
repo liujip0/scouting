@@ -1,5 +1,5 @@
 import { DBEvent, Match } from "@isa2025/api/src/utils/dbtypes.ts";
-import EventEmitter from "eventemitter3";
+import EventEmitter from "events";
 import { useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Data from "./data/Data.tsx";
@@ -12,6 +12,9 @@ import { getDBEvents, getDBMatches, initDB } from "./utils/idb.ts";
 
 export default function App() {
   const eventEmitter = useMemo(() => new EventEmitter(), []);
+  useEffect(() => {
+    eventEmitter.setMaxListeners(1);
+  }, [eventEmitter]);
 
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
     (): DeviceSetupObj => {

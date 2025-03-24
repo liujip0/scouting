@@ -8,7 +8,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import EventEmitter from "eventemitter3";
+import EventEmitter from "events";
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
@@ -97,38 +97,42 @@ export default function Scout({
       };
     }
   });
-  eventEmitter.on(
-    "idb-finished",
-    (eventsFromIdb: (DBEvent & { matches: Match[] })[]) => {
-      const eventMatches = eventsFromIdb.find(
-        (event) => event.eventKey === match.eventKey
-      )?.matches;
-      if (
-        eventMatches?.some(
-          (x) =>
-            x.matchLevel === match.matchLevel &&
-            x.matchNumber === match.matchNumber
-        )
-      ) {
-        setMatch({
-          ...match,
-          teamNumber: eventMatches.find(
-            (x) =>
-              x.matchLevel === match.matchLevel &&
-              x.matchNumber === match.matchNumber
-          )![
-            (match.alliance.toLowerCase() + match.robotNumber) as
-              | "red1"
-              | "red2"
-              | "red3"
-              | "blue1"
-              | "blue2"
-              | "blue3"
-          ],
-        });
-      }
+  useEffect(() => {
+    if (eventEmitter.listenerCount("idb-finished") === 0) {
+      eventEmitter.on(
+        "idb-finished",
+        (eventsFromIdb: (DBEvent & { matches: Match[] })[]) => {
+          const eventMatches = eventsFromIdb.find(
+            (event) => event.eventKey === match.eventKey
+          )?.matches;
+          if (
+            eventMatches?.some(
+              (x) =>
+                x.matchLevel === match.matchLevel &&
+                x.matchNumber === match.matchNumber
+            )
+          ) {
+            setMatch({
+              ...match,
+              teamNumber: eventMatches.find(
+                (x) =>
+                  x.matchLevel === match.matchLevel &&
+                  x.matchNumber === match.matchNumber
+              )![
+                (match.alliance.toLowerCase() + match.robotNumber) as
+                  | "red1"
+                  | "red2"
+                  | "red3"
+                  | "blue1"
+                  | "blue2"
+                  | "blue3"
+              ],
+            });
+          }
+        }
+      );
     }
-  );
+  }, [eventEmitter, match]);
 
   const [putEntriesPending, setPutEntriesPending] = useState(false);
 
@@ -144,6 +148,7 @@ export default function Scout({
             deviceSetup={deviceSetup}
             putEntriesPending={putEntriesPending}
             setPutEntriesPending={setPutEntriesPending}
+            eventEmitter={eventEmitter}
           />
         }
       />
