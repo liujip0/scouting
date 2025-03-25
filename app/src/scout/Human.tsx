@@ -84,7 +84,10 @@ export default function Human({
         />
         <Stack
           direction="row"
-          gap={1}>
+          gap={1}
+          sx={{
+            width: 1,
+          }}>
           <TextField
             select
             value={match.matchLevel}
@@ -144,6 +147,9 @@ export default function Human({
                   </IconButton>
                 ),
               },
+            }}
+            sx={{
+              flex: 1,
             }}
           />
         </Stack>
@@ -323,6 +329,9 @@ export default function Human({
           max={18}
           disabled={!match.teamNumber}
         />
+        {
+          //TODO: if adding comments for human players: .replace(/"/g, "'")
+        }
       </Stack>
     </Stack>
   );

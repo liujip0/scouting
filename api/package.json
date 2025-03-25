@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wrangler dev"
   },
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@10.6.4+sha512.da3d715bfd22a9a105e6e8088cfc7826699332ded60c423b14ec613a185f1602206702ff0fe4c438cb15c979081ce4cb02568e364b15174503a63c7a8e2a5f6c",
   "dependencies": {
     "@trpc/server": "11.0.0-rc.608",
     "bcryptjs": "^2.4.3",
@@ -14,11 +14,11 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250224.0",
+    "@cloudflare/workers-types": "^4.20250317.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.9",
-    "@typescript-eslint/eslint-plugin": "^8.25.0",
-    "@typescript-eslint/parser": "^8.25.0",
-    "wrangler": "^3.111.0"
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
+    "wrangler": "^4.0.0"
   }
 }

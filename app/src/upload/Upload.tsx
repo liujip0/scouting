@@ -1,4 +1,5 @@
 import {
+  CommonEntryColumns,
   HumanPlayerEntry,
   HumanPlayerEntryColumn,
   HumanPlayerEntryColumns,
@@ -29,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
 import { trpc } from "../utils/trpc.ts";
 
-export const QRCODE_UPLOAD_DELIMITER = "**";
+export const QRCODE_UPLOAD_DELIMITER = "`";
 
 export default function Upload() {
   const navigate = useNavigate();
@@ -151,6 +152,9 @@ export default function Upload() {
                       unknown
                     >
                   > = {};
+                  CommonEntryColumns.forEach((column, columnIndex) => {
+                    parsedMatch[column] = matchArr[columnIndex];
+                  });
                   if (parsedMatch.robotNumber === 4) {
                     HumanPlayerEntryColumns.forEach((column, columnIndex) => {
                       parsedMatch[column] = matchArr[columnIndex];
@@ -180,12 +184,7 @@ export default function Upload() {
         Scan QR with Camera
       </Button>
 
-      <Button
-        onClick={() => {
-          setStatus("test");
-        }}>
-        Test Button
-      </Button>
+      <Button onClick={() => {}}>&nbsp;</Button>
 
       <Button
         onClick={() => {
