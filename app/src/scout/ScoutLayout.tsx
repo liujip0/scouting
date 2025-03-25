@@ -11,7 +11,11 @@ import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
-import { getDBHumanPlayerEntries, putDBEntry } from "../utils/idb.ts";
+import {
+  getDBHumanPlayerEntries,
+  getDBTeamMatchEntries,
+  putDBEntry,
+} from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import Human from "./Human.tsx";
 import Auto from "./robot/Auto.tsx";
@@ -96,6 +100,89 @@ export default function ScoutLayout({
       navigate("/scout/savedmatches");
     },
   });
+
+  const uploadTeamMatchEntry = () => {
+    if ((match as TeamMatchEntry).noShow) {
+      setMatch({
+        ...TeamMatchEntryNoShowInit,
+        eventKey: match.eventKey,
+        matchLevel: match.matchLevel,
+        matchNumber: match.matchNumber,
+        teamNumber: match.teamNumber!,
+        alliance: match.alliance,
+        robotNumber: match.robotNumber as 1 | 2 | 3,
+        deviceTeamNumber: match.deviceTeamNumber,
+        deviceId: match.deviceId,
+        scoutTeamNumber: match.scoutTeamNumber,
+        scoutName: match.scoutName,
+        flag: match.flag,
+      });
+      getDBTeamMatchEntries().then((robotMatches) => {
+        getDBHumanPlayerEntries().then((humanMatches) => {
+          putEntries.mutate([
+            {
+              ...TeamMatchEntryNoShowInit,
+              eventKey: match.eventKey,
+              matchLevel: match.matchLevel,
+              matchNumber: match.matchNumber,
+              teamNumber: match.teamNumber!,
+              alliance: match.alliance,
+              robotNumber: match.robotNumber as 1 | 2 | 3,
+              deviceTeamNumber: match.deviceTeamNumber,
+              deviceId: match.deviceId,
+              scoutTeamNumber: match.scoutTeamNumber,
+              scoutName: match.scoutName,
+              flag: match.flag,
+            },
+            ...robotMatches.filter(
+              (x) =>
+                !x.autoUpload &&
+                !x.quickshare &&
+                !x.clipboard &&
+                !x.qr &&
+                !x.download &&
+                !x.upload
+            ),
+            ...humanMatches.filter(
+              (x) =>
+                !x.autoUpload &&
+                !x.quickshare &&
+                !x.clipboard &&
+                !x.qr &&
+                !x.download &&
+                !x.upload
+            ),
+          ]);
+        });
+      });
+    } else {
+      getDBTeamMatchEntries().then((robotMatches) => {
+        getDBHumanPlayerEntries().then((humanMatches) => {
+          putEntries.mutate([
+            match,
+            ...robotMatches.filter(
+              (x) =>
+                !x.autoUpload &&
+                !x.quickshare &&
+                !x.clipboard &&
+                !x.qr &&
+                !x.download &&
+                !x.upload
+            ),
+            ...humanMatches.filter(
+              (x) =>
+                !x.autoUpload &&
+                !x.quickshare &&
+                !x.clipboard &&
+                !x.qr &&
+                !x.download &&
+                !x.upload
+            ),
+          ]);
+        });
+      });
+    }
+  };
 
   const [matchNumberError, setMatchNumberError] = useState("");
   const [scoutNameError, setScoutNameError] = useState("");
@@ -243,40 +330,7 @@ export default function ScoutLayout({
               <Button
                 variant="contained"
                 onClick={() => {
-                  if ((match as TeamMatchEntry).noShow) {
-                    setMatch({
-                      ...TeamMatchEntryNoShowInit,
-                      eventKey: match.eventKey,
-                      matchLevel: match.matchLevel,
-                      matchNumber: match.matchNumber,
-                      teamNumber: match.teamNumber!,
-                      alliance: match.alliance,
-                      robotNumber: match.robotNumber as 1 | 2 | 3,
-                      deviceTeamNumber: match.deviceTeamNumber,
-                      deviceId: match.deviceId,
-                      scoutTeamNumber: match.scoutTeamNumber,
-                      scoutName: match.scoutName,
-                      flag: match.flag,
-                    });
-                    putEntries.mutate([
-                      {
-                        ...TeamMatchEntryNoShowInit,
-                        eventKey: match.eventKey,
-                        matchLevel: match.matchLevel,
-                        matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
-                        alliance: match.alliance,
-                        robotNumber: match.robotNumber as 1 | 2 | 3,
-                        deviceTeamNumber: match.deviceTeamNumber,
-                        deviceId: match.deviceId,
-                        scoutTeamNumber: match.scoutTeamNumber,
-                        scoutName: match.scoutName,
-                        flag: match.flag,
-                      },
-                    ]);
-                  } else {
-                    putEntries.mutate([match]);
-                  }
+                  uploadTeamMatchEntry();
                 }}>
                 Submit
               </Button>
@@ -286,40 +340,7 @@ export default function ScoutLayout({
           <Button
             variant="contained"
             onClick={() => {
-              if ((match as TeamMatchEntry).noShow) {
-                setMatch({
-                  ...TeamMatchEntryNoShowInit,
-                  eventKey: match.eventKey,
-                  matchLevel: match.matchLevel,
-                  matchNumber: match.matchNumber,
-                  teamNumber: match.teamNumber!,
-                  alliance: match.alliance,
-                  robotNumber: match.robotNumber as 1 | 2 | 3,
-                  deviceTeamNumber: match.deviceTeamNumber,
-                  deviceId: match.deviceId,
-                  scoutTeamNumber: match.scoutTeamNumber,
-                  scoutName: match.scoutName,
-                  flag: match.flag,
-                });
-                putEntries.mutate([
-                  {
-                    ...TeamMatchEntryNoShowInit,
-                    eventKey: match.eventKey,
-                    matchLevel: match.matchLevel,
-                    matchNumber: match.matchNumber,
-                    teamNumber: match.teamNumber!,
-                    alliance: match.alliance,
-                    robotNumber: match.robotNumber as 1 | 2 | 3,
-                    deviceTeamNumber: match.deviceTeamNumber,
-                    deviceId: match.deviceId,
-                    scoutTeamNumber: match.scoutTeamNumber,
-                    scoutName: match.scoutName,
-                    flag: match.flag,
-                  },
-                ]);
-              } else {
-                putEntries.mutate([match]);
-              }
+              uploadTeamMatchEntry();
             }}>
             Submit
           </Button>
@@ -414,24 +435,70 @@ export default function ScoutLayout({
                       scoutName: match.scoutName,
                       flag: match.flag,
                     });
-                    putEntries.mutate([
-                      {
-                        ...HumanPlayerEntryNoShowInit,
-                        eventKey: match.eventKey,
-                        matchLevel: match.matchLevel,
-                        matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
-                        alliance: match.alliance,
-                        robotNumber: 4,
-                        deviceTeamNumber: match.deviceTeamNumber,
-                        deviceId: match.deviceId,
-                        scoutTeamNumber: match.scoutTeamNumber,
-                        scoutName: match.scoutName,
-                        flag: match.flag,
-                      },
-                    ]);
+                    getDBTeamMatchEntries().then((robotMatches) => {
+                      getDBHumanPlayerEntries().then((humanMatches) => {
+                        putEntries.mutate([
+                          {
+                            ...HumanPlayerEntryNoShowInit,
+                            eventKey: match.eventKey,
+                            matchLevel: match.matchLevel,
+                            matchNumber: match.matchNumber,
+                            teamNumber: match.teamNumber!,
+                            alliance: match.alliance,
+                            robotNumber: 4,
+                            deviceTeamNumber: match.deviceTeamNumber,
+                            deviceId: match.deviceId,
+                            scoutTeamNumber: match.scoutTeamNumber,
+                            scoutName: match.scoutName,
+                            flag: match.flag,
+                          },
+                          ...robotMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                          ...humanMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                        ]);
+                      });
+                    });
                   } else {
-                    putEntries.mutate([match]);
+                    getDBTeamMatchEntries().then((robotMatches) => {
+                      getDBHumanPlayerEntries().then((humanMatches) => {
+                        putEntries.mutate([
+                          match,
+                          ...robotMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                          ...humanMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                        ]);
+                      });
+                    });
                   }
                 }
               }}>
