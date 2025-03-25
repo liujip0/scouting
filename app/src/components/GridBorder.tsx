@@ -1,12 +1,19 @@
 import { Box } from "@mui/material";
+import BackdropComponent from "./BackdropComponent.tsx";
 
 export const borderMarginPx = 20;
 export const borderWidthPx = 5;
 
 type GridBorderProps = {
+  backdrop?: boolean;
+  onCloseBackdrop?: () => void;
   children?: React.ReactNode;
 };
-export function GridBorder({ children }: GridBorderProps) {
+export function GridBorder({
+  backdrop = false,
+  onCloseBackdrop,
+  children,
+}: GridBorderProps) {
   return (
     <Box
       sx={{
@@ -24,49 +31,97 @@ export function GridBorder({ children }: GridBorderProps) {
           gridColumn: 1,
           gridRow: 1,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 2,
           gridRow: 1,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 3,
           gridRow: 1,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 1,
           gridRow: 2,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 3,
           gridRow: 2,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 1,
           gridRow: 3,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 2,
           gridRow: 3,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 3,
           gridRow: 3,
           backgroundColor: "background.default",
-        }}></Box>
+          position: "relative",
+        }}>
+        <BackdropComponent
+          open={backdrop}
+          onClose={onCloseBackdrop}
+        />
+      </Box>
       <Box
         sx={{
           gridColumn: 2,

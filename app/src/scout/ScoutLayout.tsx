@@ -8,7 +8,8 @@ import {
   TeamMatchEntryNoShowInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import EventEmitter from "events";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
 import {
@@ -33,6 +34,7 @@ type ScoutLayoutProps = {
   deviceSetup: DeviceSetupObj;
   putEntriesPending: boolean;
   setPutEntriesPending: (value: boolean) => void;
+  eventEmitter: EventEmitter;
 };
 export default function ScoutLayout({
   match,
@@ -41,12 +43,14 @@ export default function ScoutLayout({
   deviceSetup,
   putEntriesPending,
   setPutEntriesPending,
+  eventEmitter,
 }: ScoutLayoutProps) {
   const navigate = useNavigate();
 
   const [matchStage, setMatchStage] = useState<MatchStage>(
     match.robotNumber === 4 ? "human" : "prematch"
   );
+  console.log("match stage: " + matchStage);
 
   let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
@@ -260,8 +264,132 @@ export default function ScoutLayout({
     return error;
   };
 
+  const TELEOP_TAB_FLASH_MS = 750;
+  const [teleopTabAnimation, setTeleopTabAnimation] = useState(false);
+  const [teleopAnimationBackdrop, setTeleopAnimationBackdrop] = useState(false);
+  console.log(teleopTabAnimation, teleopAnimationBackdrop);
+  const recurringTeleopAnimation = useRef<NodeJS.Timeout | null>(null);
+  const teleopAnimationBackdropTimeout = useRef<NodeJS.Timeout | null>(null);
+  const teleopTabAnimation1 = useRef<NodeJS.Timeout | null>(null);
+  const teleopTabAnimation2 = useRef<NodeJS.Timeout | null>(null);
+  const teleopTabAnimation3 = useRef<NodeJS.Timeout | null>(null);
+  const teleopTabAnimation4 = useRef<NodeJS.Timeout | null>(null);
+  const teleopTabAnimation5 = useRef<NodeJS.Timeout | null>(null);
+  const [teleopAnimationRunning, setTeleopAnimationRunning] = useState(false);
+  const clearTeleopAnimations = () => {
+    setTeleopAnimationBackdrop(false);
+    if (teleopAnimationBackdropTimeout.current) {
+      clearInterval(teleopAnimationBackdropTimeout.current);
+      teleopAnimationBackdropTimeout.current = null;
+    }
+    setTeleopTabAnimation(false);
+    if (teleopTabAnimation1.current) {
+      clearTimeout(teleopTabAnimation1.current);
+      teleopTabAnimation1.current = null;
+    }
+    if (teleopTabAnimation2.current) {
+      clearTimeout(teleopTabAnimation2.current);
+      teleopTabAnimation2.current = null;
+    }
+    if (teleopTabAnimation3.current) {
+      clearTimeout(teleopTabAnimation3.current);
+      teleopTabAnimation3.current = null;
+    }
+    if (teleopTabAnimation4.current) {
+      clearTimeout(teleopTabAnimation4.current);
+      teleopTabAnimation4.current = null;
+    }
+    if (teleopTabAnimation5.current) {
+      clearTimeout(teleopTabAnimation5.current);
+      teleopTabAnimation5.current = null;
+    }
+
+    setTeleopAnimationRunning(false);
+  };
+
+  const matchStageRef = useRef(matchStage);
+  useEffect(() => {
+    matchStageRef.current = matchStage;
+  }, [matchStage]);
+  if (eventEmitter.listenerCount("teleop-animation") === 0) {
+    eventEmitter.on("teleop-animation", () => {
+      console.log("teleop-animation", matchStageRef.current);
+
+      if (matchStageRef.current !== "auto") {
+        console.log("not auto");
+        console.log(matchStageRef.current);
+        clearTeleopAnimations();
+        if (recurringTeleopAnimation.current) {
+          clearInterval(recurringTeleopAnimation.current);
+          recurringTeleopAnimation.current = null;
+        }
+        return;
+      }
+      if (teleopAnimationRunning) {
+        console.log("teleopAnimationRunning");
+        return;
+      }
+      setTeleopAnimationRunning(true);
+      console.log("===========================================");
+
+      setTeleopAnimationBackdrop(true);
+      if (!teleopAnimationBackdropTimeout.current) {
+        teleopAnimationBackdropTimeout.current = setTimeout(() => {
+          setTeleopAnimationBackdrop(false);
+          clearTeleopAnimations();
+        }, TELEOP_TAB_FLASH_MS * 6);
+      }
+
+      setTeleopTabAnimation(true);
+      if (!teleopTabAnimation1.current) {
+        teleopTabAnimation1.current = setTimeout(() => {
+          console.log("teleop-tab-animation-1");
+          setTeleopTabAnimation(false);
+        }, TELEOP_TAB_FLASH_MS);
+      }
+      if (!teleopTabAnimation2.current) {
+        teleopTabAnimation2.current = setTimeout(() => {
+          console.log("teleop-tab-animation-2");
+          setTeleopTabAnimation(true);
+        }, TELEOP_TAB_FLASH_MS * 2);
+      }
+      if (!teleopTabAnimation3.current) {
+        teleopTabAnimation3.current = setTimeout(() => {
+          console.log("teleop-tab-animation-3");
+          setTeleopTabAnimation(false);
+        }, TELEOP_TAB_FLASH_MS * 3);
+      }
+      if (!teleopTabAnimation4.current) {
+        teleopTabAnimation4.current = setTimeout(() => {
+          console.log("teleop-tab-animation-4");
+          setTeleopTabAnimation(true);
+        }, TELEOP_TAB_FLASH_MS * 4);
+      }
+      if (!teleopTabAnimation5.current) {
+        teleopTabAnimation5.current = setTimeout(() => {
+          console.log("teleop-tab-animation-5");
+          setTeleopTabAnimation(false);
+          clearTeleopAnimations();
+        }, TELEOP_TAB_FLASH_MS * 5);
+      }
+
+      if (!recurringTeleopAnimation.current) {
+        console.log("ooooooooooooooooooooooooooooooooooooooooooooooooooo");
+        recurringTeleopAnimation.current = setInterval(() => {
+          console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
+          eventEmitter.emit("teleop-animation");
+        }, TELEOP_TAB_FLASH_MS + 10000);
+      }
+    });
+  }
+  console.log("++++", recurringTeleopAnimation.current);
+
   return (
     <ScoutPageContainer
+      backdrop={teleopAnimationBackdrop}
+      onCloseBackdrop={() => {
+        clearTeleopAnimations();
+      }}
       title={
         match.robotNumber === 4 ?
           "Human Player Data"
@@ -275,6 +403,12 @@ export default function ScoutLayout({
             <Tabs
               value={matchStage}
               onChange={(_event, value) => {
+                clearTeleopAnimations();
+                if (recurringTeleopAnimation.current) {
+                  clearInterval(recurringTeleopAnimation.current);
+                  recurringTeleopAnimation.current = null;
+                }
+
                 if (matchStage === "prematch") {
                   if (!prematchCheck()) {
                     setMatchStage(value);
@@ -299,6 +433,13 @@ export default function ScoutLayout({
                 label="Teleop"
                 value="teleop"
                 disabled={match.noShow}
+                sx={{
+                  ...(teleopTabAnimation && {
+                    color: "primary.contrastText",
+                    backgroundColor: "primary.main",
+                  }),
+                  transition: "all " + TELEOP_TAB_FLASH_MS + "ms",
+                }}
               />
               <Tab
                 label="Postmatch"
@@ -537,6 +678,7 @@ export default function ScoutLayout({
                   match={match as TeamMatchEntry}
                   setMatch={setMatch}
                   deviceSetup={deviceSetup}
+                  eventEmitter={eventEmitter}
                 />
               ),
               teleop: (
