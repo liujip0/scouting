@@ -52,9 +52,24 @@ export default function ScoutLayout({
   );
   console.log("match stage: " + matchStage);
 
+  const [uploadingMatches, setUploadingMatches] = useState<
+    (HumanPlayerEntry | TeamMatchEntry)[]
+  >([]);
   let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
-    onMutate() {
+    onMutate(data) {
+      setUploadingMatches(
+        data.filter(
+          (x) =>
+            x.eventKey !== match.eventKey ||
+            x.matchLevel !== match.matchLevel ||
+            x.matchNumber !== match.matchNumber ||
+            x.alliance !== match.alliance ||
+            x.robotNumber !== match.robotNumber ||
+            x.deviceTeamNumber !== match.deviceTeamNumber ||
+            x.deviceId !== match.deviceId
+        )
+      );
       clearTimeout(putEntriesTimeout);
       setPutEntriesPending(true);
       putEntriesTimeout = setTimeout(async () => {
@@ -69,6 +84,13 @@ export default function ScoutLayout({
             download: false,
             upload: false,
           } as ExportMatchEntry);
+          uploadingMatches.forEach(async (entry) => {
+            await putDBEntry({
+              ...entry,
+              autoUpload: false,
+            } as ExportMatchEntry);
+          });
+          setUploadingMatches([]);
           navigate("/scout/savedmatches");
         }
       }, 3000);
@@ -84,6 +106,13 @@ export default function ScoutLayout({
         download: false,
         upload: false,
       } as ExportMatchEntry);
+      uploadingMatches.forEach(async (entry) => {
+        await putDBEntry({
+          ...entry,
+          autoUpload: true,
+        } as ExportMatchEntry);
+      });
+      setUploadingMatches([]);
       setPutEntriesPending(false);
       console.log(getDBHumanPlayerEntries());
       navigate("/scout/savedmatches");
@@ -100,6 +129,13 @@ export default function ScoutLayout({
         download: false,
         upload: false,
       } as ExportMatchEntry);
+      uploadingMatches.forEach(async (entry) => {
+        await putDBEntry({
+          ...entry,
+          autoUpload: false,
+        } as ExportMatchEntry);
+      });
+      setUploadingMatches([]);
       setPutEntriesPending(false);
       navigate("/scout/savedmatches");
     },
@@ -138,24 +174,8 @@ export default function ScoutLayout({
               scoutName: match.scoutName,
               flag: match.flag,
             },
-            ...robotMatches.filter(
-              (x) =>
-                !x.autoUpload &&
-                !x.quickshare &&
-                !x.clipboard &&
-                !x.qr &&
-                !x.download &&
-                !x.upload
-            ),
-            ...humanMatches.filter(
-              (x) =>
-                !x.autoUpload &&
-                !x.quickshare &&
-                !x.clipboard &&
-                !x.qr &&
-                !x.download &&
-                !x.upload
-            ),
+            ...robotMatches.filter((x) => !x.autoUpload),
+            ...humanMatches.filter((x) => !x.autoUpload),
           ]);
         });
       });
@@ -164,24 +184,8 @@ export default function ScoutLayout({
         getDBHumanPlayerEntries().then((humanMatches) => {
           putEntries.mutate([
             match,
-            ...robotMatches.filter(
-              (x) =>
-                !x.autoUpload &&
-                !x.quickshare &&
-                !x.clipboard &&
-                !x.qr &&
-                !x.download &&
-                !x.upload
-            ),
-            ...humanMatches.filter(
-              (x) =>
-                !x.autoUpload &&
-                !x.quickshare &&
-                !x.clipboard &&
-                !x.qr &&
-                !x.download &&
-                !x.upload
-            ),
+            ...robotMatches.filter((x) => !x.autoUpload),
+            ...humanMatches.filter((x) => !x.autoUpload),
           ]);
         });
       });
