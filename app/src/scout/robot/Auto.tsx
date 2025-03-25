@@ -10,7 +10,6 @@ import {
   Popper,
   Stack,
 } from "@mui/material";
-import EventEmitter from "events";
 import { useEffect, useRef, useState } from "react";
 import {
   StyledRedToggleButton,
@@ -23,14 +22,8 @@ type AutoProps = {
   match: TeamMatchEntry;
   setMatch: (value: TeamMatchEntry) => void;
   deviceSetup: DeviceSetupObj;
-  eventEmitter: EventEmitter;
 };
-export default function Auto({
-  match,
-  setMatch,
-  deviceSetup,
-  eventEmitter,
-}: AutoProps) {
+export default function Auto({ match, setMatch, deviceSetup }: AutoProps) {
   const [popperReef, setPopperReef] = useState<
     "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | ""
   >("");
@@ -52,44 +45,6 @@ export default function Auto({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const teleopTimeout = useRef<NodeJS.Timeout | null>(null);
-  console.log("---", teleopTimeout.current);
-  useEffect(() => {
-    teleopTimeout.current = setTimeout(() => {
-      console.log("-------------------------------------");
-      eventEmitter.emit("teleop-animation");
-    }, 30000);
-    return () => {
-      if (teleopTimeout.current) {
-        clearTimeout(teleopTimeout.current);
-      }
-    };
-  }, [eventEmitter]);
-  const [teleopTimeoutButtonClicked, setTeleopTimeoutButtonClicked] =
-    useState(false);
-  const teleopTimeoutButtonClick = () => {
-    if (teleopTimeoutButtonClicked) {
-      return;
-    }
-
-    console.log("teleopTimeoutButtonClick");
-    setTeleopTimeoutButtonClicked(true);
-    if (teleopTimeout.current) {
-      clearTimeout(teleopTimeout.current);
-      teleopTimeout.current = null;
-    }
-    teleopTimeout.current = setTimeout(() => {
-      console.log("_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
-      eventEmitter.emit("teleop-animation");
-    }, 15000);
-  };
-  eventEmitter.on("teleop-animation", () => {
-    if (teleopTimeout.current) {
-      clearTimeout(teleopTimeout.current);
-      teleopTimeout.current = null;
-    }
-  });
 
   return (
     <Stack
@@ -130,7 +85,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "A" ? "" : "A");
             }}
             sx={
@@ -161,7 +115,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "B" ? "" : "B");
             }}
             sx={
@@ -192,7 +145,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "C" ? "" : "C");
             }}
             sx={
@@ -223,7 +175,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "D" ? "" : "D");
             }}
             sx={
@@ -254,7 +205,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "E" ? "" : "E");
             }}
             sx={
@@ -285,7 +235,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "F" ? "" : "F");
             }}
             sx={
@@ -316,7 +265,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "G" ? "" : "G");
             }}
             sx={
@@ -347,7 +295,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "H" ? "" : "H");
             }}
             sx={
@@ -378,7 +325,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "I" ? "" : "I");
             }}
             sx={
@@ -409,7 +355,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "J" ? "" : "J");
             }}
             sx={
@@ -440,7 +385,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "K" ? "" : "K");
             }}
             sx={
@@ -471,7 +415,6 @@ export default function Auto({
             }}
             onClick={(event) => {
               event.stopPropagation();
-              teleopTimeoutButtonClick();
               setPopperReef(popperReef === "L" ? "" : "L");
             }}
             sx={
@@ -667,39 +610,36 @@ export default function Auto({
         <StyledRedToggleButton
           value="Robot Died?"
           selected={match.died!}
-          onChange={() => {
-            teleopTimeoutButtonClick();
+          onChange={() =>
             setMatch({
               ...match,
               died: !match.died,
-            });
-          }}
+            })
+          }
           ref={toggleButtonRefs[0]}>
           Robot Died
         </StyledRedToggleButton>
         <StyledToggleButton
           value="Removed Algae from Reef?"
           selected={match.removedAlgaeFromReef!}
-          onChange={() => {
-            teleopTimeoutButtonClick();
+          onChange={() =>
             setMatch({
               ...match,
               removedAlgaeFromReef: !match.removedAlgaeFromReef,
-            });
-          }}
+            })
+          }
           ref={toggleButtonRefs[1]}>
           Removed Algae from Reef
         </StyledToggleButton>
         <StyledToggleButton
           value="Crossed Robot Starting Line?"
           selected={match.autoCrossedRSL!}
-          onChange={() => {
-            teleopTimeoutButtonClick();
+          onChange={() =>
             setMatch({
               ...match,
               autoCrossedRSL: !match.autoCrossedRSL,
-            });
-          }}
+            })
+          }
           ref={toggleButtonRefs[2]}>
           Crossed Robot Starting Line
         </StyledToggleButton>
@@ -723,7 +663,6 @@ export default function Auto({
                 position: "relative",
               }}
               onClick={() => {
-                teleopTimeoutButtonClick();
                 if (match.autoProcessor! < 10) {
                   setMatch({
                     ...match,
@@ -741,7 +680,6 @@ export default function Auto({
               <Counter
                 value={match.autoProcessor!}
                 setValue={(value) => {
-                  teleopTimeoutButtonClick();
                   setMatch({
                     ...match,
                     autoProcessor: value,
@@ -769,7 +707,6 @@ export default function Auto({
                 position: "relative",
               }}
               onClick={() => {
-                teleopTimeoutButtonClick();
                 if (match.autoNet! < 10) {
                   setMatch({
                     ...match,
@@ -787,7 +724,6 @@ export default function Auto({
               <Counter
                 value={match.autoNet!}
                 setValue={(value) => {
-                  teleopTimeoutButtonClick();
                   setMatch({
                     ...match,
                     autoNet: value,

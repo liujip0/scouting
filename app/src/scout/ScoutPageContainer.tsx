@@ -1,5 +1,4 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import BackdropComponent from "../components/BackdropComponent.tsx";
 import { GridBorder } from "../components/GridBorder.tsx";
 
 type ScoutPageContainerProps = {
@@ -10,22 +9,16 @@ type ScoutPageContainerProps = {
     robotPosition: 1 | 2 | 3 | 4;
   };
   navButtons?: React.ReactNode;
-  backdrop?: boolean;
-  onCloseBackdrop?: () => void;
   children?: React.ReactNode;
 };
 export function ScoutPageContainer({
   title,
   nowScouting,
   navButtons,
-  backdrop = false,
-  onCloseBackdrop,
   children,
 }: ScoutPageContainerProps) {
   return (
-    <GridBorder
-      backdrop={backdrop}
-      onCloseBackdrop={onCloseBackdrop}>
+    <GridBorder>
       <Stack
         sx={{
           width: 1,
@@ -74,28 +67,18 @@ export function ScoutPageContainer({
             width: 1,
             flex: 1,
             overflowY: "scroll",
-            position: "relative",
           }}>
           {children}
-          <BackdropComponent
-            open={backdrop}
-            onClose={onCloseBackdrop}
-          />
         </Box>
         {navButtons && (
           <Stack
             sx={{
               padding: 4,
               justifyContent: "right",
-              position: "relative",
             }}
             direction="row"
             gap={3}>
             {navButtons}
-            <BackdropComponent
-              open={backdrop}
-              onClose={onCloseBackdrop}
-            />
           </Stack>
         )}
       </Stack>
