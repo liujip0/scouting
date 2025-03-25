@@ -8,7 +8,7 @@ import {
   TeamMatchEntry,
   TeamMatchEntryInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import EventEmitter from "eventemitter3";
+import EventEmitter from "events";
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";

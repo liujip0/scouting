@@ -1,6 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../utils/dbtypes.ts";
-import { all } from "./all.ts";
 import { publicOpts } from "./context.ts";
 import { humans } from "./humans.ts";
 import { robots } from "./robots.ts";
@@ -13,9 +12,6 @@ export const publicRouter = async (opts: publicOpts): Promise<Response> => {
     }
     case "humans": {
       return await authedPublicEndpoint(opts, humans);
-    }
-    case "all": {
-      return await authedPublicEndpoint(opts, all);
     }
     case "schedule": {
       return await publicPublicEndpoint(opts, schedule);
