@@ -15,6 +15,7 @@ import {
 } from "../components/GridBorder.tsx";
 import DataMenu from "./DataMenu.tsx";
 import Export from "./export/Export.tsx";
+import Review from "./Review.jsx";
 import Users from "./users/Users.tsx";
 import Util from "./Util.tsx";
 import View from "./View.tsx";
@@ -136,7 +137,7 @@ export default function DataLayout({ setToken, permLevel }: DataLayoutProps) {
             {["datamanage", "admin"].includes(permLevel) && (
               <Route
                 path="review"
-                element={<div>Review Data</div>}
+                element={<Review />}
               />
             )}
             {["admin"].includes(permLevel) && (
