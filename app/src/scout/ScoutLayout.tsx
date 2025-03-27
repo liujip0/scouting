@@ -8,11 +8,14 @@ import {
   TeamMatchEntryNoShowInit,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
-import EventEmitter from "events";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
-import { getDBHumanPlayerEntries, putDBEntry } from "../utils/idb.ts";
+import {
+  getDBHumanPlayerEntries,
+  getDBTeamMatchEntries,
+  putDBEntry,
+} from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import Human from "./Human.tsx";
 import Auto from "./robot/Auto.tsx";
@@ -30,7 +33,6 @@ type ScoutLayoutProps = {
   deviceSetup: DeviceSetupObj;
   putEntriesPending: boolean;
   setPutEntriesPending: (value: boolean) => void;
-  eventEmitter: EventEmitter;
 };
 export default function ScoutLayout({
   match,
@@ -39,18 +41,31 @@ export default function ScoutLayout({
   deviceSetup,
   putEntriesPending,
   setPutEntriesPending,
-  eventEmitter,
 }: ScoutLayoutProps) {
   const navigate = useNavigate();
 
   const [matchStage, setMatchStage] = useState<MatchStage>(
     match.robotNumber === 4 ? "human" : "prematch"
   );
-  console.log("match stage: " + matchStage);
 
+  const [uploadingMatches, setUploadingMatches] = useState<
+    (HumanPlayerEntry | TeamMatchEntry)[]
+  >([]);
   let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
-    onMutate() {
+    onMutate(data) {
+      setUploadingMatches(
+        data.filter(
+          (x) =>
+            x.eventKey !== match.eventKey ||
+            x.matchLevel !== match.matchLevel ||
+            x.matchNumber !== match.matchNumber ||
+            x.alliance !== match.alliance ||
+            x.robotNumber !== match.robotNumber ||
+            x.deviceTeamNumber !== match.deviceTeamNumber ||
+            x.deviceId !== match.deviceId
+        )
+      );
       clearTimeout(putEntriesTimeout);
       setPutEntriesPending(true);
       putEntriesTimeout = setTimeout(async () => {
@@ -65,6 +80,13 @@ export default function ScoutLayout({
             download: false,
             upload: false,
           } as ExportMatchEntry);
+          uploadingMatches.forEach(async (entry) => {
+            await putDBEntry({
+              ...entry,
+              autoUpload: false,
+            } as ExportMatchEntry);
+          });
+          setUploadingMatches([]);
           navigate("/scout/savedmatches");
         }
       }, 3000);
@@ -80,6 +102,13 @@ export default function ScoutLayout({
         download: false,
         upload: false,
       } as ExportMatchEntry);
+      uploadingMatches.forEach(async (entry) => {
+        await putDBEntry({
+          ...entry,
+          autoUpload: true,
+        } as ExportMatchEntry);
+      });
+      setUploadingMatches([]);
       setPutEntriesPending(false);
       console.log(getDBHumanPlayerEntries());
       navigate("/scout/savedmatches");
@@ -96,10 +125,68 @@ export default function ScoutLayout({
         download: false,
         upload: false,
       } as ExportMatchEntry);
+      uploadingMatches.forEach(async (entry) => {
+        await putDBEntry({
+          ...entry,
+          autoUpload: false,
+        } as ExportMatchEntry);
+      });
+      setUploadingMatches([]);
       setPutEntriesPending(false);
       navigate("/scout/savedmatches");
     },
   });
+
+  const uploadTeamMatchEntry = () => {
+    if ((match as TeamMatchEntry).noShow) {
+      setMatch({
+        ...TeamMatchEntryNoShowInit,
+        eventKey: match.eventKey,
+        matchLevel: match.matchLevel,
+        matchNumber: match.matchNumber,
+        teamNumber: match.teamNumber!,
+        alliance: match.alliance,
+        robotNumber: match.robotNumber as 1 | 2 | 3,
+        deviceTeamNumber: match.deviceTeamNumber,
+        deviceId: match.deviceId,
+        scoutTeamNumber: match.scoutTeamNumber,
+        scoutName: match.scoutName,
+        flag: match.flag,
+      });
+      getDBTeamMatchEntries().then((robotMatches) => {
+        getDBHumanPlayerEntries().then((humanMatches) => {
+          putEntries.mutate([
+            {
+              ...TeamMatchEntryNoShowInit,
+              eventKey: match.eventKey,
+              matchLevel: match.matchLevel,
+              matchNumber: match.matchNumber,
+              teamNumber: match.teamNumber!,
+              alliance: match.alliance,
+              robotNumber: match.robotNumber as 1 | 2 | 3,
+              deviceTeamNumber: match.deviceTeamNumber,
+              deviceId: match.deviceId,
+              scoutTeamNumber: match.scoutTeamNumber,
+              scoutName: match.scoutName,
+              flag: match.flag,
+            },
+            ...robotMatches.filter((x) => !x.autoUpload),
+            ...humanMatches.filter((x) => !x.autoUpload),
+          ]);
+        });
+      });
+    } else {
+      getDBTeamMatchEntries().then((robotMatches) => {
+        getDBHumanPlayerEntries().then((humanMatches) => {
+          putEntries.mutate([
+            match,
+            ...robotMatches.filter((x) => !x.autoUpload),
+            ...humanMatches.filter((x) => !x.autoUpload),
+          ]);
+        });
+      });
+    }
+  };
 
   const [matchNumberError, setMatchNumberError] = useState("");
   const [scoutNameError, setScoutNameError] = useState("");
@@ -177,126 +264,8 @@ export default function ScoutLayout({
     return error;
   };
 
-  const TELEOP_TAB_FLASH_MS = 750;
-  const [teleopTabAnimation, setTeleopTabAnimation] = useState(false);
-  const [teleopAnimationBackdrop, setTeleopAnimationBackdrop] = useState(false);
-  console.log(teleopTabAnimation, teleopAnimationBackdrop);
-  const recurringTeleopAnimation = useRef<NodeJS.Timeout | null>(null);
-  const teleopAnimationBackdropTimeout = useRef<NodeJS.Timeout | null>(null);
-  const teleopTabAnimation1 = useRef<NodeJS.Timeout | null>(null);
-  const teleopTabAnimation2 = useRef<NodeJS.Timeout | null>(null);
-  const teleopTabAnimation3 = useRef<NodeJS.Timeout | null>(null);
-  const teleopTabAnimation4 = useRef<NodeJS.Timeout | null>(null);
-  const teleopTabAnimation5 = useRef<NodeJS.Timeout | null>(null);
-  const [teleopAnimationRunning, setTeleopAnimationRunning] = useState(false);
-  const clearTeleopAnimations = () => {
-    setTeleopAnimationBackdrop(false);
-    if (teleopAnimationBackdropTimeout.current) {
-      clearInterval(teleopAnimationBackdropTimeout.current);
-      teleopAnimationBackdropTimeout.current = null;
-    }
-    setTeleopTabAnimation(false);
-    if (teleopTabAnimation1.current) {
-      clearTimeout(teleopTabAnimation1.current);
-      teleopTabAnimation1.current = null;
-    }
-    if (teleopTabAnimation2.current) {
-      clearTimeout(teleopTabAnimation2.current);
-      teleopTabAnimation2.current = null;
-    }
-    if (teleopTabAnimation3.current) {
-      clearTimeout(teleopTabAnimation3.current);
-      teleopTabAnimation3.current = null;
-    }
-    if (teleopTabAnimation4.current) {
-      clearTimeout(teleopTabAnimation4.current);
-      teleopTabAnimation4.current = null;
-    }
-    if (teleopTabAnimation5.current) {
-      clearTimeout(teleopTabAnimation5.current);
-      teleopTabAnimation5.current = null;
-    }
-
-    setTeleopAnimationRunning(false);
-  };
-  if (eventEmitter.listenerCount("teleop-animation") === 0) {
-    eventEmitter.on("teleop-animation", () => {
-      console.log("teleop-animation", matchStage);
-
-      if (matchStage !== "auto") {
-        console.log("not auto");
-        console.log(matchStage);
-        clearTeleopAnimations();
-        if (recurringTeleopAnimation.current) {
-          clearInterval(recurringTeleopAnimation.current);
-          recurringTeleopAnimation.current = null;
-        }
-        return;
-      }
-      if (teleopAnimationRunning) {
-        console.log("teleopAnimationRunning");
-        return;
-      }
-      setTeleopAnimationRunning(true);
-      console.log("===========================================");
-
-      setTeleopAnimationBackdrop(true);
-      if (!teleopAnimationBackdropTimeout.current) {
-        teleopAnimationBackdropTimeout.current = setTimeout(() => {
-          setTeleopAnimationBackdrop(false);
-          clearTeleopAnimations();
-        }, TELEOP_TAB_FLASH_MS * 6);
-      }
-
-      setTeleopTabAnimation(true);
-      if (!teleopTabAnimation1.current) {
-        teleopTabAnimation1.current = setTimeout(() => {
-          console.log("teleop-tab-animation-1");
-          setTeleopTabAnimation(false);
-        }, TELEOP_TAB_FLASH_MS);
-      }
-      if (!teleopTabAnimation2.current) {
-        teleopTabAnimation2.current = setTimeout(() => {
-          console.log("teleop-tab-animation-2");
-          setTeleopTabAnimation(true);
-        }, TELEOP_TAB_FLASH_MS * 2);
-      }
-      if (!teleopTabAnimation3.current) {
-        teleopTabAnimation3.current = setTimeout(() => {
-          console.log("teleop-tab-animation-3");
-          setTeleopTabAnimation(false);
-        }, TELEOP_TAB_FLASH_MS * 3);
-      }
-      if (!teleopTabAnimation4.current) {
-        teleopTabAnimation4.current = setTimeout(() => {
-          console.log("teleop-tab-animation-4");
-          setTeleopTabAnimation(true);
-        }, TELEOP_TAB_FLASH_MS * 4);
-      }
-      if (!teleopTabAnimation5.current) {
-        teleopTabAnimation5.current = setTimeout(() => {
-          console.log("teleop-tab-animation-5");
-          setTeleopTabAnimation(false);
-          clearTeleopAnimations();
-        }, TELEOP_TAB_FLASH_MS * 5);
-      }
-
-      if (!recurringTeleopAnimation.current) {
-        console.log("ooooooooooooooooooooooooooooooooooooooooooooooooooo");
-        recurringTeleopAnimation.current = setInterval(() => {
-          console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
-          eventEmitter.emit("teleop-animation");
-        }, 5000);
-      }
-    });
-  }
-
   return (
     <ScoutPageContainer
-      backdrop={teleopAnimationBackdrop}
-      onCloseBackdrop={() => {
-        clearTeleopAnimations();
-      }}
       title={
         match.robotNumber === 4 ?
           "Human Player Data"
@@ -310,12 +279,6 @@ export default function ScoutLayout({
             <Tabs
               value={matchStage}
               onChange={(_event, value) => {
-                clearTeleopAnimations();
-                if (recurringTeleopAnimation.current) {
-                  clearInterval(recurringTeleopAnimation.current);
-                  recurringTeleopAnimation.current = null;
-                }
-
                 if (matchStage === "prematch") {
                   if (!prematchCheck()) {
                     setMatchStage(value);
@@ -340,13 +303,6 @@ export default function ScoutLayout({
                 label="Teleop"
                 value="teleop"
                 disabled={match.noShow}
-                sx={{
-                  ...(teleopTabAnimation && {
-                    color: "primary.contrastText",
-                    backgroundColor: "primary.main",
-                  }),
-                  transition: "all " + TELEOP_TAB_FLASH_MS + "ms",
-                }}
               />
               <Tab
                 label="Postmatch"
@@ -378,40 +334,7 @@ export default function ScoutLayout({
               <Button
                 variant="contained"
                 onClick={() => {
-                  if ((match as TeamMatchEntry).noShow) {
-                    setMatch({
-                      ...TeamMatchEntryNoShowInit,
-                      eventKey: match.eventKey,
-                      matchLevel: match.matchLevel,
-                      matchNumber: match.matchNumber,
-                      teamNumber: match.teamNumber!,
-                      alliance: match.alliance,
-                      robotNumber: match.robotNumber as 1 | 2 | 3,
-                      deviceTeamNumber: match.deviceTeamNumber,
-                      deviceId: match.deviceId,
-                      scoutTeamNumber: match.scoutTeamNumber,
-                      scoutName: match.scoutName,
-                      flag: match.flag,
-                    });
-                    putEntries.mutate([
-                      {
-                        ...TeamMatchEntryNoShowInit,
-                        eventKey: match.eventKey,
-                        matchLevel: match.matchLevel,
-                        matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
-                        alliance: match.alliance,
-                        robotNumber: match.robotNumber as 1 | 2 | 3,
-                        deviceTeamNumber: match.deviceTeamNumber,
-                        deviceId: match.deviceId,
-                        scoutTeamNumber: match.scoutTeamNumber,
-                        scoutName: match.scoutName,
-                        flag: match.flag,
-                      },
-                    ]);
-                  } else {
-                    putEntries.mutate([match]);
-                  }
+                  uploadTeamMatchEntry();
                 }}>
                 Submit
               </Button>
@@ -421,40 +344,7 @@ export default function ScoutLayout({
           <Button
             variant="contained"
             onClick={() => {
-              if ((match as TeamMatchEntry).noShow) {
-                setMatch({
-                  ...TeamMatchEntryNoShowInit,
-                  eventKey: match.eventKey,
-                  matchLevel: match.matchLevel,
-                  matchNumber: match.matchNumber,
-                  teamNumber: match.teamNumber!,
-                  alliance: match.alliance,
-                  robotNumber: match.robotNumber as 1 | 2 | 3,
-                  deviceTeamNumber: match.deviceTeamNumber,
-                  deviceId: match.deviceId,
-                  scoutTeamNumber: match.scoutTeamNumber,
-                  scoutName: match.scoutName,
-                  flag: match.flag,
-                });
-                putEntries.mutate([
-                  {
-                    ...TeamMatchEntryNoShowInit,
-                    eventKey: match.eventKey,
-                    matchLevel: match.matchLevel,
-                    matchNumber: match.matchNumber,
-                    teamNumber: match.teamNumber!,
-                    alliance: match.alliance,
-                    robotNumber: match.robotNumber as 1 | 2 | 3,
-                    deviceTeamNumber: match.deviceTeamNumber,
-                    deviceId: match.deviceId,
-                    scoutTeamNumber: match.scoutTeamNumber,
-                    scoutName: match.scoutName,
-                    flag: match.flag,
-                  },
-                ]);
-              } else {
-                putEntries.mutate([match]);
-              }
+              uploadTeamMatchEntry();
             }}>
             Submit
           </Button>
@@ -540,7 +430,7 @@ export default function ScoutLayout({
                       eventKey: match.eventKey,
                       matchLevel: match.matchLevel,
                       matchNumber: match.matchNumber,
-                      teamNumber: match.teamNumber!,
+                      teamNumber: null,
                       alliance: match.alliance,
                       robotNumber: 4,
                       deviceTeamNumber: match.deviceTeamNumber,
@@ -549,24 +439,70 @@ export default function ScoutLayout({
                       scoutName: match.scoutName,
                       flag: match.flag,
                     });
-                    putEntries.mutate([
-                      {
-                        ...HumanPlayerEntryNoShowInit,
-                        eventKey: match.eventKey,
-                        matchLevel: match.matchLevel,
-                        matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
-                        alliance: match.alliance,
-                        robotNumber: 4,
-                        deviceTeamNumber: match.deviceTeamNumber,
-                        deviceId: match.deviceId,
-                        scoutTeamNumber: match.scoutTeamNumber,
-                        scoutName: match.scoutName,
-                        flag: match.flag,
-                      },
-                    ]);
+                    getDBTeamMatchEntries().then((robotMatches) => {
+                      getDBHumanPlayerEntries().then((humanMatches) => {
+                        putEntries.mutate([
+                          {
+                            ...HumanPlayerEntryNoShowInit,
+                            eventKey: match.eventKey,
+                            matchLevel: match.matchLevel,
+                            matchNumber: match.matchNumber,
+                            teamNumber: match.teamNumber!,
+                            alliance: match.alliance,
+                            robotNumber: 4,
+                            deviceTeamNumber: match.deviceTeamNumber,
+                            deviceId: match.deviceId,
+                            scoutTeamNumber: match.scoutTeamNumber,
+                            scoutName: match.scoutName,
+                            flag: match.flag,
+                          },
+                          ...robotMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                          ...humanMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                        ]);
+                      });
+                    });
                   } else {
-                    putEntries.mutate([match]);
+                    getDBTeamMatchEntries().then((robotMatches) => {
+                      getDBHumanPlayerEntries().then((humanMatches) => {
+                        putEntries.mutate([
+                          match,
+                          ...robotMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                          ...humanMatches.filter(
+                            (x) =>
+                              !x.autoUpload &&
+                              !x.quickshare &&
+                              !x.clipboard &&
+                              !x.qr &&
+                              !x.download &&
+                              !x.upload
+                          ),
+                        ]);
+                      });
+                    });
                   }
                 }
               }}>
@@ -605,7 +541,6 @@ export default function ScoutLayout({
                   match={match as TeamMatchEntry}
                   setMatch={setMatch}
                   deviceSetup={deviceSetup}
-                  eventEmitter={eventEmitter}
                 />
               ),
               teleop: (
@@ -625,6 +560,7 @@ export default function ScoutLayout({
                   match={match as HumanPlayerEntry}
                   setMatch={setMatch}
                   events={events}
+                  matchNumberError={matchNumberError}
                   scoutNameError={scoutNameError}
                   scoutTeamNumberError={scoutTeamNumberError}
                   teamNumberError={teamNumberError}

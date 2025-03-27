@@ -1,4 +1,5 @@
 import {
+  Alliance,
   DBEvent,
   HumanPlayerEntry,
   Match,
@@ -8,7 +9,7 @@ import {
 import { DBSchema, openDB } from "idb";
 import { ExportMatchEntry } from "../scout/SavedMatches.tsx";
 
-const version = 3;
+const version = 4;
 const dbname = "isa2025-idb";
 
 export enum Stores {
@@ -28,7 +29,15 @@ interface ISAIDBSchema extends DBSchema {
     value: Match;
   };
   TeamMatchEntry: {
-    key: [string, (typeof MatchLevel)[number], number, number, number, string];
+    key: [
+      string, // eventKey
+      (typeof MatchLevel)[number], // matchLevel
+      number, // matchNumber
+      (typeof Alliance)[number], // alliance
+      1 | 2 | 3, // robotNumber
+      number, // deviceTeamNumber
+      string, // deviceId
+    ];
     value: TeamMatchEntry & {
       autoUpload: boolean;
       quickshare: boolean;
@@ -39,7 +48,15 @@ interface ISAIDBSchema extends DBSchema {
     };
   };
   HumanPlayerEntry: {
-    key: [string, (typeof MatchLevel)[number], number, number, number, string];
+    key: [
+      string, // eventKey
+      (typeof MatchLevel)[number], // matchLevel
+      number, // matchNumber
+      (typeof Alliance)[number], // alliance
+      4, // robotNumber
+      number, // deviceTeamNumber
+      string, // deviceId
+    ];
     value: HumanPlayerEntry & {
       autoUpload: boolean;
       quickshare: boolean;
@@ -118,14 +135,7 @@ export const getDBTeamMatchEntries = async () => {
 export const getDBHumanPlayerEntries = async () => {
   const db = await openDB<ISAIDBSchema>(dbname, version);
   const res = await db.getAll(Stores.HumanPlayerEntry);
-  return res.map((entry) =>
-    entry.teamNumber === 0 ?
-      {
-        ...entry,
-        teamNumber: null,
-      }
-    : entry
-  );
+  return res;
 };
 
 export const putDBEvent = async (event: DBEvent) => {
@@ -149,7 +159,6 @@ export const putDBEntry = async (match: ExportMatchEntry) => {
   } else {
     await db.put(Stores.HumanPlayerEntry, {
       ...match,
-      teamNumber: match.teamNumber || 0,
     });
   }
 };
@@ -163,7 +172,8 @@ export const deleteEntry = async (
       match.eventKey,
       match.matchLevel,
       match.matchNumber,
-      match.teamNumber,
+      match.alliance,
+      match.robotNumber,
       match.deviceTeamNumber,
       match.deviceId,
     ]);
@@ -172,7 +182,8 @@ export const deleteEntry = async (
       match.eventKey,
       match.matchLevel,
       match.matchNumber,
-      match.teamNumber || 0,
+      match.alliance,
+      match.robotNumber,
       match.deviceTeamNumber,
       match.deviceId,
     ]);
