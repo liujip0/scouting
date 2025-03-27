@@ -22,7 +22,6 @@ type HumanProps = {
   match: HumanPlayerEntry;
   setMatch: (value: HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
-  matchNumberError: string;
   scoutNameError: string;
   scoutTeamNumberError: string;
   teamNumberError: string;
@@ -31,7 +30,6 @@ export default function Human({
   match,
   setMatch,
   events,
-  matchNumberError,
   scoutNameError,
   scoutTeamNumberError,
   teamNumberError,
@@ -116,8 +114,6 @@ export default function Human({
               });
             }}
             label="Match Number"
-            error={matchNumberError !== ""}
-            helperText={matchNumberError}
             slotProps={{
               input: {
                 startAdornment: (
