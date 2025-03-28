@@ -53,12 +53,16 @@ export default function Auto({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const teleopTimeoutHasRun = useRef(false);
   const teleopTimeout = useRef<NodeJS.Timeout | null>(null);
   console.log("---", teleopTimeout.current);
   useEffect(() => {
     teleopTimeout.current = setTimeout(() => {
-      console.log("-------------------------------------");
-      eventEmitter.emit("teleop-animation");
+      if (!teleopTimeoutHasRun.current) {
+        teleopTimeoutHasRun.current = true;
+        console.log("-------------------------------------");
+        eventEmitter.emit("teleop-animation");
+      }
     }, 30000);
     return () => {
       if (teleopTimeout.current) {
@@ -80,8 +84,11 @@ export default function Auto({
       teleopTimeout.current = null;
     }
     teleopTimeout.current = setTimeout(() => {
-      console.log("_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
-      eventEmitter.emit("teleop-animation");
+      if (!teleopTimeoutHasRun.current) {
+        teleopTimeoutHasRun.current = true;
+        console.log("_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+        eventEmitter.emit("teleop-animation");
+      }
     }, 15000);
   };
   eventEmitter.on("teleop-animation", () => {
