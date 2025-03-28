@@ -9,7 +9,7 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import { Box, Button, Stack, Tab, Tabs } from "@mui/material";
 import EventEmitter from "events";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
 import { getDBHumanPlayerEntries, putDBEntry } from "../utils/idb.ts";
@@ -219,13 +219,18 @@ export default function ScoutLayout({
 
     setTeleopAnimationRunning(false);
   };
+
+  const matchStageRef = useRef(matchStage);
+  useEffect(() => {
+    matchStageRef.current = matchStage;
+  }, [matchStage]);
   if (eventEmitter.listenerCount("teleop-animation") === 0) {
     eventEmitter.on("teleop-animation", () => {
-      console.log("teleop-animation", matchStage);
+      console.log("teleop-animation", matchStageRef.current);
 
-      if (matchStage !== "auto") {
+      if (matchStageRef.current !== "auto") {
         console.log("not auto");
-        console.log(matchStage);
+        console.log(matchStageRef.current);
         clearTeleopAnimations();
         if (recurringTeleopAnimation.current) {
           clearInterval(recurringTeleopAnimation.current);
@@ -286,10 +291,11 @@ export default function ScoutLayout({
         recurringTeleopAnimation.current = setInterval(() => {
           console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
           eventEmitter.emit("teleop-animation");
-        }, 5000);
+        }, TELEOP_TAB_FLASH_MS + 10000);
       }
     });
   }
+  console.log("++++", recurringTeleopAnimation.current);
 
   return (
     <ScoutPageContainer

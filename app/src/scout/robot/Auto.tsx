@@ -54,6 +54,7 @@ export default function Auto({
   }, []);
 
   const teleopTimeout = useRef<NodeJS.Timeout | null>(null);
+  console.log("---", teleopTimeout.current);
   useEffect(() => {
     teleopTimeout.current = setTimeout(() => {
       console.log("-------------------------------------");
