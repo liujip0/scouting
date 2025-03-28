@@ -1,5 +1,4 @@
 import {
-  Alliance,
   DBEvent,
   HumanPlayerEntry,
   Match,
@@ -29,15 +28,7 @@ interface ISAIDBSchema extends DBSchema {
     value: Match;
   };
   TeamMatchEntry: {
-    key: [
-      string, // eventKey
-      (typeof MatchLevel)[number], // matchLevel
-      number, // matchNumber
-      (typeof Alliance)[number], // alliance
-      1 | 2 | 3, // robotNumber
-      number, // deviceTeamNumber
-      string, // deviceId
-    ];
+    key: [string, (typeof MatchLevel)[number], number, number, number, string];
     value: TeamMatchEntry & {
       autoUpload: boolean;
       quickshare: boolean;
@@ -48,15 +39,7 @@ interface ISAIDBSchema extends DBSchema {
     };
   };
   HumanPlayerEntry: {
-    key: [
-      string, // eventKey
-      (typeof MatchLevel)[number], // matchLevel
-      number, // matchNumber
-      (typeof Alliance)[number], // alliance
-      4, // robotNumber
-      number, // deviceTeamNumber
-      string, // deviceId
-    ];
+    key: [string, (typeof MatchLevel)[number], number, number, number, string];
     value: HumanPlayerEntry & {
       autoUpload: boolean;
       quickshare: boolean;
@@ -135,7 +118,14 @@ export const getDBTeamMatchEntries = async () => {
 export const getDBHumanPlayerEntries = async () => {
   const db = await openDB<ISAIDBSchema>(dbname, version);
   const res = await db.getAll(Stores.HumanPlayerEntry);
-  return res;
+  return res.map((entry) =>
+    entry.teamNumber === 0 ?
+      {
+        ...entry,
+        teamNumber: null,
+      }
+    : entry
+  );
 };
 
 export const putDBEvent = async (event: DBEvent) => {
@@ -159,6 +149,7 @@ export const putDBEntry = async (match: ExportMatchEntry) => {
   } else {
     await db.put(Stores.HumanPlayerEntry, {
       ...match,
+      teamNumber: match.teamNumber || 0,
     });
   }
 };
@@ -172,8 +163,7 @@ export const deleteEntry = async (
       match.eventKey,
       match.matchLevel,
       match.matchNumber,
-      match.alliance,
-      match.robotNumber,
+      match.teamNumber,
       match.deviceTeamNumber,
       match.deviceId,
     ]);
@@ -182,8 +172,7 @@ export const deleteEntry = async (
       match.eventKey,
       match.matchLevel,
       match.matchNumber,
-      match.alliance,
-      match.robotNumber,
+      match.teamNumber || 0,
       match.deviceTeamNumber,
       match.deviceId,
     ]);
