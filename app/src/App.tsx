@@ -12,6 +12,9 @@ import { getDBEvents, getDBMatches, initDB } from "./utils/idb.ts";
 
 export default function App() {
   const eventEmitter = useMemo(() => new EventEmitter(), []);
+  useEffect(() => {
+    eventEmitter.setMaxListeners(1);
+  }, [eventEmitter]);
 
   const [deviceSetup, setDeviceSetupState] = useState<DeviceSetupObj>(
     (): DeviceSetupObj => {
