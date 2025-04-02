@@ -5,16 +5,24 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   FormLabel,
   Stack,
   TextField,
+  ToggleButtonGroup,
 } from "@mui/material";
+import { StyledToggleButton } from "../../components/StyledToggleButton.tsx";
 
 type PostmatchProps = {
   match: TeamMatchEntry;
   setMatch: (value: TeamMatchEntry) => void;
+  dataConfidenceError: string;
 };
-export default function Postmatch({ match, setMatch }: PostmatchProps) {
+export default function Postmatch({
+  match,
+  setMatch,
+  dataConfidenceError,
+}: PostmatchProps) {
   return (
     <Stack
       direction="row"
@@ -198,7 +206,69 @@ export default function Postmatch({ match, setMatch }: PostmatchProps) {
         sx={{
           flex: 1,
           padding: 2,
-        }}>
+        }}
+        gap={4}>
+        <Stack
+          sx={{
+            width: 1,
+          }}>
+          <FormLabel>Data Confidence</FormLabel>
+          <ToggleButtonGroup
+            sx={{
+              width: 1,
+            }}>
+            <StyledToggleButton
+              value="Low Data Confidence?"
+              selected={match.dataConfidence === "low"}
+              onChange={() => {
+                setMatch({
+                  ...match,
+                  dataConfidence: "low",
+                });
+              }}
+              sx={{
+                flex: 1,
+              }}>
+              Low
+            </StyledToggleButton>
+            <StyledToggleButton
+              value="Neutral Data Confidence?"
+              selected={match.dataConfidence === "neutral"}
+              onChange={() => {
+                setMatch({
+                  ...match,
+                  dataConfidence: "neutral",
+                });
+              }}
+              sx={{
+                flex: 1,
+              }}>
+              Neutral
+            </StyledToggleButton>
+            <StyledToggleButton
+              value="High Data Confidence?"
+              selected={match.dataConfidence === "high"}
+              onChange={() => {
+                setMatch({
+                  ...match,
+                  dataConfidence: "high",
+                });
+              }}
+              sx={{
+                flex: 1,
+              }}>
+              High
+            </StyledToggleButton>
+          </ToggleButtonGroup>
+          <FormHelperText
+            color="error"
+            sx={{
+              pl: 2,
+              color: "error.main",
+            }}>
+            {dataConfidenceError}
+          </FormHelperText>
+        </Stack>
         <TextField
           label="Comments"
           value={match.comments}
