@@ -134,6 +134,10 @@ export const TeamMatchEntrySchema = CommonEntrySchema.omit({
   teleopAttemptedDeep: z.boolean().nullable(),
   teleopSuccessfulShallow: z.boolean().nullable(),
   teleopSuccessfulDeep: z.boolean().nullable(),
+
+  dataConfidence: z
+    .union([z.literal("low"), z.literal("neutral"), z.literal("high")])
+    .nullable(),
 });
 export type TeamMatchEntry = z.infer<typeof TeamMatchEntrySchema>;
 export type TeamMatchEntryColumn = keyof TeamMatchEntry;
@@ -222,6 +226,8 @@ export const TeamMatchEntryColumns: TeamMatchEntryColumn[] = [
   "teleopAttemptedDeep",
   "teleopSuccessfulShallow",
   "teleopSuccessfulDeep",
+
+  "dataConfidence",
 ] as TeamMatchEntryColumn[];
 export const TeamMatchEntryInit: TeamMatchEntry = {
   eventKey: "",
@@ -318,6 +324,8 @@ export const TeamMatchEntryInit: TeamMatchEntry = {
   teleopAttemptedDeep: false,
   teleopSuccessfulShallow: false,
   teleopSuccessfulDeep: false,
+
+  dataConfidence: null,
 };
 export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   eventKey: "",
@@ -414,6 +422,8 @@ export const TeamMatchEntryNoShowInit: TeamMatchEntry = {
   teleopAttemptedDeep: null,
   teleopSuccessfulShallow: null,
   teleopSuccessfulDeep: null,
+
+  dataConfidence: null,
 };
 
 export const HumanPlayerEntrySchema = CommonEntrySchema.omit({

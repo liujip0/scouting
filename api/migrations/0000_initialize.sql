@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS TeamMatchEntry(
   teleopSuccessfulShallow boolean,
   teleopSuccessfulDeep boolean,
 
+  dataConfidence integer CHECK(dataConfidence IN ('low', 'neutral', 'high')),
+
   PRIMARY KEY (eventKey, matchLevel, matchNumber, alliance, robotNumber, deviceTeamNumber, deviceId)
 );
 

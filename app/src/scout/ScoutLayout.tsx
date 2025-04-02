@@ -164,6 +164,7 @@ export default function ScoutLayout({
   const [scoutTeamNumberError, setScoutTeamNumberError] = useState("");
   const [teamNumberError, setTeamNumberError] = useState("");
   const [startingPositionError, setStartingPositionError] = useState("");
+  const [dataConfidenceError, setDataConfidenceError] = useState("");
 
   const prematchCheck = () => {
     let error = false;
@@ -230,6 +231,78 @@ export default function ScoutLayout({
       setStartingPositionError("Starting position must be selected.");
     } else {
       setStartingPositionError("");
+    }
+
+    return error;
+  };
+  const submitCheck = () => {
+    let error = false;
+
+    if (
+      (match as TeamMatchEntry).dataConfidence !== "low" &&
+      (match as TeamMatchEntry).dataConfidence !== "neutral" &&
+      (match as TeamMatchEntry).dataConfidence !== "high"
+    ) {
+      error = true;
+      setDataConfidenceError("Data confidence must be selected.");
+    }
+
+    return error;
+  };
+  const humanCheck = () => {
+    let error = false;
+
+    if (!Number.isInteger(match.matchNumber) || match.matchNumber < 1) {
+      error = true;
+      setMatchNumberError("Invalid match number.");
+    } else if (
+      !events
+        .find((x) => x.eventKey === deviceSetup.currentEvent)
+        ?.matches.some(
+          (y) =>
+            y.matchNumber === match.matchNumber &&
+            y.matchLevel === match.matchLevel
+        )
+    ) {
+      if (
+        matchNumberError !==
+        "Match not in schedule. Press Next again to ignore."
+      ) {
+        error = true;
+      }
+      setMatchNumberError("Match not in schedule. Press Next again to ignore.");
+    } else {
+      setMatchNumberError("");
+    }
+
+    if (!match.scoutName) {
+      error = true;
+      setScoutNameError("Cannot be empty.");
+    } else {
+      setScoutNameError("");
+    }
+
+    if (
+      !match.scoutTeamNumber ||
+      match.scoutTeamNumber < 1 ||
+      match.scoutTeamNumber > MAX_TEAM_NUMBER
+    ) {
+      error = true;
+      setScoutTeamNumberError("Invalid team number.");
+    } else {
+      setScoutTeamNumberError("");
+    }
+
+    if (
+      match.teamNumber === null ||
+      isNaN(match.teamNumber) ||
+      match.teamNumber <= 0 ||
+      match.teamNumber > MAX_TEAM_NUMBER
+    ) {
+      error = true;
+      setTeamNumberError("Invalid team number.");
+    } else {
+      setTeamNumberError("");
     }
 
     return error;
@@ -481,9 +554,11 @@ export default function ScoutLayout({
                       noShowTeamMatchEntry(match as TeamMatchEntry),
                     ]);
                   } else {
-                    putEntries.mutate([
-                      endOfMatchTeamMatchEntry(match as TeamMatchEntry),
-                    ]);
+                    if (!submitCheck()) {
+                      putEntries.mutate([
+                        endOfMatchTeamMatchEntry(match as TeamMatchEntry),
+                      ]);
+                    }
                   }
                 }}>
                 Submit
@@ -500,9 +575,11 @@ export default function ScoutLayout({
                   noShowTeamMatchEntry(match as TeamMatchEntry),
                 ]);
               } else {
-                putEntries.mutate([
-                  endOfMatchTeamMatchEntry(match as TeamMatchEntry),
-                ]);
+                if (!submitCheck()) {
+                  putEntries.mutate([
+                    endOfMatchTeamMatchEntry(match as TeamMatchEntry),
+                  ]);
+                }
               }
             }}>
             Submit
@@ -522,67 +599,7 @@ export default function ScoutLayout({
             <Button
               variant="contained"
               onClick={() => {
-                let error = false;
-
-                if (
-                  !Number.isInteger(match.matchNumber) ||
-                  match.matchNumber < 1
-                ) {
-                  error = true;
-                  setMatchNumberError("Invalid match number.");
-                } else if (
-                  !events
-                    .find((x) => x.eventKey === deviceSetup.currentEvent)
-                    ?.matches.some(
-                      (y) =>
-                        y.matchNumber === match.matchNumber &&
-                        y.matchLevel === match.matchLevel
-                    )
-                ) {
-                  if (
-                    matchNumberError !==
-                    "Match not in schedule. Press Next again to ignore."
-                  ) {
-                    error = true;
-                  }
-                  setMatchNumberError(
-                    "Match not in schedule. Press Next again to ignore."
-                  );
-                } else {
-                  setMatchNumberError("");
-                }
-
-                if (!match.scoutName) {
-                  error = true;
-                  setScoutNameError("Cannot be empty.");
-                } else {
-                  setScoutNameError("");
-                }
-
-                if (
-                  !match.scoutTeamNumber ||
-                  match.scoutTeamNumber < 1 ||
-                  match.scoutTeamNumber > MAX_TEAM_NUMBER
-                ) {
-                  error = true;
-                  setScoutTeamNumberError("Invalid team number.");
-                } else {
-                  setScoutTeamNumberError("");
-                }
-
-                if (
-                  match.teamNumber === null ||
-                  isNaN(match.teamNumber) ||
-                  match.teamNumber <= 0 ||
-                  match.teamNumber > MAX_TEAM_NUMBER
-                ) {
-                  error = true;
-                  setTeamNumberError("Invalid team number.");
-                } else {
-                  setTeamNumberError("");
-                }
-
-                if (!error) {
+                if (!humanCheck()) {
                   if (match.teamNumber === 0) {
                     setMatch(noShowHumanPlayerEntry(match as HumanPlayerEntry));
                     putEntries.mutate([
@@ -641,6 +658,7 @@ export default function ScoutLayout({
                 <Postmatch
                   match={match as TeamMatchEntry}
                   setMatch={setMatch}
+                  dataConfidenceError={dataConfidenceError}
                 />
               ),
               human: (

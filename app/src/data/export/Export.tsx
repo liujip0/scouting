@@ -22,7 +22,9 @@ export default function Export() {
   const publicApiToken = trpc.users.publicApiToken.useQuery();
 
   const [robotColumns, setRobotColumns] = useState<boolean[]>(
-    new Array(TeamMatchEntryColumns.length)
+    new Array(
+      TeamMatchEntryColumns.filter((x) => x !== "dataConfidence").length
+    )
       .fill(false)
       .map(
         (_, i) =>
@@ -35,7 +37,9 @@ export default function Export() {
             "matchLevel",
             "alliance",
             "robotNumber",
-          ].includes(TeamMatchEntryColumns[i])
+          ].includes(
+            TeamMatchEntryColumns.filter((x) => x !== "dataConfidence")[i]
+          )
       )
   );
   const [humanColumns, setHumanColumns] = useState<boolean[]>(
@@ -87,12 +91,6 @@ export default function Export() {
               "/humans"
             }
           />
-          {/* <Tab
-            label="All Data"
-            value="/"
-            component={Link}
-            to={resolvedPath.pathname.split("/").slice(0, -1).join("/") + "/"}
-          /> */}
         </Tabs>
       </Box>
       <Box
@@ -147,29 +145,6 @@ export default function Export() {
               />
             }
           />
-          {/* <Route
-            path="/"
-            element={
-              <ExportLayout
-                showPublicApiToken={showPublicApiToken}
-                setShowPublicApiToken={setShowPublicApiToken}
-                linkIncludesToken={linkIncludesToken}
-                setLinkIncludesToken={setLinkIncludesToken}
-                showAuthorization={showAuthorization}
-                setShowAuthorization={setShowAuthorization}
-                publicApiToken={publicApiToken.data}
-                robotColumnsState={robotColumns}
-                setRobotColumnsState={setRobotColumns}
-                humanColumnsState={humanColumns}
-                setHumanColumnsState={setHumanColumns}
-                linkBase="/public/all/"
-                events={events}
-                setEvents={setEvents}
-                teams={teams}
-                setTeams={setTeams}
-              />
-            }
-          /> */}
         </Routes>
       </Box>
     </Stack>
