@@ -16,6 +16,7 @@ export const StyledRedToggleButton = styled(ToggleButton)((theme) => ({
     backgroundColor: theme.theme.palette.error.main,
   },
   color: theme.theme.palette.error.main,
+  backgroundColor: "white",
   borderColor: theme.theme.palette.error.main,
   padding: 1,
 }));
