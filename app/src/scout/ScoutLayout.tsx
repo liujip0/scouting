@@ -48,6 +48,62 @@ export default function ScoutLayout({
   );
   console.log("match stage: " + matchStage);
 
+  const endOfMatchTeamMatchEntry = (m: TeamMatchEntry): TeamMatchEntry => {
+    return {
+      ...m,
+      autoCrossedRSL:
+        (
+          m.autoCrossedRSL ||
+          m.autoCoralABL1 ||
+          m.autoCoralAL2 ||
+          m.autoCoralAL3 ||
+          m.autoCoralAL4 ||
+          m.autoCoralBL2 ||
+          m.autoCoralBL3 ||
+          m.autoCoralBL4 ||
+          m.autoCoralCDL1 ||
+          m.autoCoralCL2 ||
+          m.autoCoralCL3 ||
+          m.autoCoralCL4 ||
+          m.autoCoralDL2 ||
+          m.autoCoralDL3 ||
+          m.autoCoralDL4 ||
+          m.autoCoralEFL1 ||
+          m.autoCoralEL2 ||
+          m.autoCoralEL3 ||
+          m.autoCoralEL4 ||
+          m.autoCoralFL2 ||
+          m.autoCoralFL3 ||
+          m.autoCoralFL4 ||
+          m.autoCoralGHL1 ||
+          m.autoCoralGL2 ||
+          m.autoCoralGL3 ||
+          m.autoCoralGL4 ||
+          m.autoCoralHL2 ||
+          m.autoCoralHL3 ||
+          m.autoCoralHL4 ||
+          m.autoCoralIJL1 ||
+          m.autoCoralIL2 ||
+          m.autoCoralIL3 ||
+          m.autoCoralIL4 ||
+          m.autoCoralJL2 ||
+          m.autoCoralJL3 ||
+          m.autoCoralJL4 ||
+          m.autoCoralKLL1 ||
+          m.autoCoralKL2 ||
+          m.autoCoralKL3 ||
+          m.autoCoralKL4 ||
+          m.autoCoralLL2 ||
+          m.autoCoralLL3 ||
+          m.autoCoralLL4 ||
+          m.autoProcessor ||
+          m.autoNet
+        ) ?
+          true
+        : false,
+    };
+  };
+
   let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
     onMutate() {
@@ -57,7 +113,9 @@ export default function ScoutLayout({
         if (putEntriesPending) {
           putEntries.reset();
           await putDBEntry({
-            ...match,
+            ...(match.robotNumber === 4 ?
+              match
+            : endOfMatchTeamMatchEntry(match)),
             autoUpload: false,
             quickshare: false,
             clipboard: false,
@@ -72,7 +130,7 @@ export default function ScoutLayout({
     async onSuccess() {
       clearTimeout(putEntriesTimeout);
       await putDBEntry({
-        ...match,
+        ...(match.robotNumber === 4 ? match : endOfMatchTeamMatchEntry(match)),
         autoUpload: true,
         quickshare: false,
         clipboard: false,
@@ -88,7 +146,7 @@ export default function ScoutLayout({
       clearTimeout(putEntriesTimeout);
       console.error(error);
       await putDBEntry({
-        ...match,
+        ...(match.robotNumber === 4 ? match : endOfMatchTeamMatchEntry(match)),
         autoUpload: false,
         quickshare: false,
         clipboard: false,
@@ -297,6 +355,39 @@ export default function ScoutLayout({
   }
   console.log("++++", recurringTeleopAnimation.current);
 
+  const noShowTeamMatchEntry = (m: TeamMatchEntry): TeamMatchEntry => {
+    return {
+      ...TeamMatchEntryNoShowInit,
+      eventKey: m.eventKey,
+      matchLevel: m.matchLevel,
+      matchNumber: m.matchNumber,
+      teamNumber: m.teamNumber!,
+      alliance: m.alliance,
+      robotNumber: m.robotNumber as 1 | 2 | 3,
+      deviceTeamNumber: m.deviceTeamNumber,
+      deviceId: m.deviceId,
+      scoutTeamNumber: m.scoutTeamNumber,
+      scoutName: m.scoutName,
+      flag: m.flag,
+    };
+  };
+  const noShowHumanPlayerEntry = (m: HumanPlayerEntry): HumanPlayerEntry => {
+    return {
+      ...HumanPlayerEntryNoShowInit,
+      eventKey: m.eventKey,
+      matchLevel: m.matchLevel,
+      matchNumber: m.matchNumber,
+      teamNumber: m.teamNumber!,
+      alliance: m.alliance,
+      robotNumber: 4,
+      deviceTeamNumber: m.deviceTeamNumber,
+      deviceId: m.deviceId,
+      scoutTeamNumber: m.scoutTeamNumber,
+      scoutName: m.scoutName,
+      flag: m.flag,
+    };
+  };
+
   return (
     <ScoutPageContainer
       backdrop={teleopAnimationBackdrop}
@@ -385,38 +476,14 @@ export default function ScoutLayout({
                 variant="contained"
                 onClick={() => {
                   if ((match as TeamMatchEntry).noShow) {
-                    setMatch({
-                      ...TeamMatchEntryNoShowInit,
-                      eventKey: match.eventKey,
-                      matchLevel: match.matchLevel,
-                      matchNumber: match.matchNumber,
-                      teamNumber: match.teamNumber!,
-                      alliance: match.alliance,
-                      robotNumber: match.robotNumber as 1 | 2 | 3,
-                      deviceTeamNumber: match.deviceTeamNumber,
-                      deviceId: match.deviceId,
-                      scoutTeamNumber: match.scoutTeamNumber,
-                      scoutName: match.scoutName,
-                      flag: match.flag,
-                    });
+                    setMatch(noShowTeamMatchEntry(match as TeamMatchEntry));
                     putEntries.mutate([
-                      {
-                        ...TeamMatchEntryNoShowInit,
-                        eventKey: match.eventKey,
-                        matchLevel: match.matchLevel,
-                        matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
-                        alliance: match.alliance,
-                        robotNumber: match.robotNumber as 1 | 2 | 3,
-                        deviceTeamNumber: match.deviceTeamNumber,
-                        deviceId: match.deviceId,
-                        scoutTeamNumber: match.scoutTeamNumber,
-                        scoutName: match.scoutName,
-                        flag: match.flag,
-                      },
+                      noShowTeamMatchEntry(match as TeamMatchEntry),
                     ]);
                   } else {
-                    putEntries.mutate([match]);
+                    putEntries.mutate([
+                      endOfMatchTeamMatchEntry(match as TeamMatchEntry),
+                    ]);
                   }
                 }}>
                 Submit
@@ -428,38 +495,14 @@ export default function ScoutLayout({
             variant="contained"
             onClick={() => {
               if ((match as TeamMatchEntry).noShow) {
-                setMatch({
-                  ...TeamMatchEntryNoShowInit,
-                  eventKey: match.eventKey,
-                  matchLevel: match.matchLevel,
-                  matchNumber: match.matchNumber,
-                  teamNumber: match.teamNumber!,
-                  alliance: match.alliance,
-                  robotNumber: match.robotNumber as 1 | 2 | 3,
-                  deviceTeamNumber: match.deviceTeamNumber,
-                  deviceId: match.deviceId,
-                  scoutTeamNumber: match.scoutTeamNumber,
-                  scoutName: match.scoutName,
-                  flag: match.flag,
-                });
+                setMatch(noShowTeamMatchEntry(match as TeamMatchEntry));
                 putEntries.mutate([
-                  {
-                    ...TeamMatchEntryNoShowInit,
-                    eventKey: match.eventKey,
-                    matchLevel: match.matchLevel,
-                    matchNumber: match.matchNumber,
-                    teamNumber: match.teamNumber!,
-                    alliance: match.alliance,
-                    robotNumber: match.robotNumber as 1 | 2 | 3,
-                    deviceTeamNumber: match.deviceTeamNumber,
-                    deviceId: match.deviceId,
-                    scoutTeamNumber: match.scoutTeamNumber,
-                    scoutName: match.scoutName,
-                    flag: match.flag,
-                  },
+                  noShowTeamMatchEntry(match as TeamMatchEntry),
                 ]);
               } else {
-                putEntries.mutate([match]);
+                putEntries.mutate([
+                  endOfMatchTeamMatchEntry(match as TeamMatchEntry),
+                ]);
               }
             }}>
             Submit
@@ -541,35 +584,9 @@ export default function ScoutLayout({
 
                 if (!error) {
                   if (match.teamNumber === 0) {
-                    setMatch({
-                      ...HumanPlayerEntryNoShowInit,
-                      eventKey: match.eventKey,
-                      matchLevel: match.matchLevel,
-                      matchNumber: match.matchNumber,
-                      teamNumber: match.teamNumber!,
-                      alliance: match.alliance,
-                      robotNumber: 4,
-                      deviceTeamNumber: match.deviceTeamNumber,
-                      deviceId: match.deviceId,
-                      scoutTeamNumber: match.scoutTeamNumber,
-                      scoutName: match.scoutName,
-                      flag: match.flag,
-                    });
+                    setMatch(noShowHumanPlayerEntry(match as HumanPlayerEntry));
                     putEntries.mutate([
-                      {
-                        ...HumanPlayerEntryNoShowInit,
-                        eventKey: match.eventKey,
-                        matchLevel: match.matchLevel,
-                        matchNumber: match.matchNumber,
-                        teamNumber: match.teamNumber!,
-                        alliance: match.alliance,
-                        robotNumber: 4,
-                        deviceTeamNumber: match.deviceTeamNumber,
-                        deviceId: match.deviceId,
-                        scoutTeamNumber: match.scoutTeamNumber,
-                        scoutName: match.scoutName,
-                        flag: match.flag,
-                      },
+                      noShowHumanPlayerEntry(match as HumanPlayerEntry),
                     ]);
                   } else {
                     putEntries.mutate([match]);
