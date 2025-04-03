@@ -18,11 +18,11 @@ const theme = responsiveFontSizes(
         contrastText: "#fff",
       },
       secondary: {
-        main: "#d59f0f", // Indiana Flag Gold
+        main: "#ffb900", // Indiana Flag Gold
         contrastText: "#000",
       },
       background: {
-        default: "#f1dc8e", // Light Indiana Flag Gold
+        default: "#89cff0", // Light Indiana Flag Gold
         paper: "#dddddd",
       },
     },
