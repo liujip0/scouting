@@ -264,8 +264,12 @@ export default function DeviceSetup({
                     color: "white",
                     backgroundColor: "#ff0000",
                   },
+                  "&:hover": {
+                    backgroundColor: "#dddddd",
+                  },
                   color: "#ff0000",
                   borderColor: "#ff0000",
+                  backgroundColor: "white",
                 }}>
                 Red
               </ToggleButton>
@@ -277,8 +281,12 @@ export default function DeviceSetup({
                     color: "white",
                     backgroundColor: "#0000ff",
                   },
+                  "&:hover": {
+                    backgroundColor: "#dddddd",
+                  },
                   color: "#0000ff",
                   borderColor: "#0000ff",
+                  backgroundColor: "white",
                 }}>
                 Blue
               </ToggleButton>

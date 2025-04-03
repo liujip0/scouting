@@ -8,7 +8,7 @@ import {
 import { DBSchema, openDB } from "idb";
 import { ExportMatchEntry } from "../scout/SavedMatches.tsx";
 
-const version = 3;
+const version = 4;
 const dbname = "isa2025-idb";
 
 export enum Stores {
