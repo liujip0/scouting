@@ -8,7 +8,6 @@ import {
   TeamMatchEntryColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import {
-  CameraAlt,
   Close,
   ContentPaste,
   FileUpload,
@@ -176,13 +175,13 @@ export default function Upload() {
         </DialogActions>
       </Dialog>
 
-      <Button
+      {/* <Button
         onClick={() => {
           //TODO
         }}
         startIcon={<CameraAlt />}>
         Scan QR with Camera
-      </Button>
+      </Button> */}
 
       <Button onClick={() => {}}>&nbsp;</Button>
 

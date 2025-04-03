@@ -5,7 +5,6 @@ import "@fontsource/roboto/700.css";
 import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
@@ -19,11 +18,11 @@ const theme = responsiveFontSizes(
         contrastText: "#fff",
       },
       secondary: {
-        main: "#d59f0f", // Indiana Flag Gold
+        main: "#ffb900", // Indiana Flag Gold
         contrastText: "#000",
       },
       background: {
-        default: "#f1dc8e", // Light Indiana Flag Gold
+        default: "#89cff0", // Light Indiana Flag Gold
         paper: "#dddddd",
       },
     },
@@ -68,15 +67,13 @@ const trpcClient = trpc.createClient({
 });
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ThemeProvider theme={theme}>
-      <trpc.Provider
-        client={trpcClient}
-        queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <App />
-        </QueryClientProvider>
-      </trpc.Provider>
-    </ThemeProvider>
-  </StrictMode>
+  <ThemeProvider theme={theme}>
+    <trpc.Provider
+      client={trpcClient}
+      queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </trpc.Provider>
+  </ThemeProvider>
 );
