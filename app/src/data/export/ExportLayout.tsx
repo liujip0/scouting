@@ -141,74 +141,72 @@ export default function ExportLayout({
                 overflowY: "scroll",
                 mb: 2,
               }}>
-              {TeamMatchEntryColumns.filter((x) => x !== "dataConfidence").map(
-                (column, columnIndex) => {
-                  return (
-                    <FormControlLabel
-                      key={column}
-                      checked={robotColumnsState[columnIndex]}
-                      onChange={(_event, checked) => {
-                        setRobotColumnsState(
-                          robotColumnsState.map((value, valueIndex) =>
-                            valueIndex === columnIndex ? checked : value
-                          )
-                        );
-                      }}
-                      control={<Checkbox />}
-                      label={
-                        <Stack
-                          direction="row"
-                          sx={{
-                            alignItems: "center",
-                          }}
-                          gap={1}>
-                          <Typography>
-                            {column.startsWith("auto") ?
-                              column.replace("auto", "auto\u200b")
-                            : column.startsWith("teleop") ?
-                              column.replace("teleop", "teleop\u200b")
-                            : column.startsWith("endgame") ?
-                              column.replace("endgame", "endgame\u200b")
-                            : column.startsWith("postmatch") ?
-                              column.replace("postmatch", "postmatch\u200b")
-                            : column}
-                          </Typography>
+              {TeamMatchEntryColumns.map((column, columnIndex) => {
+                return (
+                  <FormControlLabel
+                    key={column}
+                    checked={robotColumnsState[columnIndex]}
+                    onChange={(_event, checked) => {
+                      setRobotColumnsState(
+                        robotColumnsState.map((value, valueIndex) =>
+                          valueIndex === columnIndex ? checked : value
+                        )
+                      );
+                    }}
+                    control={<Checkbox />}
+                    label={
+                      <Stack
+                        direction="row"
+                        sx={{
+                          alignItems: "center",
+                        }}
+                        gap={1}>
+                        <Typography>
+                          {column.startsWith("auto") ?
+                            column.replace("auto", "auto\u200b")
+                          : column.startsWith("teleop") ?
+                            column.replace("teleop", "teleop\u200b")
+                          : column.startsWith("endgame") ?
+                            column.replace("endgame", "endgame\u200b")
+                          : column.startsWith("postmatch") ?
+                            column.replace("postmatch", "postmatch\u200b")
+                          : column}
+                        </Typography>
+                        {
                           {
-                            {
-                              boolean: <DataTypeIcon dataType="boolean" />,
-                              string:
-                                column === "alliance" ?
-                                  <DataTypeIcon dataType='"Red" | "Blue"' />
-                                : column === "matchLevel" ?
-                                  <DataTypeIcon dataType='"None" | "Practice" | "Qualification" | "Playoff"' />
-                                : <DataTypeIcon dataType="string" />,
-                              number:
-                                column === "robotNumber" ?
-                                  <DataTypeIcon dataType="1 | 2 | 3" />
-                                : <DataTypeIcon dataType="integer" />,
-                              bigint: <DataTypeIcon dataType="error" />,
-                              symbol: <DataTypeIcon dataType="error" />,
-                              function: <DataTypeIcon dataType="error" />,
-                              object:
-                                (
-                                  [
-                                    "tbaAutoLine",
-                                    "tbaEndgamePark",
-                                    "tbaEndgameShallow",
-                                    "tbaEndgameDeep",
-                                  ].includes(column)
-                                ) ?
-                                  <DataTypeIcon dataType="boolean" />
-                                : <DataTypeIcon dataType="error" />,
-                              undefined: <DataTypeIcon dataType="error" />,
-                            }[typeof TeamMatchEntryInit[column]]
-                          }
-                        </Stack>
-                      }
-                    />
-                  );
-                }
-              )}
+                            boolean: <DataTypeIcon dataType="boolean" />,
+                            string:
+                              column === "alliance" ?
+                                <DataTypeIcon dataType='"Red" | "Blue"' />
+                              : column === "matchLevel" ?
+                                <DataTypeIcon dataType='"None" | "Practice" | "Qualification" | "Playoff"' />
+                              : <DataTypeIcon dataType="string" />,
+                            number:
+                              column === "robotNumber" ?
+                                <DataTypeIcon dataType="1 | 2 | 3" />
+                              : <DataTypeIcon dataType="integer" />,
+                            bigint: <DataTypeIcon dataType="error" />,
+                            symbol: <DataTypeIcon dataType="error" />,
+                            function: <DataTypeIcon dataType="error" />,
+                            object:
+                              (
+                                [
+                                  "tbaAutoLine",
+                                  "tbaEndgamePark",
+                                  "tbaEndgameShallow",
+                                  "tbaEndgameDeep",
+                                ].includes(column)
+                              ) ?
+                                <DataTypeIcon dataType="boolean" />
+                              : <DataTypeIcon dataType="error" />,
+                            undefined: <DataTypeIcon dataType="error" />,
+                          }[typeof TeamMatchEntryInit[column]]
+                        }
+                      </Stack>
+                    }
+                  />
+                );
+              })}
             </Stack>
           </>
         )}

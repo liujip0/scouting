@@ -22,9 +22,7 @@ export default function Export() {
   const publicApiToken = trpc.users.publicApiToken.useQuery();
 
   const [robotColumns, setRobotColumns] = useState<boolean[]>(
-    new Array(
-      TeamMatchEntryColumns.filter((x) => x !== "dataConfidence").length
-    )
+    new Array(TeamMatchEntryColumns.length)
       .fill(false)
       .map(
         (_, i) =>
@@ -37,9 +35,8 @@ export default function Export() {
             "matchLevel",
             "alliance",
             "robotNumber",
-          ].includes(
-            TeamMatchEntryColumns.filter((x) => x !== "dataConfidence")[i]
-          )
+            "dataConfidence",
+          ].includes(TeamMatchEntryColumns[i])
       )
   );
   const [humanColumns, setHumanColumns] = useState<boolean[]>(

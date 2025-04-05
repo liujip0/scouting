@@ -34,9 +34,7 @@ export const robots = async (opts: publicOpts): Promise<Response> => {
     const column = item.split(".");
     renameColumns[column[0]] = column[1];
   });
-  let columns: string[] = [
-    ...TeamMatchEntryColumns.filter((x) => x !== "dataConfidence"),
-  ];
+  let columns: string[] = [...TeamMatchEntryColumns];
 
   if (
     opts.params.has("include") &&
