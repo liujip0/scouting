@@ -389,18 +389,22 @@ export default function DeviceSetup({
                 borderStyle: "solid",
               }}>
               <StyledToggleButton
-                value="barge"
-                sx={{
-                  flex: 1,
-                }}>
-                Barge Side
-              </StyledToggleButton>
-              <StyledToggleButton
                 value="processor"
                 sx={{
                   flex: 1,
                 }}>
-                Processor Side
+                {deviceSetup.alliance === "Red" ?
+                  "Red on Left"
+                : "Blue on Left"}
+              </StyledToggleButton>
+              <StyledToggleButton
+                value="barge"
+                sx={{
+                  flex: 1,
+                }}>
+                {deviceSetup.alliance === "Red" ?
+                  "Red on Right"
+                : "Blue on Right"}
               </StyledToggleButton>
             </ToggleButtonGroup>
             <FormHelperText
