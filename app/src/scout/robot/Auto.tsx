@@ -100,15 +100,16 @@ export default function Auto({
 
   return (
     <Stack
-      direction="row"
+      direction={{ xs: "column", md: "row" }}
       sx={{
-        width: 1,
-        height: 1,
+        height: "auto",
+        width: "100%",
+        overflow: "auto",
       }}>
       <Stack
         direction="row"
         sx={{
-          width: "50%",
+          width: { xs: "100%", md: "50%" },
           padding: 2,
           alignItems: "center",
           justifyContent: "center",
@@ -666,7 +667,7 @@ export default function Auto({
       <Divider orientation="vertical" />
       <Stack
         sx={{
-          width: "50%",
+          width: { xs: "100%", md: "50%" },
           height: "100%",
           padding: 2,
         }}

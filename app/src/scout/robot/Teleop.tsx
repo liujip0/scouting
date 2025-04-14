@@ -13,10 +13,11 @@ type TeleopProps = {
 export function Teleop({ match, setMatch }: TeleopProps) {
   return (
     <Stack
-      direction="row"
+      direction={{ xs: "column", md: "row" }}
       sx={{
-        width: 1,
-        height: 1,
+        height: "auto",
+        width: "100%",
+        overflow: "auto",
       }}>
       <Stack
         direction="row"

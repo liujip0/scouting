@@ -171,10 +171,11 @@ export default function DeviceSetup({
         </>
       }>
       <Stack
-        direction="row"
+        direction={{ xs: "column", md: "row" }}
         sx={{
-          height: 1,
-          width: 1,
+          height: "auto",
+          width: "100%",
+          overflow: "auto",
         }}>
         <Snackbar
           open={status !== ""}
