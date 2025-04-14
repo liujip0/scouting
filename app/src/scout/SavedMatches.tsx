@@ -246,10 +246,11 @@ export default function SavedMatches({
         </>
       }>
       <Stack
-        direction="row"
+        direction={{ xs: "column", md: "row" }}
         sx={{
-          width: 1,
-          height: 1,
+          height: "auto",
+          width: "100%",
+          overflow: "auto",
         }}>
         <Stack
           sx={{
