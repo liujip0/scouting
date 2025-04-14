@@ -13,6 +13,15 @@ type TbaAllianceScore = {
   endGameRobot3: TbaEndGame;
   wallAlgaeCount: number;
 };
+export type TbaMatch = {
+  event_key: string;
+  comp_level: "qm" | "ef" | "qf" | "sf" | "f";
+  match_number: number;
+  score_breakdown: {
+    red: TbaAllianceScore;
+    blue: TbaAllianceScore;
+  };
+};
 type TbaRequest =
   | {
       message_type: "verification";
@@ -30,15 +39,7 @@ type TbaRequest =
   | {
       message_type: "match_score";
       message_data: {
-        match: {
-          event_key: string;
-          comp_level: "qm" | "ef" | "qf" | "sf" | "f";
-          match_number: number;
-          score_breakdown: {
-            red: TbaAllianceScore;
-            blue: TbaAllianceScore;
-          };
-        };
+        match: TbaMatch;
       };
     }
   | {
