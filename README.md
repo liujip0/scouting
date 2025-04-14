@@ -78,4 +78,4 @@ cd ..
 pnpm dev
 ```
 
-The frontend will be on `localhost:5173` and the backend will be on `localhost:8787`.
+The frontend will be on `localhost:5173` and the backend will be on `localhost:8787`. Please use event key `2024incmp` (or `2024inpla` and `2024incol` if multiple are needed) for testing on the live app so I can quickly delete test data later.
