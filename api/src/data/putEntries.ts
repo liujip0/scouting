@@ -92,150 +92,152 @@ export const putEntries = loggedPublicProcedure
       if (matchRes.status === 200) {
         const matchBody: TbaMatch = await matchRes.json();
 
-        boundTbaStmts.push(
-          updateTeamMatchEntry.bind(
-            matchBody.score_breakdown.red.autoLineRobot1 === "Yes",
-            matchBody.score_breakdown.red.endGameRobot1 === "Parked",
-            matchBody.score_breakdown.red.endGameRobot1 === "ShallowCage",
-            matchBody.score_breakdown.red.endGameRobot1 === "DeepCage",
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Red",
-            1
-          )
-        );
-        boundTbaStmts.push(
-          updateTeamMatchEntry.bind(
-            matchBody.score_breakdown.red.autoLineRobot2 === "Yes",
-            matchBody.score_breakdown.red.endGameRobot2 === "Parked",
-            matchBody.score_breakdown.red.endGameRobot2 === "ShallowCage",
-            matchBody.score_breakdown.red.endGameRobot2 === "DeepCage",
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Red",
-            2
-          )
-        );
-        boundTbaStmts.push(
-          updateTeamMatchEntry.bind(
-            matchBody.score_breakdown.red.autoLineRobot3 === "Yes",
-            matchBody.score_breakdown.red.endGameRobot3 === "Parked",
-            matchBody.score_breakdown.red.endGameRobot3 === "ShallowCage",
-            matchBody.score_breakdown.red.endGameRobot3 === "DeepCage",
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Red",
-            3
-          )
-        );
-        boundTbaStmts.push(
-          updateTeamMatchEntry.bind(
-            matchBody.score_breakdown.blue.autoLineRobot1 === "Yes",
-            matchBody.score_breakdown.blue.endGameRobot1 === "Parked",
-            matchBody.score_breakdown.blue.endGameRobot1 === "ShallowCage",
-            matchBody.score_breakdown.blue.endGameRobot1 === "DeepCage",
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Blue",
-            1
-          )
-        );
-        boundTbaStmts.push(
-          updateTeamMatchEntry.bind(
-            matchBody.score_breakdown.blue.autoLineRobot2 === "Yes",
-            matchBody.score_breakdown.blue.endGameRobot2 === "Parked",
-            matchBody.score_breakdown.blue.endGameRobot2 === "ShallowCage",
-            matchBody.score_breakdown.blue.endGameRobot2 === "DeepCage",
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Blue",
-            2
-          )
-        );
-        boundTbaStmts.push(
-          updateTeamMatchEntry.bind(
-            matchBody.score_breakdown.blue.autoLineRobot3 === "Yes",
-            matchBody.score_breakdown.blue.endGameRobot3 === "Parked",
-            matchBody.score_breakdown.blue.endGameRobot3 === "ShallowCage",
-            matchBody.score_breakdown.blue.endGameRobot3 === "DeepCage",
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Blue",
-            3
-          )
-        );
-        boundTbaStmts.push(
-          updateHumanPlayerEntry.bind(
-            matchBody.score_breakdown.blue.wallAlgaeCount,
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Red"
-          )
-        );
-        boundTbaStmts.push(
-          updateHumanPlayerEntry.bind(
-            matchBody.score_breakdown.red.wallAlgaeCount,
-            matchBody.event_key,
-            {
-              qm: "Qualification",
-              ef: "Playoff",
-              qf: "Playoff",
-              sf: "Playoff",
-              f: "Playoff",
-            }[matchBody.comp_level],
-            matchBody.match_number,
-            "Blue"
-          )
-        );
+        if (matchBody.score_breakdown?.red.autoLineRobot1) {
+          boundTbaStmts.push(
+            updateTeamMatchEntry.bind(
+              matchBody.score_breakdown.red.autoLineRobot1 === "Yes",
+              matchBody.score_breakdown.red.endGameRobot1 === "Parked",
+              matchBody.score_breakdown.red.endGameRobot1 === "ShallowCage",
+              matchBody.score_breakdown.red.endGameRobot1 === "DeepCage",
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Red",
+              1
+            )
+          );
+          boundTbaStmts.push(
+            updateTeamMatchEntry.bind(
+              matchBody.score_breakdown.red.autoLineRobot2 === "Yes",
+              matchBody.score_breakdown.red.endGameRobot2 === "Parked",
+              matchBody.score_breakdown.red.endGameRobot2 === "ShallowCage",
+              matchBody.score_breakdown.red.endGameRobot2 === "DeepCage",
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Red",
+              2
+            )
+          );
+          boundTbaStmts.push(
+            updateTeamMatchEntry.bind(
+              matchBody.score_breakdown.red.autoLineRobot3 === "Yes",
+              matchBody.score_breakdown.red.endGameRobot3 === "Parked",
+              matchBody.score_breakdown.red.endGameRobot3 === "ShallowCage",
+              matchBody.score_breakdown.red.endGameRobot3 === "DeepCage",
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Red",
+              3
+            )
+          );
+          boundTbaStmts.push(
+            updateTeamMatchEntry.bind(
+              matchBody.score_breakdown.blue.autoLineRobot1 === "Yes",
+              matchBody.score_breakdown.blue.endGameRobot1 === "Parked",
+              matchBody.score_breakdown.blue.endGameRobot1 === "ShallowCage",
+              matchBody.score_breakdown.blue.endGameRobot1 === "DeepCage",
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Blue",
+              1
+            )
+          );
+          boundTbaStmts.push(
+            updateTeamMatchEntry.bind(
+              matchBody.score_breakdown.blue.autoLineRobot2 === "Yes",
+              matchBody.score_breakdown.blue.endGameRobot2 === "Parked",
+              matchBody.score_breakdown.blue.endGameRobot2 === "ShallowCage",
+              matchBody.score_breakdown.blue.endGameRobot2 === "DeepCage",
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Blue",
+              2
+            )
+          );
+          boundTbaStmts.push(
+            updateTeamMatchEntry.bind(
+              matchBody.score_breakdown.blue.autoLineRobot3 === "Yes",
+              matchBody.score_breakdown.blue.endGameRobot3 === "Parked",
+              matchBody.score_breakdown.blue.endGameRobot3 === "ShallowCage",
+              matchBody.score_breakdown.blue.endGameRobot3 === "DeepCage",
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Blue",
+              3
+            )
+          );
+          boundTbaStmts.push(
+            updateHumanPlayerEntry.bind(
+              matchBody.score_breakdown.blue.wallAlgaeCount,
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Red"
+            )
+          );
+          boundTbaStmts.push(
+            updateHumanPlayerEntry.bind(
+              matchBody.score_breakdown.red.wallAlgaeCount,
+              matchBody.event_key,
+              {
+                qm: "Qualification",
+                ef: "Playoff",
+                qf: "Playoff",
+                sf: "Playoff",
+                f: "Playoff",
+              }[matchBody.comp_level],
+              matchBody.match_number,
+              "Blue"
+            )
+          );
+        }
       }
     }
     await opts.ctx.env.DB.batch(boundTbaStmts);

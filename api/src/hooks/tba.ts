@@ -20,7 +20,7 @@ export type TbaMatch = {
   score_breakdown: {
     red: TbaAllianceScore;
     blue: TbaAllianceScore;
-  };
+  } | null;
 };
 type TbaRequest =
   | {
@@ -65,7 +65,7 @@ export const tba = async (opts: WebhooksOpts): Promise<Response> => {
       return new Response("Ping successful.");
     }
     case "match_score": {
-      if (body.message_data.match.score_breakdown.red.autoLineRobot1) {
+      if (body.message_data.match.score_breakdown?.red.autoLineRobot1) {
         const updateTeamMatchEntry = opts.env.DB.prepare(
           `UPDATE TeamMatchEntry
             SET tbaAutoLine = ?,
