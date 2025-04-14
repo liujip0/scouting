@@ -84,6 +84,9 @@ export const putEntries = loggedPublicProcedure
         "https://www.thebluealliance.com/api/v3/match/" + key,
         {
           method: "GET",
+          headers: {
+            "X-TBA-Auth-Key": opts.ctx.env.TBA_API_TOKEN,
+          },
         }
       );
       if (matchRes.status === 200) {
@@ -91,173 +94,149 @@ export const putEntries = loggedPublicProcedure
 
         boundTbaStmts.push(
           updateTeamMatchEntry.bind(
-            matchBody.message_data.match.score_breakdown.red.autoLineRobot1 ===
-              "Yes",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot1 ===
-              "Parked",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot1 ===
-              "ShallowCage",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot1 ===
-              "DeepCage",
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.red.autoLineRobot1 === "Yes",
+            matchBody.score_breakdown.red.endGameRobot1 === "Parked",
+            matchBody.score_breakdown.red.endGameRobot1 === "ShallowCage",
+            matchBody.score_breakdown.red.endGameRobot1 === "DeepCage",
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Red",
             1
           )
         );
         boundTbaStmts.push(
           updateTeamMatchEntry.bind(
-            matchBody.message_data.match.score_breakdown.red.autoLineRobot2 ===
-              "Yes",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot2 ===
-              "Parked",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot2 ===
-              "ShallowCage",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot2 ===
-              "DeepCage",
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.red.autoLineRobot2 === "Yes",
+            matchBody.score_breakdown.red.endGameRobot2 === "Parked",
+            matchBody.score_breakdown.red.endGameRobot2 === "ShallowCage",
+            matchBody.score_breakdown.red.endGameRobot2 === "DeepCage",
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Red",
             2
           )
         );
         boundTbaStmts.push(
           updateTeamMatchEntry.bind(
-            matchBody.message_data.match.score_breakdown.red.autoLineRobot3 ===
-              "Yes",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot3 ===
-              "Parked",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot3 ===
-              "ShallowCage",
-            matchBody.message_data.match.score_breakdown.red.endGameRobot3 ===
-              "DeepCage",
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.red.autoLineRobot3 === "Yes",
+            matchBody.score_breakdown.red.endGameRobot3 === "Parked",
+            matchBody.score_breakdown.red.endGameRobot3 === "ShallowCage",
+            matchBody.score_breakdown.red.endGameRobot3 === "DeepCage",
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Red",
             3
           )
         );
         boundTbaStmts.push(
           updateTeamMatchEntry.bind(
-            matchBody.message_data.match.score_breakdown.blue.autoLineRobot1 ===
-              "Yes",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot1 ===
-              "Parked",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot1 ===
-              "ShallowCage",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot1 ===
-              "DeepCage",
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.blue.autoLineRobot1 === "Yes",
+            matchBody.score_breakdown.blue.endGameRobot1 === "Parked",
+            matchBody.score_breakdown.blue.endGameRobot1 === "ShallowCage",
+            matchBody.score_breakdown.blue.endGameRobot1 === "DeepCage",
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Blue",
             1
           )
         );
         boundTbaStmts.push(
           updateTeamMatchEntry.bind(
-            matchBody.message_data.match.score_breakdown.blue.autoLineRobot2 ===
-              "Yes",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot2 ===
-              "Parked",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot2 ===
-              "ShallowCage",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot2 ===
-              "DeepCage",
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.blue.autoLineRobot2 === "Yes",
+            matchBody.score_breakdown.blue.endGameRobot2 === "Parked",
+            matchBody.score_breakdown.blue.endGameRobot2 === "ShallowCage",
+            matchBody.score_breakdown.blue.endGameRobot2 === "DeepCage",
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Blue",
             2
           )
         );
         boundTbaStmts.push(
           updateTeamMatchEntry.bind(
-            matchBody.message_data.match.score_breakdown.blue.autoLineRobot3 ===
-              "Yes",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot3 ===
-              "Parked",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot3 ===
-              "ShallowCage",
-            matchBody.message_data.match.score_breakdown.blue.endGameRobot3 ===
-              "DeepCage",
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.blue.autoLineRobot3 === "Yes",
+            matchBody.score_breakdown.blue.endGameRobot3 === "Parked",
+            matchBody.score_breakdown.blue.endGameRobot3 === "ShallowCage",
+            matchBody.score_breakdown.blue.endGameRobot3 === "DeepCage",
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Blue",
             3
           )
         );
         boundTbaStmts.push(
           updateHumanPlayerEntry.bind(
-            matchBody.message_data.match.score_breakdown.blue.wallAlgaeCount,
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.blue.wallAlgaeCount,
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Red"
           )
         );
         boundTbaStmts.push(
           updateHumanPlayerEntry.bind(
-            matchBody.message_data.match.score_breakdown.red.wallAlgaeCount,
-            matchBody.message_data.match.event_key,
+            matchBody.score_breakdown.red.wallAlgaeCount,
+            matchBody.event_key,
             {
               qm: "Qualification",
               ef: "Playoff",
               qf: "Playoff",
               sf: "Playoff",
               f: "Playoff",
-            }[matchBody.message_data.match.comp_level],
-            matchBody.message_data.match.match_number,
+            }[matchBody.comp_level],
+            matchBody.match_number,
             "Blue"
           )
         );
       }
     }
-    opts.ctx.env.DB.batch(boundTbaStmts);
+    await opts.ctx.env.DB.batch(boundTbaStmts);
   });

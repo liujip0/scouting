@@ -14,17 +14,12 @@ type TbaAllianceScore = {
   wallAlgaeCount: number;
 };
 export type TbaMatch = {
-  message_type: "match_score";
-  message_data: {
-    match: {
-      event_key: string;
-      comp_level: "qm" | "ef" | "qf" | "sf" | "f";
-      match_number: number;
-      score_breakdown: {
-        red: TbaAllianceScore;
-        blue: TbaAllianceScore;
-      };
-    };
+  event_key: string;
+  comp_level: "qm" | "ef" | "qf" | "sf" | "f";
+  match_number: number;
+  score_breakdown: {
+    red: TbaAllianceScore;
+    blue: TbaAllianceScore;
   };
 };
 type TbaRequest =
@@ -41,7 +36,12 @@ type TbaRequest =
         desc: string;
       };
     }
-  | TbaMatch
+  | {
+      message_type: "match_score";
+      message_data: {
+        match: TbaMatch;
+      };
+    }
   | {
       message_type: "schedule_updated";
       message_data: {
