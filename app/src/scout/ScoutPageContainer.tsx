@@ -1,8 +1,9 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import React, { useState } from "react";
 import BackdropComponent from "../components/BackdropComponent.tsx";
 import { GridBorder } from "../components/GridBorder.tsx";
-import {HelpDialog}  from "../components/HelpDialog.tsx";
-import React, { useState } from "react";
+import HelpDialog from "../components/HelpDialog.tsx";
+
 type ScoutPageContainerProps = {
   title: string | React.ReactNode;
   nowScouting?: {
@@ -24,9 +25,7 @@ export function ScoutPageContainer({
   children,
 }: ScoutPageContainerProps) {
   const [helpOpen, setHelpOpen] = useState(false);
-  const closeHelpDialog = () => {
-    setHelpOpen(false);
-  }
+
   return (
     <GridBorder
       backdrop={backdrop}
@@ -104,10 +103,12 @@ export function ScoutPageContainer({
           </Stack>
         )}
       </Stack>
-        <HelpDialog
-          open={helpOpen}
-          onClose={closeHelpDialog}
-        />
+      <HelpDialog
+        open={helpOpen}
+        onClose={() => {
+          setHelpOpen(false);
+        }}
+      />
     </GridBorder>
   );
 }

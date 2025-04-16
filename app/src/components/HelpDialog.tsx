@@ -1,43 +1,108 @@
-import { Dialog, DialogContent, DialogTitle, IconButton} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import React from 'react';
-interface HelpDialogProps {
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+
+type HelpDialogProps = {
   open: boolean;
   onClose: () => void;
-}
-const HelpDialog: React.FC<HelpDialogProps> = ({ open, onClose}) => {
- return (
-        <Dialog open={open}
-        onClose={onClose}
-        maxWidth="md"
-        fullWidth
-          slotProps={{
-            paper: {
-              sx: {
-                backgroundColor: "#89cff0"
-              }
-            }
+};
+export default function HelpDialog({ open, onClose }: HelpDialogProps) {
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      slotProps={{
+        paper: {
+          sx: {
+            backgroundColor: "#89cff0",
+          },
+        },
+      }}>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}>
+        Help
+        <IconButton
+          onClick={onClose}
+          size="small">
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Stack
+          sx={{
+            width: 1,
+            height: 1,
+          }}>
+          <Stack
+            direction="row"
+            sx={{
+              marginBottom: "1em",
             }}>
-  
-    <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      Help
-      <IconButton onClick={onClose} size="small">
-        <CloseIcon />
-      </IconButton>
-    </DialogTitle>
-    <DialogContent dividers>
-      <img
-        src="/cageshelp.png"
-        alt="Cages Example"
-        style={{ maxWidth: "50%", marginBottom: "1rem", marginRight: "7rem" }}
-      />
-      <img
-        src="/linecrosshelp.png"
-        alt="Line Cross Example"
-        style={{ maxWidth: "30%" }}
-      />
-    </DialogContent>
-  </Dialog>
-)
+            <Typography
+              fontWeight="bold"
+              sx={{
+                width: "50%",
+                marginRight: "7rem",
+              }}>
+              SHALLOW VS DEEP CLIMB
+            </Typography>
+            <Typography
+              fontWeight="bold"
+              sx={{
+                width: "30%",
+              }}>
+              CROSSED ROBOT STARTING LINE?
+            </Typography>
+          </Stack>
+          <Stack
+            direction="row"
+            sx={{
+              width: 1,
+            }}>
+            <Box
+              sx={{
+                width: "50%",
+                marginBottom: "1rem",
+                marginRight: "7rem",
+              }}>
+              <img
+                src="/cageshelp.png"
+                alt="Cages Example"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: "30%",
+              }}>
+              <img
+                src="/linecrosshelp.png"
+                alt="Line Cross Example"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </Box>
+          </Stack>
+        </Stack>
+      </DialogContent>
+    </Dialog>
+  );
 }
-export { HelpDialog };
