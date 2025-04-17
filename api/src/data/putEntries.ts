@@ -35,7 +35,33 @@ export const putEntries = loggedPublicProcedure
 
     for (let match of opts.input) {
       if (match.matchLevel === "Qualification") {
-        matchKeys.add(match.eventKey + "_qm" + match.matchNumber);
+        matchKeys.add(
+          ((
+            [
+              "2025archimedes",
+              "2025curie",
+              "2025daly",
+              "2025galileo",
+              "2025hopper",
+              "2025johnson",
+              "2025milstein",
+              "2025newton",
+            ].includes(match.eventKey)
+          ) ?
+            {
+              "2025archimedes": "2025arc",
+              "2025curie": "2025cur",
+              "2025daly": "2025dal",
+              "2025galileo": "2025gal",
+              "2025hopper": "2025hop",
+              "2025johnson": "2025joh",
+              "2025milstein": "2025mil",
+              "2025newton": "2025new",
+            }[match.eventKey]
+          : match.eventKey) +
+            "_qm" +
+            match.matchNumber
+        );
       } else {
         //TODO
       }
@@ -55,6 +81,7 @@ export const putEntries = loggedPublicProcedure
     }
 
     await opts.ctx.env.DB.batch(boundStmts);
+    console.log(matchKeys);
 
     const updateTeamMatchEntry = opts.ctx.env.DB.prepare(
       `UPDATE TeamMatchEntry
@@ -91,6 +118,7 @@ export const putEntries = loggedPublicProcedure
       );
       if (matchRes.status === 200) {
         const matchBody: TbaMatch = await matchRes.json();
+        console.log(matchBody);
 
         if (matchBody.score_breakdown?.red.autoLineRobot1) {
           boundTbaStmts.push(
