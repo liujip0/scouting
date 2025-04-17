@@ -15,7 +15,7 @@ export function Teleop({ match, setMatch }: TeleopProps) {
     <Stack
       direction={{ xs: "column", md: "row" }}
       sx={{
-        height: "auto",
+        height: { xs: "auto", md: 1 },
         width: "100%",
         overflow: "auto",
       }}>
