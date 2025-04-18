@@ -268,5 +268,7 @@ export const putEntries = loggedPublicProcedure
         }
       }
     }
-    await opts.ctx.env.DB.batch(boundTbaStmts);
+    if (boundTbaStmts.length > 0) {
+      await opts.ctx.env.DB.batch(boundTbaStmts);
+    }
   });
