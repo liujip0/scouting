@@ -27,6 +27,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
+import { putDBEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 
 export const QRCODE_UPLOAD_DELIMITER = "`";
@@ -35,13 +36,25 @@ export default function Upload() {
   const navigate = useNavigate();
 
   const [status, setStatus] = useState("");
+  const [downloadError, setDownloadError] = useState<unknown>("");
 
   const putEntries = trpc.data.putEntries.useMutation({
     onSuccess() {
       setStatus("Success");
     },
     onError(error) {
-      setStatus("Error: " + error.message);
+      if (error.message === "") {
+        if (downloadError !== "") {
+          setStatus(
+            "No network connection. Matches saved locally.\nError: " +
+              downloadError
+          );
+        } else {
+          setStatus("No network connection. Matches saved locally.");
+        }
+      } else {
+        setStatus("Error: " + error.message);
+      }
     },
   });
 
@@ -76,6 +89,14 @@ export default function Upload() {
         }
       />
 
+      {/* <Button
+        onClick={() => {
+          //TODO
+        }}
+        startIcon={<CameraAlt />}>
+        Scan QR with Camera
+      </Button> */}
+
       <Button
         component="label"
         startIcon={<FileUpload />}>
@@ -85,15 +106,32 @@ export default function Upload() {
           accept="text/plain"
           onChange={async (event) => {
             if (event.currentTarget.files) {
-              const matches: (TeamMatchEntry | HumanPlayerEntry)[] = [];
+              try {
+                const matches: (TeamMatchEntry | HumanPlayerEntry)[] = [];
 
-              for (const file of event.currentTarget.files) {
-                const match = JSON.parse(await file.text());
-                console.log(match);
-                matches.push(match);
+                for (const file of event.currentTarget.files) {
+                  const match = JSON.parse(await file.text());
+                  console.log(match);
+                  matches.push(match);
+                }
+
+                setDownloadError("");
+                matches.forEach((match) => {
+                  putDBEntry({
+                    ...match,
+                    autoUpload: false,
+                    quickshare: false,
+                    clipboard: false,
+                    qr: false,
+                    download: false,
+                    upload: false,
+                  });
+                });
+                putEntries.mutate(matches);
+              } catch (error: unknown) {
+                console.log(error);
+                setDownloadError(error);
               }
-
-              putEntries.mutate(matches);
             }
           }}
           multiple
@@ -102,11 +140,31 @@ export default function Upload() {
 
       <Button
         onClick={async () => {
-          const matches = JSON.parse(await navigator.clipboard.readText());
-          putEntries.mutate(matches);
+          try {
+            const matches = JSON.parse(
+              await navigator.clipboard.readText()
+            ) as (TeamMatchEntry | HumanPlayerEntry)[];
+
+            setDownloadError("");
+            matches.forEach((match) => {
+              putDBEntry({
+                ...match,
+                autoUpload: false,
+                quickshare: false,
+                clipboard: false,
+                qr: false,
+                download: false,
+                upload: false,
+              });
+            });
+            putEntries.mutate(matches);
+          } catch (error: unknown) {
+            console.log(error);
+            setDownloadError(error);
+          }
         }}
         startIcon={<ContentPaste />}>
-        Paste from Clipboard
+        Upload from Clipboard
       </Button>
 
       <Button
@@ -114,7 +172,7 @@ export default function Upload() {
           setQrUpload(true);
         }}
         startIcon={<QrCodeScanner />}>
-        Scan QR with Scanner
+        Upload from QR
       </Button>
       <Dialog open={qrUpload}>
         <DialogTitle>Scan QR Codes</DialogTitle>
@@ -139,49 +197,60 @@ export default function Upload() {
           </Button>
           <Button
             onClick={() => {
-              const matchArrs: string[] = qrData
-                .split(QRCODE_UPLOAD_DELIMITER)
-                .filter((x) => x.trim() !== "");
-              const matches: (TeamMatchEntry | HumanPlayerEntry)[] =
-                matchArrs.map((match) => {
-                  const matchArr = JSON.parse(match);
-                  const parsedMatch: Partial<
-                    Record<
-                      TeamMatchEntryColumn | HumanPlayerEntryColumn,
-                      unknown
-                    >
-                  > = {};
-                  CommonEntryColumns.forEach((column, columnIndex) => {
-                    parsedMatch[column] = matchArr[columnIndex];
+              try {
+                const matchArrs: string[] = qrData
+                  .split(QRCODE_UPLOAD_DELIMITER)
+                  .filter((x) => x.trim() !== "");
+                const matches: (TeamMatchEntry | HumanPlayerEntry)[] =
+                  matchArrs.map((match) => {
+                    const matchArr = JSON.parse(match);
+                    const parsedMatch: Partial<
+                      Record<
+                        TeamMatchEntryColumn | HumanPlayerEntryColumn,
+                        unknown
+                      >
+                    > = {};
+                    CommonEntryColumns.forEach((column, columnIndex) => {
+                      parsedMatch[column] = matchArr[columnIndex];
+                    });
+                    if (parsedMatch.robotNumber === 4) {
+                      HumanPlayerEntryColumns.forEach((column, columnIndex) => {
+                        parsedMatch[column] = matchArr[columnIndex];
+                      });
+                    } else {
+                      TeamMatchEntryColumns.forEach((column, columnIndex) => {
+                        parsedMatch[column] = matchArr[columnIndex];
+                      });
+                    }
+                    console.log(parsedMatch);
+                    return parsedMatch as TeamMatchEntry | HumanPlayerEntry;
                   });
-                  if (parsedMatch.robotNumber === 4) {
-                    HumanPlayerEntryColumns.forEach((column, columnIndex) => {
-                      parsedMatch[column] = matchArr[columnIndex];
-                    });
-                  } else {
-                    TeamMatchEntryColumns.forEach((column, columnIndex) => {
-                      parsedMatch[column] = matchArr[columnIndex];
-                    });
-                  }
-                  console.log(parsedMatch);
-                  return parsedMatch as TeamMatchEntry | HumanPlayerEntry;
+
+                setDownloadError("");
+                matches.forEach((match) => {
+                  putDBEntry({
+                    ...match,
+                    autoUpload: false,
+                    quickshare: false,
+                    clipboard: false,
+                    qr: false,
+                    download: false,
+                    upload: false,
+                  });
                 });
-              putEntries.mutate(matches);
-              setQrData("");
-              setQrUpload(false);
+                putEntries.mutate(matches);
+              } catch (error: unknown) {
+                console.log(error);
+                setDownloadError(error);
+              } finally {
+                setQrData("");
+                setQrUpload(false);
+              }
             }}>
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* <Button
-        onClick={() => {
-          //TODO
-        }}
-        startIcon={<CameraAlt />}>
-        Scan QR with Camera
-      </Button> */}
 
       <Button onClick={() => {}}>&nbsp;</Button>
 
