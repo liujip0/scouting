@@ -49,57 +49,75 @@ export default function Upload() {
       putEntriesTimeout = setTimeout(async () => {
         if (putEntriesPending) {
           putEntries.reset();
-          data.forEach(async (match) => {
-            await putDBEntry({
-              ...match,
-              autoUpload: false,
-              quickshare: false,
-              clipboard: false,
-              qr: false,
-              download: false,
-              upload: false,
+          try {
+            data.forEach(async (match) => {
+              await putDBEntry({
+                ...match,
+                autoUpload: false,
+                quickshare: false,
+                clipboard: false,
+                qr: false,
+                download: false,
+                upload: false,
+              });
             });
-          });
-          setStatus("Error uploading. Matches saved locally.");
+            setStatus("Error uploading. Matches saved locally.");
+          } catch (error) {
+            setStatus("Error saving matches locally:" + error);
+          } finally {
+            setPutEntriesPending(false);
+          }
         }
       }, 3000);
     },
     async onSuccess() {
       clearTimeout(putEntriesTimeout);
-      data.forEach(async (match) => {
-        await putDBEntry({
-          ...match,
-          autoUpload: true,
-          quickshare: false,
-          clipboard: false,
-          qr: false,
-          download: false,
-          upload: false,
+      try {
+        data.forEach(async (match) => {
+          await putDBEntry({
+            ...match,
+            autoUpload: true,
+            quickshare: false,
+            clipboard: false,
+            qr: false,
+            download: false,
+            upload: false,
+          });
         });
-      });
-      setPutEntriesPending(false);
-      setStatus("Success!");
+        setStatus("Success!");
+      } catch (error) {
+        setStatus("Upload Success. Error saving matches locally: " + error);
+      } finally {
+        setPutEntriesPending(false);
+      }
     },
     async onError(error) {
       clearTimeout(putEntriesTimeout);
-      data.forEach(async (match) => {
-        await putDBEntry({
-          ...match,
-          autoUpload: false,
-          quickshare: false,
-          clipboard: false,
-          qr: false,
-          download: false,
-          upload: false,
-        });
-      });
+
       console.error(error);
       if (error.message === "NetworkError when attempting to fetch resource.") {
         setStatus("No network connection. Matches saved locally.");
       } else {
         setStatus(error.message);
       }
-      setPutEntriesPending(false);
+
+      try {
+        data.forEach(async (match) => {
+          await putDBEntry({
+            ...match,
+            autoUpload: false,
+            quickshare: false,
+            clipboard: false,
+            qr: false,
+            download: false,
+            upload: false,
+          });
+        });
+      } catch (error) {
+        setStatus("Error saving matches locally: " + error);
+      } finally {
+        setPutEntriesPending(false);
+      }
     },
   });
 
