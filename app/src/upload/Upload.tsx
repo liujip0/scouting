@@ -11,6 +11,8 @@ import {
   Close,
   ContentPaste,
   FileUpload,
+  FolderSpecial,
+  Home,
   QrCodeScanner,
 } from "@mui/icons-material";
 import {
@@ -27,6 +29,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
+import { putDBEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 
 export const QRCODE_UPLOAD_DELIMITER = "`";
@@ -36,12 +39,67 @@ export default function Upload() {
 
   const [status, setStatus] = useState("");
 
+  const [data, setData] = useState<(TeamMatchEntry | HumanPlayerEntry)[]>([]);
+  const [putEntriesPending, setPutEntriesPending] = useState(false);
+  let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
-    onSuccess() {
-      setStatus("Success");
+    onMutate() {
+      setStatus("Uploading...");
+      clearTimeout(putEntriesTimeout);
+      putEntriesTimeout = setTimeout(async () => {
+        if (putEntriesPending) {
+          putEntries.reset();
+          data.forEach(async (match) => {
+            await putDBEntry({
+              ...match,
+              autoUpload: false,
+              quickshare: false,
+              clipboard: false,
+              qr: false,
+              download: false,
+              upload: false,
+            });
+          });
+          setStatus("Error uploading. Matches saved locally.");
+        }
+      }, 3000);
     },
-    onError(error) {
-      setStatus("Error: " + error.message);
+    async onSuccess() {
+      clearTimeout(putEntriesTimeout);
+      data.forEach(async (match) => {
+        await putDBEntry({
+          ...match,
+          autoUpload: true,
+          quickshare: false,
+          clipboard: false,
+          qr: false,
+          download: false,
+          upload: false,
+        });
+      });
+      setPutEntriesPending(false);
+      setStatus("Success!");
+    },
+    async onError(error) {
+      clearTimeout(putEntriesTimeout);
+      data.forEach(async (match) => {
+        await putDBEntry({
+          ...match,
+          autoUpload: false,
+          quickshare: false,
+          clipboard: false,
+          qr: false,
+          download: false,
+          upload: false,
+        });
+      });
+      console.error(error);
+      if (error.message === "NetworkError when attempting to fetch resource.") {
+        setStatus("No network connection. Matches saved locally.");
+      } else {
+        setStatus(error.message);
+      }
+      setPutEntriesPending(false);
     },
   });
 
@@ -57,7 +115,7 @@ export default function Upload() {
       }}>
       <Snackbar
         open={status !== ""}
-        autoHideDuration={3000}
+        autoHideDuration={5000}
         onClose={() => {
           setStatus("");
         }}
@@ -78,7 +136,8 @@ export default function Upload() {
 
       <Button
         component="label"
-        startIcon={<FileUpload />}>
+        startIcon={<FileUpload />}
+        disabled={putEntriesPending}>
         Upload TXT Files
         <VisuallyHiddenInput
           type="file"
@@ -87,12 +146,18 @@ export default function Upload() {
             if (event.currentTarget.files) {
               const matches: (TeamMatchEntry | HumanPlayerEntry)[] = [];
 
-              for (const file of event.currentTarget.files) {
-                const match = JSON.parse(await file.text());
-                console.log(match);
-                matches.push(match);
+              try {
+                for (const file of event.currentTarget.files) {
+                  const match = JSON.parse(await file.text());
+                  console.log(match);
+                  matches.push(match);
+                }
+              } catch (error) {
+                setStatus("Error parsing file(s): " + error);
+                return;
               }
 
+              setData(matches);
               putEntries.mutate(matches);
             }
           }}
@@ -102,19 +167,29 @@ export default function Upload() {
 
       <Button
         onClick={async () => {
-          const matches = JSON.parse(await navigator.clipboard.readText());
-          putEntries.mutate(matches);
+          try {
+            const matches = JSON.parse(
+              await navigator.clipboard.readText()
+            ) as (TeamMatchEntry | HumanPlayerEntry)[];
+
+            setData(matches);
+            putEntries.mutate(matches);
+          } catch (error) {
+            setStatus("Error reading clipboard: " + error);
+          }
         }}
-        startIcon={<ContentPaste />}>
-        Paste from Clipboard
+        startIcon={<ContentPaste />}
+        disabled={putEntriesPending}>
+        Upload from Clipboard
       </Button>
 
       <Button
         onClick={() => {
           setQrUpload(true);
         }}
-        startIcon={<QrCodeScanner />}>
-        Scan QR with Scanner
+        startIcon={<QrCodeScanner />}
+        disabled={putEntriesPending}>
+        Upload from QR
       </Button>
       <Dialog open={qrUpload}>
         <DialogTitle>Scan QR Codes</DialogTitle>
@@ -142,33 +217,40 @@ export default function Upload() {
               const matchArrs: string[] = qrData
                 .split(QRCODE_UPLOAD_DELIMITER)
                 .filter((x) => x.trim() !== "");
-              const matches: (TeamMatchEntry | HumanPlayerEntry)[] =
-                matchArrs.map((match) => {
-                  const matchArr = JSON.parse(match);
-                  const parsedMatch: Partial<
-                    Record<
-                      TeamMatchEntryColumn | HumanPlayerEntryColumn,
-                      unknown
-                    >
-                  > = {};
-                  CommonEntryColumns.forEach((column, columnIndex) => {
-                    parsedMatch[column] = matchArr[columnIndex];
+              try {
+                const matches: (TeamMatchEntry | HumanPlayerEntry)[] =
+                  matchArrs.map((match) => {
+                    const matchArr = JSON.parse(match);
+                    const parsedMatch: Partial<
+                      Record<
+                        TeamMatchEntryColumn | HumanPlayerEntryColumn,
+                        unknown
+                      >
+                    > = {};
+                    CommonEntryColumns.forEach((column, columnIndex) => {
+                      parsedMatch[column] = matchArr[columnIndex];
+                    });
+                    if (parsedMatch.robotNumber === 4) {
+                      HumanPlayerEntryColumns.forEach((column, columnIndex) => {
+                        parsedMatch[column] = matchArr[columnIndex];
+                      });
+                    } else {
+                      TeamMatchEntryColumns.forEach((column, columnIndex) => {
+                        parsedMatch[column] = matchArr[columnIndex];
+                      });
+                    }
+                    console.log(parsedMatch);
+                    return parsedMatch as TeamMatchEntry | HumanPlayerEntry;
                   });
-                  if (parsedMatch.robotNumber === 4) {
-                    HumanPlayerEntryColumns.forEach((column, columnIndex) => {
-                      parsedMatch[column] = matchArr[columnIndex];
-                    });
-                  } else {
-                    TeamMatchEntryColumns.forEach((column, columnIndex) => {
-                      parsedMatch[column] = matchArr[columnIndex];
-                    });
-                  }
-                  console.log(parsedMatch);
-                  return parsedMatch as TeamMatchEntry | HumanPlayerEntry;
-                });
-              putEntries.mutate(matches);
-              setQrData("");
-              setQrUpload(false);
+
+                setData(matches);
+                putEntries.mutate(matches);
+              } catch (error) {
+                setStatus("Error parsing QR code: " + error);
+              } finally {
+                setQrData("");
+                setQrUpload(false);
+              }
             }}>
             Confirm
           </Button>
@@ -188,8 +270,16 @@ export default function Upload() {
       <Button
         onClick={() => {
           navigate("/");
-        }}>
+        }}
+        startIcon={<Home />}>
         Return to Home
+      </Button>
+      <Button
+        onClick={() => {
+          navigate("/scout/savedmatches");
+        }}
+        startIcon={<FolderSpecial />}>
+        Saved Matches
       </Button>
     </Stack>
   );
