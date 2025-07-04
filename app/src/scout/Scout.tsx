@@ -10,7 +10,7 @@ import {
 } from "@isa2025/api/src/utils/dbtypes.ts";
 import EventEmitter from "events";
 import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { DeviceSetupObj } from "../setup/DeviceSetup.tsx";
 import SavedMatches from "./SavedMatches.tsx";
 import ScoutLayout from "./ScoutLayout.tsx";
@@ -26,6 +26,8 @@ export default function Scout({
   eventEmitter,
 }: ScoutProps) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [validDeviceSetup, setValidDeviceSetup] = useState(true);
   useEffect(() => {
     if (
       (deviceSetup.fieldOrientation !== "processor" &&
@@ -42,9 +44,12 @@ export default function Scout({
         deviceSetup.robotNumber !== 3 &&
         deviceSetup.robotNumber !== 4)
     ) {
-      navigate("/setup");
+      setValidDeviceSetup(false);
+      if (location.pathname !== "/scout/savedmatches") {
+        navigate("/setup");
+      }
     }
-  }, [deviceSetup, navigate]);
+  }, [deviceSetup, location.pathname, navigate]);
 
   const [match, setMatch] = useState<TeamMatchEntry | HumanPlayerEntry>(() => {
     if (deviceSetup.robotNumber < 4) {
@@ -159,6 +164,7 @@ export default function Scout({
             match={match}
             setMatch={setMatch}
             events={events}
+            validDeviceSetup={validDeviceSetup}
           />
         }
       />
