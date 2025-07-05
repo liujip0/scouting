@@ -70,11 +70,13 @@ type SavedMatchesProps = {
   match: TeamMatchEntry | HumanPlayerEntry;
   setMatch: (value: TeamMatchEntry | HumanPlayerEntry) => void;
   events: (DBEvent & { matches: Match[] })[];
+  validDeviceSetup: boolean;
 };
 export default function SavedMatches({
   match,
   setMatch,
   events,
+  validDeviceSetup,
 }: SavedMatchesProps) {
   const navigate = useNavigate();
 
@@ -187,62 +189,64 @@ export default function SavedMatches({
             }}>
             Home
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              console.log(getDBTeamMatchEntries());
-              const newMatch: TeamMatchEntry | HumanPlayerEntry = {
-                ...(match.robotNumber !== 4 ?
-                  TeamMatchEntryInit
-                : HumanPlayerEntryInit),
-                deviceTeamNumber: match.deviceTeamNumber,
-                deviceId: match.deviceId,
-                eventKey: match.eventKey,
-                matchLevel: match.matchLevel,
-                matchNumber: match.matchNumber + 1,
-                alliance: match.alliance,
-                robotNumber: match.robotNumber,
-                scoutName: match.scoutName,
-                scoutTeamNumber: match.scoutTeamNumber,
-              } as TeamMatchEntry | HumanPlayerEntry;
+          {validDeviceSetup && (
+            <Button
+              variant="contained"
+              onClick={() => {
+                console.log(getDBTeamMatchEntries());
+                const newMatch: TeamMatchEntry | HumanPlayerEntry = {
+                  ...(match.robotNumber !== 4 ?
+                    TeamMatchEntryInit
+                  : HumanPlayerEntryInit),
+                  deviceTeamNumber: match.deviceTeamNumber,
+                  deviceId: match.deviceId,
+                  eventKey: match.eventKey,
+                  matchLevel: match.matchLevel,
+                  matchNumber: match.matchNumber + 1,
+                  alliance: match.alliance,
+                  robotNumber: match.robotNumber,
+                  scoutName: match.scoutName,
+                  scoutTeamNumber: match.scoutTeamNumber,
+                } as TeamMatchEntry | HumanPlayerEntry;
 
-              const eventMatches = events.find(
-                (event) => event.eventKey === match.eventKey
-              )?.matches;
-              if (
-                eventMatches?.some(
-                  (x) =>
-                    x.matchLevel === match.matchLevel &&
-                    x.matchNumber === match.matchNumber + 1
-                ) &&
-                match.robotNumber !== 4
-              ) {
-                setMatch({
-                  ...newMatch,
-                  teamNumber: eventMatches.find(
+                const eventMatches = events.find(
+                  (event) => event.eventKey === match.eventKey
+                )?.matches;
+                if (
+                  eventMatches?.some(
                     (x) =>
                       x.matchLevel === match.matchLevel &&
                       x.matchNumber === match.matchNumber + 1
-                  )![
-                    (match.alliance.toLowerCase() + match.robotNumber) as
-                      | "red1"
-                      | "red2"
-                      | "red3"
-                      | "blue1"
-                      | "blue2"
-                      | "blue3"
-                  ],
-                });
-              } else {
-                setMatch({
-                  ...newMatch,
-                  teamNumber: 0,
-                });
-              }
-              navigate("/scout");
-            }}>
-            Next Match
-          </Button>
+                  ) &&
+                  match.robotNumber !== 4
+                ) {
+                  setMatch({
+                    ...newMatch,
+                    teamNumber: eventMatches.find(
+                      (x) =>
+                        x.matchLevel === match.matchLevel &&
+                        x.matchNumber === match.matchNumber + 1
+                    )![
+                      (match.alliance.toLowerCase() + match.robotNumber) as
+                        | "red1"
+                        | "red2"
+                        | "red3"
+                        | "blue1"
+                        | "blue2"
+                        | "blue3"
+                    ],
+                  });
+                } else {
+                  setMatch({
+                    ...newMatch,
+                    teamNumber: 0,
+                  });
+                }
+                navigate("/scout");
+              }}>
+              Next Match
+            </Button>
+          )}
         </>
       }>
       <Stack
