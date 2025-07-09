@@ -46,6 +46,7 @@ export const putEntries = loggedPublicProcedure
               "2025johnson",
               "2025milstein",
               "2025newton",
+              "2025inind",
             ].includes(match.eventKey)
           ) ?
             {
@@ -57,6 +58,7 @@ export const putEntries = loggedPublicProcedure
               "2025johnson": "2025joh",
               "2025milstein": "2025mil",
               "2025newton": "2025new",
+              "2025inind": "2025iri",
             }[match.eventKey]
           : match.eventKey) +
             "_qm" +
