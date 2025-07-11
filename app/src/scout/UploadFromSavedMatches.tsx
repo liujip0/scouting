@@ -7,39 +7,41 @@ import {
   TeamMatchEntryColumn,
   TeamMatchEntryColumns,
 } from "@isa2025/api/src/utils/dbtypes.ts";
-import {
-  Close,
-  ContentPaste,
-  FileUpload,
-  FolderSpecial,
-  Home,
-  QrCodeScanner,
-} from "@mui/icons-material";
+import { ContentPaste, FileUpload, QrCodeScanner } from "@mui/icons-material";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  Snackbar,
-  Stack,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/VisuallyHiddenInput.tsx";
 import { putDBEntry } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
+import { ExportMatchEntry } from "./SavedMatches.tsx";
 
 export const QRCODE_UPLOAD_DELIMITER = "`";
 
-export default function Upload() {
-  const navigate = useNavigate();
-
-  const [status, setStatus] = useState("");
-
+type UploadFromSavedMatchesProps = {
+  setStatus: (status: string) => void;
+  matches: (ExportMatchEntry & {
+    selected: boolean;
+  })[];
+  setMatches: (
+    value: (ExportMatchEntry & {
+      selected: boolean;
+    })[]
+  ) => void;
+};
+export default function UploadFromSavedMatches({
+  setStatus,
+  matches,
+  setMatches,
+}: UploadFromSavedMatchesProps) {
   const [data, setData] = useState<(TeamMatchEntry | HumanPlayerEntry)[]>([]);
+
   const [putEntriesPending, setPutEntriesPending] = useState(false);
   let putEntriesTimeout: NodeJS.Timeout;
   const putEntries = trpc.data.putEntries.useMutation({
@@ -61,6 +63,19 @@ export default function Upload() {
                 upload: false,
               });
             });
+            setMatches([
+              ...data.map((match) => ({
+                ...match,
+                autoUpload: false,
+                quickshare: false,
+                clipboard: false,
+                qr: false,
+                download: false,
+                upload: false,
+                selected: true,
+              })),
+              ...matches,
+            ]);
             setStatus("Error uploading. Matches saved locally.");
           } catch (error) {
             setStatus("Error saving matches locally:" + error);
@@ -84,6 +99,19 @@ export default function Upload() {
             upload: false,
           });
         });
+        setMatches([
+          ...data.map((match) => ({
+            ...match,
+            autoUpload: true,
+            quickshare: false,
+            clipboard: false,
+            qr: false,
+            download: false,
+            upload: false,
+            selected: false,
+          })),
+          ...matches,
+        ]);
         setStatus("Success!");
       } catch (error) {
         setStatus("Upload Success. Error saving matches locally: " + error);
@@ -113,6 +141,19 @@ export default function Upload() {
             upload: false,
           });
         });
+        setMatches([
+          ...data.map((match) => ({
+            ...match,
+            autoUpload: false,
+            quickshare: false,
+            clipboard: false,
+            qr: false,
+            download: false,
+            upload: false,
+            selected: true,
+          })),
+          ...matches,
+        ]);
       } catch (error) {
         setStatus("Error saving matches locally: " + error);
       } finally {
@@ -125,35 +166,10 @@ export default function Upload() {
   const [qrData, setQrData] = useState("");
 
   return (
-    <Stack
-      sx={{
-        backgroundColor: "background.default",
-        width: 1,
-        height: 1,
-      }}>
-      <Snackbar
-        open={status !== ""}
-        autoHideDuration={5000}
-        onClose={() => {
-          setStatus("");
-        }}
-        message={status}
-        action={
-          <IconButton
-            onClick={() => {
-              setStatus("");
-            }}>
-            <Close
-              sx={{
-                color: "#ffffff",
-              }}
-            />
-          </IconButton>
-        }
-      />
-
+    <>
       <Button
         component="label"
+        variant="outlined"
         startIcon={<FileUpload />}
         disabled={putEntriesPending}>
         Upload TXT Files
@@ -184,6 +200,7 @@ export default function Upload() {
       </Button>
 
       <Button
+        variant="outlined"
         onClick={async () => {
           try {
             const matches = JSON.parse(
@@ -202,6 +219,7 @@ export default function Upload() {
       </Button>
 
       <Button
+        variant="outlined"
         onClick={() => {
           setQrUpload(true);
         }}
@@ -274,31 +292,6 @@ export default function Upload() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      {/* <Button
-        onClick={() => {
-          //TODO
-        }}
-        startIcon={<CameraAlt />}>
-        Scan QR with Camera
-      </Button> */}
-
-      <Button onClick={() => {}}>&nbsp;</Button>
-
-      <Button
-        onClick={() => {
-          navigate("/");
-        }}
-        startIcon={<Home />}>
-        Return to Home
-      </Button>
-      <Button
-        onClick={() => {
-          navigate("/scout/savedmatches");
-        }}
-        startIcon={<FolderSpecial />}>
-        Saved Matches
-      </Button>
-    </Stack>
+    </>
   );
 }

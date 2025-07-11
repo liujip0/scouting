@@ -7,7 +7,6 @@ import LandingPage from "./LandingPage.tsx";
 import ReloadPrompt from "./reloadprompt/ReloadPrompt.tsx";
 import Scout from "./scout/Scout.tsx";
 import DeviceSetup, { DeviceSetupObj } from "./setup/DeviceSetup.tsx";
-import Upload from "./upload/Upload.tsx";
 import { getDBEvents, getDBMatches, initDB } from "./utils/idb.ts";
 
 export default function App() {
@@ -104,10 +103,6 @@ export default function App() {
                 setEvents={setEvents}
               />
             }
-          />
-          <Route
-            path="/upload"
-            element={<Upload />}
           />
         </Routes>
       </BrowserRouter>
