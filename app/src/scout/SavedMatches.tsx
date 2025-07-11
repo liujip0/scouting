@@ -47,7 +47,6 @@ import {
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QRCODE_UPLOAD_DELIMITER } from "../upload/Upload.tsx";
 import {
   deleteEntry,
   getDBHumanPlayerEntries,
@@ -56,6 +55,9 @@ import {
 } from "../utils/idb.ts";
 import { trpc } from "../utils/trpc.ts";
 import { ScoutPageContainer } from "./ScoutPageContainer.tsx";
+import UploadFromSavedMatches, {
+  QRCODE_UPLOAD_DELIMITER,
+} from "./UploadFromSavedMatches.tsx";
 
 export type ExportMatchEntry = (TeamMatchEntry | HumanPlayerEntry) & {
   autoUpload: boolean;
@@ -893,6 +895,21 @@ export default function SavedMatches({
             startIcon={<Upload />}>
             Direct Upload
           </Button>
+
+          <Divider
+            orientation="horizontal"
+            flexItem
+            sx={{
+              margin: 2,
+            }}
+          />
+
+          <UploadFromSavedMatches
+            setStatus={setUploadStatus}
+            matches={matches}
+            setMatches={setMatches}
+          />
+
           <Snackbar
             open={uploadStatus !== ""}
             autoHideDuration={3000}

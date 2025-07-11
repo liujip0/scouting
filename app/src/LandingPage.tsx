@@ -41,11 +41,6 @@ export default function LandingPage() {
           color="secondary">
           View Data
         </LinkButton>
-        <LinkButton
-          to="/upload"
-          color="secondary">
-          Upload Data
-        </LinkButton>
       </Stack>
     </Stack>
   );
